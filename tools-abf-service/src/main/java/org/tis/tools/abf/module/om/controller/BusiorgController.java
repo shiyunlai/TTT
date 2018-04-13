@@ -11,6 +11,7 @@
 //import org.tis.tools.abf.module.common.log.OperateLog;
 //import org.tis.tools.abf.module.common.log.ReturnType;
 //import org.tis.tools.abf.module.common.web.controller.BaseController;
+//import org.tis.tools.abf.module.common.web.vo.ResultVO;
 //import org.tis.tools.abf.module.om.entity.OmBusiorg;
 //import org.tis.tools.abf.module.om.entity.OmOrg;
 //import org.tis.tools.abf.module.om.service.IOmOrgService;
@@ -54,7 +55,7 @@
 //            map.put("id", "00000");
 //            List<Map> list = new ArrayList<>();
 //            list.add(map);
-//            return getReturnMap(list);
+//            ResultVO.success("新增成功！", list);
 //        }else if("00000".equals(id)){
 //            List<SysDictItem> list = dictRService.queryDictItemListByDictKey("DICT_OM_BUSIDOMAIN");
 //            return getReturnMap(list);

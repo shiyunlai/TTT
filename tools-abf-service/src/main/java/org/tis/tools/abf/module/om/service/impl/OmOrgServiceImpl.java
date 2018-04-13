@@ -46,6 +46,9 @@ public class OmOrgServiceImpl extends ServiceImpl<OmOrgMapper, OmOrg> implements
 
 	@Autowired
 	private IOrgCodeGenerator orgCodeGenerator;
+	@Autowired
+    private IOmOrgService omOrgService;
+
 
 
 	/**
@@ -177,7 +180,29 @@ public class OmOrgServiceImpl extends ServiceImpl<OmOrgMapper, OmOrg> implements
 
 	@Override
 	public OmOrg updateOrg(OmOrg omOrg) throws OrgManagementException {
-		return null;
+//		WhereCondition wc = new WhereCondition() ;
+//		wc.andEquals("ORG_CODE", omOrg.getOrgCode());
+		List<OmOrg> orgList=omOrgService.queryAllChilds(omOrg.getOrgCode());
+		if(orgList.size() != 1) {
+			throw new OrgManagementException(
+					OMExceptionCodes.ORGANIZATION_NOT_EXIST_BY_ORG_CODE, wrap(omOrg.getOrgCode()), "机构代码{0}对应的机构不存在");
+		}
+		OmOrg oldOrg = orgList.get(0);
+		String oldOrgStatus = oldOrg.getOrgStatus().toString();
+		String orgStatus = omOrg.getOrgStatus().toString();
+		if(!oldOrgStatus.equals(orgStatus)){
+			throw new OrgManagementException(OMExceptionCodes.FAILURE_WHRN_UPDATE_ORG_STATUS, wrap());
+		}
+		try {
+			omOrgService.updateOrg(omOrg);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new OrgManagementException(OMExceptionCodes.FAILURE_WHEN_UPDATE_ORG_APP,
+					wrap(e.getCause().getMessage()));
+		}finally {
+			return omOrg;
+		}
+
 	}
 
 	@Override
