@@ -222,7 +222,7 @@ public class OmOrgServiceImpl extends ServiceImpl<OmOrgMapper, OmOrg> implements
 
 	@Override
 	public OmOrg queryOrg(String orgCode) {
-		return null;
+		return selectById(orgCode);
 	}
 
 	@Override
@@ -247,6 +247,9 @@ public class OmOrgServiceImpl extends ServiceImpl<OmOrgMapper, OmOrg> implements
 
 	@Override
 	public List<OmOrg> queryAllRoot() {
+		OmOrg org = new OmOrg();
+		String num = "10";
+        selectById(num);
 		return null;
 	}
 

@@ -37,7 +37,7 @@ mybatis-plus:
     logic-delete-value: 0
     logic-not-delete-value: 1
   configuration:
-    map-underscore-to-camel-case: false
+    map-underscore-to-camel-case: true
     cache-enabled: true
     lazyLoadingEnabled: true
     multipleResultSetsEnabled: true

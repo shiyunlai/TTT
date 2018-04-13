@@ -92,9 +92,7 @@ public class OmOrg extends Model<OmOrg> {
 	/** SUB_COUNT ：子节点数<br/><br/>维护时系统根据当前拥有子机构／部分数实时更新 */
 	public static final String COLUMN_SUB_COUNT = "sub_count" ; 
 	/** REMARK ：备注<br/><br/> */
-	public static final String COLUMN_REMARK = "remark" ; 
-	/** 对应的类名 */
-	public static final String CLASS_NAME = "org.tis.tools.model.po.om.OmOrg";
+	public static final String COLUMN_REMARK = "remark" ;
     /** GUID字段名<br/> */
     public static final String NAME_GUID = "数据主键" ;
     /** ORG_CODE字段名<br/> */
