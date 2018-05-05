@@ -2,8 +2,11 @@ package org.tis.tools.abf.module.ac.service;
 
 import org.tis.tools.abf.module.ac.entity.AcRole;
 import com.baomidou.mybatisplus.service.IService;
+import org.tis.tools.abf.module.ac.entity.AcRoleFunc;
 import org.tis.tools.abf.module.ac.exception.AcRoleManagementException;
 
+import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 
 
@@ -114,5 +117,30 @@ public interface IAcRoleService extends IService<AcRole>{
      * @throws AcRoleManagementException
      */
     boolean deleteByRoleCode(String roleCode) throws AcRoleManagementException;
+
+
+    /**
+     * <pre>
+     * 增加某个角色的功能
+     *
+     * </pre>
+     * @param acRoleFunc
+     *
+     * @throws AcRoleManagementException
+     */
+    void addRoleFunc(AcRoleFunc acRoleFunc) throws AcRoleManagementException;
+
+
+    /**
+     * <pre>
+     * 移除某个角色的功能
+     *
+     * </pre>
+     * @param roleGuid
+     * @param funcGuid
+     *
+     * @throws AcRoleManagementException
+     */
+    void removeRoleFunc(String roleGuid,String funcGuid) throws AcRoleManagementException;
 }
 

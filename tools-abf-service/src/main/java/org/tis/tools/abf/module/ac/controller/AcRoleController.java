@@ -3,6 +3,7 @@ package org.tis.tools.abf.module.ac.controller;
 import org.tis.tools.abf.module.ac.controller.request.AcRoleAddRequest;
 import org.tis.tools.abf.module.ac.entity.AcRole;
 import org.springframework.validation.annotation.Validated;
+import org.tis.tools.abf.module.ac.entity.AcRoleFunc;
 import org.tis.tools.abf.module.common.log.OperateLog;
 import org.tis.tools.abf.module.common.log.OperateType;
 import org.tis.tools.abf.module.common.log.ReturnType;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import org.hibernate.validator.constraints.NotBlank;
 import org.tis.tools.core.web.vo.ResultVO;
 import org.tis.tools.abf.module.ac.service.IAcRoleService;
+
+import java.util.List;
 
 /**
  * acRole的Controller类
@@ -39,6 +42,8 @@ public class AcRoleController extends BaseController<AcRole>  {
         acRole = acRoleService.createAcRole(request.getRoleCode(),request.getRoleName(),request.getEnabled(),request.getRoleDesc());
         return ResultVO.success("新增成功",acRole);
     }
+
+
     @OperateLog(
             operateType = OperateType.UPDATE,  // 操作类型
             operateDesc = "修改角色", // 操作描述
@@ -52,6 +57,8 @@ public class AcRoleController extends BaseController<AcRole>  {
         acRole1 = acRoleService.updateAcRole(acRole);
         return ResultVO.success("修改成功！",acRole1);
     }
+
+
     @OperateLog(
             operateType = OperateType.DELETE,  // 操作类型
             operateDesc = "删除角色", // 操作描述
@@ -65,6 +72,8 @@ public class AcRoleController extends BaseController<AcRole>  {
         bo = acRoleService.deleteByRoleCode(roleCode);
         return ResultVO.success("删除成功",bo);
     }
+
+
     @OperateLog(
             operateType = OperateType.QUERY,  // 操作类型
             operateDesc = "查询角色", // 操作描述
@@ -80,6 +89,8 @@ public class AcRoleController extends BaseController<AcRole>  {
         }
         return ResultVO.success("查询成功", acRole);
     }
+
+
     @OperateLog(
             operateType = OperateType.QUERY,  // 操作类型
             operateDesc = "查询角色", // 操作描述
@@ -91,6 +102,7 @@ public class AcRoleController extends BaseController<AcRole>  {
     public ResultVO list() {
         return  ResultVO.success("查询成功", acRoleService.queryAllRole());
     }
-    
+
+
 }
 
