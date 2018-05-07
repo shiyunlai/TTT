@@ -22,12 +22,14 @@ import java.util.List;
 @Data
 @TableName("er_app")
 public class ERApp {
-
+    //自动生成ID
     public static final String COLUMN_ID = "id";
-
+    //ERApp名称，例如ABF.erm,name=ABF
     public static final String COLUMN_NAME = "name";
-
+    //添加描述
     public static final String COLUMN_DESC = "desc";
+
+    //新增4个公共字段创建时间，最近更新时间，最近更新人员，数据状态
 
     @Null(groups = {AddValidateGroup.class}, message = "新增时ID由系统指定")
     @NotBlank(groups = {UpdateValidateGroup.class}, message = "修改时ID不能为空")
