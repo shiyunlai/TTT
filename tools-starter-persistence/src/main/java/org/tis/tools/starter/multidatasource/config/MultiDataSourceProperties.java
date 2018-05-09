@@ -25,7 +25,7 @@ public class MultiDataSourceProperties {
 
     private String username = "root";
 
-    private String password = "zhoushihao";
+    private String password = "root";
 
     private String driverClassName = "com.mysql.jdbc.Driver";
 

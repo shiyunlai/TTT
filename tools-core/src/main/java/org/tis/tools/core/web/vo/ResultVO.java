@@ -13,6 +13,7 @@ import org.tis.tools.core.entity.response.RestResponse;
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class ResultVO extends RestResponse {
+
     public static final String SUCCESS_CODE = "200";
     public static final String ERROR_CODE = "500";
 
