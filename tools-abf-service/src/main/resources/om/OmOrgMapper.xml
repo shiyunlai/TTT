@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.tis.tools.dao.om.OmOrgMapper">
+    <select id="queryOmorgcode" parameterType="String" resultType="org.tis.tools.dao.om.OmOrgMapper">
+        SELECT
+        <include refid="queryOmorgcode"/>
+        FROM
+        om_org a
+        WHERE
+        a.ORG_CODE =  ${org_code}
+    </select>
+    <sql id="Base_Column_List" >
+        guid,
+        org_code,
+        org_name,
+        org_type,
+        org_degree,
+        org_status,
+        org_level,
+        guid_parents,
+        org_seq,
+        org_addr,
+        zipcode,
+        link_man,
+        link_tel,
+        email,
+        start_date,
+        end_date,
+        area,
+        create_time,
+        last_update,
+        updator,
+        sort_no,
+        isleaf,
+        sub_count,
+        remark
+    </sql>
+</mapper>

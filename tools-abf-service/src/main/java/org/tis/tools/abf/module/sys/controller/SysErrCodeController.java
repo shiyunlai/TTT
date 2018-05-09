@@ -18,6 +18,7 @@ import org.tis.tools.core.web.vo.ResultVO;
  */
 @RestController
 @RequestMapping("/sysErrCode")
+@Validated
 public class SysErrCodeController extends BaseController<SysErrCode>  {
 
     @Autowired

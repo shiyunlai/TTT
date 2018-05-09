@@ -69,11 +69,11 @@ public class OrgCodeServiceImpl implements IOrgCodeGenerator {
         sb.append(toSeqNO(seqnoRService.getNextSequence("ORGCODE", "机构代码序号")));
 
         //TODO 检查机构代码未被使用，否则要重新生成，直到新机构代码可用
-//		WhereCondition wc = new WhereCondition() ; 
-//		wc.andEquals(OmOrg.ORG_CODE, sb.toString()) ; 
-//		List<OmOrg> orgs = omOrgService.query(wc) ; 
+//		WhereCondition wc = new WhereCondition() ;
+//		wc.andEquals(OmOrg.ORG_CODE, sb.toString()) ;
+//		List<OmOrg> orgs = omOrgService.query(wc) ;
 //		if( orgs.size() !=0 ){
-//			
+//
 //		}
 
         return "ORG"+sb.toString();

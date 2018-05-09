@@ -19,13 +19,23 @@ public class OmOrgServiceImplTest extends BaseTest {
 
     @Test
     public void createRootOrg() {
-        String areaCode = "1111";
-        String orgDegree = "2";
-        String orgName = "1";
-        String orgType = "1" ;
-        OmOrg rootOrg = omOrgService.createRootOrg(areaCode, orgDegree, orgName, orgType);
-        Assert.assertEquals(rootOrg.getOrgName(), orgName);
-        Assert.assertEquals(rootOrg.getOrgType(), orgType);
-        Assert.assertEquals(rootOrg.getOrgDegree(), orgDegree);
+       String areaCode = "CS";
+        String orgDegree = "CS";
+        String orgName = "CS";
+        String orgType = "CS" ;
+        OmOrg omOrg = omOrgService.queryOrg("981360076294012929");
+        System.out.println(omOrg.getArea());
+//        System.out.println(omOrg.getCreateTime());
+        System.out.println(omOrg.getEndDate());
+        System.out.println(omOrg.getGuidParents());
+        System.out.println(omOrg.getLinkMan());
+        System.out.println(omOrg.getOrgType());
+        System.out.println(omOrg.getSortNo());
+
+//        omOrgService.queryAllRoot();
+//        OmOrg rootOrg = omOrgService.createRootOrg(areaCode, orgDegree, orgName, orgType);
+//        Assert.assertEquals(rootOrg.getOrgName(), orgName);
+//        Assert.assertEquals(rootOrg.getOrgType(), orgType);
+//        Assert.assertEquals(rootOrg.getOrgDegree(), orgDegree);
     }
 }
