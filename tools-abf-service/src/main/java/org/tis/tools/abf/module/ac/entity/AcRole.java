@@ -1,8 +1,12 @@
 package org.tis.tools.abf.module.ac.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotations.TableName;
 import lombok.Data;
 import com.baomidou.mybatisplus.annotations.TableId;
+import org.tis.tools.abf.module.common.entity.enums.YON;
+import org.tis.tools.core.entity.enums.CommonEnumDeserializer;
+
 import java.io.Serializable;
 
 /**
@@ -37,8 +41,9 @@ public class AcRole implements Serializable {
 
     /**
      * guidApp对应表字段
+     * 这个字段删除了
      */
-    public static final String COLUMN_GUID_APP = "guid_app";
+   // public static final String COLUMN_GUID_APP = "guid_app";
 
     /**
      * enabled对应表字段
@@ -69,12 +74,13 @@ public class AcRole implements Serializable {
     /**
      * 隶属应用GUID
      */
-    public String guidApp;
+   // public String guidApp;
 
     /**
      * 是否启用
      */
-    public String enabled;
+    @JSONField(deserializeUsing= CommonEnumDeserializer.class)
+    public YON enabled;
 
     /**
      * 角色描述
