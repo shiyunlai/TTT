@@ -2,7 +2,6 @@ package org.tis.tools.abf.module.sys.dao;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import org.tis.tools.abf.module.sys.entity.SysDict;
-
 /**
  * sysDict的Mapper类
  * 

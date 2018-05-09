@@ -105,4 +105,5 @@ public interface ISysDictItemService extends IService<SysDictItem> {
      * @throws SysManagementException
      */
     SysDictItem keyQueryDictItem(String id) throws SysManagementException;
+
 }

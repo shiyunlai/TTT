@@ -3,7 +3,6 @@ package org.tis.tools.abf.module.sys.controller.request;
 import lombok.Data;
 import org.hibernate.validator.constraints.NotBlank;
 import org.tis.tools.core.entity.request.RestRequest;
-
 @Data
 public class SysRunConfigAddRequest  extends RestRequest {
     @NotBlank(message = "应用系统不能为空")

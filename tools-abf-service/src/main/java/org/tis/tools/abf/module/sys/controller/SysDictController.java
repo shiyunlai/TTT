@@ -36,52 +36,6 @@ public class SysDictController  extends BaseController {
     @Autowired
     private ISysDictService iSysDictService;
 
-//    @RequestMapping("/importDict")
-//    public void importDict(@RequestParam("file") MultipartFile file, HttpServletResponse response) {
-//        try {
-//
-//            String filename = file.getOriginalFilename();
-//            InputStream inputStream = file.getInputStream();
-//            ExcelReader excelReader = new ExcelReader(filename, inputStream);
-//
-//            // 对读取Excel表格内容测试
-//            Map<Integer, Map<Integer, Object>> map = excelReader.readExcelContent("业务字典");
-//
-//            // 遍历结果集,逐条插入
-//            for (int i = 1; i <= map.size(); i++) {
-//                Map rs = map.get(i);
-//                if (rs.get(0) != null && rs.get(0) != "") {
-//                    SysDict sysDict = new SysDict();
-//                    sysDict.setDictName(rs.get(1).toString());
-//                    sysDict.setDictKey(rs.get(0).toString());
-//                    sysDict.setDictType(rs.get(5).toString());
-//                    sysDict.setDictDesc(rs.get(2).toString());
-//
-//                    SysDict retSysdict = dictRService.addDict(sysDict);
-//                    Map<Integer, Map<Integer, Object>> map2 = excelReader.readExcelContent2(sysDict.getDictKey());
-//                    for(int k = 3;k <= map2.size(); k++){
-//                        SysDictItem dictItem = new SysDictItem();
-//                        Map rs2 = map2.get(k);
-//                        if(rs2.get(0) != null && rs2.get(0) != "") {
-//                            dictItem.setItemName(rs2.get(2).toString());
-//                            dictItem.setItemValue(rs2.get(0).toString());
-//                            dictItem.setSendValue(rs2.get(1).toString());
-//                            dictItem.setGuidDict(retSysdict.getGuid());
-//                            dictRService.addDictItem(dictItem);
-//                        }
-//                    }
-//                }
-//            }
-//        } catch (ToolsRuntimeException e) {
-//            AjaxUtils.ajaxJsonErrorMessage(response,e.getCode(), e.getMessage());
-//            logger.error("appAdd exception : ", e);
-//        }catch (Exception e) {
-//            AjaxUtils.ajaxJsonErrorMessage(response,"SYS_0001", e.getMessage());
-//            logger.error("appAdd exception : ", e);
-//        }
-
-//    }
-
     /**
      * 新增业务字典
      * @param request

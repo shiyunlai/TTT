@@ -19,7 +19,6 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import static org.tis.tools.core.utils.BasicUtil.wrap;
-
 /**
  * sysDictItem的Service接口实现类
  * 

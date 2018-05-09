@@ -109,4 +109,5 @@ public interface ISysDictService extends IService<SysDict> {
      * @throws SysManagementException
      */
     List<SysDict> dictKeyQuery(String dictKey,String dict_name) throws SysManagementException;
+
 }

@@ -16,7 +16,6 @@ import org.tis.tools.core.exception.i18.ExceptionCodes;
 import java.util.List;
 
 import static org.tis.tools.core.utils.BasicUtil.wrap;
-
 /**
  * sysDict的Service接口实现类
  * 

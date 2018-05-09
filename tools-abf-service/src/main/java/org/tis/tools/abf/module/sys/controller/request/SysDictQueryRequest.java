@@ -3,7 +3,6 @@ package org.tis.tools.abf.module.sys.controller.request;
 import lombok.Data;
 import org.hibernate.validator.constraints.NotBlank;
 import org.tis.tools.core.entity.request.RestRequest;
-
 @Data
 public class SysDictQueryRequest extends RestRequest {
     private String guid;

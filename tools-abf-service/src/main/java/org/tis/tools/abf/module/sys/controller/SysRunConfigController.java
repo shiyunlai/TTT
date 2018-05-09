@@ -16,7 +16,6 @@ import org.tis.tools.core.web.controller.BaseController;
 import org.tis.tools.core.web.vo.ResultVO;
 
 import java.util.*;
-
 @RestController
 @RequestMapping("/SysConfig")
 @Validated

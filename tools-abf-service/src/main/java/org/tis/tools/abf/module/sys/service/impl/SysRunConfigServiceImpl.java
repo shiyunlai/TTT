@@ -16,7 +16,6 @@ import org.tis.tools.core.exception.i18.ExceptionCodes;
 import java.util.List;
 
 import static org.tis.tools.core.utils.BasicUtil.wrap;
-
 /**
  * <pre>
  * 系统参数（SYS_RUN_CONFIG）管理服务功能的实现类
