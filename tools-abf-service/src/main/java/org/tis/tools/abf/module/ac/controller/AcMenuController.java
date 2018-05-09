@@ -1,6 +1,9 @@
 package org.tis.tools.abf.module.ac.controller;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import org.springframework.validation.annotation.Validated;
+import org.tis.tools.abf.module.ac.exception.AcMenuManagementException;
 import org.tis.tools.core.web.controller.BaseController;
 import org.tis.tools.abf.module.ac.service.IAcMenuService;
 import org.tis.tools.core.web.vo.SmartPage;
@@ -9,6 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import org.tis.tools.abf.module.ac.entity.AcMenu;
 import org.hibernate.validator.constraints.NotBlank;
 import org.tis.tools.core.web.vo.ResultVO;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * acMenu的Controller类
@@ -23,25 +29,73 @@ public class AcMenuController extends BaseController<AcMenu>  {
     @Autowired
     private IAcMenuService acMenuService;
 
-    @PostMapping("/add")
-    public ResultVO add(@RequestBody @Validated AcMenu acMenu) {
-        acMenuService.insert(acMenu);
+    /**
+     * 新增根菜单
+     * @param acMenu 新增菜单对象
+     * @return 新增结果
+     */
+    @ResponseBody
+    @PostMapping("/addAcMenu")
+    public ResultVO addAcMenu(@RequestBody @Validated AcMenu acMenu) {
+        boolean result = acMenuService.createRootMenu(acMenu);
+        if(!result){
+            return ResultVO.error("422","新增菜单失败！");
+        }
         return ResultVO.success("新增成功！");
     }
-    
-    @PutMapping
+
+    /**
+     * 新增子菜单
+     * @param acMenu 新增子菜单对象
+     * @return 新增结果
+     */
+    @ResponseBody
+    @PostMapping("/addSubAcmenu")
+    public ResultVO addSubAcmenu(@RequestBody @Validated AcMenu acMenu) {
+        boolean result = acMenuService.createChildMenu(acMenu);
+        if(!result){
+            return ResultVO.error("422","新增菜单失败！");
+        }
+        return ResultVO.success("新增成功！");
+    }
+
+    /**
+     * 修改菜单
+     * @param acMenu 修改菜单对象
+     * @return 修改结果
+     */
+    @ResponseBody
+    @PutMapping("/updateAcMenu")
     public ResultVO update(@RequestBody @Validated AcMenu acMenu) {
-        acMenuService.updateById(acMenu);
+        boolean result = acMenuService.updateAcMenu(acMenu);
+        if(!result){
+            return ResultVO.error("422","修改菜单失败！");
+        }
         return ResultVO.success("修改成功！");
     }
-    
-    @DeleteMapping("/{id}")
+
+    /**
+     * 删除菜单
+     * @param id 要删除菜单的GUID
+     * @return 删除结果
+     */
+    @ResponseBody
+    @DeleteMapping("/deleteAcMenu/{id}")
     public ResultVO delete(@PathVariable @NotBlank(message = "id不能为空") String id) {
-        acMenuService.deleteById(id);
+        boolean result = acMenuService.deleteAllSubAcMenu(id);
+        if(!result){
+            return ResultVO.error("422","删除菜单失败！");
+        }
         return ResultVO.success("删除成功");
     }
-    
-    @GetMapping("/{id}")
+
+    /**
+     * 查询单条记录
+     * @param id 要查询菜单的GUID
+     * @return 查询结果
+     */
+    @ResponseBody
+    @GetMapping("/querySingAcMenu/{id}")
     public ResultVO detail(@PathVariable @NotBlank(message = "id不能为空") String id) {
         AcMenu acMenu = acMenuService.selectById(id);
         if (acMenuService == null) {
@@ -49,11 +103,79 @@ public class AcMenuController extends BaseController<AcMenu>  {
         }
         return ResultVO.success("查询成功", acMenu);
     }
-    
+
+    @ResponseBody
     @PostMapping("/list")
     public ResultVO list(@RequestBody @Validated SmartPage<AcMenu> page) {
         return  ResultVO.success("查询成功", acMenuService.selectPage(getPage(page), getCondition(page)));
     }
-    
+
+    /**
+     * 查询应用下根菜单数据
+     * @param id 应用的GUID
+     * @return 所有子菜单数据
+     */
+    @ResponseBody
+    @GetMapping("/queryAcMenuLists/{id}")
+    public ResultVO getMenu(@PathVariable @NotBlank(message = "id不能为空") String id){
+        List lists = acMenuService.queryRootMenu(id);
+        if(lists == null){
+            ResultVO.error("404","查询无数据！");
+        }
+        return ResultVO.success("查询成功",lists);
+    }
+
+    /**
+     * 查询子菜单数据
+     * @param id 父菜单的GUID
+     * @return 所有子菜单数据
+     */
+    @ResponseBody
+    @GetMapping("/querySubAcMenuLists/{id}")
+    public ResultVO getSubMenu(@PathVariable @NotBlank(message = "id不能为空") String id){
+        List lists = acMenuService.selectSubMenu(id);
+        if(lists == null){
+            ResultVO.error("404","查询无数据！");
+        }
+        return ResultVO.success("查询成功",lists);
+    }
+
+    /**
+     * 查询分页数据
+     * @param offset 当前页数
+     * @param limit 每页记录数
+     * @return 翻页对象
+     */
+    @ResponseBody
+    @GetMapping("/queryPageAcMenuLists/{offset}/{limit}")
+    public ResultVO getPageAcMenu(@PathVariable @NotBlank(message = "id不能为空") int offset
+            ,@PathVariable @NotBlank(message = "limit不能为空") int limit){
+        Page lists = acMenuService.queryPageAcMenu(offset,limit);
+        if(lists == null){
+            ResultVO.error("404","查询无数据！");
+        }
+        return ResultVO.success("查询成功",lists);
+    }
+
+    /**
+     * 菜单移动
+     *
+     * @param targetGuid 目标菜单GUID
+     * @param moveGuid   移动的菜单GUID
+     * @param order      排序
+     * @throws AcMenuManagementException
+     */
+    @ResponseBody
+    @GetMapping("/queryMoveMenuLists/{targetGuid}/{moveGuid}")
+    public ResultVO getMoveMenu(@PathVariable @NotBlank(message = "targetGuid不能为空") String targetGuid
+            , @PathVariable @NotBlank(message = "moveGuid不能为空")String moveGuid
+            ,@PathVariable @NotBlank(message = "order不能为空")BigDecimal order){
+        AcMenu lists = acMenuService.moveMenu(targetGuid,moveGuid,order);
+        if(lists == null){
+            ResultVO.error("404","查询无数据！");
+        }
+        return ResultVO.success("查询成功",lists);
+    }
+
 }
 
