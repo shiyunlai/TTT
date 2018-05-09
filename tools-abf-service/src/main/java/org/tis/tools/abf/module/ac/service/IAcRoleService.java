@@ -4,6 +4,7 @@ import org.tis.tools.abf.module.ac.entity.AcRole;
 import com.baomidou.mybatisplus.service.IService;
 import org.tis.tools.abf.module.ac.entity.AcRoleFunc;
 import org.tis.tools.abf.module.ac.exception.AcRoleManagementException;
+import org.tis.tools.abf.module.common.entity.enums.YON;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -88,7 +89,7 @@ public interface IAcRoleService extends IService<AcRole>{
      * @return 新建角色信息
      * @throws AcRoleManagementException
      */
-    AcRole createAcRole(String roleCode,String roleName,String enabled,String roleDesc) throws AcRoleManagementException;
+    boolean createAcRole(String roleCode, String roleName, YON enabled, String roleDesc) throws AcRoleManagementException;
 
     /**
      * <pre>
@@ -102,7 +103,7 @@ public interface IAcRoleService extends IService<AcRole>{
      * @return 修改角色信息
      * @throws AcRoleManagementException
      */
-    AcRole updateAcRole(AcRole acRole) throws AcRoleManagementException;
+    boolean updateAcRole(AcRole acRole) throws AcRoleManagementException;
 
     /**
      * <pre>
@@ -125,22 +126,39 @@ public interface IAcRoleService extends IService<AcRole>{
      *
      * </pre>
      * @param acRoleFunc
-     *
+     * @return 返回增加结果
      * @throws AcRoleManagementException
      */
-    void addRoleFunc(AcRoleFunc acRoleFunc) throws AcRoleManagementException;
+    boolean addRoleFunc(AcRoleFunc acRoleFunc) throws AcRoleManagementException;
 
 
     /**
      * <pre>
      * 移除某个角色的功能
-     *
+     * 传入角色ID 功能ID
      * </pre>
      * @param roleGuid
      * @param funcGuid
-     *
+     * @return 返回删除结果
      * @throws AcRoleManagementException
      */
-    void removeRoleFunc(String roleGuid,String funcGuid) throws AcRoleManagementException;
+    boolean removeRoleFunc(String roleGuid,String funcGuid) throws AcRoleManagementException;
+
+    /**
+     * <p>角色移除某应用的全部功能权限</p>
+     * <p>
+     * <pre>
+     *     业务逻辑
+     *     传入角色的GUID和功能GUID移除角色功能权限
+     *     1.验证传入的对象不能为空
+     *
+     * </pre>
+     * @param roleGuid
+     * @param appGuid
+     * @return 返回删除结果
+     * @throws AcRoleManagementException
+     */
+
+    boolean removeRoleFuncWithApp(String roleGuid,String appGuid) throws AcRoleManagementException;
 }
 

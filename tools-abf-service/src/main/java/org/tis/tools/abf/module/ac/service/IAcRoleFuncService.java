@@ -18,6 +18,18 @@ public interface IAcRoleFuncService extends IService<AcRoleFunc>  {
 
     /**
      * <pre>
+     *通过角色ID查询某个角色的数据有没有
+     * </pre>
+     *
+     * @param roelGuid
+     *
+     * @return 查询某个角色数据
+     * @throws AcRoleFuncManagementException
+     */
+    AcRoleFunc queryRoleFunByRoleGuid(String roelGuid) throws AcRoleFuncManagementException;
+
+    /**
+     * <pre>
      *通过角色ID查询某个角色的所有功能
      * </pre>
      *
@@ -36,9 +48,10 @@ public interface IAcRoleFuncService extends IService<AcRoleFunc>  {
      *
      *
      * @param acRoleFunc
+     * @return 返回增结果
      * @throws AcRoleFuncManagementException
      */
-    AcRoleFunc addRoleFunc(AcRoleFunc acRoleFunc) throws AcRoleFuncManagementException;
+    boolean addRoleFunc(AcRoleFunc acRoleFunc) throws AcRoleFuncManagementException;
 
     /**
      * <pre>
@@ -47,9 +60,10 @@ public interface IAcRoleFuncService extends IService<AcRoleFunc>  {
      *
      *
      * @param guidRole
+     * @return 返回增结果
      * @throws AcRoleFuncManagementException
      */
-    AcRoleFunc deleteAcRole(String guidRole) throws AcRoleFuncManagementException;
+    boolean deleteAcRole(String guidRole) throws AcRoleFuncManagementException;
 
 
     /**
@@ -57,10 +71,14 @@ public interface IAcRoleFuncService extends IService<AcRoleFunc>  {
      *删除某个角色的某些功能
      * </pre>
      *
-     * @param guidFunc
-     * @param guidRole
+     * @param acRoleFunc
+     * @return 返回增加结果
      * @throws AcRoleFuncManagementException
      */
-    AcRoleFunc deleteAcRoleByCondition(String guidRole,String guidFunc) throws AcRoleFuncManagementException;
+    boolean deleteAcRoleByCondition(AcRoleFunc acRoleFunc) throws AcRoleFuncManagementException;
+
+
+
+
 }
 
