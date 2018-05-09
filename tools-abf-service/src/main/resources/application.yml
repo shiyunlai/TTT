@@ -27,8 +27,8 @@ tools:
 
 mybatis-plus:
   mapper-locations: classpath*:org/tis/tools/abf/module/**/dao/mapping/*.xml
-  typeAliasesPackage: org.tis.tools.abf.module.**.enums
-  typeEnumsPackage: org.tis.tools.abf.module.**.enums
+  typeAliasesPackage: org.tis.tools.abf.module.*.entity
+  typeEnumsPackage: org.tis.tools.abf.module.*.entity.enums
   global-config:
     id-type: 5
     field-strategy: 2
@@ -65,7 +65,7 @@ tools:
   mybatis-performance-open: true
   multi-datasource:
     datasource-name: otherDataSource
-    url: jdbc:mysql://127.0.0.1:3306/test?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false
+    url: jdbc:mysql://127.0.0.1:3306/database1?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false
     username: root
     password: zhoushihao
 
@@ -102,7 +102,7 @@ spring:
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/tools?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false
     username: root
-    password: zhoushihao
+    password: root123
     filters: log4j,wall,mergeStat
 
 tools:

@@ -7,8 +7,6 @@ import org.tis.tools.abf.base.BaseTest;
 import org.tis.tools.abf.module.om.entity.OmOrg;
 import org.tis.tools.abf.module.om.service.IOmOrgService;
 
-import static org.junit.Assert.*;
-
 public class OmOrgServiceImplTest extends BaseTest {
 
     @Autowired
@@ -27,7 +25,7 @@ public class OmOrgServiceImplTest extends BaseTest {
         String orgType = "CS" ;
         OmOrg omOrg = omOrgService.queryOrg("981360076294012929");
         System.out.println(omOrg.getArea());
-        System.out.println(omOrg.getCreateTime());
+//        System.out.println(omOrg.getCreateTime());
         System.out.println(omOrg.getEndDate());
         System.out.println(omOrg.getGuidParents());
         System.out.println(omOrg.getLinkMan());

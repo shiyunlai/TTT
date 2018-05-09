@@ -1,19 +1,17 @@
 package org.tis.tools.abf.module.om.controller;
 
 import org.apache.commons.lang.StringUtils;
-import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.tis.tools.abf.module.common.log.OperateLog;
+import org.tis.tools.abf.module.common.log.OperateType;
 import org.tis.tools.abf.module.common.log.ReturnType;
-import org.tis.tools.abf.module.common.web.controller.BaseController;
-import org.tis.tools.abf.module.common.web.vo.ResultVO;
 import org.tis.tools.abf.module.om.controller.request.OmOrgAddRequest;
 import org.tis.tools.abf.module.om.entity.OmOrg;
 import org.tis.tools.abf.module.om.service.IOmOrgService;
-
-import javax.validation.constraints.NotNull;
+import org.tis.tools.core.web.controller.BaseController;
+import org.tis.tools.core.web.vo.ResultVO;
 
 /**
  * describe: 机构controller
@@ -36,7 +34,7 @@ public class OmOrgController extends BaseController {
      * @return
      */
     @OperateLog(
-            operateType = "add",  // 操作类型
+            operateType = OperateType.ADD,  // 操作类型
             operateDesc = "新增机构", // 操作描述
             retType = ReturnType.Object, // 返回类型，对象或数组
             id = "orgCode", // 操作对象标识

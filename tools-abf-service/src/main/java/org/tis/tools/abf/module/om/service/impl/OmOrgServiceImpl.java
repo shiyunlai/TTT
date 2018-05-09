@@ -5,14 +5,10 @@ package org.tis.tools.abf.module.om.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.tis.tools.abf.module.common.entity.enums.YON;
-import org.tis.tools.abf.module.common.exception.ExceptionCodes;
 import org.tis.tools.abf.module.om.dao.OmOrgMapper;
 import org.tis.tools.abf.module.om.entity.OmOrg;
 import org.tis.tools.abf.module.om.entity.enums.OmOrgStatus;
@@ -20,12 +16,12 @@ import org.tis.tools.abf.module.om.exception.OMExceptionCodes;
 import org.tis.tools.abf.module.om.exception.OrgManagementException;
 import org.tis.tools.abf.module.om.service.IOmOrgService;
 import org.tis.tools.abf.module.om.service.IOrgCodeGenerator;
-import org.tis.tools.common.utils.StringUtil;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
 
-import static org.tis.tools.common.utils.BasicUtil.wrap;
+import static org.tis.tools.core.utils.BasicUtil.wrap;
 
 
 /**
@@ -80,19 +76,7 @@ public class OmOrgServiceImpl extends ServiceImpl<OmOrgMapper, OmOrg> implements
 	@Override
 	public OmOrg createRootOrg(String areaCode, String orgDegree, String orgName,  String orgType)
 			throws OrgManagementException {
-		//验证传入参数
-		if(StringUtils.isEmpty(areaCode)) {
-			throw new OrgManagementException(ExceptionCodes.NOT_ALLOW_NULL_WHEN_CALL, wrap("String areaCode", "createRootOrg"));
-		}
-		if(StringUtil.isEmpty(orgDegree)) {
-			throw new OrgManagementException(ExceptionCodes.NOT_ALLOW_NULL_WHEN_CALL, wrap("String orgDegree", "createRootOrg"));
-		}
-		if(StringUtil.isEmpty(orgName)) {
-			throw new OrgManagementException(ExceptionCodes.NOT_ALLOW_NULL_WHEN_CALL, wrap("String orgName", "createRootOrg"));
-		}
-		if(StringUtil.isEmpty(orgType)) {
-			throw new OrgManagementException(ExceptionCodes.NOT_ALLOW_NULL_WHEN_CALL, wrap("String orgType", "createRootOrg"));
-		}
+
 		OmOrg org = new OmOrg();
 		// 补充信息
 //		org.setGuid(GUID.org());// 补充GUID
@@ -100,10 +84,6 @@ public class OmOrgServiceImpl extends ServiceImpl<OmOrgMapper, OmOrg> implements
 		org.setOrgStatus(OmOrgStatus.STOP);
 		// 补充父机构，根节点没有父机构
 		org.setGuidParents("");
-		// 补充创建时间
-		org.setCreateTime(new Date());
-		// 补充最近更新时间
-		org.setLastUpdate(new Date());
 		// 新增节点都先算叶子节点 Y
 		org.setIsleaf(YON.YES);
 		// 设置机构序列,根机构直接用guid
@@ -125,22 +105,6 @@ public class OmOrgServiceImpl extends ServiceImpl<OmOrgMapper, OmOrg> implements
 	@Override
 	public OmOrg createChildOrg(String areaCode, String orgDegree, String orgName, String orgType, String guidParents)
 			throws OrgManagementException {
-		//验证传入参数
-		if(StringUtil.isEmpty(areaCode)) {
-			throw new OrgManagementException(ExceptionCodes.NOT_ALLOW_NULL_WHEN_CALL, wrap("String areaCode", "createChildOrg"));
-		}
-		if(StringUtil.isEmpty(orgDegree)) {
-			throw new OrgManagementException(ExceptionCodes.NOT_ALLOW_NULL_WHEN_CALL, wrap("String orgDegree", "createChildOrg"));
-		}
-		if(StringUtil.isEmpty(orgName)) {
-			throw new OrgManagementException(ExceptionCodes.NOT_ALLOW_NULL_WHEN_CALL, wrap("String orgName", "createChildOrg"));
-		}
-		if(StringUtil.isEmpty(orgType)) {
-			throw new OrgManagementException(ExceptionCodes.NOT_ALLOW_NULL_WHEN_CALL, wrap("String orgType", "createChildOrg"));
-		}
-		if(StringUtil.isEmpty(guidParents)) {
-			throw new OrgManagementException(ExceptionCodes.NOT_ALLOW_NULL_WHEN_CALL, wrap("String guidParents", "createChildOrg"));
-		}
 		// 查询父机构信息
 		OmOrg parentsOrg = selectById(guidParents);
 		if(parentsOrg == null) {
@@ -150,14 +114,15 @@ public class OmOrgServiceImpl extends ServiceImpl<OmOrgMapper, OmOrg> implements
 		String parentsOrgSeq = parentsOrg.getOrgSeq();
 		OmOrg org = new OmOrg();
 		// 补充信息
-//		org.setGuid(GUID.org());// 补充GUID
-		org.setOrgStatus(OmOrgStatus.STOP);// 补充机构状态，新增机构初始状态为 停用
-		org.setGuidParents(parentsOrg.getGuid());// 补充父机构，根节点没有父机构
-		org.setCreateTime(new Date());// 补充创建时间
-		org.setLastUpdate(new Date());// 补充最近更新时间
-		org.setIsleaf(YON.YES);// 新增节点都先算叶子节点 Y
+		// 补充机构状态，新增机构初始状态为 停用
+		org.setOrgStatus(OmOrgStatus.STOP);
+		// 补充父机构，根节点没有父机构
+		org.setGuidParents(parentsOrg.getGuid());
+		// 新增节点都先算叶子节点 Y
+		org.setIsleaf(YON.YES);
 		String newOrgSeq = parentsOrgSeq + "." + org.getGuid();
-		org.setOrgSeq(newOrgSeq);// 设置机构序列,根据父机构的序列+"."+机构的GUID
+		// 设置机构序列,根据父机构的序列+"."+机构的GUID
+		org.setOrgSeq(newOrgSeq);
 		// 收集入参
 		org.setOrgCode(orgCodeGenerator.genOrgCode(orgDegree, areaCode));
 		org.setOrgName(orgName);
@@ -165,8 +130,6 @@ public class OmOrgServiceImpl extends ServiceImpl<OmOrgMapper, OmOrg> implements
 		org.setOrgDegree(orgDegree);
 		org.setArea(areaCode);
 		// 更新父节点机构 是否叶子节点 节点数 最新更新时间 和最新更新人员
-		parentsOrg.setLastUpdate(new Date());// 补充最近更新时间
-		parentsOrg.setUpdator("");// TODO 暂时为空
 		parentsOrg.setIsleaf(YON.NO);
 		insert(org);//新增子节点
 		updateById(parentsOrg);//更新父节点

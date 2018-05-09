@@ -3,7 +3,6 @@ package org.tis.tools.abf.module.om.service.impl;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static org.tis.tools.common.utils.BasicUtil.wrap;
 
 /**
  * 通用的服务类，不暴露接口只用于内部调用

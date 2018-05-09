@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.tis.tools.abf.module.om.exception.OMExceptionCodes;
 import org.tis.tools.abf.module.om.exception.OrgManagementException;
 import org.tis.tools.abf.module.om.service.IOrgCodeGenerator;
-import org.tis.tools.abf.module.sys.service.ISeqnoService;
+import org.tis.tools.abf.module.sys.service.ISysSeqnoService;
 
 /**
  * 机构代码生成
@@ -20,7 +20,7 @@ import org.tis.tools.abf.module.sys.service.ISeqnoService;
 public class OrgCodeServiceImpl implements IOrgCodeGenerator {
 
     @Autowired
-    private ISeqnoService seqnoRService;
+    private ISysSeqnoService seqnoRService;
 
     /**
      * <pre>
@@ -89,7 +89,7 @@ public class OrgCodeServiceImpl implements IOrgCodeGenerator {
 
         String t = String.valueOf(totalOrgCount).toString();
 
-        return org.tis.tools.common.utils.StringUtil.leftPad(t, 5, '0');
+        return org.tis.tools.core.utils.StringUtil.leftPad(t, 5, '0');
 
     }
 

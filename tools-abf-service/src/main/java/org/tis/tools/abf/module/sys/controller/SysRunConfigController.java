@@ -6,14 +6,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.tis.tools.abf.module.common.log.OperateLog;
+import org.tis.tools.abf.module.common.log.OperateType;
 import org.tis.tools.abf.module.common.log.ReturnType;
-import org.tis.tools.abf.module.common.web.controller.BaseController;
-import org.tis.tools.abf.module.common.web.vo.ResultVO;
 import org.tis.tools.abf.module.sys.controller.request.SysRunConfigAddRequest;
-import org.tis.tools.abf.module.sys.controller.request.SysRunConfigQueryRequest;
 import org.tis.tools.abf.module.sys.controller.request.SysRunConfigRequest;
 import org.tis.tools.abf.module.sys.entity.SysRunConfig;
 import org.tis.tools.abf.module.sys.service.ISysRunConfigService;
+import org.tis.tools.core.web.controller.BaseController;
+import org.tis.tools.core.web.vo.ResultVO;
 
 import java.util.*;
 
@@ -30,7 +30,7 @@ public class SysRunConfigController extends BaseController {
      * @return
      */
     @OperateLog(
-            operateType = "add",  // 操作类型
+            operateType = OperateType.ADD,  // 操作类型
             operateDesc = "新增系统参数机构", // 操作描述
             retType = ReturnType.Object, // 返回类型，对象或数组
             id = "guidApp", // 操作对象标识
@@ -40,7 +40,7 @@ public class SysRunConfigController extends BaseController {
     @PostMapping("/add_Config")
     public ResultVO add_Config(@RequestBody @Validated SysRunConfigAddRequest request){
         SysRunConfig sysRunConfig = ISysRunConfigService.createSysRunConfig(request.getGuidApp(),request.getGroupName(),
-                                                    request.getKeyName(),request.getValueFrom(),request.getValue(),request.getDescription());
+                request.getKeyName(),request.getValueFrom(),request.getValue(),request.getDescription());
         return ResultVO.success("添加成功",sysRunConfig);
     }
     /**
@@ -50,7 +50,7 @@ public class SysRunConfigController extends BaseController {
      * @return
      */
     @OperateLog(
-            operateType = "update",  // 操作类型
+            operateType = OperateType.UPDATE,  // 操作类型
             operateDesc = "修改系统参数机构", // 操作描述
             retType = ReturnType.Object, // 返回类型，对象或数组
             id = "guid", // 操作对象标识
@@ -66,11 +66,11 @@ public class SysRunConfigController extends BaseController {
     /**
      * 查询系统参数
      *
-     * @param requst
+     * @param id
      * @return
      */
     @OperateLog(
-            operateType = "query",  // 操作类型
+            operateType = OperateType.QUERY,  // 操作类型
             operateDesc = "系统参数机构", // 操作描述
             retType = ReturnType.List, // 返回类型，对象或数组
             id = "guid", // 操作对象标识
@@ -78,8 +78,8 @@ public class SysRunConfigController extends BaseController {
             keys = "guid"
     )
     @PostMapping("/query_Config")
-    public ResultVO query_Config(@RequestBody @Validated SysRunConfigQueryRequest requst){
-        List list = ISysRunConfigService.queryAllSysRunConfig(requst.getGuid());
+    public ResultVO query_Config(@RequestBody @Validated String id){
+        List list = ISysRunConfigService.queryAllSysRunConfig(id);
         return ResultVO.success("查询成功",list);
     }
     /**
@@ -89,7 +89,7 @@ public class SysRunConfigController extends BaseController {
      * @return
      */
     @OperateLog(
-            operateType = "delete",  // 操作类型
+            operateType = OperateType.DELETE,  // 操作类型
             operateDesc = "系统参数机构", // 操作描述
             retType = ReturnType.Object, // 返回类型，对象或数组
             id = "guid", // 操作对象标识

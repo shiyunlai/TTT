@@ -2,7 +2,7 @@ package org.tis.tools.abf.module.om.entity;
 
 import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableName;
-import org.tis.tools.common.utils.StringUtil;
+import org.tis.tools.core.utils.StringUtil;
 
 
 import java.io.Serializable;

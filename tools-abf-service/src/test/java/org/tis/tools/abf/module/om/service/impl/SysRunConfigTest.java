@@ -45,7 +45,7 @@ public class SysRunConfigTest extends BaseTest{
     }
     @Test
     public void delete(){
-        iSysRunConfigService.deleteSysRunConfig("986179571516792834");
+//        iSysRunConfigService.deleteSysRunConfig("986179571516792834");
     }
 
 }

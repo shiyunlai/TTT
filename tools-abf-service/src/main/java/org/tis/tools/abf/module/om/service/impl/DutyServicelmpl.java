@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
-import org.tis.tools.abf.module.common.exception.ToolsRuntimeException;
 import org.tis.tools.abf.module.om.dao.OmAppGroupMapper;
 import org.tis.tools.abf.module.om.dao.OmDutyMapper;
 import org.tis.tools.abf.module.om.entity.OmDuty;
