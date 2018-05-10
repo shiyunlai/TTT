@@ -62,7 +62,7 @@ public class OperateLogHandler {
 
 
     @Around("logPoint()")
-    public void handle(ProceedingJoinPoint point) throws Throwable {
+    public Object handle(ProceedingJoinPoint point) throws Throwable {
         Object result = null;
         //执行业务
         boolean flag = true;
@@ -106,19 +106,22 @@ public class OperateLogHandler {
                     .setOperateType(log.operateType())
                     .setProcessDesc(log.operateDesc())
                     .setRestfulUrl(uri);
-            LogThreadLocal.setLogBuilderLocal(logBuilder);
-
+//            LogThreadLocal.setLogBuilderLocal(logBuilder);
             if (flag) {
-                handleSuccessReturn(log, point, (ResultVO) result);
-                String objStr = JSON.toJSONString(((ResultVO)result).getResult());
-                logger.info(" [响应] Request URL:{}; Request Method:{}; Response Body:{}", BasicUtil.wrap(uri,
-                        request.getMethod(), objStr)) ;
+                handleSuccessReturn(logBuilder, log, point, (ResultVO) result);
             } else {
-                String message = handleErrorReturn(exception);
-                logger.error(" [响应] Request URL:{}; Request Method:{}; Response Body:{}", BasicUtil.wrap(uri,
-                        request.getMethod(), message)) ;
-                throw exception;
+                handleErrorReturn(logBuilder, exception);
             }
+        }
+        if (flag) {
+            String objStr = JSON.toJSONString(((ResultVO)result).getResult());
+            logger.info(" [响应] Request URL:{}; Request Method:{}; Response Body:{}", BasicUtil.wrap(uri,
+                    request.getMethod(), objStr)) ;
+            return result;
+        } else {
+            logger.error(" [响应] Request URL:{}; Request Method:{}; Response Body:{}", BasicUtil.wrap(uri,
+                    request.getMethod(), getStackTraceString(exception))) ;
+            throw exception;
         }
     }
 
@@ -127,11 +130,11 @@ public class OperateLogHandler {
     /**
      * 保存操作日志
      */
-    private void saveOperateLog() {
+    private void saveOperateLog(LogOperateDetail log) {
         try {
             // 日志记录操作延时
             int operateDelayTime = 3000;
-            executor.schedule(businessLog(LogThreadLocal.getLogBuilderLocal().getLog())
+            executor.schedule(businessLog(log)
                     , operateDelayTime, TimeUnit.MILLISECONDS);
         } catch (Exception e) {
             logger.error("保存日志出错", e);
@@ -184,10 +187,9 @@ public class OperateLogHandler {
      * @param point
      * @param ret
      */
-    private void handleSuccessReturn(OperateLog logAnt, JoinPoint point, ResultVO ret) {
-        LogOperateDetail log = LogThreadLocal.getLogBuilderLocal().getLog();
+    private void handleSuccessReturn(OperateLogBuilder logBuilder, OperateLog logAnt, JoinPoint point, ResultVO ret) {
+        LogOperateDetail log = logBuilder.getLog();
         log.setOperateResult(OperateResult.SUCCESS);
-
         // 添加数据变化项（LogAbfChange）到操作日志
         JSONObject reqData = new JSONObject();
         for(Object arg : point.getArgs()){
@@ -229,12 +231,13 @@ public class OperateLogHandler {
                     if (changeData != null) {
                         changeData.getJSONObject(i).keySet()
                                 .forEach(key ->
-                                        log.getObj(finalI).addChangeItem(key, changeData.getJSONObject(finalI).getString(key)));
+                                        log.getObj(finalI).addChangeItem(key, changeData.getJSONObject(finalI)
+                                                .getString(key)));
                     }
                 }
             }
         }
-        saveOperateLog();
+        saveOperateLog(logBuilder.getLog());
     }
 
     /**
@@ -243,22 +246,30 @@ public class OperateLogHandler {
      * @return
      * @throws IOException
      */
-    private String handleErrorReturn(Exception e) throws IOException {
-        OperateLogBuilder logBuilder = LogThreadLocal.getLogBuilderLocal();
+    private void handleErrorReturn(OperateLogBuilder logBuilder, Exception e) throws IOException {
+//        OperateLogBuilder logBuilder = LogThreadLocal.getLogBuilderLocal();
         if(e instanceof ToolsRuntimeException) {
             logBuilder.getLog().setOperateResult(OperateResult.FAILURE);
         } else {
             logBuilder.getLog().setOperateResult(OperateResult.ERROR);
         }
+        String message = getStackTraceString(e);
+        // 数据库设置字段长度为4000，一些异常堆栈过长，截取4000长度保存
+        logBuilder.getLog().setStackTrace(message.length() > 4000 ? message.substring(0, 3999) : message);
+        saveOperateLog(logBuilder.getLog());
+    }
+
+    /**
+     * 获取异常堆栈字符
+     * @param e
+     * @return
+     */
+    private String getStackTraceString(Exception e) throws IOException {
         // 获取堆栈String
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
         e.printStackTrace(pw);
         String message = sw.toString();
-        // 数据库设置字段长度为4000，一些异常堆栈过长，截取4000长度保存
-        logBuilder.getLog().setStackTrace(sw.toString().length() > 4000 ?
-                sw.toString().substring(0, 3999) : sw.toString());
-        saveOperateLog();
         pw.close();
         sw.close();
         return message;
