@@ -109,10 +109,9 @@ public class SysDictItemServiceImpl extends ServiceImpl<SysDictItemMapper,SysDic
 
     @Override
     public SysDictItem guidQueryOneSysDic(String id) throws SysManagementException {
-        SysDictItem sysDictItem = new SysDictItem();
         EntityWrapper<SysDictItem> wrapper = new EntityWrapper<>();
         wrapper.eq(SysDictItem.COLUMN_GUID, id);
-        sysDictItem = selectOne(wrapper);
+        SysDictItem sysDictItem = selectOne(wrapper);
         if (sysDictItem == null) {
             throw new SysManagementException(
                     ExceptionCodes.NOT_FOUND_WHEN_QUERY,
