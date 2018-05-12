@@ -2,6 +2,7 @@ package org.tis.tools.core.aop;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.validation.BindingResult;
@@ -15,6 +16,7 @@ import org.tis.tools.core.web.vo.ResultVO;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import java.sql.SQLException;
 import java.util.Set;
 
 /**
@@ -86,6 +88,26 @@ public class BaseControllerExceptionHandler {
         return ResultVO.error(ex.getCode(), ex.getMessage());
     }
 
+
+    /**
+     * SQL错误
+     */
+    @ExceptionHandler(SQLException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResultVO handleSQLException() {
+        // SQL堆栈信息包含敏感信息，不返回前端，在日志中可以查看详细信息
+        return ResultVO.error("内部服务发生了SQL错误！");
+    }
+
+    /**
+     * SQL错误
+     */
+    @ExceptionHandler(DataAccessException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResultVO handleDataAccessException() {
+        // SQL堆栈信息包含敏感信息，不返回前端，在日志中可以查看详细信息
+        return ResultVO.error("内部服务发生了SQL错误！");
+    }
 
     /**
      * 未知异常
