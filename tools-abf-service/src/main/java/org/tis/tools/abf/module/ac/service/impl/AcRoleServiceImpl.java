@@ -14,10 +14,6 @@ import org.tis.tools.abf.module.ac.service.IAcRoleFuncService;
 import org.tis.tools.abf.module.ac.service.IAcRoleService;
 import org.tis.tools.abf.module.common.entity.enums.YON;
 import org.tis.tools.core.exception.i18.ExceptionCodes;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.tis.tools.core.utils.BasicUtil.wrap;
 
 /**
@@ -35,44 +31,27 @@ public class AcRoleServiceImpl extends ServiceImpl<AcRoleMapper, AcRole> impleme
     @Autowired
     IAcRoleService acRoleService;
 
+
     /**
      * <pre>
-     * 查询所有角色
+     * 根据条件查询角色
      * </pre>
      *
-     * @param
+     * @param acRole
      *
      * @return 匹配的角色
      *
      * @throws AcRoleManagementException
      */
     @Override
-    public List<AcRole> queryAllRole() throws AcRoleManagementException {
-        List<AcRole> AcRoleList = new ArrayList<AcRole>() ;
-        try {
-            AcRoleList = selectList(null);
-            return AcRoleList;
-        }catch (Exception e){
-            throw new AcRoleManagementException(ExceptionCodes.FAILURE_WHEN_QUERY,wrap("ACROLE",e));
-        }
-
-
-    }
-    /**
-     * <pre>
-     * 根据角色代码查询角色
-     * </pre>
-     *
-     * @param roleCode
-     *
-     * @return 匹配的角色
-     *
-     * @throws AcRoleManagementException
-     */
-    @Override
-    public AcRole queryByCode(String roleCode) throws AcRoleManagementException{
+    public AcRole queryByCondition(AcRole acRole) throws AcRoleManagementException{
         EntityWrapper<AcRole> acRoleEntityWrapper = new EntityWrapper<>();
-        acRoleEntityWrapper.eq(AcRole.COLUMN_ROLE_CODE, roleCode);
+        if(StringUtils.isNotBlank(acRole.getRoleCode())){
+            acRoleEntityWrapper.eq(AcRole.COLUMN_ROLE_CODE, acRole.getRoleCode());
+        }
+        if(StringUtils.isNotBlank(acRole.getRoleName())){
+            acRoleEntityWrapper.eq(AcRole.COLUMN_ROLE_NAME, acRole.getRoleName());
+        }
         try {
             AcRole acRole1 = selectOne(acRoleEntityWrapper);
             return acRole1;
@@ -81,52 +60,7 @@ public class AcRoleServiceImpl extends ServiceImpl<AcRoleMapper, AcRole> impleme
         }
 
     }
-    /**
-     * <pre>
-     * 根据角色名字查询角色
-     * </pre>
-     *
-     * @param roleName
-     *
-     * @return 匹配的角色
-     *
-     * @throws AcRoleManagementException
-     */
-    @Override
-    public AcRole queryByName(String roleName) throws AcRoleManagementException{
-        EntityWrapper<AcRole> acRoleEntityWrapper = new EntityWrapper<>();
-        acRoleEntityWrapper.eq(AcRole.COLUMN_ROLE_NAME, roleName);
-        try{
-            AcRole acRole1 = selectOne(acRoleEntityWrapper);
-            return acRole1;
-        }catch (Exception e){
-            throw new AcRoleManagementException(ExceptionCodes.FAILURE_WHEN_QUERY,wrap("ACROLE",e));
-        }
 
-    }
-    /**
-     * <pre>
-     * 根据ID查询角色
-     * </pre>
-     *
-     * @param guid
-     *
-     * @return 匹配的角色
-     *
-     * @throws AcRoleManagementException
-     */
-    @Override
-    public AcRole queryByGuid(String guid) throws AcRoleManagementException {
-        EntityWrapper<AcRole> acRoleEntityWrapper = new EntityWrapper<>();
-        acRoleEntityWrapper.eq(AcRole.COLUMN_GUID, guid);
-        try {
-            AcRole acRole1 = selectOne(acRoleEntityWrapper);
-            return acRole1;
-        }catch (Exception e){
-            throw new AcRoleManagementException(ExceptionCodes.FAILURE_WHEN_QUERY,wrap("ACROLE",e));
-        }
-
-    }
     /**
      * <pre>
      * 新建一个角色
@@ -174,8 +108,10 @@ public class AcRoleServiceImpl extends ServiceImpl<AcRoleMapper, AcRole> impleme
      */
     @Override
     public boolean updateAcRole(AcRole acRole) throws AcRoleManagementException {
+        EntityWrapper<AcRole> acRoleEntityWrapper = new EntityWrapper<>();
+        acRoleEntityWrapper.eq(AcRole.COLUMN_ROLE_CODE,acRole.getRoleCode());
         try {
-            boolean bolen = updateById(acRole);
+            boolean bolen = update(acRole,acRoleEntityWrapper);
             return bolen;
         }catch (Exception e){
             throw new AcRoleManagementException(ExceptionCodes.FAILURE_WHEN_UPDATE,wrap("ACROLE",e));
@@ -196,13 +132,11 @@ public class AcRoleServiceImpl extends ServiceImpl<AcRoleMapper, AcRole> impleme
      */
     @Override
     public boolean deleteByRoleCode(String roleCode) throws AcRoleManagementException {
-        AcRole acRole = acRoleService.queryByCode(roleCode);
-        if(acRole ==  null){
-            throw new AcRoleManagementException(ExceptionCodes.NOT_ALLOW_NULL_WHEN_QUERY, wrap("ACROLE", "AC_ROLE"));
-        }
+        AcRoleFunc acRoleFunc = new AcRoleFunc();
+        acRoleFunc.setGuidRole(roleCode);
         try{
             //删掉对应功能表格数据
-            acRoleFuncService.deleteAcRole(roleCode);
+            acRoleFuncService.queryRoleFunByCondition(acRoleFunc);
             EntityWrapper<AcRole> acRoleEntityWrapper = new EntityWrapper<>();
             acRoleEntityWrapper.eq(AcRole.COLUMN_ROLE_CODE, roleCode);
             boolean bolen = delete(acRoleEntityWrapper);
@@ -235,64 +169,8 @@ public class AcRoleServiceImpl extends ServiceImpl<AcRoleMapper, AcRole> impleme
 
     }
 
-    /**
-     * <pre>
-     * 移除某个角色的特定的功能
-     *
-     * </pre>
-     * @param roleGuid
-     * @param funcGuid
-     * @return 返回删除结果
-     * @throws AcRoleManagementException
-     */
-    @Override
-    public boolean removeRoleFunc(String roleGuid, String funcGuid) throws AcRoleManagementException {
-        try {
-            AcRoleFunc acRoleFunc = acRoleFuncService.selectById(roleGuid);
-            if(acRoleFunc == null){
-                throw  new AcRoleManagementException(ExceptionCodes.NOT_ALLOW_NULL_WHEN_DELETE,wrap("AC_ROLE_FUNC","AC_ROLE_FUNC"));
-            }
-            acRoleFunc.setGuidRole(roleGuid);
-            acRoleFunc.setGuidFunc(funcGuid);
-            acRoleFunc.setGuidApp("");
-            boolean bolen = acRoleFuncService.deleteAcRoleByCondition(acRoleFunc);
-            return bolen;
-        }catch (Exception e){
-            throw new AcRoleManagementException(ExceptionCodes.FAILURE_WHEN_INSERT,wrap("AC_ROLE_FUNC","AC_ROLE_FUNC"));
-        }
-    }
 
 
-    /**
-     * <p>角色移除某应用的全部功能权限</p>
-     * <p>
-     * <pre>
-     *     业务逻辑
-     *     传入角色的GUID和功能GUID移除角色功能权限
-     *     1.验证传入的对象不能为空
-     *
-     * </pre>
-     * @param roleGuid
-     * @param appGuid
-     * @return 返回删除结果
-     *
-     * @throws AcRoleManagementException
-     */
-    @Override
-    public boolean removeRoleFuncWithApp(String roleGuid, String appGuid) throws AcRoleManagementException {
-        try {
-            AcRoleFunc acRoleFunc = acRoleFuncService.selectById(roleGuid);
-            if(acRoleFunc == null){
-                throw  new AcRoleManagementException(ExceptionCodes.NOT_ALLOW_NULL_WHEN_DELETE,wrap("AC_ROLE_FUNC","AC_ROLE_FUNC"));
-            }
-            acRoleFunc.setGuidRole(roleGuid);
-            acRoleFunc.setGuidApp(appGuid);
-            acRoleFunc.setGuidFunc("");
-            boolean bolen = acRoleFuncService.deleteAcRoleByCondition(acRoleFunc);
-            return bolen;
-        }catch (Exception e){
-            throw new AcRoleManagementException(ExceptionCodes.FAILURE_WHEN_INSERT,wrap("AC_ROLE_FUNC","AC_ROLE_FUNC"));
-        }
-    }
+
 }
 

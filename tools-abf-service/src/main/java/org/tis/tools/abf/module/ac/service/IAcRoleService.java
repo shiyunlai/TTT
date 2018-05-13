@@ -18,58 +18,23 @@ import java.util.List;
  * @date 2018/04/23
  */
 public interface IAcRoleService extends IService<AcRole>{
+
+
     /**
      * <pre>
-     * 查询所有角色
+     * 根据条件查询角色
      * </pre>
      *
-     * @param
+     * @param acRole
      *
      * @return 匹配的角色
      *
      * @throws AcRoleManagementException
      */
-    List<AcRole> queryAllRole() throws AcRoleManagementException;
-
-    /**
-     * <pre>
-     * 根据Code查询角色
-     * </pre>
-     *
-     * @param roleCode
-     *
-     * @return 匹配的角色
-     *
-     * @throws AcRoleManagementException
-     */
-    AcRole queryByCode(String roleCode)throws AcRoleManagementException;
+    AcRole queryByCondition(AcRole acRole)throws AcRoleManagementException;
 
 
-    /**
-     * <pre>
-     * 根据名字查询角色
-     * </pre>
-     *
-     * @param roleName
-     *
-     * @return 匹配的角色
-     *
-     * @throws AcRoleManagementException
-     */
-    AcRole queryByName(String roleName)throws AcRoleManagementException;
 
-    /**
-     * <pre>
-     * 根据ID查询角色
-     * </pre>
-     *
-     * @param guid
-     *
-     * @return 匹配的角色
-     *
-     * @throws AcRoleManagementException
-     */
-    AcRole queryByGuid(String guid)throws AcRoleManagementException;
 
     /**
      * <pre>
@@ -132,33 +97,6 @@ public interface IAcRoleService extends IService<AcRole>{
     boolean addRoleFunc(AcRoleFunc acRoleFunc) throws AcRoleManagementException;
 
 
-    /**
-     * <pre>
-     * 移除某个角色的功能
-     * 传入角色ID 功能ID
-     * </pre>
-     * @param roleGuid
-     * @param funcGuid
-     * @return 返回删除结果
-     * @throws AcRoleManagementException
-     */
-    boolean removeRoleFunc(String roleGuid,String funcGuid) throws AcRoleManagementException;
 
-    /**
-     * <p>角色移除某应用的全部功能权限</p>
-     * <p>
-     * <pre>
-     *     业务逻辑
-     *     传入角色的GUID和功能GUID移除角色功能权限
-     *     1.验证传入的对象不能为空
-     *
-     * </pre>
-     * @param roleGuid
-     * @param appGuid
-     * @return 返回删除结果
-     * @throws AcRoleManagementException
-     */
-
-    boolean removeRoleFuncWithApp(String roleGuid,String appGuid) throws AcRoleManagementException;
 }
 

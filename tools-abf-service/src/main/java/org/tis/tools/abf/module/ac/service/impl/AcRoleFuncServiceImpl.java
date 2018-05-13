@@ -10,9 +10,7 @@ import org.tis.tools.abf.module.ac.dao.AcRoleFuncMapper;
 import org.tis.tools.abf.module.ac.entity.AcRoleFunc;
 import org.springframework.transaction.annotation.Transactional;
 import org.tis.tools.core.exception.i18.ExceptionCodes;
-
 import java.util.List;
-
 import static org.tis.tools.core.utils.BasicUtil.wrap;
 
 /**
@@ -30,18 +28,26 @@ public class AcRoleFuncServiceImpl extends ServiceImpl<AcRoleFuncMapper, AcRoleF
      *
      * </pre>
      *
-     * @param guidRole
+     * @param acRoleFunc
      *
      * @return 查询某个角色数据
      * @throws AcRoleFuncManagementException
      */
     @Override
-    public AcRoleFunc queryRoleFunByRoleGuid(String guidRole) throws AcRoleFuncManagementException {
+    public AcRoleFunc queryRoleFunByCondition(AcRoleFunc acRoleFunc) throws AcRoleFuncManagementException {
         EntityWrapper<AcRoleFunc> acRoleFuncEntityWrapper = new EntityWrapper<>();
-        acRoleFuncEntityWrapper.eq(AcRoleFunc.COLUMN_GUID_ROLE,guidRole);
+        if(StringUtils.isNotBlank(acRoleFunc.getGuidRole())){
+            acRoleFuncEntityWrapper.eq(AcRoleFunc.COLUMN_GUID_ROLE,acRoleFunc.getGuidRole());
+        }
+        if(StringUtils.isNotBlank(acRoleFunc.getGuidApp())){
+            acRoleFuncEntityWrapper.eq(AcRoleFunc.COLUMN_GUID_APP,acRoleFunc.getGuidApp());
+        }
+        if(StringUtils.isNotBlank(acRoleFunc.getGuidFunc())){
+            acRoleFuncEntityWrapper.eq(AcRoleFunc.COLUMN_GUID_FUNC,acRoleFunc.getGuidFunc());
+        }
         try {
-            AcRoleFunc acRoleFunc = selectOne(acRoleFuncEntityWrapper);
-            return acRoleFunc;
+            AcRoleFunc acRoleFunc1 = selectOne(acRoleFuncEntityWrapper);
+            return acRoleFunc1;
         }catch ( Exception e){
             throw new AcRoleFuncManagementException(ExceptionCodes.FAILURE_WHEN_QUERY,wrap("ACROLEFUNC","ACROLEFUNC"));
         }
@@ -91,35 +97,30 @@ public class AcRoleFuncServiceImpl extends ServiceImpl<AcRoleFuncMapper, AcRoleF
         }
 
     }
-
-
     /**
      * <pre>
-     *删除某个角色的所有相关记录
+     *修改某个角色的功能
      * </pre>
      *
      *
-     * @param guidRole
-     * @return 返回删除结果
+     * @param acRoleFunc
+     * @return 修改结果
      * @throws AcRoleFuncManagementException
      */
     @Override
-    public boolean deleteAcRole(String guidRole) throws AcRoleFuncManagementException {
-        if (StringUtils.isBlank(guidRole)){
-            throw new AcRoleFuncManagementException(ExceptionCodes.NOT_ALLOW_NULL_WHEN_DELETE,wrap("GUIDROLE","ACROLEFUNC"));
-        }
+    public boolean update(AcRoleFunc acRoleFunc) throws AcRoleFuncManagementException {
         EntityWrapper<AcRoleFunc> acRoleFuncEntityWrapper = new EntityWrapper<>();
-        acRoleFuncEntityWrapper.eq(AcRoleFunc.COLUMN_GUID_ROLE,guidRole);
-
+        //where条件
+        acRoleFuncEntityWrapper.eq(AcRoleFunc.COLUMN_GUID_ROLE,acRoleFunc.getGuidRole());
         try {
-            //删除前查询有没有可删除的数据
-            AcRoleFunc acRoleFunc = queryRoleFunByRoleGuid(guidRole);
-            return delete(acRoleFuncEntityWrapper);
-        }catch ( Exception e){
-            throw new AcRoleFuncManagementException(ExceptionCodes.FAILURE_WHEN_DELETE,wrap("GUIDROLE","ACROLEFUNC"));
+            update(acRoleFunc,acRoleFuncEntityWrapper);
+        }catch (Exception e){
+            throw new AcRoleFuncManagementException(ExceptionCodes.FAILURE_WHEN_UPDATE,wrap("ACROLEFUNC","ACROLEFUNC"));
         }
-
+        return false;
     }
+
+
 
 
     /**
@@ -132,17 +133,18 @@ public class AcRoleFuncServiceImpl extends ServiceImpl<AcRoleFuncMapper, AcRoleF
      * @throws AcRoleFuncManagementException
      */
     @Override
-    public boolean deleteAcRoleByCondition(AcRoleFunc acRoleFunc) throws AcRoleFuncManagementException {
+    public boolean deleteAcRoleFuncByCondition(AcRoleFunc acRoleFunc) throws AcRoleFuncManagementException {
         EntityWrapper<AcRoleFunc> acRoleFuncEntityWrapper = new EntityWrapper<>();
-        acRoleFuncEntityWrapper.eq(AcRoleFunc.COLUMN_GUID_ROLE,acRoleFunc.getGuidRole());
-        acRoleFuncEntityWrapper.eq(AcRoleFunc.COLUMN_GUID_FUNC,acRoleFunc.getGuidFunc());
-        acRoleFuncEntityWrapper.eq(AcRoleFunc.COLUMN_GUID_FUNC,acRoleFunc.getGuidApp());
+        if(StringUtils.isNotBlank(acRoleFunc.getGuidRole())){
+            acRoleFuncEntityWrapper.eq(AcRoleFunc.COLUMN_GUID_ROLE,acRoleFunc.getGuidRole());
+        }
+        if(StringUtils.isNotBlank(acRoleFunc.getGuidFunc())){
+            acRoleFuncEntityWrapper.eq(AcRoleFunc.COLUMN_GUID_FUNC,acRoleFunc.getGuidFunc());
+        }
+        if(StringUtils.isNotBlank(acRoleFunc.getGuidApp())){
+            acRoleFuncEntityWrapper.eq(AcRoleFunc.COLUMN_GUID_APP,acRoleFunc.getGuidApp());
+        }
         try {
-            //删除前先查询下存在否
-            AcRoleFunc acRoleFunc1 = queryRoleFunByRoleGuid(acRoleFunc.getGuidRole());
-            if(acRoleFunc1 == null){
-                throw new AcRoleFuncManagementException(ExceptionCodes.NOT_ALLOW_NULL_WHEN_DELETE,wrap("ACROLEFUNC","ACROLEFUNC"));
-            }
             boolean bolen = delete(acRoleFuncEntityWrapper);
             return bolen;
         }catch (Exception e){
