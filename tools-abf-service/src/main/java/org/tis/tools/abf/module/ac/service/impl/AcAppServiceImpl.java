@@ -1,17 +1,18 @@
 package org.tis.tools.abf.module.ac.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.mapper.Wrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.tis.tools.abf.module.ac.dao.AcAppMapper;
 import org.tis.tools.abf.module.ac.entity.enums.AcAppType;
+import org.tis.tools.abf.module.ac.exception.AcExceptionCodes;
 import org.tis.tools.abf.module.ac.exception.AcManagementException;
 import org.tis.tools.abf.module.ac.service.IAcAppService;
 import org.tis.tools.abf.module.ac.entity.AcApp;
 import org.springframework.transaction.annotation.Transactional;
 import org.tis.tools.abf.module.common.entity.enums.YON;
+import static org.tis.tools.core.utils.BasicUtil.wrap;
 
 import java.util.*;
 
@@ -55,8 +56,14 @@ public class AcAppServiceImpl extends ServiceImpl<AcAppMapper, AcApp> implements
             app.setIpPort(ipPort);
 
             insert(app);
-        }catch (Exception exception){
-            throw  exception;
+        }catch (AcManagementException ae){
+            throw ae;
+        } catch (Exception e){
+            e.printStackTrace();
+            throw new AcManagementException(
+                    AcExceptionCodes.FAILURE_WHRN_CREATE_AC_APP,
+                    wrap("SYS_RUN_CONFIG",e)
+            );
         }
         return app;
     }
@@ -73,8 +80,14 @@ public class AcAppServiceImpl extends ServiceImpl<AcAppMapper, AcApp> implements
 
         try {
             appList = acAppService.selectList(wrapper1);
-        }catch (Exception exception){
-            throw exception;
+        }catch (AcManagementException ae){
+            throw ae;
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new AcManagementException(
+                    AcExceptionCodes.FAILURE_WHRN_QUERY_AC_APP,
+                    wrap("SYS_RUN_CONFIG",e)
+            );
         }
 
         return appList;
@@ -102,8 +115,14 @@ public class AcAppServiceImpl extends ServiceImpl<AcAppMapper, AcApp> implements
             app.setIpPort(ipPort);
 
             updateById(app);
-        }catch (Exception exception){
-            throw exception;
+        }catch (AcManagementException ae){
+            throw ae;
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new AcManagementException(
+                    AcExceptionCodes.FAILURE_WHRN_UPDATE_AC_APP,
+                    wrap("SYS_RUN_CONFIG",e)
+            );
         }
         return app;
     }
