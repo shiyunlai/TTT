@@ -96,7 +96,7 @@ public class SysDictItemController  extends BaseController {
      * @param id
      */
     @ApiOperation(value = "查询业务字典项", notes = "根据guidDict查询对应的业务字典信息")
-    @PostMapping("/lists")
+    @PostMapping("/listDict")
     public ResultVO querySysDictItem(@RequestBody @Validated @NotBlank(message = "ID不能为空") String id){
         SysDictItem sysDictItem = iSysDictItemService.guidQueryOneSysDic(id);
         SysDict sysDict = iSysDictService.queryOneSysDictByGuid(sysDictItem.getGuidDict());
