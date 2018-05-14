@@ -3,7 +3,7 @@ package org.tis.tools.abf.module.ac.exception;
 /**
  * <pre>
  * AC模块的异常码定义.</br>
- * 范围： OM-0000 ~ OM-9999
+ * 范围： AC-0000 ~ AC-9999
  * </pre>
  * Created by chenchao
  * Created on 2018/5/3 16:25
@@ -397,6 +397,29 @@ public class AcExceptionCodes {
      * 默认身份不允许修改
      */
     public static final String DEFAULT_IDENTITY_NOT_ALLOW = R_EX_CODE("0076");
+
+    /**
+     * 新增应用个性化配置异常
+     */
+    public static final String FAILURE_WHRN_CREATE_AC_APPCONFIG = R_EX_CODE("0077");
+
+    /**
+     * 删除应用个性化配置异常
+     */
+    public static final String FAILURE_WHRN_DELETE_AC_APPCONFIG = R_EX_CODE("0078");
+
+    /**
+     * 更新应用个性化配置异常
+     */
+    public static final String FAILURE_WHRN_UPDATE_AC_APPCONFIG = R_EX_CODE("0079");
+
+    /**
+     * 查询应用个性化配置异常
+     */
+    public static final String FAILURE_WHRN_QUERY_AC_APPCONFIG = R_EX_CODE("0080");
+
+
+
 
     /**
      * 以烤串方式拼接异常码
