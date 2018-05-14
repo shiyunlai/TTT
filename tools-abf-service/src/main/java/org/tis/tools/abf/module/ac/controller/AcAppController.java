@@ -153,7 +153,8 @@ public class AcAppController extends BaseController<AcApp>  {
         }
 
 
-        AcApp acApp = acAppService.changeById(id,acAppquery.getAppCode(),acAppquery.getAppName(),appType,isopen,acAppquery.getOpenDate(),acAppquery.getUrl(),acAppquery.getIpAddr(),acAppquery.getIpPort(),acAppquery.getAppDesc());
+        AcApp acApp = acAppService.changeById(id,acAppquery.getAppCode(),acAppquery.getAppName(),appType,isopen,
+                acAppquery.getOpenDate(),acAppquery.getUrl(),acAppquery.getIpAddr(),acAppquery.getIpPort(),acAppquery.getAppDesc());
 
         return ResultVO.success("应用已开通",acApp);
     }
@@ -182,7 +183,8 @@ public class AcAppController extends BaseController<AcApp>  {
             appType = AcAppType.REMOTE;
         }
 
-        AcApp acApp = acAppService.changeById(id,acAppquery.getAppCode(),acAppquery.getAppName(),appType,isopen,acAppquery.getOpenDate(),acAppquery.getUrl(),acAppquery.getIpAddr(),acAppquery.getIpPort(),acAppquery.getAppDesc());
+        AcApp acApp = acAppService.changeById(id,acAppquery.getAppCode(),acAppquery.getAppName(),appType,isopen,
+                acAppquery.getOpenDate(),acAppquery.getUrl(),acAppquery.getIpAddr(),acAppquery.getIpPort(),acAppquery.getAppDesc());
 
         return ResultVO.success("应用已开通",acApp);
     }
@@ -219,7 +221,7 @@ public class AcAppController extends BaseController<AcApp>  {
             id = "appCode", // 操作对象标识
             name = "appName", // 操作对象名
             keys = {"appCode", "appName"})
-    @PostMapping("/list")
+    @PostMapping("/appList")
     public ResultVO appList(){
 
         List<AcApp> appList = null;
@@ -229,10 +231,10 @@ public class AcAppController extends BaseController<AcApp>  {
         return ResultVO.success("查询成功",appList);
     }
 
-    /*@PostMapping("/list")
+    @PostMapping("/list")
     public ResultVO list(@RequestBody @Validated SmartPage<AcApp> page) {
         return  ResultVO.success("查询成功", acAppService.selectPage(getPage(page), getCondition(page)));
-    }*/
+    }
 
 }
 
