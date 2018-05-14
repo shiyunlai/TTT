@@ -1,6 +1,9 @@
 package org.tis.tools.abf.module.sys.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.plugins.Page;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.tis.tools.abf.module.sys.dao.SysDictMapper;
 import org.springframework.stereotype.Service;
@@ -107,9 +110,8 @@ public class SysDictServiceImpl  extends ServiceImpl<SysDictMapper,SysDict> impl
      * @throws SysManagementException
      * */
     @Override
-    public List<SysDict> querySysDicts() throws SysManagementException {
-        EntityWrapper<SysDict> wrapper = new EntityWrapper<>();
-        return selectList(wrapper);
+    public Page<SysDict> querySysDicts(Page<SysDict> page, Wrapper<SysDict> wrapper){
+        return selectPage(page,wrapper);
     }
     /**
      * @param  id
@@ -141,7 +143,8 @@ public class SysDictServiceImpl  extends ServiceImpl<SysDictMapper,SysDict> impl
         if(sysDict.getDictName()!=null && sysDict.getDictName()!= ""){
             wrapper.eq(SysDict.COLUMN_DICT_NAME,sysDict.getDictName());
         }
-        return selectList(wrapper);
+        List<SysDict> list = selectList(wrapper);
+        return list;
     }
     /**
      * @param  id

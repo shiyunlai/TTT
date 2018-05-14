@@ -1,6 +1,8 @@
 package org.tis.tools.abf.module.sys.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -121,10 +123,8 @@ public class SysDictItemServiceImpl extends ServiceImpl<SysDictItemMapper,SysDic
     }
 
     @Override
-    public List<SysDictItem> querySysDictItemList() throws SysManagementException {
-        EntityWrapper<SysDictItem> wrapper = new EntityWrapper<>();
-        List<SysDictItem> sysDictItemList = selectList(wrapper);
-        return sysDictItemList;
+    public Page<SysDictItem> querySysDictItemList(Page<SysDictItem> page, Wrapper<SysDictItem> wrapper) throws SysManagementException {
+        return selectPage(page,wrapper);
     }
 }
 

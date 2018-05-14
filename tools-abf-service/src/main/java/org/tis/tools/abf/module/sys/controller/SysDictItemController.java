@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.tis.tools.abf.module.sys.entity.SysDictItem;
 import org.springframework.web.bind.annotation.*;
 import org.tis.tools.core.web.vo.ResultVO;
+import org.tis.tools.core.web.vo.SmartPage;
 
 /**
  * sysDictItem的Controller类
@@ -23,7 +24,7 @@ import org.tis.tools.core.web.vo.ResultVO;
  * @date 2018/04/23
  */
 @RestController
-@RequestMapping("/sysDictItem")
+@RequestMapping("/sysDictItems")
 @Validated
 @Api(description = "业务字典项")
 public class SysDictItemController  extends BaseController {
@@ -95,7 +96,7 @@ public class SysDictItemController  extends BaseController {
      * @param id
      */
     @ApiOperation(value = "查询业务字典项", notes = "根据guidDict查询对应的业务字典信息")
-    @PostMapping("/queryGuidDict")
+    @PostMapping("/lists")
     public ResultVO querySysDictItem(@RequestBody @Validated @NotBlank(message = "ID不能为空") String id){
         SysDictItem sysDictItem = iSysDictItemService.guidQueryOneSysDic(id);
         SysDict sysDict = iSysDictService.queryOneSysDictByGuid(sysDictItem.getGuidDict());
@@ -119,10 +120,10 @@ public class SysDictItemController  extends BaseController {
      * 查询所有字典项
      */
     @ApiOperation(value = "查询所有业务字典项", notes = "无需输入参数")
-    @PostMapping("/queryAllSysItem")
-    public ResultVO queryAllDictItem() {
-        return ResultVO.success("查询成功", iSysDictItemService.querySysDictItemList());
-    }
+    @PostMapping("/list")
+    public ResultVO queryAllDictItem(@RequestBody @Validated SmartPage<SysDict> page) {
+        return ResultVO.success("查询成功", iSysDictItemService.querySysDictItemList(getPage(page),getCondition(page)));
+}
 
 //    /**
 //     * 修改字典项默认值

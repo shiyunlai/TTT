@@ -1,6 +1,8 @@
 package org.tis.tools.abf.module.sys.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,28 +40,8 @@ public class SysRunConfigServiceImpl extends ServiceImpl<SysRunConfigMapper, Sys
      * @throws SysManagementException
      */
     @Override
-    public List<SysRunConfig> queryAllSysRunConfig(String guid) throws SysManagementException {
-        List<SysRunConfig> list = null;
-        try{
-            EntityWrapper<SysRunConfig> wrapper = new EntityWrapper<>();
-            if( !"".equals(guid)){
-                wrapper.eq(SysRunConfig.COLUMN_GUID,guid);
-                list = selectList(wrapper);
-                if( list== null){
-                    throw new SysManagementException(
-                            ExceptionCodes.NOT_FOUND_WHEN_QUERY,
-                            wrap(SysRunConfig.COLUMN_GUID,guid),SysRunConfig.COLUMN_GUID);
-                }
-            }else{
-                list = ((selectList(wrapper)));
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-            throw new SysManagementException(
-                    ExceptionCodes.FAILURE_WHEN_QUERY,
-                    wrap("SYS_RUN_CONFIG",e));
-        }
-        return list;
+    public Page<SysRunConfig> queryAllSysRunConfig(Page<SysRunConfig> page, Wrapper<SysRunConfig> wrapper) throws SysManagementException {
+        return selectPage(page,wrapper);
     }
     /**
      * @param  guidApp
@@ -172,6 +154,25 @@ public class SysRunConfigServiceImpl extends ServiceImpl<SysRunConfigMapper, Sys
                     ExceptionCodes.FAILURE_WHEN_DELETE,
                     wrap("SYS_RUN_CONFIG", e));
         }
+    }
+    /**
+     * <p>查询一条系统运行参数</p>
+     * <p>
+     * <pre>
+     *     验证必输字段：
+     *          1.系统运行参数GUID:’guid’;
+     *
+     *     服务端业务逻辑：
+     *          无
+     *
+     * @param guid
+     * @throws SysManagementException
+     */
+    @Override
+    public SysRunConfig queryOneSysRunConfig(String guid) throws SysManagementException {
+        EntityWrapper<SysRunConfig> wrapper = new EntityWrapper<>();
+        wrapper.eq(SysRunConfig.COLUMN_GUID,guid);
+        return selectOne(wrapper);
     }
 }
 

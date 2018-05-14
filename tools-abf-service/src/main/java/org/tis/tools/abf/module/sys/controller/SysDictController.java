@@ -1,11 +1,13 @@
 package org.tis.tools.abf.module.sys.controller;
 
+import com.baomidou.mybatisplus.plugins.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.tis.tools.abf.module.ac.entity.AcApp;
 import org.tis.tools.abf.module.common.log.OperateLog;
 import org.tis.tools.abf.module.common.log.OperateType;
 import org.tis.tools.abf.module.common.log.ReturnType;
@@ -18,12 +20,13 @@ import org.tis.tools.abf.module.sys.exception.SysManagementException;
 import org.tis.tools.abf.module.sys.service.ISysDictService;
 import org.tis.tools.core.web.controller.BaseController;
 import org.tis.tools.core.web.vo.ResultVO;
+import org.tis.tools.core.web.vo.SmartPage;
 
 import java.text.ParseException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/sysDict")
+@RequestMapping("/sysDicts")
 @Validated
 @Api(description = "业务字典")
 public class SysDictController  extends BaseController {
@@ -133,13 +136,13 @@ public class SysDictController  extends BaseController {
      * 查询所有业务字典
      */
     @ApiOperation(value = "查询所有的业务字典", notes = "不需要参数传入")
-    @PostMapping ("/querySysDictList")
-    public ResultVO querySysDictList(){
-        List<SysDict> sysDict = iSysDictService.querySysDicts();
+    @PostMapping ("/list")
+    public ResultVO querySysDictList( @Validated SmartPage<SysDict> page){
+        Page<SysDict> sysDict = iSysDictService.querySysDicts(getPage(page),getCondition(page));
         return ResultVO.success("查询成功",sysDict);
     }
     @ApiOperation(value = "dictKey和dictName查询", notes = "只需要传入dictKey跟dictName参数进行筛选")
-    @PostMapping("/dictKeyOrQuery")
+    @PostMapping("/lists")
     public ResultVO dictKeyOrQuery(@RequestBody @Validated SysDictQueryRequest request) {
         SysDict sysDict = new SysDict();
         sysDict.setDictKey(request.getDictKey());
