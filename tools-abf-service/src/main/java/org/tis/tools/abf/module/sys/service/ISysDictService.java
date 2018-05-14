@@ -1,6 +1,9 @@
 package org.tis.tools.abf.module.sys.service;
 
+import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.IService;
+import org.apache.poi.ss.formula.functions.T;
 import org.tis.tools.abf.module.sys.entity.SysDict;
 import org.tis.tools.abf.module.sys.entity.SysDictItem;
 import org.tis.tools.abf.module.sys.exception.SysManagementException;
@@ -80,7 +83,7 @@ public interface ISysDictService extends IService<SysDict> {
      * @return
      * @throws SysManagementException
      */
-    List<SysDict> querySysDicts() throws SysManagementException;
+    Page<SysDict> querySysDicts(Page<SysDict> page, Wrapper<SysDict> wrapper) throws SysManagementException;
 
     /**
      * 根据GUID查询业务字典自身
