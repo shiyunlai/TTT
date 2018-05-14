@@ -1,18 +1,17 @@
 package org.tis.tools.abf.module.ac.service.impl;
 
-import com.baomidou.mybatisplus.mapper.Wrapper;
-import com.baomidou.mybatisplus.plugins.Page;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.tis.tools.abf.module.ac.exception.AcExceptionCodes;
+import org.tis.tools.abf.module.ac.exception.AcManagementException;
 import org.tis.tools.abf.module.ac.service.IAcAppConfigService;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.tis.tools.abf.module.ac.dao.AcAppConfigMapper;
 import org.tis.tools.abf.module.ac.entity.AcAppConfig;
 import org.springframework.transaction.annotation.Transactional;
-import org.tis.tools.abf.module.common.entity.enums.YON;
+import static org.tis.tools.core.utils.BasicUtil.wrap;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 /**
  * acAppConfig的Service接口实现类
@@ -48,25 +47,19 @@ public class AcAppConfigServiceImpl extends ServiceImpl<AcAppConfigMapper, AcApp
             acAppConfig.setConfigDesc(configDesc);
 
             acAppConfigService.insert(acAppConfig);
-        }catch (Exception exception){
-            throw exception;
+        }catch (AcManagementException ae){
+            throw ae;
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new AcManagementException(
+                    AcExceptionCodes.FAILURE_WHRN_CREATE_AC_APPCONFIG,
+                    wrap("SYS_RUN_CONFIG",e)
+            );
         }
 
         return acAppConfig;
     }
 
-    /**
-     * 分页查询
-     */
-    @Override
-    public Page<AcAppConfig> queryByPage(Page<AcAppConfig> page, Wrapper<AcAppConfig> wrapper) {
-
-        Page<AcAppConfig> acAppConfigPage = null ;
-
-        acAppConfigPage = acAppConfigService.selectPage(page,wrapper);
-
-        return acAppConfigPage;
-    }
 
     /**
      * 修改个性配置
@@ -90,10 +83,15 @@ public class AcAppConfigServiceImpl extends ServiceImpl<AcAppConfigMapper, AcApp
             acAppConfig.setConfigDesc(configDesc);
 
             acAppConfigService.updateById(acAppConfig);
-        }catch (Exception exception){
-            throw exception;
+        }catch (AcManagementException ae){
+            throw ae;
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new AcManagementException(
+                    AcExceptionCodes.FAILURE_WHRN_UPDATE_AC_APPCONFIG,
+                    wrap("SYS_RUN_CONFIG",e)
+            );
         }
-
         return acAppConfig;
     }
 }
