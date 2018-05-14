@@ -28,6 +28,11 @@ import static org.tis.tools.core.utils.BasicUtil.wrap;
 public class SysDictServiceImpl  extends ServiceImpl<SysDictMapper,SysDict> implements ISysDictService {
     @Autowired
     private ISysDictItemService iSysDictItemService;
+    /**
+     * @param sysDict
+     * @return
+     * @throws SysManagementException
+     * */
     @Override
     public SysDict addDict(SysDict sysDict) throws SysManagementException {
         if(!"".equals(sysDict.guidParents)){
@@ -41,19 +46,31 @@ public class SysDictServiceImpl  extends ServiceImpl<SysDictMapper,SysDict> impl
         insert(sysDict);
         return sysDict;
     }
-
+    /**
+     * @param id
+     * @return
+     * @throws SysManagementException
+     * */
     @Override
     public SysDict queryDictDetail(String id) throws SysManagementException {
         return null;
     }
-
+    /**
+     * @param id
+     * @return
+     * @throws SysManagementException
+     * */
     @Override
     public List<SysDict> queryDict(String id) throws SysManagementException {
         EntityWrapper<SysDict> wrapper = new EntityWrapper<>();
         wrapper.eq(SysDict.COLUMN_DICT_KEY,id);
         return selectList(wrapper);
     }
-
+    /**
+     * @param sysDict
+     * @return
+     * @throws SysManagementException
+     * */
     @Override
     public SysDict editSysDict(SysDict sysDict) throws SysManagementException {
         EntityWrapper<SysDict> wrapper = new EntityWrapper<>();
@@ -66,7 +83,11 @@ public class SysDictServiceImpl  extends ServiceImpl<SysDictMapper,SysDict> impl
         update(sysDict,wrapper);
         return sysDict;
     }
-
+    /**
+     * @param id
+     * @return
+     * @throws SysManagementException
+     * */
     @Override
     public SysDict deleteDict(String id) throws SysManagementException {
         EntityWrapper<SysDict> wrapper = new EntityWrapper<>();
@@ -80,13 +101,21 @@ public class SysDictServiceImpl  extends ServiceImpl<SysDictMapper,SysDict> impl
         delete(wrapper);
         return sysDict;
     }
-
+    /**
+     * @param
+     * @return
+     * @throws SysManagementException
+     * */
     @Override
     public List<SysDict> querySysDicts() throws SysManagementException {
         EntityWrapper<SysDict> wrapper = new EntityWrapper<>();
         return selectList(wrapper);
     }
-
+    /**
+     * @param  id
+     * @return
+     * @throws SysManagementException
+     * */
     @Override
     public SysDict queryOneSysDictByGuid(String id) throws SysManagementException {
         EntityWrapper<SysDict> wrapper = new EntityWrapper<>();
@@ -98,7 +127,11 @@ public class SysDictServiceImpl  extends ServiceImpl<SysDictMapper,SysDict> impl
     public SysDict setDefaultDictValue(String dictGuid, String itemValue) throws SysManagementException {
         return null;
     }
-
+    /**
+     * @param  sysDict
+     * @return
+     * @throws SysManagementException
+     * */
     @Override
     public List<SysDict> dictKeyQuery(SysDict sysDict) throws SysManagementException {
         EntityWrapper<SysDict> wrapper = new EntityWrapper<>();
@@ -110,7 +143,11 @@ public class SysDictServiceImpl  extends ServiceImpl<SysDictMapper,SysDict> impl
         }
         return selectList(wrapper);
     }
-
+    /**
+     * @param  id
+     * @return
+     * @throws SysManagementException
+     * */
     @Override
     public SysDict querySysDictByGuid(String id) throws SysManagementException {
         EntityWrapper<SysDict> wrapper = new EntityWrapper<>();

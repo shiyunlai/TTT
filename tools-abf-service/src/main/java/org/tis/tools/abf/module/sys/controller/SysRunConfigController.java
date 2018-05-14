@@ -1,10 +1,12 @@
 package org.tis.tools.abf.module.sys.controller;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.tis.tools.abf.module.common.log.OperateLog;
 import org.tis.tools.abf.module.common.log.OperateType;
 import org.tis.tools.abf.module.common.log.ReturnType;
@@ -18,8 +20,9 @@ import org.tis.tools.core.web.vo.ResultVO;
 import java.util.*;
 
 @RestController
-@RequestMapping("/SysConfig")
+@RequestMapping("/sysConfig")
 @Validated
+@Api(description = "系统运行参数表")
 public class SysRunConfigController extends BaseController {
     @Autowired
     private ISysRunConfigService ISysRunConfigService;
@@ -37,8 +40,9 @@ public class SysRunConfigController extends BaseController {
             name = "groupName", // 操作对象名
             keys = {"guidApp","groupName"}
     )
-    @PostMapping("/add_Config")
-    public ResultVO add_Config(@RequestBody @Validated SysRunConfigAddRequest request){
+    @ApiOperation(value = "新增系统参数机构", notes = "实际参数以下面DataType为准")
+    @PostMapping("/add")
+    public ResultVO add(@RequestBody @Validated SysRunConfigAddRequest request){
         SysRunConfig sysRunConfig = ISysRunConfigService.createSysRunConfig(request.getGuidApp(),request.getGroupName(),
                                                     request.getKeyName(),request.getValueFrom(),request.getValue(),request.getDescription());
         return ResultVO.success("添加成功",sysRunConfig);
@@ -57,8 +61,9 @@ public class SysRunConfigController extends BaseController {
             name = "groupName", // 操作对象名
             keys = "guidApp"
     )
-    @PostMapping("/update_Config")
-    public ResultVO update_Config(@RequestBody @Validated SysRunConfigRequest request){
+    @ApiOperation(value = "修改系统参数机构", notes = "实际参数以下面DataType为准")
+    @PutMapping
+    public ResultVO updateConfig(@RequestBody @Validated SysRunConfigRequest request){
         SysRunConfig sysRunConfig = ISysRunConfigService.editSysRunConfig(request.getGuid(),request.getGuidApp(),request.getGroupName(),
                 request.getKeyName(),request.getValueFrom(),request.getValue(),request.getDescription());
         return ResultVO.success("修改成功",sysRunConfig);
@@ -67,7 +72,7 @@ public class SysRunConfigController extends BaseController {
      * 查询系统参数
      *
      * @param id
-     * @return
+     * @return List
      */
     @OperateLog(
             operateType = OperateType.QUERY,  // 操作类型
@@ -77,8 +82,9 @@ public class SysRunConfigController extends BaseController {
             name = "guid", // 操作对象名
             keys = "guid"
     )
-    @PostMapping("/query_Config")
-    public ResultVO query_Config(@RequestBody @Validated String id){
+    @ApiOperation(value = "查询系统参数机构", notes = "根据guid查询，输入则根据guid查询数据信息未输入则全查")
+    @GetMapping("/{id}")
+    public ResultVO queryConfig(@PathVariable @Validated @NotBlank(message = "ID不能为空") String id){
         List<SysRunConfig> list = ISysRunConfigService.queryAllSysRunConfig(id);
         return ResultVO.success("查询成功",list);
     }
@@ -96,8 +102,9 @@ public class SysRunConfigController extends BaseController {
             name = "groupName", // 操作对象名
             keys = {"guidApp","groupName"}
     )
-    @PostMapping("/delete_Config")
-    public ResultVO delete_Config(@RequestBody @Validated String id){
+    @ApiOperation(value = "删除系统参数机构", notes = "根据guid删除对应数据信息")
+    @DeleteMapping("/{id}")
+    public ResultVO deleteConfig(@PathVariable @Validated @NotBlank(message = "ID不能为空") String id){
         return ResultVO.success("删除成功",ISysRunConfigService.deleteSysRunConfig(id));
     }
 }
