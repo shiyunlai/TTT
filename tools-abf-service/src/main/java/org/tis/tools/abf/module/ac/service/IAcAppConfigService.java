@@ -48,12 +48,5 @@ public interface IAcAppConfigService extends IService<AcAppConfig>  {
      */
     AcAppConfig changeById(String guid,String guidApp,String configType,String configName,String configDict,String configStyle,String configValue,String enabled,BigDecimal displayOrder,String configDesc);
 
-    /**
-     *
-     * @param page      分页页码
-     * @param wrapper   对象封装操作类
-     * @return
-     */
-    Page<AcAppConfig> queryByPage(Page<AcAppConfig> page,Wrapper<AcAppConfig> wrapper);
 }
 
