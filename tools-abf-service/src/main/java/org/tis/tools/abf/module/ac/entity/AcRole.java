@@ -1,8 +1,16 @@
 package org.tis.tools.abf.module.ac.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotations.TableName;
 import lombok.Data;
 import com.baomidou.mybatisplus.annotations.TableId;
+import org.hibernate.validator.constraints.NotBlank;
+import org.tis.tools.abf.module.ac.controller.request.AcRoleUpdateValidateGrop;
+import org.tis.tools.abf.module.common.entity.enums.YON;
+import org.tis.tools.core.entity.enums.CommonEnumDeserializer;
+import org.tis.tools.core.validation.UpdateValidateGroup;
+
+import javax.validation.constraints.Null;
 import java.io.Serializable;
 
 /**
@@ -37,8 +45,9 @@ public class AcRole implements Serializable {
 
     /**
      * guidApp对应表字段
+     * 这个字段删除了
      */
-    public static final String COLUMN_GUID_APP = "guid_app";
+   // public static final String COLUMN_GUID_APP = "guid_app";
 
     /**
      * enabled对应表字段
@@ -53,12 +62,14 @@ public class AcRole implements Serializable {
     /**
      * 数据主键:全局唯一标识符（GUID，Globally Unique Identifier），系统自动生成；
      */
+
     @TableId
     public String guid;
 
     /**
      * 角色代码:业务上对角色的编码
      */
+    @NotBlank(message = "roleCode不能为空", groups = {AcRoleUpdateValidateGrop.class})
     public String roleCode;
 
     /**
@@ -69,12 +80,13 @@ public class AcRole implements Serializable {
     /**
      * 隶属应用GUID
      */
-    public String guidApp;
+   // public String guidApp;
 
     /**
      * 是否启用
      */
-    public String enabled;
+   @JSONField(deserializeUsing= CommonEnumDeserializer.class)
+    public YON enabled;
 
     /**
      * 角色描述
