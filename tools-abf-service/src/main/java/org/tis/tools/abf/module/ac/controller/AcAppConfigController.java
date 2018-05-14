@@ -74,7 +74,10 @@ public class AcAppConfigController extends BaseController<AcAppConfig> {
             displayOrder = BigDecimal.valueOf(Double.valueOf(acAppConfigAddRequest.getDisplayOrder()));
         }
 
-        acAppConfig = acAppConfigService.changeById(acAppConfigAddRequest.getGuid(),acAppConfigAddRequest.getGuidApp(), acAppConfigAddRequest.getConfigType(), acAppConfigAddRequest.getConfigName(), acAppConfigAddRequest.getConfigDict(), acAppConfigAddRequest.getConfigStyle(), acAppConfigAddRequest.getConfigValue(), acAppConfigAddRequest.getEnabled(), displayOrder,acAppConfigAddRequest.getConfigDesc());
+        acAppConfig = acAppConfigService.changeById(acAppConfigAddRequest.getGuid(),acAppConfigAddRequest.getGuidApp(),
+                acAppConfigAddRequest.getConfigType(), acAppConfigAddRequest.getConfigName(), acAppConfigAddRequest.getConfigDict(),
+                acAppConfigAddRequest.getConfigStyle(), acAppConfigAddRequest.getConfigValue(), acAppConfigAddRequest.getEnabled(),
+                displayOrder,acAppConfigAddRequest.getConfigDesc());
         return ResultVO.success("修改成功！",acAppConfig);
     }
 
@@ -116,7 +119,7 @@ public class AcAppConfigController extends BaseController<AcAppConfig> {
             keys = {"configType","configName"}) // 操作对象的关键值的键值名
     @PostMapping("/list")
     public ResultVO list(@RequestBody @Validated SmartPage<AcAppConfig> page) {
-        return ResultVO.success("查询成功", acAppConfigService.queryByPage(getPage(page), getCondition(page)));
+        return ResultVO.success("查询成功", acAppConfigService.selectPage(getPage(page), getCondition(page)));
     }
 
 }
