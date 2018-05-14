@@ -1,7 +1,5 @@
 package org.tis.tools.abf.module.ac.entity.enums;
 
-import net.bytebuddy.asm.Advice;
-import net.bytebuddy.implementation.bind.annotation.This;
 import org.tis.tools.core.entity.enums.BaseEnum;
 
 import java.io.Serializable;
