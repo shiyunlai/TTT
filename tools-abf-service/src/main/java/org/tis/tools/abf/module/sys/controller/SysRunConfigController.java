@@ -75,7 +75,7 @@ public class SysRunConfigController extends BaseController {
      */
     @ApiOperation(value = "查询系统参数机构", notes = "分页查询")
     @PostMapping("/list")
-    public ResultVO queryConfig(@Validated SmartPage<SysRunConfig> page){
+    public ResultVO queryConfig(@RequestBody @Validated SmartPage<SysRunConfig> page){
         return ResultVO.success("查询成功",
                 iSysRunConfigService.queryAllSysRunConfig(getPage(page),getCondition(page)));
     }
