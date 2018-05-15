@@ -1,6 +1,9 @@
 package org.tis.tools.abf.module.sys.service;
 
+import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.IService;
+import org.tis.tools.abf.module.sys.entity.SysDictItem;
 import org.tis.tools.abf.module.sys.entity.SysRunConfig;
 import org.tis.tools.abf.module.sys.exception.SysManagementException;
 
@@ -13,7 +16,7 @@ public interface ISysRunConfigService extends IService<SysRunConfig>{
      * @return 系统运行参数集合
      * @throws SysManagementException
      */
-    List<SysRunConfig> queryAllSysRunConfig(String guid) throws SysManagementException;
+    Page<SysRunConfig> queryAllSysRunConfig(Page<SysRunConfig> page, Wrapper<SysRunConfig> wrapper) throws SysManagementException;
 
 
     /**
@@ -82,5 +85,20 @@ public interface ISysRunConfigService extends IService<SysRunConfig>{
      * @throws SysManagementException
      */
     SysRunConfig deleteSysRunConfig(String guid) throws SysManagementException;
+
+    /**
+     * <p>查询一条系统运行参数</p>
+     *
+     * <pre>
+     *     验证必输字段：
+     *          1.系统运行参数GUID:’guid’;
+     *
+     *     服务端业务逻辑：
+     *          无
+     *
+     * @param guid
+     * @throws SysManagementException
+     */
+    SysRunConfig queryOneSysRunConfig(String guid) throws SysManagementException;
 
 }

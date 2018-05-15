@@ -1,6 +1,9 @@
 package org.tis.tools.abf.module.sys.service;
 
+import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.IService;
+import org.tis.tools.abf.module.sys.entity.SysDict;
 import org.tis.tools.abf.module.sys.entity.SysDictItem;
 import org.tis.tools.abf.module.sys.exception.SysManagementException;
 
@@ -95,6 +98,6 @@ public interface ISysDictItemService extends IService<SysDictItem> {
      * @return
      * @throws SysManagementException
      */
-    List<SysDictItem> querySysDictItemList() throws SysManagementException;
+    Page<SysDictItem> querySysDictItemList(Page<SysDictItem> page, Wrapper<SysDictItem> wrapper) throws SysManagementException;
 
 }
