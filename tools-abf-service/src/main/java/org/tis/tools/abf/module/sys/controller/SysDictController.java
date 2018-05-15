@@ -137,7 +137,7 @@ public class SysDictController  extends BaseController {
      */
     @ApiOperation(value = "查询所有的业务字典", notes = "不需要参数传入")
     @PostMapping ("/list")
-    public ResultVO querySysDictList( @Validated SmartPage<SysDict> page){
+    public ResultVO querySysDictList(@RequestBody @Validated SmartPage<SysDict> page){
         Page<SysDict> sysDict = iSysDictService.querySysDicts(getPage(page),getCondition(page));
         return ResultVO.success("查询成功",sysDict);
     }
