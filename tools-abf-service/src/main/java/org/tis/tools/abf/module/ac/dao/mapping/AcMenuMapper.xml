@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.tis.tools.abf.module.ac.dao.AcMenuMapper">
-
+    <update id="reorderMenu">
+        UPDATE
+        AC_MENU
+        <set>
+            DISPLAY_ORDER = DISPLAY_ORDER
+            <if test="flag == 'plus'">
+                + 1
+            </if>
+            <if test="flag == 'minus'">
+                - 1
+            </if>
+        </set>
+        <where>
+            GUID_PARENTS = #{targetGuid}
+            AND
+            DISPLAY_ORDER >= #{index}
+        </where>
+    </update>
 </mapper>
