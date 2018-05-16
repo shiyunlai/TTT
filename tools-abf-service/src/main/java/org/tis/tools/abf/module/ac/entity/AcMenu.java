@@ -11,7 +11,6 @@ import java.io.Serializable;
 /**
  * acMenu应用菜单表，从逻辑上为某个应用系统中的功能组织为一个有分类，有层级的树结构。
  * UI可根据菜单数据结构，进行界面呈现（PC上，PAD上，手机上....充分考虑用户交互体验）
- *
  * @author Auto Generate Tools
  * @date 2018/04/23
  */
@@ -187,7 +186,6 @@ public class AcMenu implements Serializable {
      * 如：主窗口打开、弹出窗口打开...
      */
     public String openMode;
-
 
 }
 

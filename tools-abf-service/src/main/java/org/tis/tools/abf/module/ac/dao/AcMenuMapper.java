@@ -1,12 +1,8 @@
 package org.tis.tools.abf.module.ac.dao;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Repository;
-import org.tis.tools.abf.module.ac.entity.AcMenu;
 
-import java.math.BigDecimal;
+import org.tis.tools.abf.module.ac.entity.AcMenu;
 
 /**
  * acMenu的Mapper类
@@ -15,7 +11,6 @@ import java.math.BigDecimal;
  * @date 2018/04/23
  */
 public interface AcMenuMapper extends BaseMapper<AcMenu>  {
-
 
 }
 
