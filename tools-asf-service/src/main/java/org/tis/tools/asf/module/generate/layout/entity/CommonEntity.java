@@ -67,7 +67,10 @@ public class CommonEntity extends JavaBase {
     private static List<FieldBase> getFields(BizModel model) {
         List<FieldBase> fieldList = new ArrayList<>();
         fieldList.add(FieldBase.genSerialVersionUID());
+        fieldList.add(EntityFieldGenerator.nameModel(StringUtils.isBlank(model.getLogicalName()) ?
+                model.getPhysicalName() : model.getLogicalName()));
         model.getFieldList().forEach(f -> fieldList.add(EntityFieldGenerator.columnField(f)));
+        model.getFieldList().forEach(f -> fieldList.add(EntityFieldGenerator.nameField(f)));
         model.getFieldList().forEach(f -> fieldList.add(EntityFieldGenerator.generalField(f)));
         return fieldList;
     }
