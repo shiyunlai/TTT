@@ -6,22 +6,20 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.tis.tools.abf.base.BaseTest;
 
-import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class AcRoleFuncControllerTest extends BaseTest {
+public class AcOperatorControllerTest extends BaseTest {
 
     @Test
     public void add() throws Exception{
         RequestBuilder request ;
-        request = post("/acRoleFuncs/add")
+        request = post("/acOperators/add")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content("{ \"guidRole\":\"1111\",\"guidFunc\": \"22\", \"guidApp\": \"22\"}")
+                .content("{ \"userId\":\"1111\",\"password\": \"111\", \"operatorStatus\": \"login\", \"authMode\":\"password\", \"lockLimit\":\"2\"}")
                 .accept(MediaType.APPLICATION_JSON);
         mvc.perform(request)
                 .andExpect(status().isOk());
@@ -30,9 +28,9 @@ public class AcRoleFuncControllerTest extends BaseTest {
     @Test
     public void update() throws Exception{
         RequestBuilder request ;
-        request = put("/acRoleFuncs")
+        request = put("/acOperators")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content("{ \"guidRole\":\"1111\",\"guidFunc\": \"2222\"}")
+                .content("{ \"userId\":\"1111\",\"password\": \"111\", \"operatorStatus\": \"login\", \"authMode\":\"dynpassword\", \"lockLimit\":\"2\"}")
                 .accept(MediaType.APPLICATION_JSON);
         mvc.perform(request)
                 .andExpect(status().isOk());
@@ -41,9 +39,9 @@ public class AcRoleFuncControllerTest extends BaseTest {
     @Test
     public void delete() throws Exception{
         RequestBuilder request ;
-        request = post("/acRoleFuncs/1111")
+        request = MockMvcRequestBuilders.delete("/acOperators/1111")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content("{ \"guidRole\":\"1111\"}")
+                .content("{ \"userId\":\"1111\"}")
                 .accept(MediaType.APPLICATION_JSON);
         mvc.perform(request)
                 .andExpect(status().isOk());
@@ -51,11 +49,10 @@ public class AcRoleFuncControllerTest extends BaseTest {
 
     @Test
     public void detail() throws Exception{
-
         RequestBuilder request ;
-        request = get("/acRoleFuncs/1111")
+        request = get("/acOperators/1111")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content("{ \"guidRole\":\"1111\"}")
+                .content("{ \"userId\":\"1111\",\"password\": \"111\", \"operatorStatus\": \"login\", \"authMode\":\"dynpassword\", \"lockLimit\":\"2\"}")
                 .accept(MediaType.APPLICATION_JSON);
         mvc.perform(request)
                 .andExpect(status().isOk());
@@ -64,27 +61,13 @@ public class AcRoleFuncControllerTest extends BaseTest {
     @Test
     public void list() throws Exception{
         RequestBuilder request ;
-        request = post("/acRoleFuncs/list")
+        request = post("/acOperators/list" +
+                "")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content("{" +
-                        "\" page\":{\"current\":\"0\",\"size\": \"10\",\"orderByField\":\"guidRole\"}}," +
-                        "\"condition\":{\"guidRole\":\"1111\"}" +
-                        "}")
+                .content("{\"page\":{\"current\":\"0\",\"size\": \"10\",\"orderByField\": \"password\"}," +
+                        "\"condition\":{\"userId\":\"1111\"}}")
                 .accept(MediaType.APPLICATION_JSON);
         mvc.perform(request)
                 .andExpect(status().isOk());
     }
-
-    @Test
-    public void removeSomeRoleFunc() throws Exception{
-        RequestBuilder request ;
-        request = MockMvcRequestBuilders.delete("/acRoleFuncs/removeSomeRoleFunc")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content("{\"guidRole\":\"1111\",\"guidFunc\":\"11\"}")
-                .accept(MediaType.APPLICATION_JSON);
-        mvc.perform(request)
-                .andExpect(status().isOk());
-    }
-
-
 }

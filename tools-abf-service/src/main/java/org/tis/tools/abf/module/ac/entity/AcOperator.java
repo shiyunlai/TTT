@@ -1,10 +1,18 @@
 package org.tis.tools.abf.module.ac.entity;
 
 import java.math.BigDecimal;
+
+import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotations.TableName;
 import java.util.Date;
 import lombok.Data;
 import com.baomidou.mybatisplus.annotations.TableId;
+import org.hibernate.validator.constraints.NotBlank;
+import org.tis.tools.abf.module.ac.controller.request.AcOperatorUpdateGrop;
+import org.tis.tools.abf.module.ac.entity.enums.AuthMode;
+import org.tis.tools.abf.module.ac.entity.enums.OperatorStatus;
+import org.tis.tools.core.entity.enums.CommonEnumDeserializer;
+
 import java.io.Serializable;
 
 /**
@@ -116,6 +124,7 @@ public class AcOperator implements Serializable {
     /**
      * 登录用户名
      */
+    @NotBlank(message = "登录用户名不能为空",groups = AcOperatorUpdateGrop.class)
     public String userId;
 
     /**
@@ -133,7 +142,8 @@ public class AcOperator implements Serializable {
      * 正常，挂起，注销，锁定...
      * 系统处理状态间的流转
      */
-    public String operatorStatus;
+    @JSONField(deserializeUsing = CommonEnumDeserializer.class)
+    public OperatorStatus operatorStatus;
 
     /**
      * 密码失效日期:指定失效时间具体到时分秒
@@ -148,7 +158,8 @@ public class AcOperator implements Serializable {
      * pwd,captcha
      * 表示输入密码，并且还需要验证码
      */
-    public String authMode;
+    @JSONField(deserializeUsing = CommonEnumDeserializer.class)
+    public AuthMode authMode;
 
     /**
      * 锁定次数限制:登陆错误超过本数字，系统锁定操作员，默认5次。
