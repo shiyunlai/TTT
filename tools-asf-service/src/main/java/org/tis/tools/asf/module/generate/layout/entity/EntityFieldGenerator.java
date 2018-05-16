@@ -71,7 +71,7 @@ public class EntityFieldGenerator {
         String desc = field.getLogicalName() + (StringUtils.isBlank(field.getDesc()) ? "" :  ":" + field.getDesc());
         FieldBase f = new FieldBase();
         f.setDoc(new JavadocBase(desc.replace("\n", "\n     * ")));
-        f.setDeclaration("public");
+        f.setDeclaration("private");
         if (field.getPrimaryKey()) {
             List<AnnotationField> af1 = new ArrayList<>();
 //            af1.add(new AnnotationField("value", field.getPhysicalName().toLowerCase()));
