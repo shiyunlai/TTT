@@ -14,11 +14,8 @@ import java.math.BigDecimal;
  * @author Auto Generate Tools
  * @date 2018/04/23
  */
-@Mapper
-@Repository
 public interface AcMenuMapper extends BaseMapper<AcMenu>  {
 
-    void reorderMenu(@Param("targetGuid")String identityGuid, @Param("index") BigDecimal index, @Param("flag") String flag);
 
 }
 

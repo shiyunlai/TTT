@@ -2,6 +2,7 @@ package org.tis.tools.abf.module.ac.service;
 
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.IService;
+import org.apache.ibatis.annotations.Param;
 import org.tis.tools.abf.module.ac.entity.AcMenu;
 import org.tis.tools.abf.module.ac.exception.AcMenuManagementException;
 
@@ -86,5 +87,14 @@ public interface IAcMenuService extends IService<AcMenu>  {
      * @exception AcMenuManagementException
      */
     List<AcMenu> selectSubMenu(String gidParents)throws AcMenuManagementException;
+
+    /**
+     * 重新排序菜单下的子菜单
+     *
+     * @param identityGuid 目标菜单GUID
+     * @param index 起始位置
+     * @param flag 自增或自减
+     */
+    void reorderMenu(String identityGuid, BigDecimal index ,String flag);
 }
 

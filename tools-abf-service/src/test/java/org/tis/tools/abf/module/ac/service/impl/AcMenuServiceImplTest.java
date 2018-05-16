@@ -96,4 +96,10 @@ public class AcMenuServiceImplTest extends BaseTest {
         }
     }
 
+    @Test
+    public void testMove(){
+        BigDecimal index = new BigDecimal("1");
+        acMenuService.reorderMenu("995972687042187266", index ,"push");
+        System.out.print("wr32");
+    }
 }

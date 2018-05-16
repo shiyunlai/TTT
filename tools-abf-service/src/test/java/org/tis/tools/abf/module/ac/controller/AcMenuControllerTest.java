@@ -129,5 +129,4 @@ public class AcMenuControllerTest extends BaseTest {
     @Test
     public void testGetMoveMenu() throws Exception {
     }
-
 }
