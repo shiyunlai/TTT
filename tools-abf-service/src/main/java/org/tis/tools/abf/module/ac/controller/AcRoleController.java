@@ -9,9 +9,8 @@ import org.tis.tools.abf.module.ac.entity.AcRole;
 import org.springframework.validation.annotation.Validated;
 import org.tis.tools.abf.module.ac.entity.AcRoleFunc;
 import org.tis.tools.abf.module.ac.service.IAcRoleFuncService;
-import org.tis.tools.abf.module.common.log.OperateLog;
-import org.tis.tools.abf.module.common.log.OperateType;
-import org.tis.tools.abf.module.common.log.ReturnType;
+import org.tis.tools.abf.module.jnl.annotation.OperateLog;
+import org.tis.tools.abf.module.jnl.entity.enums.OperateType;
 import org.tis.tools.core.web.controller.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -74,13 +73,7 @@ public class AcRoleController extends BaseController<AcRole>  {
      * @return 新增角色
      * 新增角色信息
      */
-    @OperateLog(
-            operateType = OperateType.ADD,  // 操作类型
-            operateDesc = "新增角色", // 操作描述
-            retType = ReturnType.Object, // 返回类型，对象或数组
-            id = "roleCode", // 操作对象标识
-            name = "roleName", // 操作对象名
-            keys = {"roleCode", "roleName"}) // 操作对象的关键值的键值名
+    @OperateLog(type = OperateType.ADD, desc = "新增角色")
     @PostMapping("/add")
     public ResultVO add(@RequestBody @Validated AcRoleAddRequest request) {
         boolean bolen = acRoleService.createAcRole(request.getRoleCode(),request.getRoleName(),request.getEnabled(),request.getRoleDesc());
@@ -96,13 +89,7 @@ public class AcRoleController extends BaseController<AcRole>  {
      * @return 修改角色结果
      * 根据角色ID修改角色信息
      */
-    @OperateLog(
-            operateType = OperateType.UPDATE,  // 操作类型
-            operateDesc = "根据角色ID修改角色", // 操作描述
-            retType = ReturnType.Object, // 返回类型，对象或数组
-            id = "roleCode", // 操作对象标识
-            name = "roleName", // 操作对象名
-            keys = {"roleCode", "roleName","enabled","roleDesc"}) // 操作对象的关键值的键值名
+    @OperateLog(type = OperateType.UPDATE, desc = "根据角色ID修改角色")
     @PutMapping("/update")
     public ResultVO update(@RequestBody @Validated({AcRoleUpdateValidateGrop.class}) AcRole acRole) {
         boolean  bolen = acRoleService.updateAcRole(acRole);
@@ -115,13 +102,7 @@ public class AcRoleController extends BaseController<AcRole>  {
      * @return 删除角色结果
      * 根据角色代码修改角色信息
      */
-    @OperateLog(
-            operateType = OperateType.DELETE,  // 操作类型
-            operateDesc = "根据角色代码删除角色", // 操作描述
-            retType = ReturnType.Object, // 返回类型，对象或数组
-            id = "roleCode",
-            name = "roleName",
-            keys = {"roleCode", "roleName","enabled","roleDesc"})
+    @OperateLog(type = OperateType.DELETE, desc = "根据角色代码删除角色")
     @DeleteMapping("/{roleCode}")
     public ResultVO deleteRoleByRoleCode(@PathVariable @NotBlank(message = "roleCode不能为空") String roleCode) {
         AcRole acRole = new AcRole();

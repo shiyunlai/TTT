@@ -38,12 +38,12 @@ public class SysDictServiceImpl  extends ServiceImpl<SysDictMapper,SysDict> impl
      * */
     @Override
     public SysDict addDict(SysDict sysDict) throws SysManagementException {
-        if(!"".equals(sysDict.guidParents)){
-            SysDictItem sysDictItem = iSysDictItemService.guidQueryOneSysDic(sysDict.guidParents);
+        if(!"".equals(sysDict.getGuidParents())){
+            SysDictItem sysDictItem = iSysDictItemService.guidQueryOneSysDic(sysDict.getGuidParents());
             if(sysDictItem == null ){
                 throw new SysManagementException(
                         ExceptionCodes.NOT_FOUND_WHEN_QUERY,
-                        wrap(SysDictItem.COLUMN_GUID,SysDictItem.COLUMN_GUID),sysDict.guidParents);
+                        wrap(SysDictItem.COLUMN_GUID,SysDictItem.COLUMN_GUID),sysDict.getGuidParents());
             }
         }
         insert(sysDict);
