@@ -114,10 +114,11 @@ public class OperateLogHandler {
                     .setOperateFrom("ABF")
                     .setUserId("开发用户TODO")
                     .setOperatorName("开发用户TODO")
+                    .setServiceId(request.getRemoteHost() + "(" + request.getRemoteAddr() + ")")
 //                  .setUserId(StringUtils.equals(jnl.operateType(),"login") ? "" : session.getAttribute("userId").toString())
 //                  .setOperatorName(StringUtils.equals(jnl.operateType(), "login") ? "" : acOperator.getOperatorName())
                     .setOperateType(log.type())
-                    .setProcessDesc(log.desc())
+                    .setOperateDesc(log.desc())
                     .setRestfulUrl(uri);
 //            LogThreadLocal.setLogBuilderLocal(logBuilder);
             try {
