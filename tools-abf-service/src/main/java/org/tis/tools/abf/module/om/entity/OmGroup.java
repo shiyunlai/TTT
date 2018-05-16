@@ -12,7 +12,7 @@ import java.io.Serializable;
  * 工作组实质上与机构类似，是为了将项目组、工作组等临时性的组织机构管理起来，业务上通常工作组有一定的时效性，是一个非常设机构。
  * 
  * @author Auto Generate Tools
- * @date 2018/04/23
+ * @date 2018/05/16
  */
 @Data
 @TableName("om_group")
@@ -22,6 +22,11 @@ public class OmGroup implements Serializable {
      * serialVersionUID.
      */
     private static final long serialVersionUID = 1L;
+
+    /**
+     * 模型名称
+     */
+    public static final String NAME = "工作组";
 
     /**
      * guid对应表字段
@@ -99,80 +104,155 @@ public class OmGroup implements Serializable {
     public static final String COLUMN_END_DATE = "end_date";
 
     /**
+     * guid逻辑名
+     */
+    public static final String NAME_GUID = "数据主键";
+
+    /**
+     * groupCode逻辑名
+     */
+    public static final String NAME_GROUP_CODE = "工作组代码";
+
+    /**
+     * groupName逻辑名
+     */
+    public static final String NAME_GROUP_NAME = "工作组名称";
+
+    /**
+     * groupType逻辑名
+     */
+    public static final String NAME_GROUP_TYPE = "工作组类型";
+
+    /**
+     * groupStatus逻辑名
+     */
+    public static final String NAME_GROUP_STATUS = "工作组状态";
+
+    /**
+     * groupDesc逻辑名
+     */
+    public static final String NAME_GROUP_DESC = "工作组描述";
+
+    /**
+     * guidEmpManager逻辑名
+     */
+    public static final String NAME_GUID_EMP_MANAGER = "负责人";
+
+    /**
+     * guidOrg逻辑名
+     */
+    public static final String NAME_GUID_ORG = "隶属机构GUID";
+
+    /**
+     * guidParents逻辑名
+     */
+    public static final String NAME_GUID_PARENTS = "父工作组GUID";
+
+    /**
+     * isleaf逻辑名
+     */
+    public static final String NAME_ISLEAF = "是否叶子节点";
+
+    /**
+     * subCount逻辑名
+     */
+    public static final String NAME_SUB_COUNT = "子节点数";
+
+    /**
+     * groupLevel逻辑名
+     */
+    public static final String NAME_GROUP_LEVEL = "工作组层次";
+
+    /**
+     * groupSeq逻辑名
+     */
+    public static final String NAME_GROUP_SEQ = "工作组序列";
+
+    /**
+     * startDate逻辑名
+     */
+    public static final String NAME_START_DATE = "工作组有效开始日期";
+
+    /**
+     * endDate逻辑名
+     */
+    public static final String NAME_END_DATE = "工作组有效截止日期";
+
+    /**
      * 数据主键:全局唯一标识符（GUID，Globally Unique Identifier），系统自动生成；
      */
     @TableId
-    public String guid;
+    private String guid;
 
     /**
      * 工作组代码:业务上对工作组的编码
      */
-    public String groupCode;
+    private String groupCode;
 
     /**
      * 工作组名称
      */
-    public String groupName;
+    private String groupName;
 
     /**
      * 工作组类型:见业务字典： DICT_OM_GROUPTYPE
      */
-    public String groupType;
+    private String groupType;
 
     /**
      * 工作组状态:见业务字典： DICT_OM_GROUPSTATUS
      */
-    public String groupStatus;
+    private String groupStatus;
 
     /**
      * 工作组描述
      */
-    public String groupDesc;
+    private String groupDesc;
 
     /**
      * 负责人:选择范围来自 OM_EMPLOYEE表
      */
-    public String guidEmpManager;
+    private String guidEmpManager;
 
     /**
      * 隶属机构GUID:全局唯一标识符（GUID，Globally Unique Identifier），系统自动生成；
      */
-    public String guidOrg;
+    private String guidOrg;
 
     /**
      * 父工作组GUID:全局唯一标识符（GUID，Globally Unique Identifier），系统自动生成；
      */
-    public String guidParents;
+    private String guidParents;
 
     /**
      * 是否叶子节点:见业务菜单： DICT_YON
      */
-    public String isleaf;
+    private String isleaf;
 
     /**
      * 子节点数
      */
-    public BigDecimal subCount;
+    private BigDecimal subCount;
 
     /**
      * 工作组层次
      */
-    public BigDecimal groupLevel;
+    private BigDecimal groupLevel;
 
     /**
      * 工作组序列:本工作组的面包屑定位信息
      */
-    public String groupSeq;
+    private String groupSeq;
 
     /**
      * 工作组有效开始日期
      */
-    public Date startDate;
+    private Date startDate;
 
     /**
      * 工作组有效截止日期
      */
-    public Date endDate;
+    private Date endDate;
 
 }
 
