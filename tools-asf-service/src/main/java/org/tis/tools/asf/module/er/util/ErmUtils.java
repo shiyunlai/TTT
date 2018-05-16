@@ -2,22 +2,21 @@ package org.tis.tools.asf.module.er.util;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.parser.ParserConfig;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.XML;
-import org.tis.tools.core.entity.enums.CommonEnumDeserializer;
+import org.tis.tools.asf.core.exception.CodeBuilderException;
 import org.tis.tools.asf.module.er.entity.*;
 import org.tis.tools.asf.module.er.entity.enums.ERColumnType;
+import org.tis.tools.core.entity.enums.CommonEnumDeserializer;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ErmUtils {
@@ -47,15 +46,24 @@ public class ErmUtils {
         Map<String, ERWord> wordMap = JSONArray.parseArray(diagram.getJSONObject("dictionary")
                 .getString("word"), ERWord.class)
                 .stream().collect(Collectors.toMap(ERWord::getId, w -> w));
-        List<ERCategory> erCategories = JSONArray.parseArray(diagram
+        String categoryString = diagram
                 .getJSONObject("settings")
                 .getJSONObject("category_settings")
                 .getJSONObject("categories")
-                .getString("category"), ERCategory.class);
+                .getString("category");
+        List<ERCategory> erCategories;
+        if (categoryString.charAt(0) == '{') {
+            erCategories = Collections.singletonList(JSONObject.parseObject(categoryString, ERCategory.class));
+        } else if (categoryString.charAt(0) == '['){
+            erCategories = JSONArray.parseArray(categoryString, ERCategory.class);
+        } else {
+            throw new CodeBuilderException("找不到ERM分类！");
+        }
         Map<String, List<ERColumn>> refColumnsMap = new HashMap<>(16);
         Map<String, ERColumn> columnMap = new HashMap<>(16);
+        List<ERCategory> finalErCategories = erCategories;
         erTables.forEach(t -> {
-            for (ERCategory c : erCategories) {
+            for (ERCategory c : finalErCategories) {
                 if (c.getTableIds().contains(t.getId())) {
                     t.setCategoryId(c.getId());
                     if (c.getTableList() == null) {
