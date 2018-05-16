@@ -431,7 +431,6 @@ public class AcMenuServiceImpl extends ServiceImpl<AcMenuMapper, AcMenu> impleme
 
     /**
      * 重新排序菜单下的子菜单
-     *
      * @param identityGuid 目标菜单GUID
      * @param index 起始位置
      */

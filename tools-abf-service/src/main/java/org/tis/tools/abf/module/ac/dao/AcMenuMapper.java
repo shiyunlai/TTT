@@ -1,7 +1,6 @@
 package org.tis.tools.abf.module.ac.dao;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
-
 import org.tis.tools.abf.module.ac.entity.AcMenu;
 
 /**
