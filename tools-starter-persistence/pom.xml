@@ -25,6 +25,12 @@
     </properties>
 
     <dependencies>
+
+        <dependency>
+            <groupId>org.tis</groupId>
+            <artifactId>tools-model</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
         <!-- 以下两个依赖是自动配置的依赖 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
