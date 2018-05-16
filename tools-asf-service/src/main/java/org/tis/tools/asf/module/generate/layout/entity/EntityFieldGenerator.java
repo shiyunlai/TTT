@@ -20,6 +20,21 @@ import java.util.List;
 public class EntityFieldGenerator {
 
     /**
+     * 生成实体类逻辑名称字段静态常量
+     * 如: employee 逻辑名称为员工
+     * public static final String NAME = "员工";
+     * @param logicName
+     * @return
+     */
+    public static FieldBase nameModel(String logicName) {
+        String desc = "模型名称";
+        String fieldName = "NAME";
+        return FieldBase.genPSFS(desc, fieldName, logicName);
+    }
+
+
+
+    /**
      * 生成实体类属性对应表字段静态常量
      * 如: employee 中的empName属性对应的表字段为emp_name,则生成
      * public static final String COLUMN_EMP_NAME = "emp_name";
@@ -32,7 +47,26 @@ public class EntityFieldGenerator {
         String fieldName = "COLUMN_" + value.toUpperCase();
         return FieldBase.genPSFS(desc, fieldName, value);
     }
+    /**
+     * 生成实体类属性对应表字段名称静态常量
+     * 如: employee 中的empName属性对应的表字段为emp_name,则生成
+     * public static final String COLUMN_EMP_NAME = "员工名";
+     * @param field
+     * @return
+     */
+    public static FieldBase nameField(BizField field) {
+        String desc = field.getPhysicalName() + "逻辑名";
+        String name = GenerateUtils.camel2Underline(field.getPhysicalName()).toLowerCase();
+        String value = StringUtils.isBlank(field.getLogicalName()) ? field.getPhysicalName() : field.getLogicalName();
+        String fieldName = "NAME_" + name.toUpperCase();
+        return FieldBase.genPSFS(desc, fieldName, value);
+    }
 
+    /**
+     * 生成实体属性字段
+     * @param field
+     * @return
+     */
     public static FieldBase generalField(BizField field) {
         String desc = field.getLogicalName() + (StringUtils.isBlank(field.getDesc()) ? "" :  ":" + field.getDesc());
         FieldBase f = new FieldBase();

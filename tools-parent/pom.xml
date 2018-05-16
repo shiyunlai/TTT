@@ -13,6 +13,7 @@
 	<modules>
 		<!-- tools core & basic -->
 		<module>../tools-core</module>
+		<module>../tools-model</module>
 
 		<!-- tools platform runtime -->
 		<module>../tools-eureka-server</module>
@@ -82,6 +83,11 @@
 			<dependency>
 				<groupId>org.tis</groupId>
 				<artifactId>tools-core</artifactId>
+				<version>${tools.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.tis</groupId>
+				<artifactId>tools-model</artifactId>
 				<version>${tools.version}</version>
 			</dependency>
 			<dependency>
@@ -192,6 +198,11 @@
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-lang3</artifactId>
 				<version>${commons-lang3.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-beanutils</groupId>
+				<artifactId>commons-beanutils</artifactId>
+				<version>${commons-beanutils.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>net.sf.ehcache</groupId>
