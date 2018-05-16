@@ -7,10 +7,8 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.tis.tools.abf.module.ac.entity.AcApp;
-import org.tis.tools.abf.module.common.log.OperateLog;
-import org.tis.tools.abf.module.common.log.OperateType;
-import org.tis.tools.abf.module.common.log.ReturnType;
+import org.tis.tools.abf.module.jnl.annotation.OperateLog;
+import org.tis.tools.abf.module.jnl.entity.enums.OperateType;
 import org.tis.tools.abf.module.sys.controller.request.SysDictQueryRequest;
 import org.tis.tools.abf.module.sys.controller.request.SysDictRequest;
 import org.tis.tools.abf.module.sys.entity.SysDict;
@@ -23,7 +21,6 @@ import org.tis.tools.core.web.vo.ResultVO;
 import org.tis.tools.core.web.vo.SmartPage;
 
 import java.text.ParseException;
-import java.util.List;
 
 @RestController
 @RequestMapping("/sysDicts")
@@ -37,14 +34,7 @@ public class SysDictController  extends BaseController {
      * @param request
      * @return
      */
-    @OperateLog(
-            operateType = OperateType.ADD,  // 操作类型
-            operateDesc = "新增业务字典", // 操作描述
-            retType = ReturnType.Object, // 返回类型，对象或数组
-            id = "guidApp", // 操作对象标识
-            name = "groupName", // 操作对象名
-            keys = {"guidApp","groupName"}
-    )
+    @OperateLog(type = OperateType.ADD, desc = "新增业务字典")
     @ApiOperation(value = "新增业务字典", notes = "实际参数以下面DataType为准，guid不需要输入")
     @PostMapping("/add")
     public ResultVO createSysDict(@RequestBody @Validated SysDictRequest request) {
@@ -72,14 +62,7 @@ public class SysDictController  extends BaseController {
      * @throws SysManagementException
      * @throws ParseException
      */
-    @OperateLog(
-            operateType = OperateType.DELETE,
-            operateDesc = "删除业务字典",
-            retType = ReturnType.Object,
-            id = "guid",
-            name = "dictName",
-            keys = {"dictKey", "dictType"}
-    )
+    @OperateLog(type = OperateType.DELETE, desc = "删除业务字典")
     @ApiOperation(value = "删除业务字典", notes = "根据guid删除对应的数据信息")
     @DeleteMapping("/{id}")
     public ResultVO deleteSysDict(@PathVariable @NotBlank String id) {
@@ -91,14 +74,7 @@ public class SysDictController  extends BaseController {
      * 修改业务字典
      * @param request
      */
-    @OperateLog(
-            operateType = OperateType.UPDATE,
-            operateDesc = "修改业务字典",
-            retType = ReturnType.Object,
-            id = "guid",
-            name = "dictName",
-            keys = {"dictKey", "dictType"}
-    )
+    @OperateLog(type = OperateType.UPDATE, desc = "修改业务字典")
     @ApiOperation(value = "修改业务字典", notes = "根据guid查询查询出需要修改的数据并进行更新，参数参考DataType内容")
     @PutMapping
     public ResultVO updateSysDict(@RequestBody @Validated SysDictRequest request) {

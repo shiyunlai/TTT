@@ -1,7 +1,7 @@
-package org.tis.tools.abf.module.common.log;
+package org.tis.tools.abf.module.jnl.core;
 
 
-import org.tis.tools.abf.module.common.log.vo.LogOperateDetail;
+import org.tis.tools.abf.module.jnl.entity.vo.LogOperateDetail;
 
 import java.io.Serializable;
 

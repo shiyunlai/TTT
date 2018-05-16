@@ -10,7 +10,7 @@ import java.io.Serializable;
  * acFunc功能&行为，菜单
  * 
  * @author Auto Generate Tools
- * @date 2018/04/23
+ * @date 2018/05/16
  */
 @Data
 @TableName("ac_func")
@@ -20,6 +20,11 @@ public class AcFunc implements Serializable {
      * serialVersionUID.
      */
     private static final long serialVersionUID = 1L;
+
+    /**
+     * 模型名称
+     */
+    public static final String NAME = "功能行为";
 
     /**
      * guid对应表字段
@@ -72,60 +77,110 @@ public class AcFunc implements Serializable {
     public static final String COLUMN_DISPLAY_ORDER = "display_order";
 
     /**
+     * guid逻辑名
+     */
+    public static final String NAME_GUID = "数据主键";
+
+    /**
+     * guidApp逻辑名
+     */
+    public static final String NAME_GUID_APP = "隶属应用";
+
+    /**
+     * funcType逻辑名
+     */
+    public static final String NAME_FUNC_TYPE = "功能类型";
+
+    /**
+     * funcCode逻辑名
+     */
+    public static final String NAME_FUNC_CODE = "功能编号";
+
+    /**
+     * funcName逻辑名
+     */
+    public static final String NAME_FUNC_NAME = "功能名称";
+
+    /**
+     * funcDesc逻辑名
+     */
+    public static final String NAME_FUNC_DESC = "功能描述";
+
+    /**
+     * isopen逻辑名
+     */
+    public static final String NAME_ISOPEN = "是否启用";
+
+    /**
+     * ischeck逻辑名
+     */
+    public static final String NAME_ISCHECK = "是否验证权限";
+
+    /**
+     * guidFunc逻辑名
+     */
+    public static final String NAME_GUID_FUNC = "父";
+
+    /**
+     * displayOrder逻辑名
+     */
+    public static final String NAME_DISPLAY_ORDER = "显示顺序";
+
+    /**
      * 数据主键:全局唯一标识符（GUID，Globally Unique Identifier），系统自动生成；
      */
     @TableId
-    public String guid;
+    private String guid;
 
     /**
      * 隶属应用:全局唯一标识符（GUID，Globally Unique Identifier），系统自动生成；
      */
-    public String guidApp;
+    private String guidApp;
 
     /**
      * 功能类型:取值来自业务菜单：DICT_AC_FUNCTYPE
      * F：功能（Function）
      * B：行为（Behave）
      */
-    public String funcType;
+    private String funcType;
 
     /**
      * 功能编号:业务上对功能的编码
      */
-    public String funcCode;
+    private String funcCode;
 
     /**
      * 功能名称
      */
-    public String funcName;
+    private String funcName;
 
     /**
      * 功能描述
      */
-    public String funcDesc;
+    private String funcDesc;
 
     /**
      * 是否启用:Y 启用(默认）
      * N 停用（不出现在菜单中）
      */
-    public String isopen;
+    private String isopen;
 
     /**
      * 是否验证权限:取值来自业务菜单： DICT_YON
      * N：无需验权（只要有看见菜单，所有人都能执行本功能）
      * Y：需进行权限验证（默认）
      */
-    public String ischeck;
+    private String ischeck;
 
     /**
      * 父:全局唯一标识符（GUID，Globally Unique Identifier），系统自动生成；
      */
-    public String guidFunc;
+    private String guidFunc;
 
     /**
      * 显示顺序:所在层次内的展示顺序
      */
-    public BigDecimal displayOrder;
+    private BigDecimal displayOrder;
 
 }
 

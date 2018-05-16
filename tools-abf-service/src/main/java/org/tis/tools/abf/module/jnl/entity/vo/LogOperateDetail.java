@@ -1,8 +1,7 @@
-package org.tis.tools.abf.module.common.log.vo;
+package org.tis.tools.abf.module.jnl.entity.vo;
 
-
-import org.tis.tools.abf.module.common.log.OperateType;
-import org.tis.tools.abf.module.common.log.enums.OperateResult;
+import org.tis.tools.abf.module.jnl.entity.enums.OperateType;
+import org.tis.tools.abf.module.jnl.entity.enums.OperateResult;
 import org.tis.tools.abf.module.jnl.entity.LogAbfOperate;
 
 import java.io.Serializable;
@@ -10,18 +9,23 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * describe: 操作日志VO类
+ *
+ * @author zhaoch
+ * @date 2018/5/14
+ **/
 public class LogOperateDetail implements Serializable {
 
     /** serialVersionUID */
     private static final long serialVersionUID = 1L;
-
-
+    
     private LogAbfOperate log = new LogAbfOperate();
 
-    private List<LogHistoryDetail> logAbfHistorie = new ArrayList<>();
+    private List<LogDataDetail> logDatas = new ArrayList<>();
 
-    public void setLogAbfHistorie(List<LogHistoryDetail> logAbfHistorie) {
-        this.logAbfHistorie = logAbfHistorie;
+    public void setLogDatas(List<LogDataDetail> logDatas) {
+        this.logDatas = logDatas;
     }
 
     public void setLog(LogAbfOperate log) {
@@ -30,18 +34,23 @@ public class LogOperateDetail implements Serializable {
 
     public LogOperateDetail(){}
 
-    public LogHistoryDetail addObj() {
-        LogHistoryDetail obj = new LogHistoryDetail();
-        this.logAbfHistorie.add(obj);
+    public LogDataDetail addLogData() {
+        LogDataDetail obj = new LogDataDetail();
+        this.logDatas.add(obj);
         return obj;
     }
 
-    public LogHistoryDetail getObj(int index) {
-        return this.logAbfHistorie.get(index);
+    public LogDataDetail addLogData(LogDataDetail obj) {
+        this.logDatas.add(obj);
+        return obj;
     }
 
-    public List<LogHistoryDetail> getAllObj() {
-        return this.logAbfHistorie;
+    public LogDataDetail getLogData(int index) {
+        return this.logDatas.get(index);
+    }
+
+    public List<LogDataDetail> getAllLogData() {
+        return this.logDatas;
     }
 
 
@@ -139,7 +148,6 @@ public class LogOperateDetail implements Serializable {
         return this;
     }
 
-
     /**
      * Set the 应用名称.
      *
@@ -151,30 +159,15 @@ public class LogOperateDetail implements Serializable {
         return this;
     }
 
-
     /**
-     * Set the 功能编号.
      *
-     * @param funcCode
-     *            功能编号
+     * @param serviceId
+     * @return
      */
-    public LogOperateDetail setFuncCode(String funcCode) {
-        this.log.setFuncCode(funcCode == null ? null : funcCode.trim());
+    public LogOperateDetail setServiceId(String serviceId) {
+        this.log.setServiceId(serviceId == null ? null : serviceId.trim());
         return this;
     }
-
-
-    /**
-     * Set the 功能名称.
-     *
-     * @param funcName
-     *            功能名称
-     */
-    public LogOperateDetail setFuncName(String funcName) {
-        this.log.setFuncName(funcName == null ? null : funcName.trim());
-        return this;
-    }
-
 
     /**
      * Set the 服务地址.
@@ -187,7 +180,6 @@ public class LogOperateDetail implements Serializable {
         return this;
     }
 
-
     /**
      * Set the 异常堆栈.
      *
@@ -199,7 +191,6 @@ public class LogOperateDetail implements Serializable {
         return this;
     }
 
-
     /**
      * Set the 处理描述.
      *
@@ -210,6 +201,5 @@ public class LogOperateDetail implements Serializable {
         this.log.setProcessDesc(processDesc == null ? null : processDesc.trim());
         return this;
     }
-
 
 }

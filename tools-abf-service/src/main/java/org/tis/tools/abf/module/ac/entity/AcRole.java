@@ -8,16 +8,14 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.tis.tools.abf.module.ac.controller.request.AcRoleUpdateValidateGrop;
 import org.tis.tools.abf.module.common.entity.enums.YON;
 import org.tis.tools.core.entity.enums.CommonEnumDeserializer;
-import org.tis.tools.core.validation.UpdateValidateGroup;
 
-import javax.validation.constraints.Null;
 import java.io.Serializable;
 
 /**
  * acRole权限集（角色）定义表
  * 
  * @author Auto Generate Tools
- * @date 2018/04/23
+ * @date 2018/05/16
  */
 @Data
 @TableName("ac_role")
@@ -27,6 +25,11 @@ public class AcRole implements Serializable {
      * serialVersionUID.
      */
     private static final long serialVersionUID = 1L;
+
+    /**
+     * 模型名称
+     */
+    public static final String NAME = "权限集(角色)";
 
     /**
      * guid对应表字段
@@ -44,12 +47,6 @@ public class AcRole implements Serializable {
     public static final String COLUMN_ROLE_NAME = "role_name";
 
     /**
-     * guidApp对应表字段
-     * 这个字段删除了
-     */
-   // public static final String COLUMN_GUID_APP = "guid_app";
-
-    /**
      * enabled对应表字段
      */
     public static final String COLUMN_ENABLED = "enabled";
@@ -60,11 +57,35 @@ public class AcRole implements Serializable {
     public static final String COLUMN_ROLE_DESC = "role_desc";
 
     /**
+     * guid逻辑名
+     */
+    public static final String NAME_GUID = "数据主键";
+
+    /**
+     * roleCode逻辑名
+     */
+    public static final String NAME_ROLE_CODE = "角色代码";
+
+    /**
+     * roleName逻辑名
+     */
+    public static final String NAME_ROLE_NAME = "角色名称";
+
+    /**
+     * enabled逻辑名
+     */
+    public static final String NAME_ENABLED = "是否启用";
+
+    /**
+     * roleDesc逻辑名
+     */
+    public static final String NAME_ROLE_DESC = "角色描述";
+
+    /**
      * 数据主键:全局唯一标识符（GUID，Globally Unique Identifier），系统自动生成；
      */
-
     @TableId
-    public String guid;
+    private String guid;
 
     /**
      * 角色代码:业务上对角色的编码
@@ -75,23 +96,18 @@ public class AcRole implements Serializable {
     /**
      * 角色名称
      */
-    public String roleName;
-
-    /**
-     * 隶属应用GUID
-     */
-   // public String guidApp;
+    private String roleName;
 
     /**
      * 是否启用
      */
-   @JSONField(deserializeUsing= CommonEnumDeserializer.class)
+    @JSONField(deserializeUsing= CommonEnumDeserializer.class)
     public YON enabled;
 
     /**
      * 角色描述
      */
-    public String roleDesc;
+    private String roleDesc;
 
 }
 

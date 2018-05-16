@@ -13,9 +13,9 @@ import java.io.Serializable;
 
 /**
  * sysSeqno每个SEQ_KEY表示一个序号资源，顺序增加使用序号。
- *
+ * 
  * @author Auto Generate Tools
- * @date 2018/04/23
+ * @date 2018/05/16
  */
 @Data
 @TableName("sys_seqno")
@@ -25,6 +25,11 @@ public class SysSeqno implements Serializable {
      * serialVersionUID.
      */
     private static final long serialVersionUID = 1L;
+
+    /**
+     * 模型名称
+     */
+    public static final String NAME = "序号资源表";
 
     /**
      * seqName对应表字段
@@ -52,20 +57,45 @@ public class SysSeqno implements Serializable {
     public static final String COLUMN_RESET_PARAMS = "reset_params";
 
     /**
+     * seqName逻辑名
+     */
+    public static final String NAME_SEQ_NAME = "序号资源表名称";
+
+    /**
+     * seqKey逻辑名
+     */
+    public static final String NAME_SEQ_KEY = "序号键值";
+
+    /**
+     * seqNo逻辑名
+     */
+    public static final String NAME_SEQ_NO = "序号数";
+
+    /**
+     * reset逻辑名
+     */
+    public static final String NAME_RESET = "重置方式";
+
+    /**
+     * resetParams逻辑名
+     */
+    public static final String NAME_RESET_PARAMS = "重置处理参数";
+
+    /**
      * 序号资源表名称:序号资源的名称，如:柜员660001的交易流水序号资源
      */
-    public String seqName;
+    private String seqName;
 
     /**
      * 序号键值
      */
     @TableId
-    public String seqKey;
+    private String seqKey;
 
     /**
      * 序号数:顺序增加的数字
      */
-    public BigDecimal seqNo;
+    private BigDecimal seqNo;
 
     /**
      * 重置方式:来自业务字典： DICT_SYS_RESET
@@ -82,7 +112,7 @@ public class SysSeqno implements Serializable {
     /**
      * 重置处理参数:重置程序执行时的输入参数，通过本参数指定六重置周期，重置执行时间，重置起始数字等
      */
-    public String resetParams;
+    private String resetParams;
 
 }
 

@@ -10,7 +10,7 @@ import java.io.Serializable;
  * sysDutyDef职务及responsiblity。定义职务及上下级关系（可以把“职务”理解为岗位的岗位类型，岗位是在机构、部门中实例化后的职务，如：A机构设有‘总经理’这个岗位，其职务为‘总经理’）
  * 
  * @author Auto Generate Tools
- * @date 2018/04/23
+ * @date 2018/05/16
  */
 @Data
 @TableName("sys_duty_def")
@@ -20,6 +20,11 @@ public class SysDutyDef implements Serializable {
      * serialVersionUID.
      */
     private static final long serialVersionUID = 1L;
+
+    /**
+     * 模型名称
+     */
+    public static final String NAME = "职务定义表";
 
     /**
      * guid对应表字段
@@ -72,57 +77,107 @@ public class SysDutyDef implements Serializable {
     public static final String COLUMN_REMARK = "remark";
 
     /**
+     * guid逻辑名
+     */
+    public static final String NAME_GUID = "数据主键";
+
+    /**
+     * dutyCode逻辑名
+     */
+    public static final String NAME_DUTY_CODE = "职务代码";
+
+    /**
+     * dutyName逻辑名
+     */
+    public static final String NAME_DUTY_NAME = "职务名称";
+
+    /**
+     * dutyType逻辑名
+     */
+    public static final String NAME_DUTY_TYPE = "职务套别";
+
+    /**
+     * guidParents逻辑名
+     */
+    public static final String NAME_GUID_PARENTS = "父职务GUID";
+
+    /**
+     * isleaf逻辑名
+     */
+    public static final String NAME_ISLEAF = "是否叶子节点";
+
+    /**
+     * subCount逻辑名
+     */
+    public static final String NAME_SUB_COUNT = "子节点数";
+
+    /**
+     * dutyLevel逻辑名
+     */
+    public static final String NAME_DUTY_LEVEL = "职务层次";
+
+    /**
+     * dutySeq逻辑名
+     */
+    public static final String NAME_DUTY_SEQ = "职务序列";
+
+    /**
+     * remark逻辑名
+     */
+    public static final String NAME_REMARK = "备注";
+
+    /**
      * 数据主键:全局唯一标识符（GUID，Globally Unique Identifier），系统自动生成；
      */
     @TableId
-    public String guid;
+    private String guid;
 
     /**
      * 职务代码
      */
-    public String dutyCode;
+    private String dutyCode;
 
     /**
      * 职务名称
      */
-    public String dutyName;
+    private String dutyName;
 
     /**
      * 职务套别:见业务字典： DICT_OM_DUTYTYPE
      * 例如科技类，审计类等
      * 实际记录了 字典项的GUID （SYS_DITC_ITEM）
      */
-    public String dutyType;
+    private String dutyType;
 
     /**
      * 父职务GUID:全局唯一标识符（GUID，Globally Unique Identifier），系统自动生成；
      */
-    public String guidParents;
+    private String guidParents;
 
     /**
      * 是否叶子节点:取值来自业务菜单：DICT_YON
      */
-    public String isleaf;
+    private String isleaf;
 
     /**
      * 子节点数
      */
-    public BigDecimal subCount;
+    private BigDecimal subCount;
 
     /**
      * 职务层次
      */
-    public BigDecimal dutyLevel;
+    private BigDecimal dutyLevel;
 
     /**
      * 职务序列:职务的面包屑定位信息
      */
-    public String dutySeq;
+    private String dutySeq;
 
     /**
      * 备注
      */
-    public String remark;
+    private String remark;
 
 }
 
