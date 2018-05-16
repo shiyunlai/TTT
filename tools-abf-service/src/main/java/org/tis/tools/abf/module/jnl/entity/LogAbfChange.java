@@ -1,5 +1,6 @@
 package org.tis.tools.abf.module.jnl.entity;
 
+import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import lombok.Data;
 import java.io.Serializable;
@@ -23,6 +24,11 @@ public class LogAbfChange implements Serializable {
      * 模型名称
      */
     public static final String NAME = "记录日志差异值";
+
+    /**
+     * guid对应表字段
+     */
+    public static final String COLUMN_GUID = "guid";
 
     /**
      * guidData对应表字段
@@ -73,6 +79,12 @@ public class LogAbfChange implements Serializable {
      * newValue逻辑名
      */
     public static final String NAME_NEW_VALUE = "变化之后值";
+
+    /**
+     * 数据主键:全局唯一标识符（GUID，Globally Unique Identifier）
+     */
+    @TableId
+    private String guid;
 
     /**
      * 操作数据GUID:全局唯一标识符（GUID，Globally Unique Identifier）

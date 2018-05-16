@@ -17,18 +17,6 @@ public class LogDataThreadLocal {
     private static ThreadLocal<List<LogDataDetail>> LOG_DATA_LOCAL = new ThreadLocal<>();
 
     /**
-     * ADD
-     * @param data
-     */
-    public static void addData(LogDataDetail data){
-        if (CollectionUtils.isEmpty(getLogDataLocal())) {
-            LOG_DATA_LOCAL.set(Collections.singletonList(data));
-        } else {
-            getLogDataLocal().add(data);
-        }
-    }
-
-    /**
      * GET
      * @return
      */

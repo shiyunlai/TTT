@@ -39,6 +39,7 @@ public class DataUtils {
                 f.setAccessible(true);
                 try {
                     id = (String) f.get(object);
+                    break;
                 } catch (IllegalAccessException ignored) {
 
                 }

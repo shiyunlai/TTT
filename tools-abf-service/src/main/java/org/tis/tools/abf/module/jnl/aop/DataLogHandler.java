@@ -4,12 +4,14 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.enums.SqlMethod;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import org.apache.commons.lang3.StringUtils;
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 import org.tis.tools.abf.module.jnl.core.LogDataThreadLocal;
 import org.tis.tools.abf.module.jnl.entity.enums.DataOperateType;
 import org.tis.tools.abf.module.jnl.entity.vo.LogDataDetail;
@@ -20,9 +22,7 @@ import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * description:
@@ -56,8 +56,8 @@ public class DataLogHandler {
      * @return
      * @throws Throwable
      */
-    @AfterReturning(pointcut = "insert()", returning = "result", argNames = "result,pjp")
-    public void insert(Integer result, ProceedingJoinPoint pjp) throws Throwable {
+    @AfterReturning(pointcut = "insert()", returning = "result", argNames = "pjp,result")
+    public void insert(JoinPoint pjp, Integer result) throws Throwable {
         if (result > 0) {
             // 获取方法名
             String method = pjp.getSignature().getName();
@@ -68,7 +68,7 @@ public class DataLogHandler {
                 Object obj = pjp.getArgs()[0];
                 data.setOperateType(DataOperateType.INSERT);
                 collectDataInfo(data, obj);
-                LogDataThreadLocal.addData(data);
+                addDataLog(data);
             }
         }
     }
@@ -96,7 +96,7 @@ public class DataLogHandler {
                     String dataClassName = ((ParameterizedType) type).getActualTypeArguments()[0].getTypeName();
                     data.setDataClass(dataClassName);
                     data.setDataName(DataUtils.getEntityName(Class.forName(dataClassName)));
-                    LogDataThreadLocal.addData(data);
+                    addDataLog(data);
                 }
             }
         }
@@ -124,7 +124,7 @@ public class DataLogHandler {
                     LogDataDetail data = new LogDataDetail();
                     data.setOperateType(DataOperateType.DELETE);
                     collectDataInfo(data, oldObj);
-                    LogDataThreadLocal.addData(data);
+                    addDataLog(data);
                 }
             }
         }
@@ -163,7 +163,7 @@ public class DataLogHandler {
                     data.setChanges(DiffUtils.getChangeItems(oldObj, obj, false));
                 }
             }
-            LogDataThreadLocal.addData(data);
+            addDataLog(data);
         }
 
         // update 方法-【Integer update(@Param("et") T entity, @Param("ew") Wrapper<T> wrapper)】
@@ -183,7 +183,7 @@ public class DataLogHandler {
                     data.setOperateType(DataOperateType.UPDATE);
                     collectDataInfo(data, oldObj);
                     data.setChanges(DiffUtils.getChangeItems(oldObj, obj, true));
-                    LogDataThreadLocal.addData(data);
+                    addDataLog(data);
                 }
             }
         }
@@ -195,6 +195,17 @@ public class DataLogHandler {
                 .setDataString(JSON.toJSONString(obj))
                 .setDataName(DataUtils.getEntityName(obj.getClass()))
                 .setDataGuid(DataUtils.getEntityId(obj));
+    }
+
+    private void addDataLog(LogDataDetail data) {
+        List<LogDataDetail> list = LogDataThreadLocal.getLogDataLocal();
+        if (CollectionUtils.isEmpty(list)) {
+            List<LogDataDetail> dataDetails = new ArrayList<>();
+            dataDetails.add(data);
+            LogDataThreadLocal.setLogDataLocal(dataDetails);
+        } else {
+            list.add(data);
+        }
     }
 
 

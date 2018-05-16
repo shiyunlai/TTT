@@ -24,7 +24,7 @@ public @interface OperateLog {
      *
      * @return
      */
-    OperateType operateType() default OperateType.QUERY;
+    OperateType type() default OperateType.QUERY;
 
     /**
      * 记录操作描述
@@ -32,6 +32,6 @@ public @interface OperateLog {
      *
      * @return
      */
-    String operateDesc() default "";
+    String desc() default "";
 
 }

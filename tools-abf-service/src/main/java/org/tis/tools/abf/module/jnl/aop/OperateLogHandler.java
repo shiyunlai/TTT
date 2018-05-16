@@ -116,8 +116,8 @@ public class OperateLogHandler {
                     .setOperatorName("开发用户TODO")
 //                  .setUserId(StringUtils.equals(jnl.operateType(),"login") ? "" : session.getAttribute("userId").toString())
 //                  .setOperatorName(StringUtils.equals(jnl.operateType(), "login") ? "" : acOperator.getOperatorName())
-                    .setOperateType(log.operateType())
-                    .setProcessDesc(log.operateDesc())
+                    .setOperateType(log.type())
+                    .setProcessDesc(log.desc())
                     .setRestfulUrl(uri);
 //            LogThreadLocal.setLogBuilderLocal(logBuilder);
             try {
