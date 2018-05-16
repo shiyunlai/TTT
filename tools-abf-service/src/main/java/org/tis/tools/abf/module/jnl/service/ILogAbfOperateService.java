@@ -1,22 +1,24 @@
 package org.tis.tools.abf.module.jnl.service;
 
-import com.baomidou.mybatisplus.service.IService;
-import org.tis.tools.abf.module.common.log.vo.LogOperateDetail;
 import org.tis.tools.abf.module.jnl.entity.LogAbfOperate;
-import org.tis.tools.abf.module.jnl.exception.JnlManagementException;
+import com.baomidou.mybatisplus.service.IService;
+import org.tis.tools.abf.module.jnl.entity.vo.LogOperateDetail;
+import org.tis.tools.abf.module.jnl.exception.OperateLogException;
 
 /**
- * describe: 
- *
- * @author zhaoch
- * @date 2018/3/30
- **/
-public interface ILogAbfOperateService extends IService<LogAbfOperate> {
+ * logAbfOperate的Service接口类
+ * 
+ * @author Auto Generate Tools
+ * @date 2018/05/14
+ */
+public interface ILogAbfOperateService extends IService<LogAbfOperate>  {
 
     /**
-     * 新增操作日志
-     * @param log 日志VO类
-     * @throws JnlManagementException
+     *
+     * @param log
+     * @throws OperateLogException
      */
-    void createOperatorLog(LogOperateDetail log) throws JnlManagementException;
+    void insertOperatorLog(LogOperateDetail log) throws OperateLogException;
+
 }
+
