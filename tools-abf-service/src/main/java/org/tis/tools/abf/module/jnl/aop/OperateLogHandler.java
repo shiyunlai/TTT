@@ -1,8 +1,10 @@
-package org.tis.tools.abf.module.common.log;
+package org.tis.tools.abf.module.jnl.aop;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.apache.commons.lang.StringUtils;
 import org.aspectj.lang.JoinPoint;
@@ -14,20 +16,30 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import org.tis.tools.abf.module.common.log.enums.OperateResult;
-import org.tis.tools.abf.module.common.log.vo.LogOperateDetail;
+import org.tis.tools.abf.module.jnl.core.LogDataThreadLocal;
+import org.tis.tools.abf.module.jnl.core.OperateLogBuilder;
+import org.tis.tools.abf.module.jnl.annotation.OperateLog;
+import org.tis.tools.abf.module.jnl.entity.enums.OperateResult;
+import org.tis.tools.abf.module.jnl.entity.enums.ReturnType;
+import org.tis.tools.abf.module.jnl.entity.vo.LogDataDetail;
+import org.tis.tools.abf.module.jnl.exception.OperateLogException;
+import org.tis.tools.abf.module.jnl.exception.OperateLogExceptionCodes;
+import org.tis.tools.abf.module.jnl.entity.vo.LogOperateDetail;
 import org.tis.tools.abf.module.jnl.service.ILogAbfOperateService;
 import org.tis.tools.core.exception.ToolsRuntimeException;
 import org.tis.tools.core.utils.BasicUtil;
 import org.tis.tools.core.web.vo.ResultVO;
+import org.tis.tools.model.log.LogData;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Objects;
 import java.util.TimerTask;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -62,7 +74,7 @@ public class OperateLogHandler {
 
 
     @Around("logPoint()")
-    public Object handle(ProceedingJoinPoint point) throws Throwable {
+    public Object handle(ProceedingJoinPoint point)  throws Throwable {
         Object result = null;
         //执行业务
         boolean flag = true;
@@ -90,6 +102,7 @@ public class OperateLogHandler {
         MethodSignature msig = (MethodSignature) sig;
         Object target = point.getTarget();
         Method currentMethod = target.getClass().getMethod(msig.getName(), msig.getParameterTypes());
+
         OperateLog log = currentMethod.getAnnotation(OperateLog.class);
         if (log != null) {
 //          HttpSession session = request.getSession();
@@ -107,10 +120,14 @@ public class OperateLogHandler {
                     .setProcessDesc(log.operateDesc())
                     .setRestfulUrl(uri);
 //            LogThreadLocal.setLogBuilderLocal(logBuilder);
-            if (flag) {
-                handleSuccessReturn(logBuilder, log, point, (ResultVO) result);
-            } else {
-                handleErrorReturn(logBuilder, exception);
+            try {
+                if (flag) {
+                    handleSuccessReturn(logBuilder, log, point, (ResultVO) result);
+                } else {
+                    handleErrorReturn(logBuilder, exception);
+                }
+            } catch (Exception e) {
+                logger.error("处理日志信息发生异常：", e);
             }
         }
         if (flag) {
@@ -124,8 +141,6 @@ public class OperateLogHandler {
             throw exception;
         }
     }
-
-
 
     /**
      * 保存操作日志
@@ -151,7 +166,7 @@ public class OperateLogHandler {
             @Override
             public void run() {
                 try {
-                    logOperatorRService.createOperatorLog(log);
+                    logOperatorRService.insertOperatorLog(log);
                 } catch (Exception e) {
                     logger.error("创建业务日志异常!", e);
                 }
@@ -177,8 +192,7 @@ public class OperateLogHandler {
             }
         }
         sb = sb == null ? new StringBuilder() : sb;
-        String info = String.format("{method:[%s#%s] | args:[%s]}", className, methodName, sb.toString());
-        return info;
+        return String.format("{method:[%s#%s] | args:[%s]}", className, methodName, sb.toString());
     }
 
     /**
@@ -190,52 +204,10 @@ public class OperateLogHandler {
     private void handleSuccessReturn(OperateLogBuilder logBuilder, OperateLog logAnt, JoinPoint point, ResultVO ret) {
         LogOperateDetail log = logBuilder.getLog();
         log.setOperateResult(OperateResult.SUCCESS);
-        // 添加数据变化项（LogAbfChange）到操作日志
-        JSONObject reqData = new JSONObject();
-        for(Object arg : point.getArgs()){
-            if (arg != null &&  String.class.equals(arg.getClass())) {
-                try{
-                    reqData = JSONObject.parseObject(String.valueOf(arg));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        String objStr = JSON.toJSONString(ret.getResult());
-        if(logAnt.retType() == ReturnType.Object) {
-            JSONObject jsonObject = JSONObject.parseObject(objStr);
-            JSONObject changeData = reqData.getJSONObject("changeData");
-            if(StringUtils.isNotBlank(logAnt.id())) {
-                log.addObj()
-                        .setObjGuid(jsonObject.getString(logAnt.id()))
-                        .setObjName(StringUtils.isBlank(logAnt.name()) ? null : jsonObject.getString(logAnt.name()))
-                        .setObjValue(objStr);
-                for (String key : logAnt.keys()) {
-                    log.getObj(0).addKey(key, jsonObject.getString(key));
-                }
-                if (changeData != null) {
-                    changeData.keySet().forEach(key -> log.getObj(0).addChangeItem(key, changeData.getString(key)));
-                }
-            }
-        } else if(logAnt.retType() == ReturnType.List) {
-            JSONArray array = JSONObject.parseArray(objStr);
-            JSONArray changeData = reqData.getJSONArray("changeData");
-            if(StringUtils.isNotBlank(logAnt.id())) {
-                for (int i = 0; i < array.size(); i++) {
-                    JSONObject jsonObject = array.getJSONObject(i);
-                    log.addObj().setObjGuid(jsonObject.getString(logAnt.id())).setObjValue(jsonObject.toJSONString());
-                    for (String key : logAnt.keys()) {
-                        log.getObj(i).addKey(key, jsonObject.getString(key));
-                    }
-                    int finalI = i;
-                    if (changeData != null) {
-                        changeData.getJSONObject(i).keySet()
-                                .forEach(key ->
-                                        log.getObj(finalI).addChangeItem(key, changeData.getJSONObject(finalI)
-                                                .getString(key)));
-                    }
-                }
-            }
+        // 添加数据变化项到操作日志
+        List<LogDataDetail> logDataList = LogDataThreadLocal.getLogDataLocal();
+        if (!CollectionUtils.isEmpty(logDataList)) {
+            logBuilder.getLog().setLogDatas(logDataList);
         }
         saveOperateLog(logBuilder.getLog());
     }
@@ -274,6 +246,5 @@ public class OperateLogHandler {
         sw.close();
         return message;
     }
-
 
 }

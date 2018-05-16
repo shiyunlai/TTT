@@ -1,4 +1,4 @@
-package org.tis.tools.abf.module.common.log;
+package org.tis.tools.abf.module.jnl.entity.enums;
 
 import org.tis.tools.core.entity.enums.BaseEnum;
 
@@ -11,6 +11,7 @@ import java.io.Serializable;
  * @date 2018/4/20
  **/
 public enum OperateType implements BaseEnum {
+
     ADD("add", "新增"),
     DELETE("delete", "删除"),
     UPDATE("update", "修改"),
