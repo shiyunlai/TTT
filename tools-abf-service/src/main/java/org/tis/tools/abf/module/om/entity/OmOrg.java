@@ -3,10 +3,12 @@ package org.tis.tools.abf.module.om.entity;
 import java.math.BigDecimal;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.baomidou.mybatisplus.annotations.TableName;
+import com.baomidou.mybatisplus.annotations.*;
+
 import java.util.Date;
+
+import com.baomidou.mybatisplus.enums.FieldFill;
 import lombok.Data;
-import com.baomidou.mybatisplus.annotations.TableId;
 import org.tis.tools.abf.module.common.entity.enums.YON;
 import org.tis.tools.abf.module.om.entity.enums.OmOrgStatus;
 import org.tis.tools.core.entity.enums.CommonEnumDeserializer;
@@ -339,22 +341,28 @@ public class OmOrg implements Serializable {
     /**
      * 创建时间
      */
+    @TableField(fill = FieldFill.INSERT)
     private Date createtime;
 
     /**
      * 最近更新时间
      */
+    @Version
+    @TableField(fill = FieldFill.UPDATE)
     private Date lastupdate;
 
     /**
      * 最近更新人员
      */
+    @TableField(fill = FieldFill.UPDATE)
     private String updator;
 
     /**
      * 数据状态:0 有效
      * D 删除（逻辑删除）
      */
+    @TableLogic
+    @TableField(fill = FieldFill.INSERT)
     private String dataStatus;
 
 }

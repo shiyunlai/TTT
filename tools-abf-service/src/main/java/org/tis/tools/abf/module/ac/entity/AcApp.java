@@ -1,19 +1,19 @@
 package org.tis.tools.abf.module.ac.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.baomidou.mybatisplus.annotations.TableName;
-import java.util.Date;
+import com.baomidou.mybatisplus.annotations.*;
+import com.baomidou.mybatisplus.enums.FieldFill;
 import lombok.Data;
-import com.baomidou.mybatisplus.annotations.TableId;
 import org.tis.tools.abf.module.ac.entity.enums.AcAppType;
 import org.tis.tools.abf.module.common.entity.enums.YON;
 import org.tis.tools.core.entity.enums.CommonEnumDeserializer;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * acApp应用系统（Application）注册表
- * 
+ *
  * @author Auto Generate Tools
  * @date 2018/05/17
  */
@@ -229,22 +229,28 @@ public class AcApp implements Serializable {
     /**
      * 创建时间
      */
+    @TableField(fill = FieldFill.INSERT)
     private Date createtime;
 
     /**
      * 最近更新时间
      */
+    @Version
+    @TableField(fill = FieldFill.UPDATE)
     private Date lastupdate;
 
     /**
      * 最近更新人员
      */
+    @TableField(fill = FieldFill.UPDATE)
     private String updator;
 
     /**
      * 数据状态:0 有效
      * D 删除（逻辑删除）
      */
+    @TableLogic
+    @TableField(fill = FieldFill.INSERT)
     private String dataStatus;
 
 }
