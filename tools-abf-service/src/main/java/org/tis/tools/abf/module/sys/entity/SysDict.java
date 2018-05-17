@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotations.TableName;
+import java.util.Date;
 import lombok.Data;
 import com.baomidou.mybatisplus.annotations.TableId;
 import org.tis.tools.abf.module.sys.entity.enums.DictFromType;
@@ -16,7 +17,7 @@ import java.io.Serializable;
  * sysDict业务字典表，定义系统中下拉菜单的数据（注意：仅仅包括下拉菜单中的数据，而不包括下拉菜单样式，是否多选这些与下拉内容无关的信息）
  * 
  * @author Auto Generate Tools
- * @date 2018/05/16
+ * @date 2018/05/17
  */
 @Data
 @TableName("sys_dict")
@@ -98,6 +99,26 @@ public class SysDict implements Serializable {
     public static final String COLUMN_FROM_TYPE = "from_type";
 
     /**
+     * createtime对应表字段
+     */
+    public static final String COLUMN_CREATETIME = "createtime";
+
+    /**
+     * lastupdate对应表字段
+     */
+    public static final String COLUMN_LASTUPDATE = "lastupdate";
+
+    /**
+     * updator对应表字段
+     */
+    public static final String COLUMN_UPDATOR = "updator";
+
+    /**
+     * dataStatus对应表字段
+     */
+    public static final String COLUMN_DATA_STATUS = "data_status";
+
+    /**
      * guid逻辑名
      */
     public static final String NAME_GUID = "数据主键";
@@ -161,6 +182,26 @@ public class SysDict implements Serializable {
      * fromType逻辑名
      */
     public static final String NAME_FROM_TYPE = "字典项来源类型";
+
+    /**
+     * createtime逻辑名
+     */
+    public static final String NAME_CREATETIME = "创建时间";
+
+    /**
+     * lastupdate逻辑名
+     */
+    public static final String NAME_LASTUPDATE = "最近更新时间";
+
+    /**
+     * updator逻辑名
+     */
+    public static final String NAME_UPDATOR = "最近更新人员";
+
+    /**
+     * dataStatus逻辑名
+     */
+    public static final String NAME_DATA_STATUS = "数据状态";
 
     /**
      * 数据主键:全局唯一标识符（GUID，Globally Unique Identifier），系统自动生成；

@@ -4,10 +4,12 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.parser.ParserConfig;
+import com.baomidou.mybatisplus.toolkit.CollectionUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.XML;
+import org.springframework.beans.BeanUtils;
 import org.tis.tools.asf.core.exception.CodeBuilderException;
 import org.tis.tools.asf.module.er.entity.*;
 import org.tis.tools.asf.module.er.entity.enums.ERColumnType;
@@ -43,6 +45,9 @@ public class ErmUtils {
         ParserConfig.getGlobalInstance().putDeserializer(ERColumnType.class, new CommonEnumDeserializer());
         com.alibaba.fastjson.JSONObject diagram = JSON.parseObject(xmlString).getJSONObject("diagram");
         List<ERTable> erTables = JSONArray.parseArray(diagram.getJSONObject("contents").getString("table"), ERTable.class);
+        Map<String, List<ERColumnGroup>> columnGroupMap = JSONArray.parseArray(diagram.getJSONObject("column_groups")
+                .getString("column_group"), ERColumnGroup.class)
+                .stream().collect(Collectors.groupingBy(ERColumnGroup::getId));
         Map<String, ERWord> wordMap = JSONArray.parseArray(diagram.getJSONObject("dictionary")
                 .getString("word"), ERWord.class)
                 .stream().collect(Collectors.toMap(ERWord::getId, w -> w));
@@ -72,6 +77,17 @@ public class ErmUtils {
                     }
                     c.getTableList().add(t);
                     break;
+                }
+            }
+            if (CollectionUtils.isNotEmpty(t.getColumns().getColumnGroupList())) {
+                for (String columnGroup : t.getColumns().getColumnGroupList()) {
+                    if (columnGroupMap.get(columnGroup) != null) {
+                        columnGroupMap.get(columnGroup).get(0).getColumns().getNormalColumnList().forEach(column -> {
+                            ERColumn erColumn = new ERColumn();
+                            BeanUtils.copyProperties(column, erColumn);
+                            t.getColumns().getNormalColumnList().add(erColumn);
+                        });
+                    }
                 }
             }
             for (ERColumn c : t.getColumns().getNormalColumnList()) {

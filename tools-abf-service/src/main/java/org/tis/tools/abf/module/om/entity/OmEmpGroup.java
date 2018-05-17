@@ -10,7 +10,7 @@ import java.io.Serializable;
  * 如：某个项目组有哪些人员
  * 
  * @author Auto Generate Tools
- * @date 2018/05/16
+ * @date 2018/05/17
  */
 @Data
 @TableName("om_emp_group")

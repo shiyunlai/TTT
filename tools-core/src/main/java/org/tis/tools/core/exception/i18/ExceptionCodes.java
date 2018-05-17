@@ -17,7 +17,7 @@ public class ExceptionCodes {
 	/**
 	 * 异常码前缀（分配给core模块）
 	 */
-	private static final String R_EX_PREFIX = "COMMON";
+	private static final String R_EX_PREFIX = "CORE";
 	
 	/**
 	 * 异常：执行成功.<br>

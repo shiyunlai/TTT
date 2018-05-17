@@ -20,9 +20,10 @@ import org.tis.tools.abf.module.jnl.util.DiffUtils;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 /**
  * description:
@@ -66,7 +67,7 @@ public class DataLogHandler {
                     StringUtils.equals(method, SqlMethod.INSERT_ONE_ALL_COLUMN.getMethod())) {
                 LogDataDetail data = new LogDataDetail();
                 Object obj = pjp.getArgs()[0];
-                data.setOperateType(DataOperateType.INSERT);
+                data.setOperateType(DataOperateType.INSERT).setDataString(JSON.toJSONString(obj));
                 collectDataInfo(data, obj);
                 addDataLog(data);
             }
@@ -80,30 +81,31 @@ public class DataLogHandler {
      */
     @Around("delete()")
     public Object delete(ProceedingJoinPoint pjp) throws Throwable {
-        Object returnObj = null;
+        Object returnObj;
         // 获取方法名
         String method = pjp.getSignature().getName();
         // deleteById 方法
         if (StringUtils.equals(method, SqlMethod.DELETE_BY_ID.getMethod())) {
+            // 获取删除前数据
+            String id = (String) pjp.getArgs()[0];
+            Method selectMethod = pjp.getTarget().getClass()
+                    .getDeclaredMethod(SqlMethod.SELECT_BY_ID.getMethod(), Serializable.class);
+            Object oldObj = selectMethod.invoke(pjp.getTarget(), id);
             // 执行处理逻辑
             returnObj = pjp.proceed();
             if (((Integer) returnObj) > 0) {
-                if (StringUtils.equals(method, SqlMethod.DELETE_BY_ID.getMethod())) {
-                    LogDataDetail data = new LogDataDetail();
-                    data.setOperateType(DataOperateType.DELETE);
-                    data.setDataGuid((String) pjp.getArgs()[0]);
-                    Type type = pjp.getTarget().getClass().getGenericInterfaces()[0];
-                    String dataClassName = ((ParameterizedType) type).getActualTypeArguments()[0].getTypeName();
-                    data.setDataClass(dataClassName);
-                    data.setDataName(DataUtils.getEntityName(Class.forName(dataClassName)));
-                    addDataLog(data);
-                }
+                LogDataDetail data = new LogDataDetail();
+                data.setOperateType(DataOperateType.DELETE);
+                collectDataInfo(data, oldObj);
+                addDataLog(data);
             }
         }
         // deleteBatchIds 方法-【List<T> selectBatchIds(@Param("coll") Collection<? extends Serializable> idList)】
         // 和deleteByMap 方法-【List<T> selectByMap(@Param("cm") Map<String, Object> columnMap)】
-        if (StringUtils.equals(method, SqlMethod.DELETE_BATCH_BY_IDS.getMethod()) ||
-                StringUtils.equals(method, SqlMethod.DELETE_BY_MAP.getMethod())) {
+        // 和delete 方法-【Integer delete(@Param("ew") Wrapper<T> wrapper)】
+        else if (StringUtils.equals(method, SqlMethod.DELETE_BATCH_BY_IDS.getMethod()) ||
+                StringUtils.equals(method, SqlMethod.DELETE_BY_MAP.getMethod()) ||
+                StringUtils.equals(method, SqlMethod.DELETE.getMethod())) {
             // 获取删除前数据
             List oldObjs;
             if (StringUtils.equals(method, SqlMethod.DELETE_BATCH_BY_IDS.getMethod())) {
@@ -111,11 +113,17 @@ public class DataLogHandler {
                 Method selectMethod = pjp.getTarget().getClass()
                         .getDeclaredMethod(SqlMethod.SELECT_BATCH_BY_IDS.getMethod(), Collection.class);
                 oldObjs = (List) selectMethod.invoke(pjp.getTarget(), idList);
-            } else {
+            } else if (StringUtils.equals(method, SqlMethod.DELETE_BY_MAP.getMethod())){
                 Map columnMap = (Map) pjp.getArgs()[0];
                 Method selectMethod = pjp.getTarget().getClass()
                         .getDeclaredMethod(SqlMethod.SELECT_BY_MAP.getMethod(), Map.class);
                 oldObjs = (List) selectMethod.invoke(pjp.getTarget(), columnMap);
+            } else {
+                Wrapper wrapper = (Wrapper) pjp.getArgs()[0];
+                Method selectMethod = pjp.getTarget().getClass()
+                        .getDeclaredMethod(SqlMethod.SELECT_LIST.getMethod(), Wrapper.class);
+                // 获取修改前数据
+                oldObjs = ((List) selectMethod.invoke(pjp.getTarget(), wrapper));
             }
             // 执行处理逻辑
             returnObj = pjp.proceed();
@@ -127,6 +135,9 @@ public class DataLogHandler {
                     addDataLog(data);
                 }
             }
+        } else {
+            // 执行处理逻辑
+            returnObj = pjp.proceed();
         }
         return returnObj;
     }
@@ -167,7 +178,7 @@ public class DataLogHandler {
         }
 
         // update 方法-【Integer update(@Param("et") T entity, @Param("ew") Wrapper<T> wrapper)】
-        if (StringUtils.equals(method, SqlMethod.UPDATE.getMethod())) {
+        else if (StringUtils.equals(method, SqlMethod.UPDATE.getMethod())) {
             Wrapper wrapper = (Wrapper) pjp.getArgs()[1];
             Object obj = pjp.getArgs()[0];
             Method selectMethod = pjp.getTarget().getClass()
@@ -185,6 +196,9 @@ public class DataLogHandler {
                     data.setChanges(DiffUtils.getChangeItems(oldObj, obj, true));
                     addDataLog(data);
                 }
+            } else {
+                // 执行处理逻辑
+                returnObj = pjp.proceed();
             }
         }
         return returnObj;
@@ -192,7 +206,6 @@ public class DataLogHandler {
 
     private void collectDataInfo(LogDataDetail data, Object obj) {
         data.setDataClass(obj.getClass().getName())
-                .setDataString(JSON.toJSONString(obj))
                 .setDataName(DataUtils.getEntityName(obj.getClass()))
                 .setDataGuid(DataUtils.getEntityId(obj));
     }

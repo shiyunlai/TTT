@@ -15,7 +15,7 @@ import java.io.Serializable;
  * sysSeqno每个SEQ_KEY表示一个序号资源，顺序增加使用序号。
  * 
  * @author Auto Generate Tools
- * @date 2018/05/16
+ * @date 2018/05/17
  */
 @Data
 @TableName("sys_seqno")

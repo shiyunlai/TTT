@@ -14,7 +14,7 @@ import java.io.Serializable;
  * 可以没有身份，不指定身份登陆时，表示使用操作所有角色、功能权限
  * 
  * @author Auto Generate Tools
- * @date 2018/05/16
+ * @date 2018/05/17
  */
 @Data
 @TableName("ac_operator_identity")

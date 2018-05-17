@@ -9,7 +9,7 @@ import java.io.Serializable;
  * omPositionApp岗位所拥有（允许操作）的应用列表信息
  * 
  * @author Auto Generate Tools
- * @date 2018/05/16
+ * @date 2018/05/17
  */
 @Data
 @TableName("om_position_app")
