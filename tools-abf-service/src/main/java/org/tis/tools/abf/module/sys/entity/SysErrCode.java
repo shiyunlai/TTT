@@ -9,7 +9,7 @@ import java.io.Serializable;
  * sysErrCode记录系统中的各种错误代码信息，如系统抛出的错误信息，交易执行时的错误码等
  * 
  * @author Auto Generate Tools
- * @date 2018/05/16
+ * @date 2018/05/17
  */
 @Data
 @TableName("sys_err_code")

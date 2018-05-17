@@ -9,7 +9,7 @@ import java.io.Serializable;
  * omEmpPosition定义人员和岗位的对应关系，需要注明，一个人员可以设定一个基本岗位
  * 
  * @author Auto Generate Tools
- * @date 2018/05/16
+ * @date 2018/05/17
  */
 @Data
 @TableName("om_emp_position")

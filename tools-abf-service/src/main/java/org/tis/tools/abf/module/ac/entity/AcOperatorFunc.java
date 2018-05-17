@@ -10,7 +10,7 @@ import java.io.Serializable;
  * acOperatorFunc针对人员配置的特殊权限，如特别开通的功能，或者特别禁止的功能
  * 
  * @author Auto Generate Tools
- * @date 2018/05/16
+ * @date 2018/05/17
  */
 @Data
 @TableName("ac_operator_func")
@@ -62,6 +62,26 @@ public class AcOperatorFunc implements Serializable {
     public static final String COLUMN_GUID_APP = "guid_app";
 
     /**
+     * createtime对应表字段
+     */
+    public static final String COLUMN_CREATETIME = "createtime";
+
+    /**
+     * lastupdate对应表字段
+     */
+    public static final String COLUMN_LASTUPDATE = "lastupdate";
+
+    /**
+     * updator对应表字段
+     */
+    public static final String COLUMN_UPDATOR = "updator";
+
+    /**
+     * dataStatus对应表字段
+     */
+    public static final String COLUMN_DATA_STATUS = "data_status";
+
+    /**
      * guid逻辑名
      */
     public static final String NAME_GUID = "数据主键";
@@ -95,6 +115,26 @@ public class AcOperatorFunc implements Serializable {
      * guidApp逻辑名
      */
     public static final String NAME_GUID_APP = "应用GUID";
+
+    /**
+     * createtime逻辑名
+     */
+    public static final String NAME_CREATETIME = "创建时间";
+
+    /**
+     * lastupdate逻辑名
+     */
+    public static final String NAME_LASTUPDATE = "最近更新时间";
+
+    /**
+     * updator逻辑名
+     */
+    public static final String NAME_UPDATOR = "最近更新人员";
+
+    /**
+     * dataStatus逻辑名
+     */
+    public static final String NAME_DATA_STATUS = "数据状态";
 
     /**
      * 数据主键:全局唯一标识符（GUID，Globally Unique Identifier）
@@ -132,6 +172,27 @@ public class AcOperatorFunc implements Serializable {
      * 应用GUID:冗余字段
      */
     private String guidApp;
+
+    /**
+     * 创建时间
+     */
+    private Date createtime;
+
+    /**
+     * 最近更新时间
+     */
+    private Date lastupdate;
+
+    /**
+     * 最近更新人员
+     */
+    private String updator;
+
+    /**
+     * 数据状态:0 有效
+     * D 删除（逻辑删除）
+     */
+    private String dataStatus;
 
 }
 

@@ -2,6 +2,7 @@ package org.tis.tools.abf.module.ac.entity;
 
 import java.math.BigDecimal;
 import com.baomidou.mybatisplus.annotations.TableName;
+import java.util.Date;
 import lombok.Data;
 import com.baomidou.mybatisplus.annotations.TableId;
 import java.io.Serializable;
@@ -10,7 +11,7 @@ import java.io.Serializable;
  * acFunc功能&行为，菜单
  * 
  * @author Auto Generate Tools
- * @date 2018/05/16
+ * @date 2018/05/17
  */
 @Data
 @TableName("ac_func")
@@ -77,6 +78,26 @@ public class AcFunc implements Serializable {
     public static final String COLUMN_DISPLAY_ORDER = "display_order";
 
     /**
+     * createtime对应表字段
+     */
+    public static final String COLUMN_CREATETIME = "createtime";
+
+    /**
+     * lastupdate对应表字段
+     */
+    public static final String COLUMN_LASTUPDATE = "lastupdate";
+
+    /**
+     * updator对应表字段
+     */
+    public static final String COLUMN_UPDATOR = "updator";
+
+    /**
+     * dataStatus对应表字段
+     */
+    public static final String COLUMN_DATA_STATUS = "data_status";
+
+    /**
      * guid逻辑名
      */
     public static final String NAME_GUID = "数据主键";
@@ -125,6 +146,26 @@ public class AcFunc implements Serializable {
      * displayOrder逻辑名
      */
     public static final String NAME_DISPLAY_ORDER = "显示顺序";
+
+    /**
+     * createtime逻辑名
+     */
+    public static final String NAME_CREATETIME = "创建时间";
+
+    /**
+     * lastupdate逻辑名
+     */
+    public static final String NAME_LASTUPDATE = "最近更新时间";
+
+    /**
+     * updator逻辑名
+     */
+    public static final String NAME_UPDATOR = "最近更新人员";
+
+    /**
+     * dataStatus逻辑名
+     */
+    public static final String NAME_DATA_STATUS = "数据状态";
 
     /**
      * 数据主键:全局唯一标识符（GUID，Globally Unique Identifier），系统自动生成；
@@ -181,6 +222,27 @@ public class AcFunc implements Serializable {
      * 显示顺序:所在层次内的展示顺序
      */
     private BigDecimal displayOrder;
+
+    /**
+     * 创建时间
+     */
+    private Date createtime;
+
+    /**
+     * 最近更新时间
+     */
+    private Date lastupdate;
+
+    /**
+     * 最近更新人员
+     */
+    private String updator;
+
+    /**
+     * 数据状态:0 有效
+     * D 删除（逻辑删除）
+     */
+    private String dataStatus;
 
 }
 

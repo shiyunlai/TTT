@@ -9,7 +9,7 @@ import java.io.Serializable;
  * acDatascope定义能够操作某个表数据的范围
  * 
  * @author Auto Generate Tools
- * @date 2018/05/16
+ * @date 2018/05/17
  */
 @Data
 @TableName("ac_datascope")

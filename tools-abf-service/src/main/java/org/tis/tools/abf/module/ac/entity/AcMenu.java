@@ -2,6 +2,7 @@ package org.tis.tools.abf.module.ac.entity;
 
 import java.math.BigDecimal;
 import com.baomidou.mybatisplus.annotations.TableName;
+import java.util.Date;
 import lombok.Data;
 import com.baomidou.mybatisplus.annotations.TableId;
 import java.io.Serializable;
@@ -11,7 +12,7 @@ import java.io.Serializable;
  * UI可根据菜单数据结构，进行界面呈现（PC上，PAD上，手机上....充分考虑用户交互体验）
  * 
  * @author Auto Generate Tools
- * @date 2018/05/16
+ * @date 2018/05/17
  */
 @Data
 @TableName("ac_menu")
@@ -108,6 +109,26 @@ public class AcMenu implements Serializable {
     public static final String COLUMN_OPEN_MODE = "open_mode";
 
     /**
+     * createtime对应表字段
+     */
+    public static final String COLUMN_CREATETIME = "createtime";
+
+    /**
+     * lastupdate对应表字段
+     */
+    public static final String COLUMN_LASTUPDATE = "lastupdate";
+
+    /**
+     * updator对应表字段
+     */
+    public static final String COLUMN_UPDATOR = "updator";
+
+    /**
+     * dataStatus对应表字段
+     */
+    public static final String COLUMN_DATA_STATUS = "data_status";
+
+    /**
      * guid逻辑名
      */
     public static final String NAME_GUID = "数据主键";
@@ -186,6 +207,26 @@ public class AcMenu implements Serializable {
      * openMode逻辑名
      */
     public static final String NAME_OPEN_MODE = "页面打开方式";
+
+    /**
+     * createtime逻辑名
+     */
+    public static final String NAME_CREATETIME = "创建时间";
+
+    /**
+     * lastupdate逻辑名
+     */
+    public static final String NAME_LASTUPDATE = "最近更新时间";
+
+    /**
+     * updator逻辑名
+     */
+    public static final String NAME_UPDATOR = "最近更新人员";
+
+    /**
+     * dataStatus逻辑名
+     */
+    public static final String NAME_DATA_STATUS = "数据状态";
 
     /**
      * 数据主键:全局唯一标识符（GUID，Globally Unique Identifier），系统自动生成；
@@ -270,6 +311,27 @@ public class AcMenu implements Serializable {
      * 如：主窗口打开、弹出窗口打开...
      */
     private String openMode;
+
+    /**
+     * 创建时间
+     */
+    private Date createtime;
+
+    /**
+     * 最近更新时间
+     */
+    private Date lastupdate;
+
+    /**
+     * 最近更新人员
+     */
+    private String updator;
+
+    /**
+     * 数据状态:0 有效
+     * D 删除（逻辑删除）
+     */
+    private String dataStatus;
 
 }
 

@@ -9,7 +9,7 @@ import java.io.Serializable;
  * acOperatorIdentityres身份是操作员权限集合的子集，限定操作员登陆某个应用时，只具备特定的功能；
  * 
  * @author Auto Generate Tools
- * @date 2018/05/16
+ * @date 2018/05/17
  */
 @Data
 @TableName("ac_operator_identityres")

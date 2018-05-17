@@ -11,7 +11,7 @@ import java.io.Serializable;
  * acOperator系统登录用户表，一个用户只能有一个或零个操作员
  * 
  * @author Auto Generate Tools
- * @date 2018/05/16
+ * @date 2018/05/17
  */
 @Data
 @TableName("ac_operator")
@@ -113,6 +113,26 @@ public class AcOperator implements Serializable {
     public static final String COLUMN_IP_ADDRESS = "ip_address";
 
     /**
+     * createtime对应表字段
+     */
+    public static final String COLUMN_CREATETIME = "createtime";
+
+    /**
+     * lastupdate对应表字段
+     */
+    public static final String COLUMN_LASTUPDATE = "lastupdate";
+
+    /**
+     * updator对应表字段
+     */
+    public static final String COLUMN_UPDATOR = "updator";
+
+    /**
+     * dataStatus对应表字段
+     */
+    public static final String COLUMN_DATA_STATUS = "data_status";
+
+    /**
      * guid逻辑名
      */
     public static final String NAME_GUID = "数据主键";
@@ -196,6 +216,26 @@ public class AcOperator implements Serializable {
      * ipAddress逻辑名
      */
     public static final String NAME_IP_ADDRESS = "允许IP地址";
+
+    /**
+     * createtime逻辑名
+     */
+    public static final String NAME_CREATETIME = "创建时间";
+
+    /**
+     * lastupdate逻辑名
+     */
+    public static final String NAME_LASTUPDATE = "最近更新时间";
+
+    /**
+     * updator逻辑名
+     */
+    public static final String NAME_UPDATOR = "最近更新人员";
+
+    /**
+     * dataStatus逻辑名
+     */
+    public static final String NAME_DATA_STATUS = "数据状态";
 
     /**
      * 数据主键:全局唯一标识符（GUID，Globally Unique Identifier），系统自动生成；
@@ -294,6 +334,27 @@ public class AcOperator implements Serializable {
      * 允许IP地址:允许设置多个IP地址
      */
     private String ipAddress;
+
+    /**
+     * 创建时间
+     */
+    private Date createtime;
+
+    /**
+     * 最近更新时间
+     */
+    private Date lastupdate;
+
+    /**
+     * 最近更新人员
+     */
+    private String updator;
+
+    /**
+     * 数据状态:0 有效
+     * D 删除（逻辑删除）
+     */
+    private String dataStatus;
 
 }
 

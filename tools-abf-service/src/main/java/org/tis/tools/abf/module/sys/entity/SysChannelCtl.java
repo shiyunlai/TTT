@@ -9,7 +9,7 @@ import java.io.Serializable;
  * sysChannelCtl
  * 
  * @author Auto Generate Tools
- * @date 2018/05/16
+ * @date 2018/05/17
  */
 @Data
 @TableName("sys_channel_ctl")

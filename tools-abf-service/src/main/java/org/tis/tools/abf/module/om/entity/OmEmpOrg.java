@@ -10,7 +10,7 @@ import java.io.Serializable;
  * 允许一个人员同时在多个机构，但是只能有一个主机构。
  * 
  * @author Auto Generate Tools
- * @date 2018/05/16
+ * @date 2018/05/17
  */
 @Data
 @TableName("om_emp_org")

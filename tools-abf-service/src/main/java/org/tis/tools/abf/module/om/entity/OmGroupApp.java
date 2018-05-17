@@ -9,7 +9,7 @@ import java.io.Serializable;
  * omGroupApp工作组所拥有（允许操作）的应用列表
  * 
  * @author Auto Generate Tools
- * @date 2018/05/16
+ * @date 2018/05/17
  */
 @Data
 @TableName("om_group_app")

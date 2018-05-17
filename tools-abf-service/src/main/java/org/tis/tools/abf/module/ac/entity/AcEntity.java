@@ -10,7 +10,7 @@ import java.io.Serializable;
  * acEntity数据实体定义表
  * 
  * @author Auto Generate Tools
- * @date 2018/05/16
+ * @date 2018/05/17
  */
 @Data
 @TableName("ac_entity")
