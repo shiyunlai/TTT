@@ -29,27 +29,23 @@ public class SysSeqnoServiceImpl extends ServiceImpl<SysSeqnoMapper, SysSeqno> i
     public long getNextSequence(String seqKey, String seqName) throws SysManagementException {
         long seq;
         // TODO 增加Redis能力
-        try {
-            SysSeqno sysSeqno = selectById(seqKey);
-            // 如果没有该资源，新增资源
-            if(sysSeqno == null) {
-                SysSeqno seqno = new SysSeqno();
-                seqno.setSeqKey(seqKey);
-                seqno.setSeqName(seqName);
-                seqno.setSeqNo(new BigDecimal("2"));
-                seqno.setReset(SeqnoReset.EVER);
-                insert(seqno);
-                seq = 1;
-            } else {
-                BigDecimal curNo = sysSeqno.getSeqNo();
-                sysSeqno.setSeqNo(curNo.add(new BigDecimal(1)));
-                updateById(sysSeqno);
-                seq = curNo.longValue();
-            }
-            return seq;
-        } catch (Exception e) {
-            throw new SysManagementException(SYSExceptionCodes.FAILURE_WHEN_GET_SEQUENCE_NUMBER, wrap(e));
+        SysSeqno sysSeqno = selectById(seqKey);
+        // 如果没有该资源，新增资源
+        if(sysSeqno == null) {
+            SysSeqno seqno = new SysSeqno();
+            seqno.setSeqKey(seqKey);
+            seqno.setSeqName(seqName);
+            seqno.setSeqNo(new BigDecimal("2"));
+            seqno.setReset(SeqnoReset.EVER);
+            insert(seqno);
+            seq = 1;
+        } else {
+            BigDecimal curNo = sysSeqno.getSeqNo();
+            sysSeqno.setSeqNo(curNo.add(new BigDecimal(1)));
+            updateById(sysSeqno);
+            seq = curNo.longValue();
         }
+        return seq;
     }
 
 }

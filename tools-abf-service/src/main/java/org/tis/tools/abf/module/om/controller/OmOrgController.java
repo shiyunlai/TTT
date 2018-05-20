@@ -4,9 +4,8 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.tis.tools.abf.module.common.log.OperateLog;
-import org.tis.tools.abf.module.common.log.OperateType;
-import org.tis.tools.abf.module.common.log.ReturnType;
+import org.tis.tools.abf.module.jnl.annotation.OperateLog;
+import org.tis.tools.abf.module.jnl.entity.enums.OperateType;
 import org.tis.tools.abf.module.om.controller.request.OmOrgAddRequest;
 import org.tis.tools.abf.module.om.entity.OmOrg;
 import org.tis.tools.abf.module.om.service.IOmOrgService;
@@ -33,13 +32,7 @@ public class OmOrgController extends BaseController {
      * @param request
      * @return
      */
-    @OperateLog(
-            operateType = OperateType.ADD,  // 操作类型
-            operateDesc = "新增机构", // 操作描述
-            retType = ReturnType.Object, // 返回类型，对象或数组
-            id = "orgCode", // 操作对象标识
-            name = "orgName", // 操作对象名
-            keys = {"orgCode", "orgName"}) // 操作对象的关键值的键值名
+    @OperateLog(type = OperateType.ADD, desc = "新增机构")
     @PostMapping("/add")
     public ResultVO add(@RequestBody @Validated OmOrgAddRequest request) {
         OmOrg omOrg;

@@ -10,7 +10,7 @@ import java.io.Serializable;
  * acEntity数据实体定义表
  * 
  * @author Auto Generate Tools
- * @date 2018/04/23
+ * @date 2018/05/17
  */
 @Data
 @TableName("ac_entity")
@@ -20,6 +20,11 @@ public class AcEntity implements Serializable {
      * serialVersionUID.
      */
     private static final long serialVersionUID = 1L;
+
+    /**
+     * 模型名称
+     */
+    public static final String NAME = "实体";
 
     /**
      * guid对应表字段
@@ -87,30 +92,95 @@ public class AcEntity implements Serializable {
     public static final String COLUMN_REF_RELATION = "ref_relation";
 
     /**
+     * guid逻辑名
+     */
+    public static final String NAME_GUID = "数据主键";
+
+    /**
+     * guidApp逻辑名
+     */
+    public static final String NAME_GUID_APP = "隶属应用GUID";
+
+    /**
+     * entityName逻辑名
+     */
+    public static final String NAME_ENTITY_NAME = "实体名称";
+
+    /**
+     * entityDesc逻辑名
+     */
+    public static final String NAME_ENTITY_DESC = "实体描述";
+
+    /**
+     * tableName逻辑名
+     */
+    public static final String NAME_TABLE_NAME = "数据库表名";
+
+    /**
+     * entityType逻辑名
+     */
+    public static final String NAME_ENTITY_TYPE = "实体类型";
+
+    /**
+     * isadd逻辑名
+     */
+    public static final String NAME_ISADD = "是否可增加";
+
+    /**
+     * isdel逻辑名
+     */
+    public static final String NAME_ISDEL = "是否可删除";
+
+    /**
+     * ismodify逻辑名
+     */
+    public static final String NAME_ISMODIFY = "可修改";
+
+    /**
+     * isview逻辑名
+     */
+    public static final String NAME_ISVIEW = "可查看";
+
+    /**
+     * ispage逻辑名
+     */
+    public static final String NAME_ISPAGE = "是否需要分页显示";
+
+    /**
+     * pageSize逻辑名
+     */
+    public static final String NAME_PAGE_SIZE = "每页记录数";
+
+    /**
+     * refRelation逻辑名
+     */
+    public static final String NAME_REF_RELATION = "引用关系";
+
+    /**
      * 数据主键:全局唯一标识符（GUID，Globally Unique Identifier），系统自动生成；
      */
     @TableId
-    public String guid;
+    private String guid;
 
     /**
      * 隶属应用GUID:全局唯一标识符（GUID，Globally Unique Identifier），系统自动生成；
      */
-    public String guidApp;
+    private String guidApp;
 
     /**
      * 实体名称
      */
-    public String entityName;
+    private String entityName;
 
     /**
      * 实体描述
      */
-    public String entityDesc;
+    private String entityDesc;
 
     /**
      * 数据库表名
      */
-    public String tableName;
+    private String tableName;
 
     /**
      * 实体类型:取值来自业务字典：DICT_AC_ENTITYTYPE
@@ -119,37 +189,37 @@ public class AcEntity implements Serializable {
      * 2-查询实体
      * 3-内存对象（系统运行时才存在）
      */
-    public String entityType;
+    private String entityType;
 
     /**
      * 是否可增加:取值来自业务菜单： DICT_YON
      */
-    public String isadd;
+    private String isadd;
 
     /**
      * 是否可删除:取值来自业务菜单： DICT_YON
      */
-    public String isdel;
+    private String isdel;
 
     /**
      * 可修改:取值来自业务菜单： DICT_YON
      */
-    public String ismodify;
+    private String ismodify;
 
     /**
      * 可查看:取值来自业务菜单： DICT_YON
      */
-    public String isview;
+    private String isview;
 
     /**
      * 是否需要分页显示:取值来自业务菜单： DICT_YON
      */
-    public String ispage;
+    private String ispage;
 
     /**
      * 每页记录数
      */
-    public BigDecimal pageSize;
+    private BigDecimal pageSize;
 
     /**
      * 引用关系:根据引用关系定义，检查关联记录是否需要同步删除；
@@ -171,7 +241,7 @@ public class AcEntity implements Serializable {
      * 
      * 前提，必须基于实体的GUID进行引用。
      */
-    public String refRelation;
+    private String refRelation;
 
 }
 

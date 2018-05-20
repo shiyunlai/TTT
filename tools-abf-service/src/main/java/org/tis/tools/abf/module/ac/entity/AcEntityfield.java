@@ -10,7 +10,7 @@ import java.io.Serializable;
  * acEntityfield数据实体的字段（属性）定义表
  * 
  * @author Auto Generate Tools
- * @date 2018/04/23
+ * @date 2018/05/17
  */
 @Data
 @TableName("ac_entityfield")
@@ -20,6 +20,11 @@ public class AcEntityfield implements Serializable {
      * serialVersionUID.
      */
     private static final long serialVersionUID = 1L;
+
+    /**
+     * 模型名称
+     */
+    public static final String NAME = "实体属性";
 
     /**
      * guid对应表字段
@@ -162,72 +167,212 @@ public class AcEntityfield implements Serializable {
     public static final String COLUMN_ISAUTOKEY = "isautokey";
 
     /**
+     * guid逻辑名
+     */
+    public static final String NAME_GUID = "数据主键";
+
+    /**
+     * guidEntity逻辑名
+     */
+    public static final String NAME_GUID_ENTITY = "隶属实体GUID";
+
+    /**
+     * fieldName逻辑名
+     */
+    public static final String NAME_FIELD_NAME = "属性名称";
+
+    /**
+     * fieldDesc逻辑名
+     */
+    public static final String NAME_FIELD_DESC = "属性描述";
+
+    /**
+     * displayFormat逻辑名
+     */
+    public static final String NAME_DISPLAY_FORMAT = "显示格式";
+
+    /**
+     * doclistCode逻辑名
+     */
+    public static final String NAME_DOCLIST_CODE = "代码大类";
+
+    /**
+     * checkboxValue逻辑名
+     */
+    public static final String NAME_CHECKBOX_VALUE = "CHECKBOX_VALUE";
+
+    /**
+     * fkInputurl逻辑名
+     */
+    public static final String NAME_FK_INPUTURL = "外键录入URL";
+
+    /**
+     * fkFielddesc逻辑名
+     */
+    public static final String NAME_FK_FIELDDESC = "外键描述字段名";
+
+    /**
+     * fkColumnname逻辑名
+     */
+    public static final String NAME_FK_COLUMNNAME = "外键列名";
+
+    /**
+     * fkTablename逻辑名
+     */
+    public static final String NAME_FK_TABLENAME = "外键表名";
+
+    /**
+     * descFieldname逻辑名
+     */
+    public static final String NAME_DESC_FIELDNAME = "描述字段名";
+
+    /**
+     * refType逻辑名
+     */
+    public static final String NAME_REF_TYPE = "引用类型";
+
+    /**
+     * fieldType逻辑名
+     */
+    public static final String NAME_FIELD_TYPE = "字段类型";
+
+    /**
+     * displayOrder逻辑名
+     */
+    public static final String NAME_DISPLAY_ORDER = "顺序";
+
+    /**
+     * columnName逻辑名
+     */
+    public static final String NAME_COLUMN_NAME = "数据库列名";
+
+    /**
+     * width逻辑名
+     */
+    public static final String NAME_WIDTH = "宽度";
+
+    /**
+     * defaultValue逻辑名
+     */
+    public static final String NAME_DEFAULT_VALUE = "缺省值";
+
+    /**
+     * minValue逻辑名
+     */
+    public static final String NAME_MIN_VALUE = "最小值";
+
+    /**
+     * maxValue逻辑名
+     */
+    public static final String NAME_MAX_VALUE = "最大值";
+
+    /**
+     * lengthValue逻辑名
+     */
+    public static final String NAME_LENGTH_VALUE = "长度";
+
+    /**
+     * precisionValue逻辑名
+     */
+    public static final String NAME_PRECISION_VALUE = "小数位";
+
+    /**
+     * validateType逻辑名
+     */
+    public static final String NAME_VALIDATE_TYPE = "页面校验类型";
+
+    /**
+     * ismodify逻辑名
+     */
+    public static final String NAME_ISMODIFY = "是否可修改";
+
+    /**
+     * isdisplay逻辑名
+     */
+    public static final String NAME_ISDISPLAY = "是否显示";
+
+    /**
+     * isinput逻辑名
+     */
+    public static final String NAME_ISINPUT = "是否必须填写";
+
+    /**
+     * ispk逻辑名
+     */
+    public static final String NAME_ISPK = "是否是主键";
+
+    /**
+     * isautokey逻辑名
+     */
+    public static final String NAME_ISAUTOKEY = "是否自动产生主键";
+
+    /**
      * 数据主键:全局唯一标识符（GUID，Globally Unique Identifier），系统自动生成；
      */
     @TableId
-    public String guid;
+    private String guid;
 
     /**
      * 隶属实体GUID:全局唯一标识符（GUID，Globally Unique Identifier），系统自动生成；
      */
-    public String guidEntity;
+    private String guidEntity;
 
     /**
      * 属性名称
      */
-    public String fieldName;
+    private String fieldName;
 
     /**
      * 属性描述
      */
-    public String fieldDesc;
+    private String fieldDesc;
 
     /**
      * 显示格式:如：属性为日期时，可以设置显示格式 yyyy/MM/dd；
      * 当查询出数据，返回给调用着之前生效本显示格式（返回的数据已经被格式化）；
      */
-    public String displayFormat;
+    private String displayFormat;
 
     /**
      * 代码大类
      */
-    public String doclistCode;
+    private String doclistCode;
 
     /**
      * CHECKBOX_VALUE
      */
-    public String checkboxValue;
+    private String checkboxValue;
 
     /**
      * 外键录入URL
      */
-    public String fkInputurl;
+    private String fkInputurl;
 
     /**
      * 外键描述字段名
      */
-    public String fkFielddesc;
+    private String fkFielddesc;
 
     /**
      * 外键列名
      */
-    public String fkColumnname;
+    private String fkColumnname;
 
     /**
      * 外键表名
      */
-    public String fkTablename;
+    private String fkTablename;
 
     /**
      * 描述字段名
      */
-    public String descFieldname;
+    private String descFieldname;
 
     /**
      * 引用类型:0 业务字典
      * 1 其他表
      */
-    public String refType;
+    private String refType;
 
     /**
      * 字段类型:0 字符串
@@ -238,77 +383,77 @@ public class AcEntityfield implements Serializable {
      * 5 CHECKBOX
      * 6 引用
      */
-    public String fieldType;
+    private String fieldType;
 
     /**
      * 顺序
      */
-    public BigDecimal displayOrder;
+    private BigDecimal displayOrder;
 
     /**
      * 数据库列名
      */
-    public String columnName;
+    private String columnName;
 
     /**
      * 宽度
      */
-    public BigDecimal width;
+    private BigDecimal width;
 
     /**
      * 缺省值
      */
-    public String defaultValue;
+    private String defaultValue;
 
     /**
      * 最小值
      */
-    public String minValue;
+    private String minValue;
 
     /**
      * 最大值
      */
-    public String maxValue;
+    private String maxValue;
 
     /**
      * 长度
      */
-    public BigDecimal lengthValue;
+    private BigDecimal lengthValue;
 
     /**
      * 小数位
      */
-    public BigDecimal precisionValue;
+    private BigDecimal precisionValue;
 
     /**
      * 页面校验类型
      */
-    public String validateType;
+    private String validateType;
 
     /**
      * 是否可修改:取值来自业务菜单： DICT_YON
      */
-    public String ismodify;
+    private String ismodify;
 
     /**
      * 是否显示:取值来自业务菜单： DICT_YON
      */
-    public String isdisplay;
+    private String isdisplay;
 
     /**
      * 是否必须填写:取值来自业务菜单： DICT_YON
      */
-    public String isinput;
+    private String isinput;
 
     /**
      * 是否是主键:取值来自业务菜单： DICT_YON
      */
-    public String ispk;
+    private String ispk;
 
     /**
      * 是否自动产生主键:取值来自业务菜单： DICT_YON
      */
-    public String isautokey;
+    private String isautokey;
 
 }
 

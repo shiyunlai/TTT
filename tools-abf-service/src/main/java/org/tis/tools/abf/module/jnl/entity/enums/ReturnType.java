@@ -1,4 +1,6 @@
-package org.tis.tools.abf.module.common.log;
+package org.tis.tools.abf.module.jnl.entity.enums;
+
+import org.tis.tools.abf.module.jnl.annotation.OperateLog;
 
 /**
  * 操作日志记录的操作对象类型枚举类

@@ -5,9 +5,8 @@ import org.tis.tools.abf.module.ac.controller.request.AcAppAddRequest;
 import org.tis.tools.abf.module.ac.controller.request.AcAppUpdateRequest;
 import org.tis.tools.abf.module.ac.entity.enums.AcAppType;
 import org.tis.tools.abf.module.common.entity.enums.YON;
-import org.tis.tools.abf.module.common.log.OperateLog;
-import org.tis.tools.abf.module.common.log.OperateType;
-import org.tis.tools.abf.module.common.log.ReturnType;
+import org.tis.tools.abf.module.jnl.annotation.OperateLog;
+import org.tis.tools.abf.module.jnl.entity.enums.OperateType;
 import org.tis.tools.core.web.controller.BaseController;
 import org.tis.tools.core.web.vo.SmartPage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,13 +38,7 @@ public class AcAppController extends BaseController<AcApp>  {
      * @param request
      * @return ResultVO
      */
-    @OperateLog(
-            operateType = OperateType.ADD,  // 操作类型
-            operateDesc = "新增应用", // 操作描述
-            retType = ReturnType.Object, // 返回类型，对象或数组
-            id = "appCode", // 操作对象标识
-            name = "appName", // 操作对象名
-            keys = {"appCode", "appName"}) // 操作对象的关键值的键值名
+    @OperateLog(type = OperateType.ADD, desc = "新增应用")
     @PostMapping("/add")
     public ResultVO add(@RequestBody @Validated AcAppAddRequest request){
         AcApp app;
@@ -67,13 +60,7 @@ public class AcAppController extends BaseController<AcApp>  {
      * @param updateRequest
      * @return
      */
-    @OperateLog(
-            operateType = OperateType.UPDATE, //操作类型
-            operateDesc = "修改应用", // 操作描述
-            retType = ReturnType.Object, // 返回类型，对象或数组
-            id = "appCode", // 操作对象标识
-            name = "appName", // 操作对象名
-            keys = {"appCode", "appName"}) // 操作对象的关键值的键值名
+    @OperateLog(type = OperateType.UPDATE,  desc = "修改应用")
     @PutMapping
     public ResultVO update(@RequestBody @Validated AcAppUpdateRequest updateRequest) {
         AcApp app;
@@ -104,13 +91,7 @@ public class AcAppController extends BaseController<AcApp>  {
      * @param id
      * @return ResultVO
      */
-    @OperateLog(
-            operateType = OperateType.DELETE, //操作类型
-            operateDesc = "删除应用", // 操作描述
-            retType = ReturnType.Object, // 返回类型，对象或数组
-            id = "appCode", // 操作对象标识
-            name = "appName", // 操作对象名
-            keys = {"appCode", "appName"})
+    @OperateLog(type = OperateType.DELETE, desc = "删除应用")
     @DeleteMapping("/{id}")
     public ResultVO delete(@PathVariable @NotBlank(message = "id不能为空") String id) {
 
@@ -128,13 +109,7 @@ public class AcAppController extends BaseController<AcApp>  {
         }
     }
 
-    @OperateLog(
-            operateType = OperateType.UPDATE, //操作类型
-            operateDesc = "开通应用", // 操作描述
-            retType = ReturnType.Object, // 返回类型，对象或数组
-            id = "appCode", // 操作对象标识
-            name = "appName", // 操作对象名
-            keys = {"appCode", "appName"})
+    @OperateLog(type = OperateType.UPDATE, desc = "开通应用")
     @PutMapping("/openApp/{id}")
     public ResultVO openApp(@PathVariable @NotBlank(message = "id不能为空") String id){
 
@@ -159,13 +134,7 @@ public class AcAppController extends BaseController<AcApp>  {
         return ResultVO.success("应用已开通",acApp);
     }
 
-    @OperateLog(
-            operateType = OperateType.UPDATE, //操作类型
-            operateDesc = "停用应用", // 操作描述
-            retType = ReturnType.Object, // 返回类型，对象或数组
-            id = "appCode", // 操作对象标识
-            name = "appName", // 操作对象名
-            keys = {"appCode", "appName"})
+    @OperateLog(type = OperateType.UPDATE, desc = "停用应用")
     @PutMapping("/stopApp/{id}")
     public ResultVO stopApp(@PathVariable @NotBlank(message = "id不能为空") String id){
 
@@ -194,13 +163,7 @@ public class AcAppController extends BaseController<AcApp>  {
      * @param id
      * @return
      */
-    @OperateLog(
-            operateType = OperateType.QUERY, //操作类型
-            operateDesc = "查询应用", // 操作描述
-            retType = ReturnType.Object, // 返回类型，对象或数组
-            id = "appCode", // 操作对象标识
-            name = "appName", // 操作对象名
-            keys = {"appCode", "appName"})
+    @OperateLog(type = OperateType.QUERY, desc = "查询应用")
     @GetMapping("/{id}")
     public ResultVO detail(@PathVariable @NotBlank(message = "id不能为空") String id) {
         AcApp acApp = acAppService.selectById(id);
@@ -214,13 +177,7 @@ public class AcAppController extends BaseController<AcApp>  {
      * 根据应用列表
      * @return
      */
-    @OperateLog(
-            operateType = OperateType.QUERY, //操作类型
-            operateDesc = "查询应用列表", // 操作描述
-            retType = ReturnType.List, // 返回类型，对象或数组
-            id = "appCode", // 操作对象标识
-            name = "appName", // 操作对象名
-            keys = {"appCode", "appName"})
+    @OperateLog(type = OperateType.QUERY, desc = "查询应用列表")
     @PostMapping("/appList")
     public ResultVO appList(){
 
