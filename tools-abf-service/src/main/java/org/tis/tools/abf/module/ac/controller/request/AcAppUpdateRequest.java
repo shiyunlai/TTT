@@ -5,7 +5,7 @@ import lombok.EqualsAndHashCode;
 import org.hibernate.validator.constraints.NotBlank;
 import org.tis.tools.core.entity.request.RestRequest;
 
-import java.util.Date;
+import javax.validation.constraints.Pattern;
 
 /**
  * Created by chenchao
@@ -30,9 +30,9 @@ public class AcAppUpdateRequest extends RestRequest{
 
     private String guid;
 
-    private Date openDate;
+    private String openDate;
 
-    //@Pattern(regexp = "(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]",message = "访问地址不符合标准")
+    @Pattern(regexp = "(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]",message = "访问地址不符合标准")
     private String url;
 
     private String ipAddr;
