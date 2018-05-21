@@ -1,4 +1,4 @@
-package org.tis.tools.abf.module.common.log;
+package org.tis.tools.abf.module.jnl.core;
 
 public class LogThreadLocal {
 
@@ -12,5 +12,6 @@ public class LogThreadLocal {
     public static OperateLogBuilder getLogBuilderLocal(){
         return LOG_BUILDER_LOCAL.get();
     }
+
 
 }

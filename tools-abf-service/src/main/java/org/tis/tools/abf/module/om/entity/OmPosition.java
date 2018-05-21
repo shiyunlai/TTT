@@ -1,10 +1,14 @@
 package org.tis.tools.abf.module.om.entity;
 
 import java.math.BigDecimal;
-import com.baomidou.mybatisplus.annotations.TableName;
+
+import com.baomidou.mybatisplus.annotations.*;
+
 import java.util.Date;
+
+import com.baomidou.mybatisplus.enums.FieldFill;
 import lombok.Data;
-import com.baomidou.mybatisplus.annotations.TableId;
+
 import java.io.Serializable;
 
 /**
@@ -14,7 +18,7 @@ import java.io.Serializable;
  * 例如，一个公司有三个部门A，B，C，每个部门都设置了管理岗位 A部门经理，B部门经理，C部门经理。同时可在三个岗位上设置共同的职务为“经理”
  * 
  * @author Auto Generate Tools
- * @date 2018/04/23
+ * @date 2018/05/17
  */
 @Data
 @TableName("om_position")
@@ -24,6 +28,11 @@ public class OmPosition implements Serializable {
      * serialVersionUID.
      */
     private static final long serialVersionUID = 1L;
+
+    /**
+     * 模型名称
+     */
+    public static final String NAME = "岗位";
 
     /**
      * guid对应表字段
@@ -91,71 +100,203 @@ public class OmPosition implements Serializable {
     public static final String COLUMN_END_DATE = "end_date";
 
     /**
+     * createtime对应表字段
+     */
+    public static final String COLUMN_CREATETIME = "createtime";
+
+    /**
+     * lastupdate对应表字段
+     */
+    public static final String COLUMN_LASTUPDATE = "lastupdate";
+
+    /**
+     * updator对应表字段
+     */
+    public static final String COLUMN_UPDATOR = "updator";
+
+    /**
+     * dataStatus对应表字段
+     */
+    public static final String COLUMN_DATA_STATUS = "data_status";
+
+    /**
+     * guid逻辑名
+     */
+    public static final String NAME_GUID = "数据主键";
+
+    /**
+     * guidOrg逻辑名
+     */
+    public static final String NAME_GUID_ORG = "隶属机构GUID";
+
+    /**
+     * positionCode逻辑名
+     */
+    public static final String NAME_POSITION_CODE = "岗位代码";
+
+    /**
+     * positionName逻辑名
+     */
+    public static final String NAME_POSITION_NAME = "岗位名称";
+
+    /**
+     * positionType逻辑名
+     */
+    public static final String NAME_POSITION_TYPE = "岗位类别";
+
+    /**
+     * positionStatus逻辑名
+     */
+    public static final String NAME_POSITION_STATUS = "岗位状态";
+
+    /**
+     * isleaf逻辑名
+     */
+    public static final String NAME_ISLEAF = "是否叶子岗位";
+
+    /**
+     * subCount逻辑名
+     */
+    public static final String NAME_SUB_COUNT = "子节点数";
+
+    /**
+     * positionLevel逻辑名
+     */
+    public static final String NAME_POSITION_LEVEL = "岗位层次";
+
+    /**
+     * positionSeq逻辑名
+     */
+    public static final String NAME_POSITION_SEQ = "岗位序列";
+
+    /**
+     * guidParents逻辑名
+     */
+    public static final String NAME_GUID_PARENTS = "父岗位GUID";
+
+    /**
+     * startDate逻辑名
+     */
+    public static final String NAME_START_DATE = "岗位有效开始日期";
+
+    /**
+     * endDate逻辑名
+     */
+    public static final String NAME_END_DATE = "岗位有效截止日期";
+
+    /**
+     * createtime逻辑名
+     */
+    public static final String NAME_CREATETIME = "创建时间";
+
+    /**
+     * lastupdate逻辑名
+     */
+    public static final String NAME_LASTUPDATE = "最近更新时间";
+
+    /**
+     * updator逻辑名
+     */
+    public static final String NAME_UPDATOR = "最近更新人员";
+
+    /**
+     * dataStatus逻辑名
+     */
+    public static final String NAME_DATA_STATUS = "数据状态";
+
+    /**
      * 数据主键:全局唯一标识符（GUID，Globally Unique Identifier），系统自动生成；
      */
     @TableId
-    public String guid;
+    private String guid;
 
     /**
      * 隶属机构GUID:全局唯一标识符（GUID，Globally Unique Identifier），系统自动生成；
      */
-    public String guidOrg;
+    private String guidOrg;
 
     /**
      * 岗位代码:业务上对岗位的编码
      */
-    public String positionCode;
+    private String positionCode;
 
     /**
      * 岗位名称
      */
-    public String positionName;
+    private String positionName;
 
     /**
      * 岗位类别:见业务字典： DICT_OM_POSITYPE
      * 机构岗位，工作组岗位
      */
-    public String positionType;
+    private String positionType;
 
     /**
      * 岗位状态:见业务字典： DICT_OM_POSISTATUS
      */
-    public String positionStatus;
+    private String positionStatus;
 
     /**
      * 是否叶子岗位:见业务字典： DICT_YON
      */
-    public String isleaf;
+    private String isleaf;
 
     /**
      * 子节点数
      */
-    public BigDecimal subCount;
+    private BigDecimal subCount;
 
     /**
      * 岗位层次
      */
-    public BigDecimal positionLevel;
+    private BigDecimal positionLevel;
 
     /**
      * 岗位序列:岗位的面包屑定位信息
      */
-    public String positionSeq;
+    private String positionSeq;
 
     /**
      * 父岗位GUID:全局唯一标识符（GUID，Globally Unique Identifier），系统自动生成；
      */
-    public String guidParents;
+    private String guidParents;
 
     /**
      * 岗位有效开始日期
      */
-    public Date startDate;
+    private Date startDate;
 
     /**
      * 岗位有效截止日期
      */
-    public Date endDate;
+    private Date endDate;
+
+    /**
+     * 创建时间
+     */
+    @TableField(fill = FieldFill.INSERT)
+    private Date createtime;
+
+    /**
+     * 最近更新时间
+     */
+    @Version
+    @TableField(fill = FieldFill.UPDATE)
+    private Date lastupdate;
+
+    /**
+     * 最近更新人员
+     */
+    @TableField(fill = FieldFill.UPDATE)
+    private String updator;
+
+    /**
+     * 数据状态:0 有效
+     * D 删除（逻辑删除）
+     */
+    @TableLogic
+    @TableField(fill = FieldFill.INSERT)
+    private String dataStatus;
 
 }
 

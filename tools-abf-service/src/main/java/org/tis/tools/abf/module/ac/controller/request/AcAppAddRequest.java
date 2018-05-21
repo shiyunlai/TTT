@@ -25,7 +25,9 @@ public class AcAppAddRequest extends RestRequest {
     @NotBlank(message = "应用类型不能为空")
     private String appType;
 
-   // private String isopen;
+    private String isopen;
+
+    private String openDate;
 
     @Pattern(regexp = "(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]",message = "访问地址不符合标准")
     private String url;
@@ -35,5 +37,4 @@ public class AcAppAddRequest extends RestRequest {
     private String ipPort;
 
     private String appDesc;
-
 }

@@ -2,9 +2,8 @@ package org.tis.tools.abf.module.sys.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.hibernate.validator.constraints.NotBlank;
-import org.tis.tools.abf.module.common.log.OperateLog;
-import org.tis.tools.abf.module.common.log.OperateType;
-import org.tis.tools.abf.module.common.log.ReturnType;
+import org.tis.tools.abf.module.jnl.annotation.OperateLog;
+import org.tis.tools.abf.module.jnl.entity.enums.OperateType;
 import org.tis.tools.abf.module.sys.controller.request.SysDictItemRequest;
 import org.tis.tools.abf.module.sys.entity.SysDict;
 import org.tis.tools.abf.module.sys.service.ISysDictItemService;
@@ -36,14 +35,7 @@ public class SysDictItemController  extends BaseController {
      * 新增业务字典项
      * @param request
      */
-    @OperateLog(
-            operateType = OperateType.ADD,
-            operateDesc = "新增业务字典项",
-            retType = ReturnType.Object,
-            id = "guid",
-            name = "itemName",
-            keys = {"guidDict", "itemType"}
-    )
+    @OperateLog(type = OperateType.ADD, desc = "新增业务字典项")
     @ApiOperation(value = "新增业务字典项", notes = "实际参数以下面DataType为准")
     @PostMapping("/add")
     public ResultVO addSysDictItem(@RequestBody @Validated SysDictItemRequest request) {
@@ -55,14 +47,7 @@ public class SysDictItemController  extends BaseController {
      * 修改业务字典项
      * @param request
      */
-    @OperateLog(
-            operateType = OperateType.UPDATE,
-            operateDesc = "修改业务字典项",
-            retType = ReturnType.Object,
-            id = "guid",
-            name = "itemName",
-            keys = {"guidDict", "itemType"}
-    )
+    @OperateLog(type = OperateType.UPDATE, desc = "修改业务字典项")
     @ApiOperation(value = "修改业务字典项", notes = "实际参数以下面DataType为准")
     @PutMapping
     public ResultVO updateSysDictItem(@RequestBody @Validated SysDictItemRequest request) {
@@ -75,14 +60,7 @@ public class SysDictItemController  extends BaseController {
      * 删除业务字典项
      * @param id
      */
-    @OperateLog(
-            operateType = OperateType.DELETE,
-            operateDesc = "删除业务字典项",
-            retType = ReturnType.Object,
-            id = "guid",
-            name = "itemName",
-            keys = {"guidDict", "itemType"}
-    )
+    @OperateLog(type = OperateType.DELETE, desc = "删除业务字典项")
     @ApiOperation(value = "删除业务字典项", notes = "根据guid删除对应的数据信息")
     @DeleteMapping("/{id}")
     public ResultVO editSysDictItem(@PathVariable @Validated @NotBlank(message = "ID不能为空") String id) {
@@ -129,15 +107,7 @@ public class SysDictItemController  extends BaseController {
 //     * 修改字典项默认值
 //     *
 //     */
-//    @OperateLog(
-//            operateType = OperateType.UPDATE,
-//            operateDesc = "设置字典默认字典项",
-//            retType = ReturnType.Object,
-//            id = "dictKey",
-//            name = "dictName",
-//            keys = "defaultValue"
-//    )
-//
+//    @OperateLog(type = OperateType.UPDATE,desc = "设置字典默认字典项")
 //    @RequestMapping("/setDefaultDictValue")
 //    public ResultVO setDefaultDictValue(@RequestBody @Validated SysDictItemRequest request) {
 //        SysDictItem sysDictItem = new SysDictItem();

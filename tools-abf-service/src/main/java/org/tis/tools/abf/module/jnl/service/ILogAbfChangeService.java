@@ -1,13 +1,15 @@
 package org.tis.tools.abf.module.jnl.service;
 
-import com.baomidou.mybatisplus.service.IService;
 import org.tis.tools.abf.module.jnl.entity.LogAbfChange;
+import com.baomidou.mybatisplus.service.IService;
 
 /**
- * describe: 
- *
- * @author zhaoch
- * @date 2018/3/30
- **/
-public interface ILogAbfChangeService extends IService<LogAbfChange> {
+ * logAbfChange的Service接口类
+ * 
+ * @author Auto Generate Tools
+ * @date 2018/05/14
+ */
+public interface ILogAbfChangeService extends IService<LogAbfChange>  {
+
 }
+

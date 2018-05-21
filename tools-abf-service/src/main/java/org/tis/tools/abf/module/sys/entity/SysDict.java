@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotations.TableName;
+import java.util.Date;
 import lombok.Data;
 import com.baomidou.mybatisplus.annotations.TableId;
 import org.tis.tools.abf.module.sys.entity.enums.DictFromType;
@@ -16,7 +17,7 @@ import java.io.Serializable;
  * sysDict业务字典表，定义系统中下拉菜单的数据（注意：仅仅包括下拉菜单中的数据，而不包括下拉菜单样式，是否多选这些与下拉内容无关的信息）
  * 
  * @author Auto Generate Tools
- * @date 2018/04/23
+ * @date 2018/05/17
  */
 @Data
 @TableName("sys_dict")
@@ -26,6 +27,11 @@ public class SysDict implements Serializable {
      * serialVersionUID.
      */
     private static final long serialVersionUID = 1L;
+
+    /**
+     * 模型名称
+     */
+    public static final String NAME = "业务字典";
 
     /**
      * guid对应表字段
@@ -93,15 +99,120 @@ public class SysDict implements Serializable {
     public static final String COLUMN_FROM_TYPE = "from_type";
 
     /**
+     * createtime对应表字段
+     */
+    public static final String COLUMN_CREATETIME = "createtime";
+
+    /**
+     * lastupdate对应表字段
+     */
+    public static final String COLUMN_LASTUPDATE = "lastupdate";
+
+    /**
+     * updator对应表字段
+     */
+    public static final String COLUMN_UPDATOR = "updator";
+
+    /**
+     * dataStatus对应表字段
+     */
+    public static final String COLUMN_DATA_STATUS = "data_status";
+
+    /**
+     * guid逻辑名
+     */
+    public static final String NAME_GUID = "数据主键";
+
+    /**
+     * dictKey逻辑名
+     */
+    public static final String NAME_DICT_KEY = "业务字典";
+
+    /**
+     * dictType逻辑名
+     */
+    public static final String NAME_DICT_TYPE = "类型";
+
+    /**
+     * dictName逻辑名
+     */
+    public static final String NAME_DICT_NAME = "字典名称";
+
+    /**
+     * dictDesc逻辑名
+     */
+    public static final String NAME_DICT_DESC = "解释说明";
+
+    /**
+     * guidParents逻辑名
+     */
+    public static final String NAME_GUID_PARENTS = "父字典GUID";
+
+    /**
+     * defaultValue逻辑名
+     */
+    public static final String NAME_DEFAULT_VALUE = "业务字典默认值";
+
+    /**
+     * fromTable逻辑名
+     */
+    public static final String NAME_FROM_TABLE = "字典项来源表";
+
+    /**
+     * useForKey逻辑名
+     */
+    public static final String NAME_USE_FOR_KEY = "作为字典项的列";
+
+    /**
+     * useForName逻辑名
+     */
+    public static final String NAME_USE_FOR_NAME = "作为字典项名称的列";
+
+    /**
+     * seqno逻辑名
+     */
+    public static final String NAME_SEQNO = "顺序号";
+
+    /**
+     * sqlFilter逻辑名
+     */
+    public static final String NAME_SQL_FILTER = "过滤条件";
+
+    /**
+     * fromType逻辑名
+     */
+    public static final String NAME_FROM_TYPE = "字典项来源类型";
+
+    /**
+     * createtime逻辑名
+     */
+    public static final String NAME_CREATETIME = "创建时间";
+
+    /**
+     * lastupdate逻辑名
+     */
+    public static final String NAME_LASTUPDATE = "最近更新时间";
+
+    /**
+     * updator逻辑名
+     */
+    public static final String NAME_UPDATOR = "最近更新人员";
+
+    /**
+     * dataStatus逻辑名
+     */
+    public static final String NAME_DATA_STATUS = "数据状态";
+
+    /**
      * 数据主键:全局唯一标识符（GUID，Globally Unique Identifier），系统自动生成；
      */
     @TableId
-    public String guid;
+    private String guid;
 
     /**
      * 业务字典
      */
-    public String dictKey;
+    private String dictKey;
 
     /**
      * 类型:见业务字典： DICT_TYPE
@@ -114,49 +225,49 @@ public class SysDict implements Serializable {
     /**
      * 字典名称
      */
-    public String dictName;
+    private String dictName;
 
     /**
      * 解释说明
      */
-    public String dictDesc;
+    private String dictDesc;
 
     /**
      * 父字典GUID:全局唯一标识符（GUID，Globally Unique Identifier），系统自动生成；
      */
-    public String guidParents;
+    private String guidParents;
 
     /**
      * 业务字典默认值:指定某个字典项（ITEM_VALUE）为本业务字典的默认值（用于扶助View层实现展示默认值）
      */
-    public String defaultValue;
+    private String defaultValue;
 
     /**
      * 字典项来源表:如果业务字典用来描述某个表中的字段选项，则本字段保存表名；
      * 其他情况默认为空；
      */
-    public String fromTable;
+    private String fromTable;
 
     /**
      * 作为字典项的列:如果业务字典用来描述某个表中的字段选项，则本字段保存字段名；
      * 其他情况默认为空；
      */
-    public String useForKey;
+    private String useForKey;
 
     /**
      * 作为字典项名称的列
      */
-    public String useForName;
+    private String useForName;
 
     /**
      * 顺序号:顺序号，从0开始排，按小到大排序
      */
-    public BigDecimal seqno;
+    private BigDecimal seqno;
 
     /**
      * 过滤条件
      */
-    public String sqlFilter;
+    private String sqlFilter;
 
     /**
      * 字典项来源类型:来源类型:0:来自字典项 1:来自单表  2:多表或视图

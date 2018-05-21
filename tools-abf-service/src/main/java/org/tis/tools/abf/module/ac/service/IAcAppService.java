@@ -1,15 +1,8 @@
 package org.tis.tools.abf.module.ac.service;
 
-import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.service.IService;
 import org.tis.tools.abf.module.ac.entity.AcApp;
-import org.tis.tools.abf.module.ac.entity.enums.AcAppType;
 import org.tis.tools.abf.module.ac.exception.AcManagementException;
-import org.tis.tools.abf.module.common.entity.enums.YON;
-
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 /**
  * acApp的Service接口类
@@ -30,10 +23,10 @@ public interface IAcAppService extends IService<AcApp>  {
      * @param appDesc 应用描述
      * @return  AcApp
      */
-    AcApp creatRootApp(String appCode, String appName, AcAppType appType, String url, String ipAddr, String ipPort, String appDesc) throws AcManagementException;
+    AcApp creatRootApp(String appCode, String appName, String appType, String url, String ipAddr, String ipPort, String appDesc,String isopen,String openDate) throws AcManagementException;
 
     /**
-     *
+     * 修改应用
      * @param guid
      * @param appCode  应用代码
      * @param appName  应用名称
@@ -47,13 +40,7 @@ public interface IAcAppService extends IService<AcApp>  {
      * @return  AcApp
      * @throws AcManagementException
      */
-    AcApp changeById(String guid,String appCode, String appName, AcAppType appType,YON isopen,Date openDate ,String url, String ipAddr, String ipPort, String appDesc) throws AcManagementException;
+    AcApp changeById(String guid,String appCode, String appName, String appType,String isopen,String openDate ,String url, String ipAddr, String ipPort, String appDesc) throws AcManagementException;
 
-    /**
-     *
-     * @return List<AcApp>
-     * @throws AcManagementException
-     */
-    List<AcApp> selectAppList() throws AcManagementException;
 }
 
