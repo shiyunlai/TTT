@@ -31,10 +31,18 @@ public class AcAppConfigServiceImpl extends ServiceImpl<AcAppConfigMapper, AcApp
      */
     @Override
     public AcAppConfig createRootAppConfig(String guidApp, String configType, String configName, String configDict, String configStyle, String configValue, String
-            enabled, BigDecimal displayOrder, String configDesc) {
+            enabled, String displayOrder, String configDesc) {
         AcAppConfig acAppConfig = new AcAppConfig();
 
+
         try {
+            //转换displayOrder类型
+            BigDecimal displayOrderNew;
+            if ("".equals(displayOrder) || null == displayOrder){
+                displayOrderNew = null;
+            }else {
+                displayOrderNew = BigDecimal.valueOf(Double.valueOf(displayOrder));
+            }
             //收集参数
             acAppConfig.setGuidApp(guidApp);
             acAppConfig.setConfigType(configType);
@@ -43,7 +51,7 @@ public class AcAppConfigServiceImpl extends ServiceImpl<AcAppConfigMapper, AcApp
             acAppConfig.setConfigStyle(configStyle);
             acAppConfig.setConfigValue(configValue);
             acAppConfig.setEnabled(enabled);
-            acAppConfig.setDisplayOrder(displayOrder);
+            acAppConfig.setDisplayOrder(displayOrderNew);
             acAppConfig.setConfigDesc(configDesc);
 
             acAppConfigService.insert(acAppConfig);
@@ -53,7 +61,7 @@ public class AcAppConfigServiceImpl extends ServiceImpl<AcAppConfigMapper, AcApp
             e.printStackTrace();
             throw new AcManagementException(
                     AcExceptionCodes.FAILURE_WHRN_CREATE_AC_APPCONFIG,
-                    wrap("SYS_RUN_CONFIG",e)
+                    wrap(AcAppConfig.COLUMN_CONFIG_TYPE,configType),configType
             );
         }
 
@@ -65,11 +73,20 @@ public class AcAppConfigServiceImpl extends ServiceImpl<AcAppConfigMapper, AcApp
      * 修改个性配置
      */
     @Override
-    public AcAppConfig changeById(String guid, String guidApp, String configType, String configName, String configDict, String configStyle, String configValue, String enabled, BigDecimal displayOrder, String configDesc) {
+    public AcAppConfig changeById(String guid, String guidApp, String configType, String configName, String configDict, String configStyle,
+                                  String configValue, String enabled, String displayOrder, String configDesc) {
 
         AcAppConfig acAppConfig = new AcAppConfig();
 
         try {
+            //转换displayOrder类型
+            BigDecimal displayOrderNew;
+            if ("".equals(displayOrder) || null == displayOrder){
+                displayOrderNew = null;
+            }else {
+                displayOrderNew = BigDecimal.valueOf(Double.valueOf(displayOrder));
+            }
+
             //收录参数
             acAppConfig.setGuid(guid);
             acAppConfig.setGuidApp(guidApp);
@@ -79,7 +96,7 @@ public class AcAppConfigServiceImpl extends ServiceImpl<AcAppConfigMapper, AcApp
             acAppConfig.setConfigStyle(configStyle);
             acAppConfig.setConfigValue(configValue);
             acAppConfig.setEnabled(enabled);
-            acAppConfig.setDisplayOrder(displayOrder);
+            acAppConfig.setDisplayOrder(displayOrderNew);
             acAppConfig.setConfigDesc(configDesc);
 
             acAppConfigService.updateById(acAppConfig);
@@ -89,7 +106,7 @@ public class AcAppConfigServiceImpl extends ServiceImpl<AcAppConfigMapper, AcApp
             e.printStackTrace();
             throw new AcManagementException(
                     AcExceptionCodes.FAILURE_WHRN_UPDATE_AC_APPCONFIG,
-                    wrap("SYS_RUN_CONFIG",e)
+                    wrap(AcAppConfig.COLUMN_GUID,guid),guid
             );
         }
         return acAppConfig;
