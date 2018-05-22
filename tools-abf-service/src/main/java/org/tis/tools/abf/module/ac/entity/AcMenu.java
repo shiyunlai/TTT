@@ -224,4 +224,3 @@ public class AcMenu implements Serializable {
     private String dataStatus;
 
 }
-
