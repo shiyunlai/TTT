@@ -29,22 +29,15 @@ public class AcAppConfigController extends BaseController<AcAppConfig> {
     @Autowired
     private IAcAppConfigService acAppConfigService;
 
-    @OperateLog(type = OperateType.ADD, desc = "新增个性化配置") // 操作对象的关键值的键值名
+    @OperateLog(type = OperateType.ADD, desc = "新增个性化配置")
     @PostMapping("/add")
     public ResultVO add(@RequestBody @Validated AcAppConfigAddRequest acAppConfigAddRequest) {
 
         AcAppConfig acAppConfig;
 
-        BigDecimal displayOrder;
-        if ("".equals(acAppConfigAddRequest.getDisplayOrder()) || null == acAppConfigAddRequest.getDisplayOrder()){
-            displayOrder = null;
-        }else {
-            displayOrder = BigDecimal.valueOf(Double.valueOf(acAppConfigAddRequest.getDisplayOrder()));
-        }
-
         acAppConfig = acAppConfigService.createRootAppConfig(acAppConfigAddRequest.getGuidApp(), acAppConfigAddRequest.getConfigType(),
                 acAppConfigAddRequest.getConfigName(), acAppConfigAddRequest.getConfigDict(), acAppConfigAddRequest.getConfigStyle(),
-                acAppConfigAddRequest.getConfigValue(),acAppConfigAddRequest.getEnabled(), displayOrder,acAppConfigAddRequest.getConfigDesc());
+                acAppConfigAddRequest.getConfigValue(),acAppConfigAddRequest.getEnabled(), acAppConfigAddRequest.getDisplayOrder(),acAppConfigAddRequest.getConfigDesc());
         return ResultVO.success("新增成功！",acAppConfig);
     }
 
@@ -52,25 +45,25 @@ public class AcAppConfigController extends BaseController<AcAppConfig> {
     @PutMapping
     public ResultVO update(@RequestBody @Validated AcAppConfigAddRequest acAppConfigAddRequest) {
 
-        AcAppConfig acAppConfig;
-
-        BigDecimal displayOrder;
-        if ("".equals(acAppConfigAddRequest.getDisplayOrder()) || null == acAppConfigAddRequest.getDisplayOrder()){
-            displayOrder = null;
-        }else {
-            displayOrder = BigDecimal.valueOf(Double.valueOf(acAppConfigAddRequest.getDisplayOrder()));
+       AcAppConfig acAppConfig = acAppConfigService.selectById(acAppConfigAddRequest.getGuid());
+        if (acAppConfig == null) {
+            return ResultVO.error("404", "找不到对应记录或已经被删除！");
         }
 
-        acAppConfig = acAppConfigService.changeById(acAppConfigAddRequest.getGuid(),acAppConfigAddRequest.getGuidApp(),
+        AcAppConfig acAppConfig1 = acAppConfigService.changeById(acAppConfigAddRequest.getGuid(),acAppConfigAddRequest.getGuidApp(),
                 acAppConfigAddRequest.getConfigType(), acAppConfigAddRequest.getConfigName(), acAppConfigAddRequest.getConfigDict(),
                 acAppConfigAddRequest.getConfigStyle(), acAppConfigAddRequest.getConfigValue(), acAppConfigAddRequest.getEnabled(),
-                displayOrder,acAppConfigAddRequest.getConfigDesc());
-        return ResultVO.success("修改成功！",acAppConfig);
+                acAppConfigAddRequest.getDisplayOrder(),acAppConfigAddRequest.getConfigDesc());
+        return ResultVO.success("修改成功！",acAppConfig1);
     }
 
     @OperateLog(type = OperateType.DELETE, desc = "删除个性化配置")
     @DeleteMapping("/{id}")
     public ResultVO delete(@PathVariable @NotBlank(message = "id不能为空") String id) {
+        AcAppConfig acAppConfig = acAppConfigService.selectById(id);
+        if (acAppConfig == null ) {
+            return ResultVO.error("404", "找不到对应记录或已经被删除！");
+        }
         Boolean isDel = acAppConfigService.deleteById(id);
         return ResultVO.success("删除成功",isDel);
     }
@@ -79,7 +72,7 @@ public class AcAppConfigController extends BaseController<AcAppConfig> {
     @GetMapping("/{id}")
     public ResultVO detail(@PathVariable @NotBlank(message = "id不能为空") String id) {
         AcAppConfig acAppConfig = acAppConfigService.selectById(id);
-        if (acAppConfigService == null) {
+        if (acAppConfig == null) {
             return ResultVO.error("404", "找不到对应记录或已经被删除！");
         }
         return ResultVO.success("查询成功", acAppConfig);

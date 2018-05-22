@@ -26,7 +26,7 @@ public class AcAppConfigServiceImplTest extends BaseTest{
         String configStyle= "4";
         String configValue= "默认值04";
         String enabled= "N";
-        BigDecimal displayOrder= BigDecimal.valueOf(6);
+        String displayOrder= "1";
         String configDesc= "应用4的描述新增";
 
         acAppConfigService.createRootAppConfig(guidApp,configType,configName,configDict,configStyle,configValue,enabled,displayOrder,configDesc);
@@ -43,7 +43,7 @@ public class AcAppConfigServiceImplTest extends BaseTest{
         String configStyle= "4";
         String configValue= "默认值04";
         String enabled= "Y";
-        BigDecimal displayOrder= BigDecimal.valueOf(6);
+        String displayOrder= "6";
         String configDesc= "应用4的描述修改";
 
         acAppConfigService.changeById(guid,guidApp,configType,configName,configDict,configStyle,configValue,enabled,displayOrder,configDesc);

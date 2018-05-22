@@ -8,6 +8,8 @@ import java.util.Date;
 
 import com.baomidou.mybatisplus.enums.FieldFill;
 import lombok.Data;
+import org.tis.tools.abf.module.ac.entity.enums.FuncType;
+import org.tis.tools.abf.module.common.entity.enums.YON;
 
 import java.io.Serializable;
 
@@ -187,7 +189,7 @@ public class AcFunc implements Serializable {
      * F：功能（Function）
      * B：行为（Behave）
      */
-    private String funcType;
+    private FuncType funcType;
 
     /**
      * 功能编号:业务上对功能的编码
@@ -208,14 +210,14 @@ public class AcFunc implements Serializable {
      * 是否启用:Y 启用(默认）
      * N 停用（不出现在菜单中）
      */
-    private String isopen;
+    private YON isopen;
 
     /**
      * 是否验证权限:取值来自业务菜单： DICT_YON
      * N：无需验权（只要有看见菜单，所有人都能执行本功能）
      * Y：需进行权限验证（默认）
      */
-    private String ischeck;
+    private YON ischeck;
 
     /**
      * 父:全局唯一标识符（GUID，Globally Unique Identifier），系统自动生成；
