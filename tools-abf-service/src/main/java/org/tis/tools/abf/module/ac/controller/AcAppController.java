@@ -57,7 +57,7 @@ public class AcAppController extends BaseController<AcApp>  {
         AcApp app;
 
         AcApp acApp = acAppService.selectById(updateRequest.getGuid());
-        if (acAppService == null || (!"0".equals(acApp.getDataStatus()))) {
+        if (acApp == null) {
             return ResultVO.error("404", "找不到对应记录或已经被删除！");
         }
 
@@ -67,7 +67,6 @@ public class AcAppController extends BaseController<AcApp>  {
         return ResultVO.success("修改成功！",app);
     }
 
-
     /**
      * 根据ID删除应用
      * @param id
@@ -76,27 +75,47 @@ public class AcAppController extends BaseController<AcApp>  {
     @OperateLog(type = OperateType.DELETE, desc = "删除应用")
     @DeleteMapping("/{id}")
     public ResultVO delete(@PathVariable @NotBlank(message = "id不能为空") String id) {
+        AcApp acApp = acAppService.selectById(id);
+        if (acApp == null) {
+            return ResultVO.error("404", "找不到对应记录或已经被删除！");
+        }
 
         Boolean isDel = acAppService.deleteById(id);
         return ResultVO.success("删除成功",isDel);
 
     }
 
+    /**
+     * 开通应用
+     * @param id
+     * @return
+     */
     @OperateLog(type = OperateType.UPDATE, desc = "开通应用")
     @PutMapping("/openApp/{id}")
     public ResultVO openApp(@PathVariable @NotBlank(message = "id不能为空") String id){
 
         AcApp acApp = acAppService.selectById(id);
+        if (acApp == null) {
+            return ResultVO.error("404", "找不到对应记录或已经被删除！");
+        }
         acApp.setIsopen(YON.YES);
         acAppService.updateById(acApp);
         return ResultVO.success("应用已开通",acApp);
     }
 
+    /**
+     * 停用应用
+     * @param id
+     * @return
+     */
     @OperateLog(type = OperateType.UPDATE, desc = "停用应用")
     @PutMapping("/stopApp/{id}")
     public ResultVO stopApp(@PathVariable @NotBlank(message = "id不能为空") String id){
 
         AcApp acApp = acAppService.selectById(id);
+        if (acApp == null) {
+            return ResultVO.error("404", "找不到对应记录或已经被删除！");
+        }
         acApp.setIsopen(YON.NO);
         acAppService.updateById(acApp);
         return ResultVO.success("应用已停用",acApp);
@@ -111,12 +130,17 @@ public class AcAppController extends BaseController<AcApp>  {
     @GetMapping("/{id}")
     public ResultVO detail(@PathVariable @NotBlank(message = "id不能为空") String id) {
         AcApp acApp = acAppService.selectById(id);
-        if (acAppService == null  || (!"0".equals(acApp.getDataStatus()))) {
+        if (acApp == null) {
             return ResultVO.error("404", "找不到对应记录或已经被删除！");
         }
         return ResultVO.success("查询成功", acApp);
     }
 
+    /**
+     * 分页查询应用
+     * @param page
+     * @return
+     */
     @PostMapping("/list")
     public ResultVO list(@RequestBody @Validated SmartPage<AcApp> page) {
         return  ResultVO.success("查询成功", acAppService.selectPage(getPage(page), getCondition(page)));
