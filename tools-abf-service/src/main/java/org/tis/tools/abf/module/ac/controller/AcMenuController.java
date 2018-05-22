@@ -3,9 +3,8 @@ package org.tis.tools.abf.module.ac.controller;
 import com.baomidou.mybatisplus.plugins.Page;
 import org.springframework.validation.annotation.Validated;
 import org.tis.tools.abf.module.ac.exception.AcMenuManagementException;
-import org.tis.tools.abf.module.common.log.OperateLog;
-import org.tis.tools.abf.module.common.log.OperateType;
-import org.tis.tools.abf.module.common.log.ReturnType;
+import org.tis.tools.abf.module.jnl.annotation.OperateLog;
+import org.tis.tools.abf.module.jnl.entity.enums.OperateType;
 import org.tis.tools.core.web.controller.BaseController;
 import org.tis.tools.abf.module.ac.service.IAcMenuService;
 import org.tis.tools.core.web.vo.SmartPage;
@@ -37,12 +36,8 @@ public class AcMenuController extends BaseController<AcMenu>  {
      * @return 新增结果
      */
     @OperateLog(
-            operateType = OperateType.ADD,  // 操作类型
-            operateDesc = "新增根菜单", // 操作描述
-            retType = ReturnType.Object, // 返回类型，对象或数组
-            id = "guid", // 操作对象标识
-            name = "menuName", // 操作对象名
-            keys = {"guidApp", "menuCode", "menuLabel"}) // 操作对象的关键值的键值名
+            type = OperateType.ADD,  // 操作类型
+            desc = "新增根菜单") // 操作对象的关键值的键值名
     @ResponseBody
     @PostMapping("/addAcMenu")
     public ResultVO addAcMenu(@RequestBody @Validated AcMenu acMenu) {
@@ -70,12 +65,8 @@ public class AcMenuController extends BaseController<AcMenu>  {
      * @return 新增结果
      */
     @OperateLog(
-            operateType = OperateType.ADD,
-            operateDesc = "添加子菜单",
-            retType = ReturnType.Object,
-            id = "guid",
-            name = "menuName",
-            keys = {"guidApp", "menuCode", "menuLabel"})
+            type = OperateType.ADD,
+            desc = "添加子菜单")
     @ResponseBody
     @PostMapping("/addSubAcmenu")
     public ResultVO addSubAcmenu(@RequestBody @Validated AcMenu acMenu) {
@@ -92,12 +83,8 @@ public class AcMenuController extends BaseController<AcMenu>  {
      * @return 修改结果
      */
     @OperateLog(
-            operateType = OperateType.UPDATE,
-            operateDesc = "修改菜单",
-            retType = ReturnType.Object,
-            id = "guid",
-            name = "menuName",
-            keys = {"guidApp", "menuCode", "menuLabel"})
+            type = OperateType.UPDATE,
+            desc = "修改菜单")
     @ResponseBody
     @PutMapping("/updateAcMenu")
     public ResultVO update(@RequestBody @Validated AcMenu acMenu) {
@@ -114,12 +101,8 @@ public class AcMenuController extends BaseController<AcMenu>  {
      * @return 删除结果
      */
     @OperateLog(
-            operateType = OperateType.DELETE,
-            operateDesc = "删除菜单",
-            retType = ReturnType.List,
-            id = "guid",
-            name = "menuName",
-            keys = {"guidApp", "guidFunc", "menuCode", "menuLabel"})
+            type = OperateType.DELETE,
+            desc = "删除菜单")
     @ResponseBody
     @DeleteMapping("/deleteAcMenu/{id}")
     public ResultVO deleteAcMenu(@PathVariable @NotBlank(message = "id不能为空") String id) {
@@ -207,12 +190,8 @@ public class AcMenuController extends BaseController<AcMenu>  {
      * @throws AcMenuManagementException
      */
     @OperateLog(
-            operateType = OperateType.UPDATE,
-            operateDesc = "修改菜单（移动）",
-            retType = ReturnType.Object,
-            id = "guid",
-            name = "menuName",
-            keys = {"guidParents", "menuSeq", "displayOrder"})
+            type = OperateType.UPDATE,
+            desc = "修改菜单（移动）")
     @ResponseBody
     @GetMapping("/queryMoveMenuLists/{targetGuid}/{moveGuid}")
     public ResultVO getMoveMenu(@PathVariable @NotBlank(message = "targetGuid不能为空") String targetGuid

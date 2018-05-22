@@ -331,10 +331,6 @@ public class AcMenuServiceImpl extends ServiceImpl<AcMenuMapper, AcMenu> impleme
                         , wrap(acMenu.getGuidParents()));
             }
             /** 添加菜单GUID和序列*/
-//            String guid = GUID.menu();
-//            AcMenu parMenu = list.get(0);
-//            acMenu.setGuid(guid);
-            acMenu.setMenuSeq(parMenu.getMenuSeq() );
             acMenu.setGuidRoot(parMenu.getGuidRoot());
             acMenu.setDisplayOrder(new BigDecimal(acMenuService.selectCount(
                     new EntityWrapper<AcMenu>()
@@ -383,7 +379,7 @@ public class AcMenuServiceImpl extends ServiceImpl<AcMenuMapper, AcMenu> impleme
                         AcExceptionCodes.CURRENT_APP_ALREADY_HAVE_ROOT_MENU);
             }
 //            acMenu.setGuid(GUID.menu());
-            acMenu.setMenuSeq(acMenu.getGuid());
+//            acMenu.setMenuSeq(acMenu.getGuid());
             acMenu.setGuidParents(null);
             acMenu.setIsleaf(NO);
             acMenu.setGuidRoot(acMenu.getGuid());

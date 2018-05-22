@@ -40,9 +40,9 @@ public class AcMenuControllerTest extends BaseTest {
     @Test
     public void testAddSubAcmenu() throws Exception {
         AcMenu acMenu = new AcMenu();
-        acMenu.setMenuName("测试菜单");
-        acMenu.setGuidApp("201832148212");
-        acMenu.setMenuLabel("测试菜单");
+        acMenu.setMenuName("测试菜单2");
+        acMenu.setGuidApp("2018321482212");
+        acMenu.setMenuLabel("测试菜单1");
         acMenu.setMenuCode("AC00001");
         acMenu.setIsleaf("Y");
         acMenu.setMenuSeq("1");
@@ -128,5 +128,6 @@ public class AcMenuControllerTest extends BaseTest {
 
     @Test
     public void testGetMoveMenu() throws Exception {
+
     }
 }

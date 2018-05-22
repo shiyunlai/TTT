@@ -62,14 +62,15 @@ public class AcMenuServiceImplTest extends BaseTest {
     @Test
     public void testCreateChildMenu() throws Exception {
         AcMenu acMenu = new AcMenu();
-        acMenu.setMenuName("测试子菜单");
+        acMenu.setMenuName("测试子菜单1");
         acMenu.setGuidApp("App002");
-        acMenu.setMenuLabel("测试菜单");
-        acMenu.setMenuCode("AC00001");
+        acMenu.setMenuLabel("测试菜单2");
+        acMenu.setMenuCode("AC00002");
         acMenu.setIsleaf("Y");
-        acMenu.setMenuSeq("1");
-        acMenu.setImagePath("35325");
-        acMenu.setGuidParents("995919032385556481");
+        acMenu.setMenuSeq("998583132815122434");
+        acMenu.setImagePath("a.jpg");
+        acMenu.setUpdator("测试用户1");
+        acMenu.setGuidParents("998583132815122434");
         AcMenu result = acMenuService.createChildMenu(acMenu);
         System.out.print(result);
     }
@@ -77,11 +78,12 @@ public class AcMenuServiceImplTest extends BaseTest {
     @Test
     public void testCreateRootMenu() throws Exception {
         AcMenu acMenu = new AcMenu();
-        acMenu.setMenuName("测试菜单4");
-        acMenu.setGuidApp("App004");
+        acMenu.setMenuName("测试菜单14");
+        acMenu.setGuidApp("App002");
         acMenu.setMenuLabel("测试菜单2");
         acMenu.setMenuCode("AC00004");
-        acMenu.setMenuSeq("1");
+        acMenu.setMenuSeq("0");
+        acMenu.setUpdator("测试用户");
         acMenu.setImagePath("imags/2.jpg");
         AcMenu result = acMenuService.createRootMenu(acMenu);
         System.out.print(result);
@@ -89,7 +91,7 @@ public class AcMenuServiceImplTest extends BaseTest {
 
     @Test
     public void testQueryRootMenu() throws Exception {
-        String GUID = "App004";
+        String GUID = "App002";
         List<AcMenu> lists = acMenuService.queryRootMenu(GUID);
         for (AcMenu acMenu : lists) {
             System.out.println(acMenu.toString());
