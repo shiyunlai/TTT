@@ -1,21 +1,20 @@
 package org.tis.tools.abf.module.sys.entity;
 
-import java.math.BigDecimal;
-
 import com.alibaba.fastjson.annotation.JSONField;
-import com.baomidou.mybatisplus.annotations.TableName;
-import java.util.Date;
+import com.baomidou.mybatisplus.annotations.*;
+import com.baomidou.mybatisplus.enums.FieldFill;
 import lombok.Data;
-import com.baomidou.mybatisplus.annotations.TableId;
 import org.tis.tools.abf.module.sys.entity.enums.DictFromType;
 import org.tis.tools.abf.module.sys.entity.enums.DictType;
 import org.tis.tools.core.entity.enums.CommonEnumDeserializer;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * sysDict业务字典表，定义系统中下拉菜单的数据（注意：仅仅包括下拉菜单中的数据，而不包括下拉菜单样式，是否多选这些与下拉内容无关的信息）
- * 
+ *
  * @author Auto Generate Tools
  * @date 2018/05/17
  */
@@ -275,5 +274,31 @@ public class SysDict implements Serializable {
     @JSONField(deserializeUsing = CommonEnumDeserializer.class)
     public DictFromType fromType;
 
+    /**
+     * 创建时间
+     */
+    @TableField(fill = FieldFill.INSERT)
+    private Date createtime;
+
+    /**
+     * 最近更新时间
+     */
+    @Version
+    @TableField(fill = FieldFill.UPDATE)
+    private Date lastupdate;
+
+    /**
+     * 最近更新人员
+     */
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private String updator;
+
+    /**
+     * 数据状态:0 有效
+     * D 删除（逻辑删除）
+     */
+    @TableLogic
+    @TableField(fill = FieldFill.INSERT)
+    private String dataStatus;
 }
 
