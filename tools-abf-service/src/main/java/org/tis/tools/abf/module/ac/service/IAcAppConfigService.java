@@ -30,7 +30,7 @@ public interface IAcAppConfigService extends IService<AcAppConfig>  {
      * @param configDesc  配置描述说明
      * @return
      */
-    AcAppConfig createRootAppConfig(String guidApp, String configType, String configName, String configDict, String configStyle, String configValue, String enabled, BigDecimal displayOrder, String configDesc);
+    AcAppConfig createRootAppConfig(String guidApp, String configType, String configName, String configDict, String configStyle, String configValue, String enabled, String displayOrder, String configDesc);
 
     /**
      *
@@ -46,7 +46,7 @@ public interface IAcAppConfigService extends IService<AcAppConfig>  {
      * @param configDesc    配置描述说明
      * @return
      */
-    AcAppConfig changeById(String guid,String guidApp,String configType,String configName,String configDict,String configStyle,String configValue,String enabled,BigDecimal displayOrder,String configDesc);
+    AcAppConfig changeById(String guid,String guidApp,String configType,String configName,String configDict,String configStyle,String configValue,String enabled,String displayOrder,String configDesc);
 
 }
 
