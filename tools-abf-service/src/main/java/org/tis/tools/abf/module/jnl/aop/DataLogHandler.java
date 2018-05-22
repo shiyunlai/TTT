@@ -84,13 +84,15 @@ public class DataLogHandler {
         Object returnObj;
         // 获取方法名
         String method = pjp.getSignature().getName();
+        // 目标类
+        Class<?> targetClass = pjp.getTarget().getClass();
         // deleteById 方法
         if (StringUtils.equals(method, SqlMethod.DELETE_BY_ID.getMethod())) {
             // 获取删除前数据
             String id = (String) pjp.getArgs()[0];
-            Method selectMethod = pjp.getTarget().getClass()
-                    .getDeclaredMethod(SqlMethod.SELECT_BY_ID.getMethod(), Serializable.class);
-            Object oldObj = selectMethod.invoke(pjp.getTarget(), id);
+            Object oldObj = targetClass
+                    .getDeclaredMethod(SqlMethod.SELECT_BY_ID.getMethod(), Serializable.class)
+                    .invoke(pjp.getTarget(), id);
             // 执行处理逻辑
             returnObj = pjp.proceed();
             if (((Integer) returnObj) > 0) {
@@ -110,20 +112,19 @@ public class DataLogHandler {
             List oldObjs;
             if (StringUtils.equals(method, SqlMethod.DELETE_BATCH_BY_IDS.getMethod())) {
                 List idList = (List) pjp.getArgs()[0];
-                Method selectMethod = pjp.getTarget().getClass()
-                        .getDeclaredMethod(SqlMethod.SELECT_BATCH_BY_IDS.getMethod(), Collection.class);
-                oldObjs = (List) selectMethod.invoke(pjp.getTarget(), idList);
+                oldObjs = (List) targetClass
+                        .getDeclaredMethod(SqlMethod.SELECT_BATCH_BY_IDS.getMethod(), Collection.class)
+                        .invoke(pjp.getTarget(), idList);
             } else if (StringUtils.equals(method, SqlMethod.DELETE_BY_MAP.getMethod())){
                 Map columnMap = (Map) pjp.getArgs()[0];
-                Method selectMethod = pjp.getTarget().getClass()
-                        .getDeclaredMethod(SqlMethod.SELECT_BY_MAP.getMethod(), Map.class);
-                oldObjs = (List) selectMethod.invoke(pjp.getTarget(), columnMap);
+                oldObjs = (List) targetClass
+                        .getDeclaredMethod(SqlMethod.SELECT_BY_MAP.getMethod(), Map.class)
+                        .invoke(pjp.getTarget(), columnMap);
             } else {
                 Wrapper wrapper = (Wrapper) pjp.getArgs()[0];
-                Method selectMethod = pjp.getTarget().getClass()
-                        .getDeclaredMethod(SqlMethod.SELECT_LIST.getMethod(), Wrapper.class);
-                // 获取修改前数据
-                oldObjs = ((List) selectMethod.invoke(pjp.getTarget(), wrapper));
+                oldObjs = ((List) targetClass
+                        .getDeclaredMethod(SqlMethod.SELECT_LIST.getMethod(), Wrapper.class)
+                        .invoke(pjp.getTarget(), wrapper));
             }
             // 执行处理逻辑
             returnObj = pjp.proceed();
@@ -153,6 +154,8 @@ public class DataLogHandler {
         Object returnObj = null;
         // 获取方法名
         String method = pjp.getSignature().getName();
+        // 目标类
+        Class<?> targetClass = pjp.getTarget().getClass();
         // updateById 和 updateAllColumnById 方法
         if (StringUtils.equals(method, SqlMethod.UPDATE_BY_ID.getMethod())
                 || StringUtils.equals(method, SqlMethod.UPDATE_ALL_COLUMN_BY_ID.getMethod())) {
@@ -161,9 +164,9 @@ public class DataLogHandler {
             Object obj = pjp.getArgs()[0];
             collectDataInfo(data, obj);
             // 获取修改前数据
-            Method selectMethod = pjp.getTarget().getClass()
-                    .getDeclaredMethod(SqlMethod.SELECT_BY_ID.getMethod(), Serializable.class);
-            Object oldObj = selectMethod.invoke(pjp.getTarget(), data.getInstance().getDataGuid());
+            Object oldObj = targetClass
+                    .getDeclaredMethod(SqlMethod.SELECT_BY_ID.getMethod(), Serializable.class)
+                    .invoke(pjp.getTarget(), data.getInstance().getDataGuid());
             // 执行处理逻辑
             returnObj = pjp.proceed();
             // 处理差异
@@ -181,10 +184,10 @@ public class DataLogHandler {
         else if (StringUtils.equals(method, SqlMethod.UPDATE.getMethod())) {
             Wrapper wrapper = (Wrapper) pjp.getArgs()[1];
             Object obj = pjp.getArgs()[0];
-            Method selectMethod = pjp.getTarget().getClass()
-                    .getDeclaredMethod(SqlMethod.SELECT_LIST.getMethod(), Wrapper.class);
             // 获取修改前数据
-            List oldObjs = ((List) selectMethod.invoke(pjp.getTarget(), wrapper));
+            List oldObjs = (List) targetClass
+                    .getDeclaredMethod(SqlMethod.SELECT_LIST.getMethod(), Wrapper.class)
+                    .invoke(pjp.getTarget(), wrapper);
             // 执行处理逻辑
             returnObj = pjp.proceed();
             // 处理差异
