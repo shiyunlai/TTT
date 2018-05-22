@@ -355,7 +355,7 @@ public class AcOperator implements Serializable {
     /**
      * 最近更新人员
      */
-    @TableField(fill = FieldFill.UPDATE)
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private String updator;
 
     /**
