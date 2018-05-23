@@ -4,9 +4,8 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import org.springframework.validation.annotation.Validated;
 import org.tis.tools.abf.module.ac.controller.request.AcOperatorAddRequest;
 import org.tis.tools.abf.module.ac.controller.request.AcOperatorUpdateGrop;
-import org.tis.tools.abf.module.common.log.OperateLog;
-import org.tis.tools.abf.module.common.log.OperateType;
-import org.tis.tools.abf.module.common.log.ReturnType;
+import org.tis.tools.abf.module.jnl.annotation.OperateLog;
+import org.tis.tools.abf.module.jnl.entity.enums.OperateType;
 import org.tis.tools.core.web.controller.BaseController;
 import org.tis.tools.core.web.vo.SmartPage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,13 +34,7 @@ public class AcOperatorController extends BaseController<AcOperator>  {
      * @return 新增操作员
      *
      */
-    @OperateLog(
-            operateType = OperateType.ADD,  // 操作类型
-            operateDesc = "新增操作员", // 操作描述
-            retType = ReturnType.Object, // 返回类型，对象或数组
-            id = "userId", // 操作对象标识
-            name = "operatorName", // 操作对象名
-            keys = {"userId", "operatorName"}) // 操作对象的关键值的键值名
+    @OperateLog(type = OperateType.ADD,desc = "新增操作员")
     @PostMapping("/add")
     public ResultVO add(@RequestBody @Validated AcOperatorAddRequest request) {
         acOperatorService.addAcOperator(request);
@@ -57,13 +50,7 @@ public class AcOperatorController extends BaseController<AcOperator>  {
      * @param acOperator
      * @return 修改操作员
      */
-    @OperateLog(
-            operateType = OperateType.UPDATE,
-            operateDesc = "修改操作员",
-            retType = ReturnType.Object,
-            id = "userId",
-            keys = {"userId", "operatorName","operatorStatus","invalDate","authMode"}
-    )
+    @OperateLog(type = OperateType.UPDATE,desc = "修改操作员")
     @PutMapping
     public ResultVO update(@RequestBody @Validated({AcOperatorUpdateGrop.class}) AcOperator acOperator) {
         acOperatorService.updateAcOperatorByCondition(acOperator);
@@ -78,14 +65,7 @@ public class AcOperatorController extends BaseController<AcOperator>  {
      * @param id
      * @return 删除操作员结果
      */
-    @OperateLog(
-            operateType = OperateType.DELETE,
-            operateDesc = "删除操作员",
-            retType = ReturnType.Object,
-            id = "userId",
-            keys = {"userId", "operatorName","operatorStatus","invalDate","authMode"}
-
-    )
+    @OperateLog(type = OperateType.DELETE,desc = "删除操作员")
     @DeleteMapping("/{id}")
     public ResultVO delete(@PathVariable @NotBlank(message = "id不能为空") String id) {
         AcOperator acOperator = new AcOperator();
@@ -102,13 +82,6 @@ public class AcOperatorController extends BaseController<AcOperator>  {
      * @param id
      * @return
      */
-    @OperateLog(
-            operateType = OperateType.QUERY,
-            operateDesc = "查询操作员",
-            retType = ReturnType.Object,
-            id = "userId",
-            keys = {"userId", "operatorName","operatorStatus","invalDate","authMode"}
-    )
     @GetMapping("/{id}")
     public ResultVO detail(@PathVariable @NotBlank(message = "id不能为空") String id) {
         EntityWrapper<AcOperator> acOperatorEntityWrapper = new EntityWrapper<>();

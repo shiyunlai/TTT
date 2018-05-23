@@ -6,6 +6,9 @@ import java.util.Date;
 
 import com.baomidou.mybatisplus.enums.FieldFill;
 import lombok.Data;
+import org.hibernate.validator.constraints.NotBlank;
+import org.tis.tools.abf.module.ac.controller.request.AcOPeratorRoleUpdateGrop;
+import org.tis.tools.abf.module.ac.controller.request.AcOperatorRoleAddGrop;
 
 import java.io.Serializable;
 
@@ -103,16 +106,19 @@ public class AcOperatorRole implements Serializable {
      * 数据主键:全局唯一标识符（GUID，Globally Unique Identifier），系统自动生成；
      */
     @TableId
+    @NotBlank(message = "修改时不能为空",groups = AcOPeratorRoleUpdateGrop.class)
     private String guid;
 
     /**
      * 操作员GUID:全局唯一标识符（GUID，Globally Unique Identifier），系统自动生成；
      */
+    @NotBlank(message = "新增时不能为空",groups = AcOperatorRoleAddGrop.class)
     private String guidOperator;
 
     /**
      * 拥有角色GUID:全局唯一标识符（GUID，Globally Unique Identifier），系统自动生成；
      */
+    @NotBlank(message = "新增时不能为空",groups = AcOperatorRoleAddGrop.class)
     private String guidRole;
 
     /**

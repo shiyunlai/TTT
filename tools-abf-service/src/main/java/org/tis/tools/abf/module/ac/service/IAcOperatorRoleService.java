@@ -2,6 +2,7 @@ package org.tis.tools.abf.module.ac.service;
 
 import com.baomidou.mybatisplus.service.IService;
 import org.tis.tools.abf.module.ac.entity.AcOperatorRole;
+import org.tis.tools.abf.module.ac.exception.AcOperatorRoleManagementException;
 
 /**
  * acOperatorRole的Service接口类
@@ -10,6 +11,7 @@ import org.tis.tools.abf.module.ac.entity.AcOperatorRole;
  * @date 2018/04/23
  */
 public interface IAcOperatorRoleService extends IService<AcOperatorRole>  {
+
 
 }
 
