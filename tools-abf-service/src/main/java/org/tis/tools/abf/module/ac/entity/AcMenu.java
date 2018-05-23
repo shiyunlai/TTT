@@ -113,6 +113,126 @@ public class AcMenu implements Serializable {
     public static final String COLUMN_OPEN_MODE = "open_mode";
 
     /**
+     * createtime对应表字段
+     */
+    public static final String COLUMN_CREATETIME = "createtime";
+
+    /**
+     * lastupdate对应表字段
+     */
+    public static final String COLUMN_LASTUPDATE = "lastupdate";
+
+    /**
+     * updator对应表字段
+     */
+    public static final String COLUMN_UPDATOR = "updator";
+
+    /**
+     * dataStatus对应表字段
+     */
+    public static final String COLUMN_DATA_STATUS = "data_status";
+
+    /**
+     * guid逻辑名
+     */
+    public static final String NAME_GUID = "数据主键";
+
+    /**
+     * guidApp逻辑名
+     */
+    public static final String NAME_GUID_APP = "应用GUID";
+
+    /**
+     * guidFunc逻辑名
+     */
+    public static final String NAME_GUID_FUNC = "功能GUID";
+
+    /**
+     * menuName逻辑名
+     */
+    public static final String NAME_MENU_NAME = "菜单名称";
+
+    /**
+     * menuLabel逻辑名
+     */
+    public static final String NAME_MENU_LABEL = "菜单显示（中文）";
+
+    /**
+     * menuCode逻辑名
+     */
+    public static final String NAME_MENU_CODE = "菜单代码";
+
+    /**
+     * isleaf逻辑名
+     */
+    public static final String NAME_ISLEAF = "是否叶子菜单";
+
+    /**
+     * uiEntry逻辑名
+     */
+    public static final String NAME_UI_ENTRY = "UI入口";
+
+    /**
+     * menuLevel逻辑名
+     */
+    public static final String NAME_MENU_LEVEL = "菜单层次";
+
+    /**
+     * guidParents逻辑名
+     */
+    public static final String NAME_GUID_PARENTS = "父菜单GUID";
+
+    /**
+     * guidRoot逻辑名
+     */
+    public static final String NAME_GUID_ROOT = "根菜单GUID";
+
+    /**
+     * displayOrder逻辑名
+     */
+    public static final String NAME_DISPLAY_ORDER = "显示顺序";
+
+    /**
+     * imagePath逻辑名
+     */
+    public static final String NAME_IMAGE_PATH = "菜单闭合图片路径";
+
+    /**
+     * expandPath逻辑名
+     */
+    public static final String NAME_EXPAND_PATH = "菜单展开图片路径";
+
+    /**
+     * menuSeq逻辑名
+     */
+    public static final String NAME_MENU_SEQ = "菜单路径序列";
+
+    /**
+     * openMode逻辑名
+     */
+    public static final String NAME_OPEN_MODE = "页面打开方式";
+
+    /**
+     * createtime逻辑名
+     */
+    public static final String NAME_CREATETIME = "创建时间";
+
+    /**
+     * lastupdate逻辑名
+     */
+    public static final String NAME_LASTUPDATE = "最近更新时间";
+
+    /**
+     * updator逻辑名
+     */
+    public static final String NAME_UPDATOR = "最近更新人员";
+
+    /**
+     * dataStatus逻辑名
+     */
+    public static final String NAME_DATA_STATUS = "数据状态";
+
+    /**
      * 数据主键:全局唯一标识符（GUID，Globally Unique Identifier），系统自动生成；
      */
     @TableId
