@@ -175,8 +175,8 @@ public class AcFuncController extends BaseController<AcFunc>  {
      * @return ResultVO
      */
     @OperateLog(type= OperateType.QUERY,desc = "查询根功能的子列表")
-    @GetMapping("/oneList/{id}")
-    public ResultVO oneList(@PathVariable @NotBlank(message = "id不能为空") String id){
+    @GetMapping("/childList/{id}")
+    public ResultVO childList(@PathVariable @NotBlank(message = "id不能为空") String id){
 
         AcFunc acFunc = acFuncService.selectById(id);
         if (acFunc == null) {
