@@ -37,6 +37,10 @@ public class ToolsEntityMetaObjectHandler extends MetaObjectHandler {
         if (metaObject.hasGetter("createtime")) {
             setFieldValByName("createtime", new Date(), metaObject);
         }
+        // 最近更新人员 private String updator
+        if (metaObject.hasGetter("updator")) {
+            setFieldValByName("updator", "开发人员", metaObject);
+        }
 
     }
 
