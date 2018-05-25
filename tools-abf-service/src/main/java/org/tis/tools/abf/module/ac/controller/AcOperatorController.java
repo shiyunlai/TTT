@@ -1,6 +1,11 @@
 package org.tis.tools.abf.module.ac.controller;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import org.springframework.validation.annotation.Validated;
+import org.tis.tools.abf.module.ac.controller.request.AcOperatorAddRequest;
+import org.tis.tools.abf.module.ac.controller.request.AcOperatorUpdateGrop;
+import org.tis.tools.abf.module.jnl.annotation.OperateLog;
+import org.tis.tools.abf.module.jnl.entity.enums.OperateType;
 import org.tis.tools.core.web.controller.BaseController;
 import org.tis.tools.core.web.vo.SmartPage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,34 +22,72 @@ import org.tis.tools.abf.module.ac.service.IAcOperatorService;
  * @date 2018/04/23
  */
 @RestController
-@RequestMapping("/acOperator")
+@RequestMapping("/acOperators")
 public class AcOperatorController extends BaseController<AcOperator>  {
 
     @Autowired
     private IAcOperatorService acOperatorService;
 
+    /**
+     * @param request
+     *
+     * @return 新增操作员
+     *
+     */
+    @OperateLog(type = OperateType.ADD,desc = "新增操作员")
     @PostMapping("/add")
-    public ResultVO add(@RequestBody @Validated AcOperator acOperator) {
-        acOperatorService.insert(acOperator);
-        return ResultVO.success("新增成功！");
+    public ResultVO add(@RequestBody @Validated AcOperatorAddRequest request) {
+        acOperatorService.addAcOperator(request);
+        AcOperator acOperator = new AcOperator();
+        EntityWrapper<AcOperator> acOperatorEntityWrapper = new EntityWrapper<>();
+        acOperatorEntityWrapper.eq(AcOperator.COLUMN_USER_ID,request.getUserId());
+        AcOperator acOperator1 = acOperatorService.selectOne(acOperatorEntityWrapper);
+        return ResultVO.success("新增成功！",acOperator1);
     }
-    
+
+    /**
+     *
+     * @param acOperator
+     * @return 修改操作员
+     */
+    @OperateLog(type = OperateType.UPDATE,desc = "修改操作员")
     @PutMapping
-    public ResultVO update(@RequestBody @Validated AcOperator acOperator) {
-        acOperatorService.updateById(acOperator);
-        return ResultVO.success("修改成功！");
+    public ResultVO update(@RequestBody @Validated({AcOperatorUpdateGrop.class}) AcOperator acOperator) {
+        acOperatorService.updateAcOperatorByCondition(acOperator);
+        EntityWrapper<AcOperator> acOperatorEntityWrapper = new EntityWrapper<>();
+        acOperatorEntityWrapper.eq(AcOperator.COLUMN_USER_ID,acOperator.getUserId());
+        AcOperator acOperator1 = acOperatorService.selectOne(acOperatorEntityWrapper);
+        return ResultVO.success("修改成功！",acOperator1);
     }
-    
+
+    /**
+     *
+     * @param id
+     * @return 删除操作员结果
+     */
+    @OperateLog(type = OperateType.DELETE,desc = "删除操作员")
     @DeleteMapping("/{id}")
     public ResultVO delete(@PathVariable @NotBlank(message = "id不能为空") String id) {
-        acOperatorService.deleteById(id);
-        return ResultVO.success("删除成功");
+        AcOperator acOperator = new AcOperator();
+        acOperator.setUserId(id);
+        EntityWrapper<AcOperator> acOperatorEntityWrapper = new EntityWrapper<>();
+        acOperatorEntityWrapper.eq(AcOperator.COLUMN_USER_ID,id);
+        AcOperator acOperator1 = acOperatorService.selectOne(acOperatorEntityWrapper);
+        acOperatorService.deleteAcOperator(acOperator);
+        return ResultVO.success("删除成功",acOperator1);
     }
-    
+
+    /**
+     *
+     * @param id
+     * @return
+     */
     @GetMapping("/{id}")
     public ResultVO detail(@PathVariable @NotBlank(message = "id不能为空") String id) {
-        AcOperator acOperator = acOperatorService.selectById(id);
-        if (acOperatorService == null) {
+        EntityWrapper<AcOperator> acOperatorEntityWrapper = new EntityWrapper<>();
+        acOperatorEntityWrapper.eq(AcOperator.COLUMN_USER_ID,id);
+        AcOperator acOperator = acOperatorService.selectOne(acOperatorEntityWrapper);
+        if (acOperator == null) {
             return ResultVO.error("404", "找不到对应记录或已经被删除！");
         }
         return ResultVO.success("查询成功", acOperator);

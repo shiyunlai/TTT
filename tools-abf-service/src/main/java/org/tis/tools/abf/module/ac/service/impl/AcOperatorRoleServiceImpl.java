@@ -1,6 +1,9 @@
 package org.tis.tools.abf.module.ac.service.impl;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import org.apache.commons.lang.StringUtils;
 import org.tis.tools.abf.module.ac.dao.AcOperatorRoleMapper;
+import org.tis.tools.abf.module.ac.exception.AcOperatorRoleManagementException;
 import org.tis.tools.abf.module.ac.service.IAcOperatorRoleService;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -16,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class AcOperatorRoleServiceImpl extends ServiceImpl<AcOperatorRoleMapper, AcOperatorRole> implements IAcOperatorRoleService {
+
 
 }
 
