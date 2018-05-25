@@ -1,5 +1,6 @@
 package org.tis.tools.abf.module.ac.service;
 
+import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.IService;
 import org.tis.tools.abf.module.ac.entity.AcFunc;
 import org.tis.tools.abf.module.ac.exception.AcManagementException;
@@ -75,6 +76,13 @@ public interface IAcFuncService extends IService<AcFunc>  {
      * @return List<AcFunc>
      */
     List<AcFunc> queryFuncList(String id)throws AcManagementException;
+
+    /**
+     * 查询列表
+     * @param page
+     * @return
+     */
+    List<Object> getlist(Page<AcFunc> page);
 
 }
 
