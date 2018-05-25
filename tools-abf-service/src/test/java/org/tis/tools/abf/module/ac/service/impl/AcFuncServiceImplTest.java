@@ -3,10 +3,7 @@ package org.tis.tools.abf.module.ac.service.impl;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.tis.tools.abf.base.BaseTest;
-import org.tis.tools.abf.module.ac.entity.AcFunc;
 import org.tis.tools.abf.module.ac.service.IAcFuncService;
-
-import java.util.List;
 
 /**
  * 功能的Service实现类的测试类
@@ -17,25 +14,6 @@ public class AcFuncServiceImplTest extends BaseTest {
 
     @Autowired
     IAcFuncService acFuncService;
-
-    /**
-     * 新增根功能
-     * @throws Exception
-     */
-    @Test
-    public void creatRootFunc() throws Exception{
-
-        String guidApp = "989411000669696001";
-        String funcType = "TWSTX";
-        String funcCode = "001";
-        String funcName = "001应用";
-        String displayOrder = "1";
-        String funcDesc = "001的描述";
-        String isopen = "";
-        String ischeck ="";
-        AcFunc acFunc = acFuncService.creatRootFunc(guidApp,funcType,funcCode,funcName,displayOrder,funcDesc,isopen,ischeck);
-
-    }
 
     /**
      * 新增子功能
@@ -77,33 +55,5 @@ public class AcFuncServiceImplTest extends BaseTest {
         acFuncService.changeFunc(guid,guidApp,funcType,funcCode,funcName,funcDesc,isopen,ischeck,displayOrder,guidFunc);
 
     }
-
-
-    /**
-     * 删除根功能
-     * @throws Exception
-     */
-    @Test
-    public void clearRootFunc() throws Exception{
-        String guid = "995937977815744514";
-        String statusData = "0";
-        Boolean isDel = acFuncService.clearRootFunc(guid,statusData);
-        System.out.println(isDel);
-    }
-
-    /**
-     * 查询某个根功能的所有子功能
-     * @throws Exception
-     */
-    @Test
-    public void queryFuncList() throws Exception{
-
-        String guid = "996295466776137729";
-        List<AcFunc> list = acFuncService.queryFuncList(guid);
-        for (AcFunc  acFunc : list) {
-            System.out.println(acFunc);
-        }
-    }
-
 
 }
