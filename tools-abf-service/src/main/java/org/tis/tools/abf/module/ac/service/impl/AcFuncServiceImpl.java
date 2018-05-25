@@ -2,6 +2,8 @@ package org.tis.tools.abf.module.ac.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.plugins.pagination.Pagination;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,9 +16,12 @@ import org.tis.tools.abf.module.ac.exception.AcManagementException;
 import org.tis.tools.abf.module.ac.service.IAcFuncService;
 import org.tis.tools.abf.module.common.entity.enums.YON;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.tis.tools.core.utils.BasicUtil.wrap;
 
@@ -329,5 +334,97 @@ public class AcFuncServiceImpl extends ServiceImpl<AcFuncMapper, AcFunc> impleme
         return funcList;
     }
 
+
+    /**
+     * 查询列表
+     */
+    @Override
+    public  List<Object>  getlist(Page<AcFunc> page) {
+
+        //创建一个返回对象listMap
+        List<Object> listMap = new ArrayList<Object>();
+
+        try{
+            //默认查询顺序为升序
+            Boolean isAsc = true;
+
+            //获取当前页和每页数目
+            Integer current = page.getCurrent() - 1;
+            Integer  size = page.getSize();
+
+            //如果当前页为0或者为null,默认设置为 0
+            if (current <= 0 || current == null){
+                current = 0;
+            }
+            //如果每页数目为空,默认设置为 10
+            if (size == null){
+                size = 10;
+            }
+
+            //拼接分页查询的 sql
+            String limtSql = "limit "+(current * size)+","+size;
+            Wrapper<AcFunc> acFuncWrapper = new EntityWrapper<AcFunc>();
+            acFuncWrapper.eq(AcFunc.COLUMN_GUID_FUNC,"0")
+                    .orderBy(AcFunc.COLUMN_DISPLAY_ORDER,isAsc)
+                    .last(limtSql);
+
+            //计算总数
+            Integer total = acFuncService.selectCount(acFuncWrapper);
+
+            //计算总页数
+            int pages = total / size;
+            if (total % size != 0) {
+                pages++;
+            }
+
+            //查询所有功能组的guid
+            List<Object> listRootFuncGuid = null;
+            //创建一个Pagination
+            Pagination pagination = new Pagination();
+
+            //如果当前页码大于等于总页数时,默认查询最后一页
+            if(current >= pages) {
+                limtSql = "limit " + ((pages - 1) * size) + "," + size;
+                Wrapper<AcFunc> acFuncWrapper1 = new EntityWrapper<AcFunc>();
+                acFuncWrapper.eq(AcFunc.COLUMN_GUID_FUNC, "0")
+                        .orderBy(AcFunc.COLUMN_DISPLAY_ORDER, isAsc)
+                        .last(limtSql);
+                listRootFuncGuid = acFuncService.selectObjs(acFuncWrapper1);
+                pagination.setCurrent(pages);
+            } else {
+                pagination.setCurrent(current+1);
+                listRootFuncGuid = acFuncService.selectObjs(acFuncWrapper);
+            }
+            pagination.setSize(size);
+            pagination.setTotal(total);
+            pages = pagination.getPages();
+
+            Map<AcFunc,List<AcFunc>> map = new HashMap<AcFunc,List<AcFunc>>();
+
+            //遍历所有的功能组,查询该功能组和功能组下对应的功能
+            for (Object ob : listRootFuncGuid) {
+                AcFunc acFunc = acFuncService.selectById((Serializable) ob);
+                if ("0".equals(acFunc.getGuid()) ){
+                    continue;
+                }
+                List<AcFunc> list = queryFuncList((String) ob);
+                map.put(acFunc,list);
+            }
+
+            Map<String,Pagination> map1 = new HashMap<String, Pagination>();
+            map1.put("Pagination",pagination);
+            //将所有功能组和功能组下的功能set到list中
+            listMap.add(map1);
+            listMap.add(map);
+        }catch (AcManagementException ae) {
+            throw ae;
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new AcManagementException(
+                    AcExceptionCodes.FAILURE_WHRN_QUERY_AC_FUNCGROUP
+            );
+        }
+        return listMap;
+    }
 }
 
