@@ -166,7 +166,7 @@ public class AcFuncController extends BaseController<AcFunc>  {
     @OperateLog(type = OperateType.QUERY,desc = "查询功能列表")
     @PostMapping("/list")
     public ResultVO list(@RequestBody @Validated SmartPage<AcFunc> page) {
-        return  ResultVO.success("查询成功", acFuncService.selectPage(getPage(page), getCondition(page)));
+        return  ResultVO.success("查询成功", acFuncService.getlist(getPage(page)));
     }
 
     /**
