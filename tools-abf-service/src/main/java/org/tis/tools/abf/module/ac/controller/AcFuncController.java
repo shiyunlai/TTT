@@ -166,7 +166,7 @@ public class AcFuncController extends BaseController<AcFunc>  {
     @OperateLog(type = OperateType.QUERY,desc = "查询功能列表")
     @PostMapping("/list")
     public ResultVO list(@RequestBody @Validated SmartPage<AcFunc> page) {
-        return  ResultVO.success("查询成功", acFuncService.selectPage(getPage(page), getCondition(page)));
+        return  ResultVO.success("查询成功", acFuncService.getlist(getPage(page)));
     }
 
     /**
@@ -175,8 +175,8 @@ public class AcFuncController extends BaseController<AcFunc>  {
      * @return ResultVO
      */
     @OperateLog(type= OperateType.QUERY,desc = "查询根功能的子列表")
-    @GetMapping("/oneList/{id}")
-    public ResultVO oneList(@PathVariable @NotBlank(message = "id不能为空") String id){
+    @GetMapping("/childList/{id}")
+    public ResultVO childList(@PathVariable @NotBlank(message = "id不能为空") String id){
 
         AcFunc acFunc = acFuncService.selectById(id);
         if (acFunc == null) {
