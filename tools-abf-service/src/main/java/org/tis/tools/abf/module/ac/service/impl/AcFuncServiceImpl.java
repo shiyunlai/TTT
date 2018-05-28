@@ -89,8 +89,7 @@ public class AcFuncServiceImpl extends ServiceImpl<AcFuncMapper, AcFunc> impleme
             e.printStackTrace();
             throw new AcManagementException(
                     AcExceptionCodes.FAILURE_WHRN_CREATE_AC_FUNC,
-                    wrap(AcFunc.COLUMN_GUID_APP,guidApp),
-                    guidApp
+                    wrap(e.getMessage())
             );
         }
 
@@ -149,8 +148,7 @@ public class AcFuncServiceImpl extends ServiceImpl<AcFuncMapper, AcFunc> impleme
             e.printStackTrace();
             throw new AcManagementException(
                     AcExceptionCodes.FAILURE_WHRN_UPDATE_AC_FUNCGROUP,
-                    wrap(AcFunc.COLUMN_GUID,guid),
-                    guid
+                    wrap(e.getMessage())
             );
         }
         return acFunc;
