@@ -1,9 +1,5 @@
 package org.tis.tools.abf.module.ac.service.impl;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.mapper.SqlHelper;
-import com.baomidou.mybatisplus.mapper.Wrapper;
-import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,8 +13,6 @@ import org.tis.tools.abf.module.ac.service.IAcFuncService;
 import org.tis.tools.abf.module.common.entity.enums.YON;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.tis.tools.core.utils.BasicUtil.wrap;
 
@@ -46,14 +40,10 @@ public class AcFuncServiceImpl extends ServiceImpl<AcFuncMapper, AcFunc> impleme
 
         FuncType funcTypeNew = null;
 
-        if ("PAGEPROCESS".equals(funcType) || "pageprocess".equals(funcType)){
-            funcTypeNew = FuncType.PAGEPROCESS;
-        }else if ("TRADEPROCESS".equals(funcType) || "tradeprocess".equals(funcType)){
-            funcTypeNew = FuncType.TRADEPROCESS;
-        }else if ("RESTFUL".equals(funcType) || "restful".equals(funcType)){
-            funcTypeNew = FuncType.RESTFUL;
-        }else if ("TWSTX".equals(funcType) || "twstx".equals(funcType)){
-            funcTypeNew = FuncType.TWSTX;
+        if ("FUNCTION".equals(funcType) || "function".equals(funcType)){
+            funcTypeNew = FuncType.FUNCTION;
+        }else if ("BEHAVE".equals(funcType) || "behave".equals(funcType)){
+            funcTypeNew = FuncType.BEHAVE;
         }
 
         YON isopenNew = null;
@@ -118,14 +108,10 @@ public class AcFuncServiceImpl extends ServiceImpl<AcFuncMapper, AcFunc> impleme
 
 
         FuncType funcTypeNew = null;
-        if ("PAGEPROCESS".equals(funcType) || "pageprocess".equals(funcType)){
-            funcTypeNew = FuncType.PAGEPROCESS;
-        }else if ("TRADEPROCESS".equals(funcType) || "tradeprocess".equals(funcType)){
-            funcTypeNew = FuncType.TRADEPROCESS;
-        }else if ("RESTFUL".equals(funcType) || "restful".equals(funcType)){
-            funcTypeNew = FuncType.RESTFUL;
-        }else if ("TWSTX".equals(funcType) || "twstx".equals(funcType)){
-            funcTypeNew = FuncType.TWSTX;
+        if ("FUNCTION".equals(funcType) || "function".equals(funcType)){
+            funcTypeNew = FuncType.FUNCTION;
+        }else if ("BEHAVE".equals(funcType) || "behave".equals(funcType)){
+            funcTypeNew = FuncType.BEHAVE;
         }
 
         YON isopenNew = null;
