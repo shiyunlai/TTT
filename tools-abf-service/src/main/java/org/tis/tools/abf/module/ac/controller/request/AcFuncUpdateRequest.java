@@ -30,7 +30,6 @@ public class AcFuncUpdateRequest extends RestRequest {
     @NotBlank(message = "显示顺序不能为空")
     private String displayOrder;
 
-    @NotBlank(message = "父节点的GUID不能为空")
     private String guidFunc;
 
     @NotBlank(message = "是否启用不能为空")
