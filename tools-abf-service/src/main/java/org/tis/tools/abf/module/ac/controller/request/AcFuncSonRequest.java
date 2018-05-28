@@ -3,7 +3,6 @@ package org.tis.tools.abf.module.ac.controller.request;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.validator.constraints.NotBlank;
-import org.springframework.validation.annotation.Validated;
 import org.tis.tools.core.entity.request.RestRequest;
 
 /**
@@ -29,7 +28,6 @@ public class AcFuncSonRequest extends RestRequest {
     @NotBlank(message = "显示顺序不能为空")
     private String displayOrder;
 
-    @NotBlank(message = "父节点的GUID不能为空")
     private String guidFunc;
 
     private String funcDesc;
