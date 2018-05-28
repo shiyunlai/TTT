@@ -39,10 +39,9 @@ public class AcFuncServiceImpl extends ServiceImpl<AcFuncMapper, AcFunc> impleme
         AcFunc acFunc = new AcFunc();
 
         FuncType funcTypeNew = null;
-
-        if ("FUNCTION".equals(funcType) || "function".equals(funcType)){
+        if ("FUNCTION".equals(funcType) || "function".equals(funcType) || "F".equals(funcType) || "f".equals(funcType)){
             funcTypeNew = FuncType.FUNCTION;
-        }else if ("BEHAVE".equals(funcType) || "behave".equals(funcType)){
+        }else if ("BEHAVE".equals(funcType) || "behave".equals(funcType) || "B".equals(funcType) || "b".equals(funcType)){
             funcTypeNew = FuncType.BEHAVE;
         }
 
@@ -108,9 +107,9 @@ public class AcFuncServiceImpl extends ServiceImpl<AcFuncMapper, AcFunc> impleme
 
 
         FuncType funcTypeNew = null;
-        if ("FUNCTION".equals(funcType) || "function".equals(funcType)){
+        if ("FUNCTION".equals(funcType) || "function".equals(funcType) || "F".equals(funcType) || "f".equals(funcType)){
             funcTypeNew = FuncType.FUNCTION;
-        }else if ("BEHAVE".equals(funcType) || "behave".equals(funcType)){
+        }else if ("BEHAVE".equals(funcType) || "behave".equals(funcType) || "B".equals(funcType) || "b".equals(funcType)){
             funcTypeNew = FuncType.BEHAVE;
         }
 
