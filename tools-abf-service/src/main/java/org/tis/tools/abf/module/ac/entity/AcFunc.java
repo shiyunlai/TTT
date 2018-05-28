@@ -1,17 +1,14 @@
 package org.tis.tools.abf.module.ac.entity;
 
-import java.math.BigDecimal;
-
 import com.baomidou.mybatisplus.annotations.*;
-
-import java.util.Date;
-
 import com.baomidou.mybatisplus.enums.FieldFill;
 import lombok.Data;
 import org.tis.tools.abf.module.ac.entity.enums.FuncType;
 import org.tis.tools.abf.module.common.entity.enums.YON;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * acFunc功能&行为，菜单

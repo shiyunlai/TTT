@@ -12,17 +12,11 @@ import java.io.Serializable;
  */
 public enum FuncType implements BaseEnum {
 
-    /** 功能类型: 页面流*/
-    PAGEPROCESS("0","页面流"),
+    /** 功能类型: 功能*/
+    FUNCTION("F","功能"),
 
-    /** 功能类型: 交易流*/
-    TRADEPROCESS("1","交易流"),
-
-    /** 功能类型: RESTFul服务*/
-    RESTFUL("2","RESTFul服务"),
-
-    /** 功能类型: 柜面交易*/
-    TWSTX("3","柜面交易");
+    /** 功能类型: 行为*/
+    BEHAVE("B","行为");
 
     private final String value;
 
