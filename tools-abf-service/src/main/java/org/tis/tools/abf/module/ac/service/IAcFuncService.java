@@ -2,7 +2,9 @@ package org.tis.tools.abf.module.ac.service;
 
 import com.baomidou.mybatisplus.service.IService;
 import org.tis.tools.abf.module.ac.entity.AcFunc;
+import org.tis.tools.abf.module.ac.entity.enums.FuncType;
 import org.tis.tools.abf.module.ac.exception.AcManagementException;
+import org.tis.tools.abf.module.common.entity.enums.YON;
 
 /**
  * acFunc的Service接口类
@@ -24,8 +26,8 @@ public interface IAcFuncService extends IService<AcFunc>  {
      * @return              AcFunc
      * @throws AcManagementException
      */
-    AcFunc creatFunc(String guidApp,String funcType,String funcCode,String funcName,String displayOrder,
-                     String funcDesc,String guidFunc,String isopen,String ischeck) throws AcManagementException;
+    AcFunc creatFunc(String guidApp, FuncType funcType, String funcCode, String funcName, String displayOrder,
+                     String funcDesc, String guidFunc, YON isopen, YON ischeck) throws AcManagementException;
 
     /**
      * 修改功能行为
@@ -42,8 +44,8 @@ public interface IAcFuncService extends IService<AcFunc>  {
      * @return              AcFunc
      * @throws AcManagementException
      */
-    AcFunc changeFunc(String guid, String guidApp, String funcType, String funcCode, String funcName, String funcDesc,
-                      String isopen, String ischeck, String displayOrder, String guidFunc)throws AcManagementException;
+    AcFunc changeFunc(String guid, String guidApp, FuncType funcType, String funcCode, String funcName, String funcDesc,
+                      YON isopen, YON ischeck, String displayOrder, String guidFunc)throws AcManagementException;
 
 
 }
