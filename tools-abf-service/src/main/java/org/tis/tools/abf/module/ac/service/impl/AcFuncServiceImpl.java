@@ -34,35 +34,17 @@ public class AcFuncServiceImpl extends ServiceImpl<AcFuncMapper, AcFunc> impleme
      * 新增功能行为
      */
     @Override
-    public AcFunc creatFunc(String guidApp, String funcType, String funcCode, String funcName, String displayOrder, String funcDesc, String guidFunc,String isopen,String ischeck) throws AcManagementException {
+    public AcFunc creatFunc(String guidApp, FuncType funcType, String funcCode, String funcName, String displayOrder, String funcDesc, String guidFunc,YON isopen,YON ischeck) throws AcManagementException {
 
         AcFunc acFunc = new AcFunc();
 
-        FuncType funcTypeNew = null;
-        if ("FUNCTION".equals(funcType) || "function".equals(funcType) || "F".equals(funcType) || "f".equals(funcType)){
-            funcTypeNew = FuncType.FUNCTION;
-        }else if ("BEHAVE".equals(funcType) || "behave".equals(funcType) || "B".equals(funcType) || "b".equals(funcType)){
-            funcTypeNew = FuncType.BEHAVE;
-        }
+       if (null == isopen){
+           isopen = YON.YES;
+       }
 
-        YON isopenNew = null;
-        if ("YES".equals(isopen) || "yes".equals(isopen) ||"Y".equals(isopen) ||"y".equals(isopen)){
-            isopenNew = YON.YES;
-        }else if ("NO".equals(isopen) || "no".equals(isopen) ||"N".equals(isopen) ||"n".equals(isopen)){
-            isopenNew = YON.NO;
-        }else {
-            isopenNew = YON.YES;
-        }
-
-        YON ischeckNew = null;
-        if ("YES".equals(ischeck) || "yes".equals(ischeck) ||"Y".equals(ischeck) ||"y".equals(ischeck)){
-            ischeckNew = YON.YES;
-        }else if ("NO".equals(ischeck) || "no".equals(ischeck) ||"N".equals(ischeck) ||"n".equals(ischeck)){
-            ischeckNew = YON.NO;
-        }else {
-            ischeckNew = YON.YES;
-        }
-
+       if (null == ischeck){
+           ischeck = YON.YES;
+       }
 
         try{
             BigDecimal displayOrderNew =  BigDecimal.valueOf(Double.valueOf(displayOrder));
@@ -70,16 +52,16 @@ public class AcFuncServiceImpl extends ServiceImpl<AcFuncMapper, AcFunc> impleme
             //收集参数
             acFunc.setGuidApp(guidApp);
             acFunc.setFuncCode(funcCode);
-            acFunc.setFuncType(funcTypeNew);
+            acFunc.setFuncType(funcType);
             acFunc.setFuncName(funcName);
             acFunc.setDisplayOrder(displayOrderNew);
             acFunc.setFuncDesc(funcDesc);
             acFunc.setGuidFunc(guidFunc);
 
             //默认为需要验证
-            acFunc.setIscheck(ischeckNew);
+            acFunc.setIscheck(ischeck);
             //默认为应用启用
-            acFunc.setIsopen(isopenNew);
+            acFunc.setIsopen(isopen);
 
             //新增
             acFuncService.insert(acFunc);
@@ -89,8 +71,7 @@ public class AcFuncServiceImpl extends ServiceImpl<AcFuncMapper, AcFunc> impleme
             e.printStackTrace();
             throw new AcManagementException(
                     AcExceptionCodes.FAILURE_WHRN_CREATE_AC_FUNC,
-                    wrap(AcFunc.COLUMN_GUID_APP,guidApp),
-                    guidApp
+                    wrap(e.getMessage())
             );
         }
 
@@ -101,45 +82,23 @@ public class AcFuncServiceImpl extends ServiceImpl<AcFuncMapper, AcFunc> impleme
      * 修改功能行为
      */
     @Override
-    public AcFunc changeFunc(String guid, String guidApp, String funcType, String funcCode, String funcName, String funcDesc, String isopen, String ischeck, String displayOrder, String guidFunc) throws AcManagementException {
+    public AcFunc changeFunc(String guid, String guidApp, FuncType funcType, String funcCode, String funcName, String funcDesc, YON isopen, YON ischeck, String displayOrder, String guidFunc) throws AcManagementException {
 
         AcFunc acFunc = new AcFunc();
-
-
-        FuncType funcTypeNew = null;
-        if ("FUNCTION".equals(funcType) || "function".equals(funcType) || "F".equals(funcType) || "f".equals(funcType)){
-            funcTypeNew = FuncType.FUNCTION;
-        }else if ("BEHAVE".equals(funcType) || "behave".equals(funcType) || "B".equals(funcType) || "b".equals(funcType)){
-            funcTypeNew = FuncType.BEHAVE;
-        }
-
-        YON isopenNew = null;
-        if ("YES".equals(isopen) || "yes".equals(isopen) ||"Y".equals(isopen) ||"y".equals(isopen)){
-            isopenNew = YON.YES;
-        }else if ("NO".equals(isopen) || "no".equals(isopen) ||"N".equals(isopen) ||"n".equals(isopen)){
-            isopenNew = YON.NO;
-        }
-
-        YON ischeckNew = null;
-        if ("YES".equals(ischeck) || "yes".equals(ischeck) ||"Y".equals(ischeck) ||"y".equals(ischeck)){
-            ischeckNew = YON.YES;
-        }else if ("NO".equals(ischeck) || "no".equals(ischeck) ||"N".equals(ischeck) ||"n".equals(ischeck)){
-            ischeckNew = YON.NO;
-        }
 
         try{
             BigDecimal disPlayOrderNew = BigDecimal.valueOf(Double.valueOf(displayOrder));
 
             acFunc.setGuid(guid);
             acFunc.setGuidApp(guidApp);
-            acFunc.setFuncType(funcTypeNew);
+            acFunc.setFuncType(funcType);
             acFunc.setFuncCode(funcCode);
             acFunc.setFuncName(funcName);
             acFunc.setFuncDesc(funcDesc);
             acFunc.setGuidFunc(guidFunc);
             acFunc.setDisplayOrder(disPlayOrderNew);
-            acFunc.setIsopen(isopenNew);
-            acFunc.setIscheck(ischeckNew);
+            acFunc.setIsopen(isopen);
+            acFunc.setIscheck(ischeck);
 
             //修改
             acFuncService.updateById(acFunc);
@@ -148,9 +107,8 @@ public class AcFuncServiceImpl extends ServiceImpl<AcFuncMapper, AcFunc> impleme
         }catch (Exception e){
             e.printStackTrace();
             throw new AcManagementException(
-                    AcExceptionCodes.FAILURE_WHRN_UPDATE_AC_FUNCGROUP,
-                    wrap(AcFunc.COLUMN_GUID,guid),
-                    guid
+                    AcExceptionCodes.FAILURE_WHRN_UPDATE_AC_FUNC,
+                    wrap(e.getMessage())
             );
         }
         return acFunc;
