@@ -34,29 +34,17 @@ public class AcAppServiceImpl extends ServiceImpl<AcAppMapper, AcApp> implements
      * 应用新增
      */
     @Override
-    public AcApp creatRootApp(String appCode, String appName, String appType, String url, String ipAddr, String ipPort, String appDesc,String isopen,String openDate) throws AcManagementException {
+    public AcApp creatRootApp(String appCode, String appName, AcAppType appType, String url, String ipAddr, String ipPort, String appDesc,YON isopen,String openDate) throws AcManagementException {
         AcApp app = new AcApp();
 
         /**
          * 是否开通:取值来自业务菜单： DICT_YON
          * 默认为N，新建后，必须执行应用开通操作，才被开通。
          */
-
-        AcAppType appTypeNew = null;
-        if ("local".equals(appType) || "LOCAL".equals(appType)){
-            appTypeNew = AcAppType.LOCAL;
-        }else if("remote".equals(appType) || "REMOTE".equals(appType)){
-            appTypeNew = AcAppType.REMOTE;
+        if (null == isopen){
+            isopen = YON.NO;
         }
 
-        YON isopenNew = null;
-        if("YES".equals(isopen) || "yes".equals(isopen) || "Y".equals(isopen) || "y".equals(isopen)){
-            isopenNew = YON.YES;
-        }else if ("NO".equals(isopen) || "no".equals(isopen) || "N".equals(isopen) || "n".equals(isopen)){
-            isopenNew =YON.NO;
-        }else {
-            isopenNew = YON.NO;
-        }
 
         try{
             //处理时间格式
@@ -68,14 +56,14 @@ public class AcAppServiceImpl extends ServiceImpl<AcAppMapper, AcApp> implements
             }
 
             //收集入参
-            app.setAppType(appTypeNew);
+            app.setAppType(appType);
             app.setAppName(appName);
             app.setAppCode(appCode);
             app.setAppDesc(appDesc);
             app.setUrl(url);
             app.setIpAddr(ipAddr);
             app.setIpPort(ipPort);
-            app.setIsopen(isopenNew);
+            app.setIsopen(isopen);
             app.setOpenDate(openDateNew);
 
             insert(app);
@@ -85,7 +73,7 @@ public class AcAppServiceImpl extends ServiceImpl<AcAppMapper, AcApp> implements
             e.printStackTrace();
             throw new AcManagementException(
                     AcExceptionCodes.FAILURE_WHRN_CREATE_AC_APP,
-                    wrap(AcApp.COLUMN_APP_CODE,appCode),appCode
+                    wrap(e.getMessage())
             );
         }
         return app;
@@ -97,23 +85,8 @@ public class AcAppServiceImpl extends ServiceImpl<AcAppMapper, AcApp> implements
      * @throws AcManagementException
      */
     @Override
-    public AcApp changeById(String guid,String appCode, String appName, String appType,String isopen,String openDate ,String url, String ipAddr, String ipPort, String appDesc) throws AcManagementException {
+    public AcApp changeById(String guid,String appCode, String appName, AcAppType appType,YON isopen,String openDate ,String url, String ipAddr, String ipPort, String appDesc) throws AcManagementException {
         AcApp app = new AcApp();
-
-
-        AcAppType appTypeNew = null;
-        if ("local".equals(appType) || "LOCAL".equals(appType)){
-            appTypeNew = AcAppType.LOCAL;
-        }else if("remote".equals(appType) || "REMOTE".equals(appType)){
-            appTypeNew = AcAppType.REMOTE;
-        }
-
-        YON isopenNew = null;
-        if("YES".equals(isopen) || "yes".equals(isopen) || "Y".equals(isopen) || "y".equals(isopen)){
-            isopenNew = YON.YES;
-        }else if ("NO".equals(isopen) || "no".equals(isopen) || "N".equals(isopen) || "n".equals(isopen)){
-            isopenNew =YON.NO;
-        }
 
         try{
             //处理时间格式
@@ -126,9 +99,9 @@ public class AcAppServiceImpl extends ServiceImpl<AcAppMapper, AcApp> implements
 
             //收集入参
             app.setGuid(guid);
-            app.setIsopen(isopenNew);
+            app.setIsopen(isopen);
             app.setOpenDate(openDateNew);
-            app.setAppType(appTypeNew);
+            app.setAppType(appType);
             app.setAppName(appName);
             app.setAppCode(appCode);
             app.setAppDesc(appDesc);
@@ -143,7 +116,7 @@ public class AcAppServiceImpl extends ServiceImpl<AcAppMapper, AcApp> implements
             e.printStackTrace();
             throw new AcManagementException(
                     AcExceptionCodes.FAILURE_WHRN_UPDATE_AC_APP,
-                    wrap(AcApp.COLUMN_GUID,guid),guid
+                    wrap(e.getMessage())
             );
         }
         return app;
