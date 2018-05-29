@@ -3,15 +3,9 @@ package org.tis.tools.abf.module.ac.service.impl;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.tis.tools.abf.base.BaseTest;
-import org.tis.tools.abf.module.ac.entity.AcApp;
 import org.tis.tools.abf.module.ac.entity.enums.AcAppType;
 import org.tis.tools.abf.module.ac.service.IAcAppService;
 import org.tis.tools.abf.module.common.entity.enums.YON;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * 应用的service测试类
@@ -26,14 +20,14 @@ public class AcAppServiceImplTest extends BaseTest {
     @Test
     public void creatRootApp(){
 
-        String appType = "LOCAL";
+       AcAppType appType = AcAppType.LOCAL;
         String appName = "22";
         String appCode = "33";
         String appDesc = "44";
         String url = "http://123.com";
         String ipAddr = "66";
         String ipPort = "77";
-        String isopen= "yes";
+        YON isopen= YON.YES;
         String openDate = "";
         acAppService.creatRootApp(appCode,appName,appType,url,ipAddr,ipPort,appDesc,isopen,openDate);
 
@@ -43,9 +37,9 @@ public class AcAppServiceImplTest extends BaseTest {
     public void updateById(){
 
         String guid = "998443010394292226";
-        String isopen = "YES";
+        YON isopen= YON.YES;
         String openDate = ("2018-5-21 14:01:01");
-        String appType = "REMOTE";
+        AcAppType appType = AcAppType.LOCAL;
         String appName = "222";
         String appCode = "009";
         String appDesc = "444";
