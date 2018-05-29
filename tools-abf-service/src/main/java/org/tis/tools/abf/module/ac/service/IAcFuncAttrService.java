@@ -1,11 +1,10 @@
 package org.tis.tools.abf.module.ac.service;
 
 import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.IService;
 import org.tis.tools.abf.module.ac.entity.AcFuncAttr;
 import org.tis.tools.abf.module.ac.exception.AcManagementException;
-
-import java.util.List;
 
 /**
  * acFuncAttr的Service接口类
@@ -38,10 +37,11 @@ public interface IAcFuncAttrService extends IService<AcFuncAttr>  {
     AcFuncAttr changeFuncAttr(String guid,String guidFunc,String attrType,String attrKey,String attrValue,String memo)throws AcManagementException;
 
     /**
-     * 根据GUID查询功能属性列表
+     * 根据GUID查询功能的属性列表
      * @param id
      * @return
      */
-    List<AcFuncAttr> queryList(String id)throws AcManagementException;
+    Page<AcFuncAttr> queryPageById(Page<AcFuncAttr> page, Wrapper<AcFuncAttr> entityWrapper, String id)throws
+            AcManagementException;
 }
 

@@ -1,19 +1,17 @@
 package org.tis.tools.abf.module.ac.controller;
 
-import org.tis.tools.abf.module.ac.controller.request.AcAppConfigAddRequest;
-import org.tis.tools.abf.module.ac.service.IAcAppConfigService;
+import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import org.tis.tools.abf.module.ac.controller.request.AcAppConfigAddRequest;
+import org.tis.tools.abf.module.ac.entity.AcAppConfig;
+import org.tis.tools.abf.module.ac.service.IAcAppConfigService;
 import org.tis.tools.abf.module.jnl.annotation.OperateLog;
 import org.tis.tools.abf.module.jnl.entity.enums.OperateType;
 import org.tis.tools.core.web.controller.BaseController;
-import org.tis.tools.core.web.vo.SmartPage;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-import org.hibernate.validator.constraints.NotBlank;
 import org.tis.tools.core.web.vo.ResultVO;
-import org.tis.tools.abf.module.ac.entity.AcAppConfig;
-
-import java.math.BigDecimal;
+import org.tis.tools.core.web.vo.SmartPage;
 
 /**
  * acAppConfig的Controller类
@@ -30,15 +28,11 @@ public class AcAppConfigController extends BaseController<AcAppConfig> {
     private IAcAppConfigService acAppConfigService;
 
     @OperateLog(type = OperateType.ADD, desc = "新增个性化配置")
-    @PostMapping("/add")
+    @PostMapping
     public ResultVO add(@RequestBody @Validated AcAppConfigAddRequest acAppConfigAddRequest) {
 
-        AcAppConfig acAppConfig;
-
-        acAppConfig = acAppConfigService.createRootAppConfig(acAppConfigAddRequest.getGuidApp(), acAppConfigAddRequest.getConfigType(),
-                acAppConfigAddRequest.getConfigName(), acAppConfigAddRequest.getConfigDict(), acAppConfigAddRequest.getConfigStyle(),
-                acAppConfigAddRequest.getConfigValue(),acAppConfigAddRequest.getEnabled(), acAppConfigAddRequest.getDisplayOrder(),acAppConfigAddRequest.getConfigDesc());
-        return ResultVO.success("新增成功！",acAppConfig);
+        acAppConfigService.createRootAppConfig(acAppConfigAddRequest.getGuidApp(), acAppConfigAddRequest.getConfigType(),acAppConfigAddRequest.getConfigName(), acAppConfigAddRequest.getConfigDict(), acAppConfigAddRequest.getConfigStyle(), acAppConfigAddRequest.getConfigValue(),acAppConfigAddRequest.getEnabled(), acAppConfigAddRequest.getDisplayOrder(),acAppConfigAddRequest.getConfigDesc());
+        return ResultVO.success("新增成功！");
     }
 
     @OperateLog(type = OperateType.UPDATE, desc = "修改个性化配置")
@@ -64,8 +58,9 @@ public class AcAppConfigController extends BaseController<AcAppConfig> {
         if (acAppConfig == null ) {
             return ResultVO.error("404", "找不到对应记录或已经被删除！");
         }
-        Boolean isDel = acAppConfigService.deleteById(id);
-        return ResultVO.success("删除成功",isDel);
+
+        acAppConfigService.deleteById(id);
+        return ResultVO.success("删除成功");
     }
 
     @OperateLog(type = OperateType.QUERY, desc = "根据ID查询个性化配置")

@@ -1,17 +1,18 @@
 package org.tis.tools.abf.module.ac.service.impl;
 
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.tis.tools.abf.module.ac.dao.AcAppConfigMapper;
+import org.tis.tools.abf.module.ac.entity.AcAppConfig;
 import org.tis.tools.abf.module.ac.exception.AcExceptionCodes;
 import org.tis.tools.abf.module.ac.exception.AcManagementException;
 import org.tis.tools.abf.module.ac.service.IAcAppConfigService;
-import org.springframework.stereotype.Service;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import org.tis.tools.abf.module.ac.dao.AcAppConfigMapper;
-import org.tis.tools.abf.module.ac.entity.AcAppConfig;
-import org.springframework.transaction.annotation.Transactional;
-import static org.tis.tools.core.utils.BasicUtil.wrap;
 
 import java.math.BigDecimal;
+
+import static org.tis.tools.core.utils.BasicUtil.wrap;
 
 /**
  * acAppConfig的Service接口实现类
@@ -61,7 +62,7 @@ public class AcAppConfigServiceImpl extends ServiceImpl<AcAppConfigMapper, AcApp
             e.printStackTrace();
             throw new AcManagementException(
                     AcExceptionCodes.FAILURE_WHRN_CREATE_AC_APPCONFIG,
-                    wrap(AcAppConfig.COLUMN_CONFIG_TYPE,configType),configType
+                    wrap(e.getMessage())
             );
         }
 
@@ -106,7 +107,7 @@ public class AcAppConfigServiceImpl extends ServiceImpl<AcAppConfigMapper, AcApp
             e.printStackTrace();
             throw new AcManagementException(
                     AcExceptionCodes.FAILURE_WHRN_UPDATE_AC_APPCONFIG,
-                    wrap(AcAppConfig.COLUMN_GUID,guid),guid
+                    wrap(e.getMessage())
             );
         }
         return acAppConfig;

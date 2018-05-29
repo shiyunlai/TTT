@@ -2,18 +2,16 @@ package org.tis.tools.abf.module.ac.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import org.springframework.transaction.annotation.Transactional;
 import org.tis.tools.abf.module.ac.dao.AcFuncAttrMapper;
+import org.tis.tools.abf.module.ac.entity.AcFuncAttr;
 import org.tis.tools.abf.module.ac.exception.AcExceptionCodes;
 import org.tis.tools.abf.module.ac.exception.AcManagementException;
 import org.tis.tools.abf.module.ac.service.IAcFuncAttrService;
-import org.springframework.transaction.annotation.Transactional;
-import org.tis.tools.abf.module.ac.entity.AcFuncAttr;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.tis.tools.core.utils.BasicUtil.wrap;
 
@@ -53,7 +51,7 @@ public class AcFuncAttrServiceImpl extends ServiceImpl<AcFuncAttrMapper, AcFuncA
             e.printStackTrace();
             throw new AcManagementException(
                     AcExceptionCodes.FAILURE_WHRN_CREATE_AC_FUNCRESOURCE,
-                    wrap(AcFuncAttr.COLUMN_GUID_FUNC,guidFunc),guidFunc
+                    wrap(e.getMessage())
             );
         }
 
@@ -68,10 +66,7 @@ public class AcFuncAttrServiceImpl extends ServiceImpl<AcFuncAttrMapper, AcFuncA
 
         AcFuncAttr acFuncAttr = new AcFuncAttr();
 
-        try{
-            Wrapper<AcFuncAttr> wrapper = new EntityWrapper<AcFuncAttr>();
-            wrapper.eq(AcFuncAttr.COLUMN_GUID,guid);
-
+        try{;
             //收集参数
             acFuncAttr.setGuid(guid);
             acFuncAttr.setGuidFunc(guidFunc);
@@ -80,14 +75,14 @@ public class AcFuncAttrServiceImpl extends ServiceImpl<AcFuncAttrMapper, AcFuncA
             acFuncAttr.setAttrValue(attrValue);
             acFuncAttr.setMemo(memo);
 
-            acFuncAttrService.update(acFuncAttr,wrapper);
+            acFuncAttrService.updateById(acFuncAttr);
         }catch (AcManagementException ae){
             throw ae;
         }catch (Exception e){
             e.printStackTrace();
             throw new AcManagementException(
                     AcExceptionCodes.FAILURE_WHRN_UPDATE_AC_FUNCRESOURCE,
-                    wrap(AcFuncAttr.COLUMN_GUID_FUNC,guidFunc),guidFunc
+                    wrap(e.getMessage())
             );
         }
 
@@ -95,31 +90,26 @@ public class AcFuncAttrServiceImpl extends ServiceImpl<AcFuncAttrMapper, AcFuncA
     }
 
     /**
-     * 根据GUID查询功能属性列表
+     * 根据GUID查询功能的属性列表
      */
     @Override
-    public List<AcFuncAttr> queryList(String id)throws AcManagementException {
+    public Page<AcFuncAttr> queryPageById(Page<AcFuncAttr> page, Wrapper<AcFuncAttr> entityWrapper , String id) throws AcManagementException {
 
-        List<AcFuncAttr> attrList = new ArrayList<AcFuncAttr>();
+        Page<AcFuncAttr> pageAttr = null;
 
-        try{
-            //判断条件 guid_func = id and data_status = "0"
-            Wrapper<AcFuncAttr> wrapper = new EntityWrapper<AcFuncAttr>();
-            wrapper.eq(AcFuncAttr.COLUMN_GUID_FUNC,id)
-            .eq(AcFuncAttr.COLUMN_DATA_STATUS,"0");
-
-            attrList = acFuncAttrService.selectList(wrapper);
-        }catch (AcManagementException ae){
-            throw ae;
-        }catch (Exception e){
-            e.printStackTrace();
-            throw new AcManagementException(
-                    AcExceptionCodes.FAILURE_WHRN_QUERY_AC_FUNCRESOURCE,
-                    wrap(AcFuncAttr.COLUMN_GUID_FUNC,id),id
-            );
+        if (null == entityWrapper){
+            entityWrapper = new EntityWrapper<AcFuncAttr>();
         }
 
-        return attrList;
+        try {
+            entityWrapper.eq(AcFuncAttr.COLUMN_GUID_FUNC,id);
+            pageAttr = acFuncAttrService.selectPage(page,entityWrapper);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new AcManagementException(AcExceptionCodes.FAILURE_WHRN_QUERY_AC_FUNCRESOURCE,wrap(e.getMessage()));
+        }
+
+        return pageAttr;
     }
 }
 

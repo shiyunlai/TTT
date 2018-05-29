@@ -3,11 +3,7 @@ package org.tis.tools.abf.module.ac.service.impl;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.tis.tools.abf.base.BaseTest;
-import org.tis.tools.abf.module.ac.entity.AcFuncAttr;
 import org.tis.tools.abf.module.ac.service.IAcFuncAttrService;
-
-
-import java.util.List;
 
 /**
  * Created by chenchao
@@ -53,18 +49,5 @@ public class AcFuncAttrServiceImplTest extends BaseTest {
 
     }
 
-    /**
-     * 测试查询功能属性列表
-     * @throws Exception
-     */
-    @Test
-    public void queryList() throws Exception{
-        String id = "996295466776137729";
-        List<AcFuncAttr> list = acFuncAttrService.queryList(id);
-
-        for (AcFuncAttr acFuncAttr:list) {
-            System.out.println(acFuncAttr);
-        }
-    }
 
 }

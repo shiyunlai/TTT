@@ -36,16 +36,14 @@ public class AcFuncController extends BaseController<AcFunc>  {
      * @return ResultVO
      */
     @OperateLog(type = OperateType.ADD, desc = "新增功能行为")
-    @PostMapping("/add")
+    @PostMapping
     public ResultVO add(@RequestBody @Validated AcFuncSonRequest acFuncSonRequest){
 
-        AcFunc acFunc;
-
-        acFunc = acFuncService.creatFunc(acFuncSonRequest.getGuidApp(),acFuncSonRequest.getFuncType(),acFuncSonRequest.getFuncCode(),
+         acFuncService.creatFunc(acFuncSonRequest.getGuidApp(),acFuncSonRequest.getFuncType(),acFuncSonRequest.getFuncCode(),
                 acFuncSonRequest.getFuncName(), acFuncSonRequest.getDisplayOrder(),acFuncSonRequest.getFuncDesc(),
                 acFuncSonRequest.getGuidFunc(),acFuncSonRequest.getIsopen(),acFuncSonRequest.getIscheck());
 
-        return ResultVO.success("新增成功！",acFunc);
+        return ResultVO.success("新增成功！");
     }
 
     /**
@@ -62,9 +60,7 @@ public class AcFuncController extends BaseController<AcFunc>  {
             return ResultVO.error("404", "找不到对应记录或已经被删除！");
         }
 
-        AcFunc acFunc1 = acFuncService.changeFunc(acFuncUpdateRequest.getGuid(),acFuncUpdateRequest.getGuidApp(),acFuncUpdateRequest.getFuncType(),
-                acFuncUpdateRequest.getFuncCode(),acFuncUpdateRequest.getFuncName(),acFuncUpdateRequest.getFuncDesc(),
-                acFuncUpdateRequest.getIsopen(),acFuncUpdateRequest.getIscheck(),acFuncUpdateRequest.getDisplayOrder(),acFuncUpdateRequest.getGuidFunc());
+        AcFunc acFunc1 = acFuncService.changeFunc(acFuncUpdateRequest.getGuid(),acFuncUpdateRequest.getGuidApp(),acFuncUpdateRequest.getFuncType(), acFuncUpdateRequest.getFuncCode(),acFuncUpdateRequest.getFuncName(),acFuncUpdateRequest.getFuncDesc(),acFuncUpdateRequest.getIsopen(),acFuncUpdateRequest.getIscheck(),acFuncUpdateRequest.getDisplayOrder(),acFuncUpdateRequest.getGuidFunc());
         return ResultVO.success("修改成功！",acFunc1);
     }
 
@@ -81,7 +77,7 @@ public class AcFuncController extends BaseController<AcFunc>  {
             return ResultVO.error("404", "找不到对应记录或已经被删除！");
         }
         Boolean isDel = acFuncService.deleteById(id);
-        return ResultVO.success("删除成功!",isDel);
+        return ResultVO.success("删除成功!");
     }
 
 

@@ -36,14 +36,12 @@ public class AcAppController extends BaseController<AcApp>  {
      * @return ResultVO
      */
     @OperateLog(type = OperateType.ADD, desc = "新增应用")
-    @PostMapping("/add")
+    @PostMapping
     public ResultVO add(@RequestBody @Validated AcAppAddRequest request){
-        AcApp app;
 
-        app = acAppService.creatRootApp(request.getAppCode(),request.getAppName(),request.getAppType(),request.getUrl(),
-                request.getIpAddr(),request.getIpPort(),request.getAppDesc(),request.getIsopen(),request.getOpenDate());
+        acAppService.creatRootApp(request.getAppCode(),request.getAppName(),request.getAppType(),request.getUrl(),request.getIpAddr(),request.getIpPort(),request.getAppDesc(),request.getIsopen(),request.getOpenDate());
 
-        return ResultVO.success("新增成功!",app);
+        return ResultVO.success("新增成功!");
     }
 
     /**
@@ -80,8 +78,8 @@ public class AcAppController extends BaseController<AcApp>  {
             return ResultVO.error("404", "找不到对应记录或已经被删除！");
         }
 
-        Boolean isDel = acAppService.deleteById(id);
-        return ResultVO.success("删除成功",isDel);
+        acAppService.deleteById(id);
+        return ResultVO.success("删除成功");
 
     }
 

@@ -1,10 +1,15 @@
 package org.tis.tools.abf.module.ac.controller.request;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.validator.constraints.NotBlank;
+import org.tis.tools.abf.module.ac.entity.enums.AcAppType;
+import org.tis.tools.abf.module.common.entity.enums.YON;
+import org.tis.tools.core.entity.enums.CommonEnumDeserializer;
 import org.tis.tools.core.entity.request.RestRequest;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 /**
@@ -22,10 +27,12 @@ public class AcAppAddRequest extends RestRequest {
     @NotBlank(message = "应用名称不能为空")
     private String appName;
 
-    @NotBlank(message = "应用类型不能为空")
-    private String appType;
+    @NotNull(message = "应用类型不能为空")
+    @JSONField(deserializeUsing = CommonEnumDeserializer.class)
+    private AcAppType appType;
 
-    private String isopen;
+    @JSONField(deserializeUsing = CommonEnumDeserializer.class)
+    private YON isopen;
 
     private String openDate;
 
