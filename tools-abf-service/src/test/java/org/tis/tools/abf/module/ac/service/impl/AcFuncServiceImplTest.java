@@ -3,7 +3,9 @@ package org.tis.tools.abf.module.ac.service.impl;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.tis.tools.abf.base.BaseTest;
+import org.tis.tools.abf.module.ac.entity.enums.FuncType;
 import org.tis.tools.abf.module.ac.service.IAcFuncService;
+import org.tis.tools.abf.module.common.entity.enums.YON;
 
 /**
  * 功能的Service实现类的测试类
@@ -23,14 +25,14 @@ public class AcFuncServiceImplTest extends BaseTest {
     public void creatFunc() throws Exception{
 
         String guidApp = "989411000669696001";
-        String funcType = "TWSTX";
+        FuncType funcType = FuncType.FUNCTION;
         String funcCode = "003";
         String funcName = "003应用";
         String displayOrder = "2";
         String funcDesc = "003的描述";
         String guidFunc = "996295466776137729";
-        String isopen ="yes";
-        String ischeck = "yes";
+        YON isopen =YON.YES;
+        YON ischeck = YON.YES;
         acFuncService.creatFunc(guidApp,funcType,funcCode,funcName,displayOrder,funcDesc,guidFunc,isopen,ischeck);
 
     }
@@ -48,9 +50,9 @@ public class AcFuncServiceImplTest extends BaseTest {
         String displayOrder = "5";
         String funcDesc = "004的修改描述";
         String guidFunc = "0";
-        String  isopen = "YES";
-        String ischeck = "NO";
-        String funcType ="RESTFUL";
+        YON isopen =YON.YES;
+        YON ischeck = YON.YES;
+        FuncType funcType = FuncType.FUNCTION;
 
         acFuncService.changeFunc(guid,guidApp,funcType,funcCode,funcName,funcDesc,isopen,ischeck,displayOrder,guidFunc);
 
