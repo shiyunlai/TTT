@@ -33,27 +33,19 @@ public class ToolsEntityMetaObjectHandler extends MetaObjectHandler {
         if (StringUtils.isEmpty(testType)) {
             setFieldValByName("dataStatus", logicNotDeleteValue, metaObject);
         }
-        // 全局处理公共字段 创建时间 private Date createtime
-        if (metaObject.hasGetter("createtime")) {
-            setFieldValByName("createtime", new Date(), metaObject);
-        }
+        // 全局处理公共字段 创建时间 private Date createtime、
+        setFieldValByName("createtime", new Date(), metaObject);
         // 最近更新人员 private String updator
-        if (metaObject.hasGetter("updator")) {
-            setFieldValByName("updator", "开发人员", metaObject);
-        }
+        setFieldValByName("updator", "开发人员", metaObject);
 
     }
 
     @Override
     public void updateFill(MetaObject metaObject) {
         // 最近更新时间 private Date lastupdate
-        if (metaObject.hasGetter("lastupdate")) {
-            setFieldValByName("lastupdate", new Date(), metaObject);
-        }
+        setFieldValByName("lastupdate", new Date(), metaObject);
         // TODO 获取人员
         // 最近更新人员 private String updator
-        if (metaObject.hasGetter("updator")) {
-            setFieldValByName("updator", "开发人员", metaObject);
-        }
+        setFieldValByName("updator", "开发人员", metaObject);
     }
 }
