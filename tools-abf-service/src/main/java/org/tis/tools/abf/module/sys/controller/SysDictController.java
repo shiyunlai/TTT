@@ -12,8 +12,6 @@ import org.tis.tools.abf.module.jnl.entity.enums.OperateType;
 import org.tis.tools.abf.module.sys.controller.request.SysDictQueryRequest;
 import org.tis.tools.abf.module.sys.controller.request.SysDictRequest;
 import org.tis.tools.abf.module.sys.entity.SysDict;
-import org.tis.tools.abf.module.sys.entity.enums.DictFromType;
-import org.tis.tools.abf.module.sys.entity.enums.DictType;
 import org.tis.tools.abf.module.sys.exception.SysManagementException;
 import org.tis.tools.abf.module.sys.service.ISysDictService;
 import org.tis.tools.core.web.controller.BaseController;
@@ -52,7 +50,7 @@ public class SysDictController  extends BaseController {
         sysDict.setSqlFilter(request.getSqlFilter());
         sysDict.setFromType(request.getFromType());
         sysDict =  iSysDictService.addDict(sysDict);
-        return ResultVO.success("添加成功",sysDict);
+        return ResultVO.success("添加成功");
     }
 
     /**
@@ -65,9 +63,9 @@ public class SysDictController  extends BaseController {
     @OperateLog(type = OperateType.DELETE, desc = "删除业务字典")
     @ApiOperation(value = "删除业务字典", notes = "根据guid删除对应的数据信息")
     @DeleteMapping("/{id}")
-    public ResultVO deleteSysDict(@PathVariable @NotBlank String id) {
+    public ResultVO deleteSysDict(@PathVariable @NotBlank(message = "id不能为空") String id) {
         SysDict sysDict = iSysDictService.deleteDict(id);
-        return ResultVO.success("删除成功",sysDict);
+        return ResultVO.success("删除成功");
     }
 
     /**
