@@ -67,7 +67,7 @@ public class LogAbfOperateServiceImpl extends ServiceImpl<LogAbfOperateMapper, L
 
         Wrapper<LogAbfOperate> wrapper = new EntityWrapper<LogAbfOperate>();
         wrapper.orderBy(LogAbfOperate.COLUMN_OPERATE_TIME,false);
-        wrapper.eq(LogAbfOperate.COLUMN_OPERATE_TIME,condition);
+        wrapper.like(LogAbfOperate.COLUMN_OPERATE_TIME,condition);
 
         List<LogAbfOperate> logAbfOperateList = selectList(wrapper);
 
