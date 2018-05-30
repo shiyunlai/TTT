@@ -1,5 +1,8 @@
 package org.tis.tools.abf.module.ac.service.impl;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,8 +34,7 @@ public class AcAppConfigServiceImpl extends ServiceImpl<AcAppConfigMapper, AcApp
      * 新增应用个性化配置
      */
     @Override
-    public AcAppConfig createRootAppConfig(String guidApp, String configType, String configName, String configDict, String configStyle, String configValue, String
-            enabled, String displayOrder, String configDesc) {
+    public AcAppConfig createRootAppConfig(String guidApp, String configType, String configName, String configDict, String configStyle, String configValue, String enabled, String displayOrder, String configDesc) throws AcManagementException {
         AcAppConfig acAppConfig = new AcAppConfig();
 
 
@@ -74,8 +76,7 @@ public class AcAppConfigServiceImpl extends ServiceImpl<AcAppConfigMapper, AcApp
      * 修改个性配置
      */
     @Override
-    public AcAppConfig changeById(String guid, String guidApp, String configType, String configName, String configDict, String configStyle,
-                                  String configValue, String enabled, String displayOrder, String configDesc) {
+    public AcAppConfig changeById(String guid, String guidApp, String configType, String configName, String configDict, String configStyle, String configValue, String enabled, String displayOrder, String configDesc) throws AcManagementException {
 
         AcAppConfig acAppConfig = new AcAppConfig();
 
@@ -111,6 +112,19 @@ public class AcAppConfigServiceImpl extends ServiceImpl<AcAppConfigMapper, AcApp
             );
         }
         return acAppConfig;
+    }
+
+    @Override
+    public Page<AcAppConfig> queryPageById(Page<AcAppConfig> page, Wrapper<AcAppConfig> wrapper, String id) throws AcManagementException {
+
+        if (null == wrapper){
+            wrapper = new EntityWrapper<AcAppConfig>();
+        }
+
+        wrapper.eq(AcAppConfig.COLUMN_GUID_APP,id);
+        Page<AcAppConfig> pageConfig = selectPage(page,wrapper);
+
+        return pageConfig;
     }
 }
 
