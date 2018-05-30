@@ -23,7 +23,7 @@ public interface ILogAbfOperateService extends IService<LogAbfOperate>  {
     void insertOperatorLog(LogOperateDetail log) throws OperateLogException;
 
     /**
-     * 根据条件查询日志
+     * 查询某天的日志
      * @param condition
      * @return List<LogAbfOperate>
      * @throws OperateLogException
