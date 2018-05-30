@@ -1,5 +1,8 @@
 package org.tis.tools.abf.module.ac.service.impl;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -114,5 +117,27 @@ public class AcFuncServiceImpl extends ServiceImpl<AcFuncMapper, AcFunc> impleme
         return acFunc;
     }
 
+    /**
+     * 查询对应应用下的功能
+     */
+    @Override
+    public Page<AcFunc> queryPageById(Page<AcFunc> page, Wrapper<AcFunc> wrapper, String id) throws AcManagementException {
+
+        Page<AcFunc> pagefunc = null;
+
+        if (null == wrapper){
+            wrapper = new EntityWrapper<AcFunc>();
+        }
+
+        try {
+            wrapper.eq(AcFunc.COLUMN_GUID_APP,id);
+            pagefunc = acFuncService.selectPage(page,wrapper);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new AcManagementException(AcExceptionCodes.FAILURE_WHRN_QUERY_AC_FUNC,wrap(e.getMessage()));
+        }
+
+        return pagefunc;
+    }
 }
 

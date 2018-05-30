@@ -1,5 +1,7 @@
 package org.tis.tools.abf.module.jnl.service.impl;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,7 @@ import org.tis.tools.abf.module.jnl.service.ILogAbfOperateService;
 import org.tis.tools.core.exception.i18.ExceptionCodes;
 
 import java.util.Date;
+import java.util.List;
 
 import static org.tis.tools.core.utils.BasicUtil.wrap;
 
@@ -53,5 +56,22 @@ public class LogAbfOperateServiceImpl extends ServiceImpl<LogAbfOperateMapper, L
                 logAbfChangeService.insert(logAbfChange);
             }
         }
+    }
+
+    @Override
+    public List<LogAbfOperate> queryByCondition(String condition) throws OperateLogException {
+
+        if (null == condition){
+            throw new OperateLogException(ExceptionCodes.NOT_ALLOW_NULL_WHEN_QUERY,wrap("","LOG_OPERATE_QUERYBYCONDITION"));
+        }
+
+        Wrapper<LogAbfOperate> wrapper = new EntityWrapper<LogAbfOperate>();
+        wrapper.orderBy(LogAbfOperate.COLUMN_OPERATE_TIME,false);
+        wrapper.eq(LogAbfOperate.COLUMN_OPERATE_TIME,condition);
+
+        List<LogAbfOperate> logAbfOperateList = selectList(wrapper);
+
+
+        return logAbfOperateList;
     }
 }
