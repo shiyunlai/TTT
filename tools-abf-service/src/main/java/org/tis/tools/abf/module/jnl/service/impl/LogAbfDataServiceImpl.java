@@ -2,7 +2,9 @@ package org.tis.tools.abf.module.jnl.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.tis.tools.abf.module.jnl.dao.LogAbfDataMapper;
@@ -25,6 +27,9 @@ import static org.tis.tools.core.utils.BasicUtil.wrap;
 @Transactional(rollbackFor = Exception.class)
 public class LogAbfDataServiceImpl extends ServiceImpl<LogAbfDataMapper, LogAbfData> implements ILogAbfDataService {
 
+    @Autowired
+    ILogAbfDataService logAbfDataService;
+
     /**
      * 查询
      * @param operateGuid
@@ -43,6 +48,22 @@ public class LogAbfDataServiceImpl extends ServiceImpl<LogAbfDataMapper, LogAbfD
         List<LogAbfData> logAbfDataList = selectList(wrapper);
 
         return logAbfDataList;
+    }
+
+    /**
+     * 查询日志对应ID的操作数据记录
+     */
+    @Override
+    public Page<LogAbfData> selectPage(Page<LogAbfData> page, Wrapper<LogAbfData> wrapper, String id) throws OperateLogException {
+
+        if (null == wrapper){
+            wrapper = new EntityWrapper<LogAbfData>();
+        }
+
+        wrapper.eq(LogAbfData.COLUMN_GUID_OPERATE,id);
+        Page<LogAbfData> pageData = logAbfDataService.selectPage(page,wrapper);
+
+        return pageData;
     }
 }
 
