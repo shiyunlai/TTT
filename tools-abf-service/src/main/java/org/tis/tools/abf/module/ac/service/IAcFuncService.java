@@ -1,5 +1,7 @@
 package org.tis.tools.abf.module.ac.service;
 
+import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.IService;
 import org.tis.tools.abf.module.ac.entity.AcFunc;
 import org.tis.tools.abf.module.ac.entity.enums.FuncType;
@@ -47,6 +49,16 @@ public interface IAcFuncService extends IService<AcFunc>  {
     AcFunc changeFunc(String guid, String guidApp, FuncType funcType, String funcCode, String funcName, String funcDesc,
                       YON isopen, YON ischeck, String displayOrder, String guidFunc)throws AcManagementException;
 
+
+    /**
+     * 查询对应应用下的功能
+     * @param page
+     * @param wrapper
+     * @param id
+     * @return
+     * @throws AcManagementException
+     */
+    Page<AcFunc> queryPageById(Page<AcFunc> page, Wrapper<AcFunc> wrapper ,String id)throws AcManagementException;
 
 }
 
