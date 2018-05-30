@@ -1,5 +1,7 @@
 package org.tis.tools.abf.module.jnl.service;
 
+import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.IService;
 import org.tis.tools.abf.module.jnl.entity.LogAbfData;
 import org.tis.tools.abf.module.jnl.exception.OperateLogException;
@@ -21,5 +23,15 @@ public interface ILogAbfDataService extends IService<LogAbfData>  {
      */
     List<LogAbfData> queryForOperate(String operateGuid) throws OperateLogException;
 
+
+    /**
+     * 查询日志对应ID的操作数据记录
+     * @param page
+     * @param wrapper
+     * @param id
+     * @return
+     * @throws OperateLogException
+     */
+    Page<LogAbfData> selectPage(Page<LogAbfData> page, Wrapper<LogAbfData> wrapper,String id) throws OperateLogException;
 }
 
