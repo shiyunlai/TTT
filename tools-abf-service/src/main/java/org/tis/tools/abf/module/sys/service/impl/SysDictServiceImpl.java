@@ -3,21 +3,22 @@ package org.tis.tools.abf.module.sys.service.impl;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
-import org.apache.commons.lang.StringUtils;
-import org.apache.poi.ss.formula.functions.T;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.tis.tools.abf.module.sys.dao.SysDictMapper;
-import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.tis.tools.abf.module.sys.dao.SysDictMapper;
+import org.tis.tools.abf.module.sys.entity.SysDict;
 import org.tis.tools.abf.module.sys.entity.SysDictItem;
-import org.tis.tools.abf.module.sys.entity.enums.DictFromType;
+import org.tis.tools.abf.module.sys.entity.vo.SysDictDetail;
+import org.tis.tools.abf.module.sys.exception.SYSExceptionCodes;
 import org.tis.tools.abf.module.sys.exception.SysManagementException;
 import org.tis.tools.abf.module.sys.service.ISysDictItemService;
 import org.tis.tools.abf.module.sys.service.ISysDictService;
-import org.tis.tools.abf.module.sys.entity.SysDict;
-import org.springframework.transaction.annotation.Transactional;
 import org.tis.tools.core.exception.i18.ExceptionCodes;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.tis.tools.core.utils.BasicUtil.wrap;
@@ -40,11 +41,12 @@ public class SysDictServiceImpl  extends ServiceImpl<SysDictMapper,SysDict> impl
     @Override
     public SysDict addDict(SysDict sysDict) throws SysManagementException {
         if(StringUtils.isNotBlank(sysDict.getGuidParents())){
-            SysDictItem sysDictItem = iSysDictItemService.guidQueryOneSysDic(sysDict.getGuidParents());
-            if(sysDictItem == null ){
-                throw new SysManagementException(
-                        ExceptionCodes.NOT_FOUND_WHEN_QUERY,
-                        wrap(SysDictItem.COLUMN_GUID,SysDictItem.COLUMN_GUID),sysDict.getGuidParents());
+
+            SysDict sysDictNew = selectById(sysDict.getGuidParents());
+            if (sysDictNew == null){
+                throw new SysManagementException(ExceptionCodes.NOT_FOUND_WHEN_QUERY,
+                        wrap(SYSExceptionCodes.NOT_FOUND_SYS_DICT_WITH_GUID,sysDict.getGuidParents())
+                );
             }
         }
         insert(sysDict);
@@ -158,5 +160,57 @@ public class SysDictServiceImpl  extends ServiceImpl<SysDictMapper,SysDict> impl
         wrapper.eq(SysDict.COLUMN_GUID,id);
         SysDict sysDict = selectOne(wrapper);
         return sysDict;
+    }
+
+    /**
+     * 查询业务字典的树结构
+     */
+    @Override
+    public SysDictDetail queryDictTree(String id) throws SysManagementException {
+
+            SysDictDetail sysDictDetail = new SysDictDetail();
+
+        try {
+            //查询该业务字典
+            SysDict sysDictOne = selectById(id);
+
+            List<Object> list = new ArrayList<Object>();
+
+            //查询业务字典对应的子业务字典
+            Wrapper<SysDict> wrapper = new EntityWrapper<SysDict>();
+            wrapper.eq(SysDict.COLUMN_GUID_PARENTS,id);
+
+            List<SysDict> listDict = selectList(wrapper);
+
+            //查询业务字典的字典项
+            Wrapper<SysDictItem> wrapperItem = new EntityWrapper<SysDictItem>();
+            wrapperItem.eq(SysDictItem.COLUMN_GUID_DICT,id);
+
+            List<SysDictItem> listDictItem = iSysDictItemService.selectList(wrapperItem);
+
+            //如果listDict和listDictItem非空,则将其内容set到
+            for (SysDict sysDict: listDict) {
+                list.add(sysDict);
+            }
+            for (SysDictItem sysDictItem: listDictItem) {
+                list.add(sysDictItem);
+            }
+
+            //判断该父节点是否有子业务字典和字典项
+            if (0 != list.size()){
+                sysDictDetail.setHaveDitmItem(true);
+            }
+
+            sysDictDetail.setGuid(sysDictOne.getGuid());
+            sysDictDetail.setDictKey(sysDictOne.getDictKey());
+            sysDictDetail.setDictName(sysDictOne.getDictName());
+            sysDictDetail.setChildren(list);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new SysManagementException(SYSExceptionCodes.NOT_FOUND_SYS_DICT_ITEM_WITH_GUID,
+                    wrap(e.getMessage())
+                    );
+        }
+        return sysDictDetail;
     }
 }
