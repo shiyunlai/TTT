@@ -1,25 +1,20 @@
 package org.tis.tools.abf.module.ac.controller;
 
 import com.baomidou.mybatisplus.plugins.Page;
-import org.apache.commons.lang.StringUtils;
+import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import org.tis.tools.abf.module.ac.controller.request.AcRoleAddRequest;
-import org.tis.tools.abf.module.ac.controller.request.AcRoleFuncAddRequest;
 import org.tis.tools.abf.module.ac.controller.request.AcRoleUpdateValidateGrop;
 import org.tis.tools.abf.module.ac.entity.AcRole;
-import org.springframework.validation.annotation.Validated;
-import org.tis.tools.abf.module.ac.entity.AcRoleFunc;
 import org.tis.tools.abf.module.ac.service.IAcRoleFuncService;
+import org.tis.tools.abf.module.ac.service.IAcRoleService;
 import org.tis.tools.abf.module.jnl.annotation.OperateLog;
 import org.tis.tools.abf.module.jnl.entity.enums.OperateType;
 import org.tis.tools.core.web.controller.BaseController;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-import org.hibernate.validator.constraints.NotBlank;
 import org.tis.tools.core.web.vo.ResultVO;
-import org.tis.tools.abf.module.ac.service.IAcRoleService;
 import org.tis.tools.core.web.vo.SmartPage;
-
-import java.util.List;
 
 /**
  * acRole的Controller类
@@ -108,13 +103,11 @@ public class AcRoleController extends BaseController<AcRole>  {
         AcRole acRole = new AcRole();
         acRole.setRoleCode(roleCode);
         AcRole acRole1 = acRoleService.queryByCondition(acRole);
+        if (acRole1 == null) {
+            return ResultVO.error("404", "找不到对应记录或已经被删除！");
+        }
         boolean bolen = acRoleService.deleteByRoleCode(roleCode);
-        return ResultVO.success("删除成功",acRole1);
+        return ResultVO.success("删除成功");
     }
-
-
-
-
-
 }
 
