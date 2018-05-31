@@ -90,7 +90,10 @@ public class AcRoleServiceImpl extends ServiceImpl<AcRoleMapper, AcRole> impleme
             boolean bole = insert(acRole);
             return bole;
         }catch (Exception e){
-            throw new AcRoleManagementException(ExceptionCodes.FAILURE_WHEN_INSERT,wrap("ACROLE",e));
+            e.printStackTrace();
+            throw new AcRoleManagementException(ExceptionCodes.FAILURE_WHEN_INSERT,
+                    wrap(e.getMessage())
+            );
         }
 
     }
