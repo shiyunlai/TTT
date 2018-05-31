@@ -18,6 +18,7 @@ import org.tis.tools.core.web.controller.BaseController;
 import org.tis.tools.core.web.vo.ResultVO;
 import org.tis.tools.core.web.vo.SmartPage;
 
+import javax.validation.constraints.NotNull;
 import java.text.ParseException;
 
 @RestController
@@ -122,5 +123,16 @@ public class SysDictController  extends BaseController {
         sysDict.setDictKey(request.getDictKey());
         sysDict.setDictName(request.getDictName());
         return ResultVO.success("查询成功",iSysDictService.dictKeyQuery(sysDict));
+    }
+
+    @OperateLog(type = OperateType.QUERY ,desc = "查询业务字典树")
+    @ApiOperation(value = "查询业务字典树", notes = "传入分页参数")
+    @PostMapping("/tree/{guid}")
+    public ResultVO tree(@PathVariable @NotNull(message = "guid不能为空") String guid){
+        SysDict sysDict = iSysDictService.selectById(guid);
+        if (sysDict == null){
+            return ResultVO.error("404", "找不到对应记录或已经被删除！");
+        }
+        return ResultVO.success("查询成功",iSysDictService.queryDictTree(guid));
     }
 }

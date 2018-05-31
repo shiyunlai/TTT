@@ -80,25 +80,5 @@ public class AcOperatorServiceImpl extends ServiceImpl<AcOperatorMapper, AcOpera
         }
 
     }
-
-    /**
-     *
-     * @param acOperator
-     * @return 删除操作员结果
-     * @throws AcOperatorManagementException
-     */
-    @Override
-    public boolean deleteAcOperator(AcOperator acOperator) throws AcOperatorManagementException {
-        EntityWrapper<AcOperator> acOperatorEntityWrapper = new EntityWrapper<>();
-        acOperatorEntityWrapper.eq(AcOperator.COLUMN_USER_ID,acOperator.getUserId());
-        try {
-            boolean b = delete(acOperatorEntityWrapper);
-            return b;
-        }catch (Exception e){
-            throw new AcOperatorManagementException(ExceptionCodes.FAILURE_WHEN_DELETE,wrap("ACOPERATOR",e));
-        }
-    }
-
-
 }
 

@@ -3,9 +3,8 @@ package org.tis.tools.abf.module.sys.service;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.IService;
-import org.apache.poi.ss.formula.functions.T;
 import org.tis.tools.abf.module.sys.entity.SysDict;
-import org.tis.tools.abf.module.sys.entity.SysDictItem;
+import org.tis.tools.abf.module.sys.entity.vo.SysDictDetail;
 import org.tis.tools.abf.module.sys.exception.SysManagementException;
 
 import java.util.List;
@@ -120,5 +119,13 @@ public interface ISysDictService extends IService<SysDict> {
      * @throws SysManagementException
      */
     SysDict querySysDictByGuid(String id) throws SysManagementException;
+
+    /**
+     * 查询业务字典的树结构
+     * @param id
+     * @return
+     * @throws SysManagementException
+     */
+    SysDictDetail queryDictTree(String id) throws SysManagementException;
 
 }

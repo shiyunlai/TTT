@@ -17,8 +17,5 @@ public interface IAcOperatorService extends IService<AcOperator>  {
 
     boolean updateAcOperatorByCondition(AcOperator acOperator) throws AcOperatorManagementException;
 
-    boolean deleteAcOperator(AcOperator acOperator) throws AcOperatorManagementException;
-
-
 }
 
