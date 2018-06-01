@@ -52,8 +52,7 @@ public class SysDictItemController  extends BaseController {
     @PutMapping
     public ResultVO updateSysDictItem(@RequestBody @Validated SysDictItemRequest request) {
         SysDictItem sysDictItem = new SysDictItem();
-        sysDictItem = iSysDictItemService.editSysDictItem(request.getGuid(),request.getGuidDict(),request.getItemName(),request.getItemType(),request.getItemVlaue(),
-                request.getSendValue(),request.getSeqNo().toString(),request.getItemDesc());
+        sysDictItem = iSysDictItemService.editSysDictItem(request.getGuid(),request.getGuidDict(),request.getItemName(),request.getItemType(),request.getItemValue(), request.getSendValue(),request.getSeqNo().toString(),request.getItemDesc());
         return ResultVO.success("修改成功",sysDictItem);
     }
     /**
