@@ -1,12 +1,11 @@
 package org.tis.tools.abf.module.ac.service.impl;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.tis.tools.abf.module.ac.controller.request.AcOperatorAddRequest;
 import org.tis.tools.abf.module.ac.dao.AcOperatorMapper;
-import org.springframework.stereotype.Service;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.tis.tools.abf.module.ac.entity.AcOperator;
-import org.springframework.transaction.annotation.Transactional;
 import org.tis.tools.abf.module.ac.entity.enums.AuthMode;
 import org.tis.tools.abf.module.ac.entity.enums.OperatorStatus;
 import org.tis.tools.abf.module.ac.exception.AcOperatorManagementException;
@@ -37,6 +36,7 @@ public class AcOperatorServiceImpl extends ServiceImpl<AcOperatorMapper, AcOpera
 
     @Override
     public boolean addAcOperator(AcOperatorAddRequest request) throws AcOperatorManagementException {
+
         AcOperator acOperator = new AcOperator();
         acOperator.setUserId(request.getUserId());
         acOperator.setPassword(request.getPassword());
@@ -70,10 +70,8 @@ public class AcOperatorServiceImpl extends ServiceImpl<AcOperatorMapper, AcOpera
      */
     @Override
     public boolean updateAcOperatorByCondition(AcOperator acOperator) throws AcOperatorManagementException {
-        EntityWrapper<AcOperator> acOperatorEntityWrapper = new EntityWrapper<>();
-        acOperatorEntityWrapper.eq(AcOperator.COLUMN_USER_ID,acOperator.getUserId());
         try {
-            boolean b = update(acOperator,acOperatorEntityWrapper);
+            boolean b = updateById(acOperator);
             return b;
         }catch (Exception e){
             throw new AcOperatorManagementException(ExceptionCodes.FAILURE_WHEN_UPDATE,wrap("ACOPERATOR",e));
