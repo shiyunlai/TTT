@@ -10,6 +10,7 @@ import org.tis.tools.abf.module.ac.controller.request.AcRoleUpdateValidateGrop;
 import org.tis.tools.abf.module.ac.entity.AcRole;
 import org.tis.tools.abf.module.ac.service.IAcRoleFuncService;
 import org.tis.tools.abf.module.ac.service.IAcRoleService;
+import org.tis.tools.abf.module.common.entity.enums.YON;
 import org.tis.tools.abf.module.jnl.annotation.OperateLog;
 import org.tis.tools.abf.module.jnl.entity.enums.OperateType;
 import org.tis.tools.core.web.controller.BaseController;
@@ -33,12 +34,12 @@ public class AcRoleController extends BaseController<AcRole>  {
     IAcRoleFuncService acRoleFuncService;
 
 
-/**
- * @param page
- * @return 分页内容
- *
- */
-
+    /**
+     * @param page
+     * @return 分页内容
+     *
+     */
+    @OperateLog(type = OperateType.QUERY,desc = "分页查询角色信息")
     @PostMapping("/list")
     public ResultVO queryRoleWithPage(@RequestBody @Validated SmartPage<AcRole> page) {
         Page page1  =  acRoleService.selectPage(getPage(page),getCondition(page));
@@ -51,6 +52,7 @@ public class AcRoleController extends BaseController<AcRole>  {
      * 根据角色代码查询角色信息
      *
      */
+    @OperateLog(type =OperateType.QUERY,desc = "根据角色代码查询角色信息")
     @GetMapping("/{roleCode}")
     public ResultVO selectByRoleCode(@PathVariable @NotBlank(message = "roleCode不能为空") String roleCode) {
         AcRole acRole = new AcRole();
@@ -69,13 +71,10 @@ public class AcRoleController extends BaseController<AcRole>  {
      * 新增角色信息
      */
     @OperateLog(type = OperateType.ADD, desc = "新增角色")
-    @PostMapping("/add")
+    @PostMapping
     public ResultVO add(@RequestBody @Validated AcRoleAddRequest request) {
         boolean bolen = acRoleService.createAcRole(request.getRoleCode(),request.getRoleName(),request.getEnabled(),request.getRoleDesc());
-        AcRole acRole = new AcRole();
-        acRole.setRoleCode(request.getRoleCode());
-        AcRole acRole1 = acRoleService.queryByCondition(acRole);
-        return ResultVO.success("新增成功",acRole1);
+        return ResultVO.success("新增成功",bolen);
     }
 
 
@@ -109,5 +108,22 @@ public class AcRoleController extends BaseController<AcRole>  {
         boolean bolen = acRoleService.deleteByRoleCode(roleCode);
         return ResultVO.success("删除成功");
     }
+
+    @PutMapping("/{id}")
+    public ResultVO openRole(@PathVariable @NotBlank(message = "id不能为空") String id){
+
+        AcRole acRole = acRoleService.selectById(id);
+        if (null == acRole){
+            return ResultVO.error("404","找不到对应记录或已经被删除");
+        }
+
+        YON enabled = YON.YES;
+
+        acRole.setEnabled(enabled);
+        acRoleService.updateById(acRole);
+
+        return ResultVO.success("启用成功",acRole);
+    }
+
 }
 
