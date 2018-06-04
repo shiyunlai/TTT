@@ -1,8 +1,5 @@
 package org.tis.tools.abf.module.ac.service.impl;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.mapper.Wrapper;
-import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -112,19 +109,6 @@ public class AcAppConfigServiceImpl extends ServiceImpl<AcAppConfigMapper, AcApp
             );
         }
         return acAppConfig;
-    }
-
-    @Override
-    public Page<AcAppConfig> queryPageById(Page<AcAppConfig> page, Wrapper<AcAppConfig> wrapper, String id) throws AcManagementException {
-
-        if (null == wrapper){
-            wrapper = new EntityWrapper<AcAppConfig>();
-        }
-
-        wrapper.eq(AcAppConfig.COLUMN_GUID_APP,id);
-        Page<AcAppConfig> pageConfig = selectPage(page,wrapper);
-
-        return pageConfig;
     }
 }
 
