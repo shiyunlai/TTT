@@ -19,16 +19,14 @@ public class SysDictDetail implements Serializable{
 
     private String dictName ="";
 
-    private Boolean haveDitmItem = new Boolean(false);
 
     private List<Object> children = new ArrayList<Object>();
 
     public SysDictDetail(){}
 
-    public SysDictDetail(String guid , String dictKey, String dictName,Boolean haveDitmItem,List<Object> children){
+    public SysDictDetail(String guid , String dictKey, String dictName,List<Object> children){
             this.dictKey = dictKey;
             this.dictName = dictName;
-            this.haveDitmItem = haveDitmItem;
             this.children = children;
     }
 
@@ -64,12 +62,4 @@ public class SysDictDetail implements Serializable{
         this.children = children;
     }
 
-
-    public Boolean getHaveDitmItem() {
-        return haveDitmItem;
-    }
-
-    public void setHaveDitmItem(Boolean haveDitmItem) {
-        this.haveDitmItem = haveDitmItem;
-    }
 }
