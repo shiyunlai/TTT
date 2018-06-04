@@ -74,10 +74,9 @@ public class AcAppConfigController extends BaseController<AcAppConfig> {
     }
 
     @OperateLog(type = OperateType.QUERY, desc = "分页查询个性化配置")
-    @PostMapping("/list/{id}")
-    public ResultVO list(@RequestBody @Validated SmartPage<AcAppConfig> page,@PathVariable @NotBlank(message =
-            "id不能为空") String id) {
-        return ResultVO.success("查询成功", acAppConfigService.queryPageById(getPage(page), getCondition(page),id));
+    @PostMapping("/list")
+    public ResultVO list(@RequestBody @Validated SmartPage<AcAppConfig> page) {
+        return ResultVO.success("查询成功", acAppConfigService.selectPage(getPage(page), getCondition(page)));
     }
 
 }
