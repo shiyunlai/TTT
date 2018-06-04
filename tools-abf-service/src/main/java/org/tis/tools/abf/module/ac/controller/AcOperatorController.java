@@ -37,7 +37,10 @@ public class AcOperatorController extends BaseController<AcOperator>  {
     @OperateLog(type = OperateType.ADD,desc = "新增操作员")
     @PostMapping
     public ResultVO add(@RequestBody @Validated AcOperatorAddRequest request) {
-        acOperatorService.addAcOperator(request);
+        boolean isexist = acOperatorService.addAcOperator(request);
+        if (!isexist){
+            return ResultVO.error("404","登录用户名已存在,请重新输入!");
+        }
         AcOperator acOperator = new AcOperator();
         EntityWrapper<AcOperator> acOperatorEntityWrapper = new EntityWrapper<>();
         acOperatorEntityWrapper.eq(AcOperator.COLUMN_USER_ID,request.getUserId());
@@ -53,11 +56,17 @@ public class AcOperatorController extends BaseController<AcOperator>  {
     @OperateLog(type = OperateType.UPDATE,desc = "修改操作员")
     @PutMapping
     public ResultVO update(@RequestBody @Validated({AcOperatorUpdateGrop.class}) AcOperator acOperator) {
+
         AcOperator acOperatorQue  = acOperatorService.selectById(acOperator.getGuid());
         if (acOperatorQue == null) {
             return ResultVO.error("404", "找不到对应记录或已经被删除！");
         }
-        acOperatorService.updateAcOperatorByCondition(acOperator);
+
+        boolean isexist = acOperatorService.updateAcOperatorByCondition(acOperator);
+        if (!isexist){
+            return ResultVO.error("404","登录用户名已存在,请重新输入!");
+        }
+
         AcOperator acOperatorQue1  = acOperatorService.selectById(acOperator.getGuid());
         return ResultVO.success("修改成功！",acOperatorQue1);
     }

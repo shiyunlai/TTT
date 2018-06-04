@@ -1,15 +1,15 @@
 package org.tis.tools.abf.module.sys.entity;
 
-import java.math.BigDecimal;
-
 import com.alibaba.fastjson.annotation.JSONField;
-import com.baomidou.mybatisplus.annotations.TableName;
+import com.baomidou.mybatisplus.annotations.*;
+import com.baomidou.mybatisplus.enums.FieldFill;
 import lombok.Data;
-import com.baomidou.mybatisplus.annotations.TableId;
 import org.tis.tools.abf.module.sys.entity.enums.SeqnoReset;
 import org.tis.tools.core.entity.enums.CommonEnumDeserializer;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * sysSeqno每个SEQ_KEY表示一个序号资源，顺序增加使用序号。
@@ -57,6 +57,26 @@ public class SysSeqno implements Serializable {
     public static final String COLUMN_RESET_PARAMS = "reset_params";
 
     /**
+     * createtime对应表字段
+     */
+    public static final String COLUMN_CREATETIME = "createtime";
+
+    /**
+     * lastupdate对应表字段
+     */
+    public static final String COLUMN_LASTUPDATE = "lastupdate";
+
+    /**
+     * updator对应表字段
+     */
+    public static final String COLUMN_UPDATOR = "updator";
+
+    /**
+     * dataStatus对应表字段
+     */
+    public static final String COLUMN_DATA_STATUS = "data_status";
+
+    /**
      * seqName逻辑名
      */
     public static final String NAME_SEQ_NAME = "序号资源表名称";
@@ -80,6 +100,26 @@ public class SysSeqno implements Serializable {
      * resetParams逻辑名
      */
     public static final String NAME_RESET_PARAMS = "重置处理参数";
+
+    /**
+     * createtime逻辑名
+     */
+    public static final String NAME_CREATETIME = "创建时间";
+
+    /**
+     * lastupdate逻辑名
+     */
+    public static final String NAME_LASTUPDATE = "最近更新时间";
+
+    /**
+     * updator逻辑名
+     */
+    public static final String NAME_UPDATOR = "最近更新人员";
+
+    /**
+     * dataStatus逻辑名
+     */
+    public static final String NAME_DATA_STATUS = "数据状态";
 
     /**
      * 序号资源表名称:序号资源的名称，如:柜员660001的交易流水序号资源
@@ -114,5 +154,31 @@ public class SysSeqno implements Serializable {
      */
     private String resetParams;
 
+    /**
+     * 创建时间
+     */
+    @TableField(fill = FieldFill.INSERT)
+    private Date createtime;
+
+    /**
+     * 最近更新时间
+     */
+    @Version
+    @TableField(fill = FieldFill.UPDATE)
+    private Date lastupdate;
+
+    /**
+     * 最近更新人员
+     */
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private String updator;
+
+    /**
+     * 数据状态:0 有效
+     * D 删除（逻辑删除）
+     */
+    @TableLogic
+    @TableField(fill = FieldFill.INSERT)
+    private String dataStatus;
 }
 

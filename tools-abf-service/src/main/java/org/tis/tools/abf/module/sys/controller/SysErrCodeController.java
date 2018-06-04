@@ -1,14 +1,17 @@
 package org.tis.tools.abf.module.sys.controller;
 
-import org.tis.tools.abf.module.sys.entity.SysErrCode;
-import org.springframework.validation.annotation.Validated;
-import org.tis.tools.core.web.controller.BaseController;
-import org.tis.tools.core.web.vo.SmartPage;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-import org.tis.tools.abf.module.sys.service.ISysErrCodeService;
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import org.tis.tools.abf.module.jnl.annotation.OperateLog;
+import org.tis.tools.abf.module.jnl.entity.enums.OperateType;
+import org.tis.tools.abf.module.sys.controller.request.SysErrCodeRequest;
+import org.tis.tools.abf.module.sys.entity.SysErrCode;
+import org.tis.tools.abf.module.sys.service.ISysErrCodeService;
+import org.tis.tools.core.web.controller.BaseController;
 import org.tis.tools.core.web.vo.ResultVO;
+import org.tis.tools.core.web.vo.SmartPage;
 
 /**
  * sysErrCode的Controller类
@@ -18,38 +21,46 @@ import org.tis.tools.core.web.vo.ResultVO;
  */
 @RestController
 @RequestMapping("/sysErrCode")
+@Validated
 public class SysErrCodeController extends BaseController<SysErrCode>  {
 
     @Autowired
     private ISysErrCodeService sysErrCodeService;
 
-    @PostMapping("/add")
-    public ResultVO add(@RequestBody @Validated SysErrCode sysErrCode) {
-        sysErrCodeService.insert(sysErrCode);
-        return ResultVO.success("新增成功！");
-    }
-    
+    @OperateLog(type = OperateType.UPDATE,desc = "修改错误码")
     @PutMapping
-    public ResultVO update(@RequestBody @Validated SysErrCode sysErrCode) {
-        sysErrCodeService.updateById(sysErrCode);
-        return ResultVO.success("修改成功！");
+    public ResultVO update(@RequestBody @Validated SysErrCodeRequest sysErrCodeRequest) {
+
+        SysErrCode sysErrCode = sysErrCodeService.selectById(sysErrCodeRequest.getGuid());
+        if (sysErrCode == null){
+            return ResultVO.error("404", "找不到对应记录或已经被删除！");
+        }
+
+        SysErrCode sysErrCodeChange = sysErrCodeService.change(sysErrCodeRequest);
+        return ResultVO.success("修改成功！",sysErrCodeChange);
     }
-    
+
+    @OperateLog(type = OperateType.DELETE,desc = "删除错误码")
     @DeleteMapping("/{id}")
     public ResultVO delete(@PathVariable @NotBlank(message = "id不能为空") String id) {
+        SysErrCode sysErrCode = sysErrCodeService.selectById(id);
+        if (sysErrCode == null) {
+            return ResultVO.error("404", "找不到对应记录或已经被删除！");
+        }
         sysErrCodeService.deleteById(id);
         return ResultVO.success("删除成功");
     }
-    
+
+    @OperateLog(type = OperateType.QUERY,desc = "根据ID查询错误码")
     @GetMapping("/{id}")
     public ResultVO detail(@PathVariable @NotBlank(message = "id不能为空") String id) {
         SysErrCode sysErrCode = sysErrCodeService.selectById(id);
-        if (sysErrCodeService == null) {
+        if (sysErrCode == null) {
             return ResultVO.error("404", "找不到对应记录或已经被删除！");
         }
         return ResultVO.success("查询成功", sysErrCode);
     }
-    
+    @OperateLog(type = OperateType.QUERY,desc = "分页查询错误码")
     @PostMapping("/list")
     public ResultVO list(@RequestBody @Validated SmartPage<SysErrCode> page) {
         return  ResultVO.success("查询成功", sysErrCodeService.selectPage(getPage(page), getCondition(page)));

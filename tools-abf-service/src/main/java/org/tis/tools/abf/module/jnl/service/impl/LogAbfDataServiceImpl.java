@@ -11,11 +11,6 @@ import org.tis.tools.abf.module.jnl.dao.LogAbfDataMapper;
 import org.tis.tools.abf.module.jnl.entity.LogAbfData;
 import org.tis.tools.abf.module.jnl.exception.OperateLogException;
 import org.tis.tools.abf.module.jnl.service.ILogAbfDataService;
-import org.tis.tools.core.exception.i18.ExceptionCodes;
-
-import java.util.List;
-
-import static org.tis.tools.core.utils.BasicUtil.wrap;
 
 /**
  * logAbfData的Service接口实现类
@@ -30,31 +25,8 @@ public class LogAbfDataServiceImpl extends ServiceImpl<LogAbfDataMapper, LogAbfD
     @Autowired
     ILogAbfDataService logAbfDataService;
 
-    /**
-     * 查询
-     * @param operateGuid
-     * @return
-     */
     @Override
-    public List<LogAbfData> queryForOperate(String operateGuid) throws OperateLogException {
-
-        if (null == operateGuid){
-            throw  new OperateLogException(ExceptionCodes.NOT_ALLOW_NULL_WHEN_QUERY,wrap("","LOG_DATA_QUERY_FOR_OPERATE"));
-        }
-
-        Wrapper<LogAbfData> wrapper = new EntityWrapper<LogAbfData>();
-        wrapper.eq(LogAbfData.COLUMN_GUID_OPERATE,operateGuid);
-
-        List<LogAbfData> logAbfDataList = selectList(wrapper);
-
-        return logAbfDataList;
-    }
-
-    /**
-     * 查询日志对应ID的操作数据记录
-     */
-    @Override
-    public Page<LogAbfData> selectPage(Page<LogAbfData> page, Wrapper<LogAbfData> wrapper, String id) throws OperateLogException {
+    public Page<LogAbfData> queryPageById(Page<LogAbfData> page, Wrapper<LogAbfData> wrapper, String id) throws OperateLogException {
 
         if (null == wrapper){
             wrapper = new EntityWrapper<LogAbfData>();

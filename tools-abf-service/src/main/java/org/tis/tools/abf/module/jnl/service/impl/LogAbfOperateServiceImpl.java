@@ -2,6 +2,7 @@ package org.tis.tools.abf.module.jnl.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,6 @@ import org.tis.tools.abf.module.jnl.service.ILogAbfOperateService;
 import org.tis.tools.core.exception.i18.ExceptionCodes;
 
 import java.util.Date;
-import java.util.List;
 
 import static org.tis.tools.core.utils.BasicUtil.wrap;
 
@@ -59,19 +59,45 @@ public class LogAbfOperateServiceImpl extends ServiceImpl<LogAbfOperateMapper, L
     }
 
     @Override
-    public List<LogAbfOperate> queryByCondition(String condition) throws OperateLogException {
+    public Page<LogAbfOperate> queryByCondition(Page<LogAbfOperate> page, Wrapper<LogAbfOperate> wrapper, String condition) throws OperateLogException {
 
         if (null == condition){
-            throw new OperateLogException(ExceptionCodes.NOT_ALLOW_NULL_WHEN_QUERY,wrap("","LOG_OPERATE_QUERYBYCONDITION"));
+            throw new OperateLogException(ExceptionCodes.NOT_ALLOW_NULL_WHEN_QUERY,wrap("操作时间为空", "LOG_OPERATE_QUERYBYCONDITION"));
         }
 
-        Wrapper<LogAbfOperate> wrapper = new EntityWrapper<LogAbfOperate>();
+        if (null == wrapper){
+            wrapper = new EntityWrapper<LogAbfOperate>();
+        }
+
         wrapper.orderBy(LogAbfOperate.COLUMN_OPERATE_TIME,false);
         wrapper.like(LogAbfOperate.COLUMN_OPERATE_TIME,condition);
 
-        List<LogAbfOperate> logAbfOperateList = selectList(wrapper);
+        Page<LogAbfOperate> logAbfOperatePage = selectPage(page,wrapper);
 
 
-        return logAbfOperateList;
+        return logAbfOperatePage;
+    }
+
+    @Override
+    public Page<LogAbfOperate> queryByTimeAndUser(Page<LogAbfOperate> page, Wrapper<LogAbfOperate> wrapper,String operateTime, String userId) throws OperateLogException {
+
+        if (null == operateTime){
+            throw new OperateLogException(ExceptionCodes.NOT_ALLOW_NULL_WHEN_QUERY,wrap("操作时间为空", "LOG_OPERATE_QUERYBYTIMEANDUSER"));
+        }
+        if (null == userId){
+            throw new OperateLogException(ExceptionCodes.NOT_ALLOW_NULL_WHEN_QUERY,wrap("操作员不能为空","LOG_OPERATE_QUERYBYTIMEANDUSER"));
+        }
+
+        if (null == wrapper){
+            wrapper = new EntityWrapper<LogAbfOperate>();
+        }
+
+        wrapper.orderBy(LogAbfOperate.COLUMN_OPERATE_TIME,false);
+        wrapper.like(LogAbfOperate.COLUMN_OPERATE_TIME,operateTime);
+        wrapper.eq(LogAbfOperate.COLUMN_USER_ID,userId);
+
+        Page<LogAbfOperate> logAbfOperatePage = selectPage(page,wrapper);
+
+        return logAbfOperatePage;
     }
 }

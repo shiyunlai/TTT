@@ -29,9 +29,8 @@ public class LogAbfChangeServiceImpl extends ServiceImpl<LogAbfChangeMapper, Log
         }
 
         wrapper.eq(LogAbfChange.COLUMN_GUID_DATA,id);
-
         Page<LogAbfChange> pageChange = selectPage(page,wrapper);
 
-        return null;
+        return pageChange;
     }
 }
