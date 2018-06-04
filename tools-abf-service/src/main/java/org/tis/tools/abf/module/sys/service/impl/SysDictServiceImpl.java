@@ -196,11 +196,6 @@ public class SysDictServiceImpl  extends ServiceImpl<SysDictMapper,SysDict> impl
                 list.add(sysDictItem);
             }
 
-            //判断该父节点是否有子业务字典和字典项
-            if (0 != list.size()){
-                sysDictDetail.setHaveDitmItem(true);
-            }
-
             sysDictDetail.setGuid(sysDictOne.getGuid());
             sysDictDetail.setDictKey(sysDictOne.getDictKey());
             sysDictDetail.setDictName(sysDictOne.getDictName());
