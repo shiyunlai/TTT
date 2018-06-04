@@ -22,22 +22,9 @@ public interface ILogAbfOperateService extends IService<LogAbfOperate>  {
      */
     void insertOperatorLog(LogOperateDetail log) throws OperateLogException;
 
-    /**
-     * 查询某天的日志
-     * @param condition
-     * @return Page<LogAbfOperate>
-     * @throws OperateLogException
-     */
-    Page<LogAbfOperate> queryByCondition(Page<LogAbfOperate> page, Wrapper<LogAbfOperate> wrapper, String condition) throws
-            OperateLogException;
 
-    /**
-     * 查询某人某天的日志
-     * @param operateTime
-     * @param userId
-     * @return
-     */
-    Page<LogAbfOperate> queryByTimeAndUser(Page<LogAbfOperate> page, Wrapper<LogAbfOperate> wrapper,String operateTime, String userId) throws OperateLogException;
+    Page<LogAbfOperate> queryListByUser(Page<LogAbfOperate> page, Wrapper<LogAbfOperate> wrapper ,String userId)throws
+            OperateLogException;
 
 }
 
