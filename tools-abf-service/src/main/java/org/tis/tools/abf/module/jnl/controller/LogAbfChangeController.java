@@ -30,4 +30,12 @@ public class LogAbfChangeController extends BaseController<LogAbfChange> {
         return  ResultVO.success("查询成功", logAbfChangeService.queryPageById(getPage(page), getCondition(page),id));
     }
 
+    @GetMapping("/{id}")
+    public ResultVO detial(@PathVariable @NotBlank(message = "操作日志GUID不能为空") String id){
+        LogAbfChange logAbfChange = logAbfChangeService.selectById(id);
+        if (logAbfChange == null) {
+            return ResultVO.error("404", "找不到对应记录或已经被删除！");
+        }
+        return ResultVO.success("查询成功",logAbfChange);
+    }
 }
