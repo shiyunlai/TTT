@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.service.IService;
 import org.tis.tools.abf.module.jnl.entity.LogAbfData;
 import org.tis.tools.abf.module.jnl.exception.OperateLogException;
 
+import java.util.List;
+
 /**
  * logAbfData的Service接口类
  * 
@@ -24,5 +26,7 @@ public interface ILogAbfDataService extends IService<LogAbfData>  {
      */
     Page<LogAbfData> queryPageById(Page<LogAbfData> page, Wrapper<LogAbfData> wrapper,String id) throws
             OperateLogException;
+
+    List<LogAbfData> queryByDataId(String dataGuid)throws OperateLogException;
 }
 

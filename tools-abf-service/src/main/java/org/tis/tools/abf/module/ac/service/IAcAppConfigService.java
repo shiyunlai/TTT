@@ -1,7 +1,5 @@
 package org.tis.tools.abf.module.ac.service;
 
-import com.baomidou.mybatisplus.mapper.Wrapper;
-import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.IService;
 import org.tis.tools.abf.module.ac.entity.AcAppConfig;
 import org.tis.tools.abf.module.ac.exception.AcManagementException;
@@ -44,17 +42,6 @@ public interface IAcAppConfigService extends IService<AcAppConfig>  {
      * @return
      */
     AcAppConfig changeById(String guid,String guidApp,String configType,String configName,String configDict,String configStyle,String configValue,String enabled,String displayOrder,String configDesc) throws AcManagementException ;
-
-    /**
-     * 分页查询应用参数
-     * @param page
-     * @param wrapper
-     * @param id
-     * @return
-     * @throws AcManagementException
-     */
-    Page<AcAppConfig> queryPageById(Page<AcAppConfig> page , Wrapper<AcAppConfig> wrapper ,String id) throws
-            AcManagementException;
 
 }
 

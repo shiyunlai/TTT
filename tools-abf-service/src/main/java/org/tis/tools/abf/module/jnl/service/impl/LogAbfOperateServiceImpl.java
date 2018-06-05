@@ -59,45 +59,17 @@ public class LogAbfOperateServiceImpl extends ServiceImpl<LogAbfOperateMapper, L
     }
 
     @Override
-    public Page<LogAbfOperate> queryByCondition(Page<LogAbfOperate> page, Wrapper<LogAbfOperate> wrapper, String condition) throws OperateLogException {
-
-        if (null == condition){
-            throw new OperateLogException(ExceptionCodes.NOT_ALLOW_NULL_WHEN_QUERY,wrap("操作时间为空", "LOG_OPERATE_QUERYBYCONDITION"));
-        }
+    public Page<LogAbfOperate> queryListByUser(Page<LogAbfOperate> page, Wrapper<LogAbfOperate> wrapper, String
+            userId) throws OperateLogException {
 
         if (null == wrapper){
             wrapper = new EntityWrapper<LogAbfOperate>();
         }
 
-        wrapper.orderBy(LogAbfOperate.COLUMN_OPERATE_TIME,false);
-        wrapper.like(LogAbfOperate.COLUMN_OPERATE_TIME,condition);
-
-        Page<LogAbfOperate> logAbfOperatePage = selectPage(page,wrapper);
-
-
-        return logAbfOperatePage;
-    }
-
-    @Override
-    public Page<LogAbfOperate> queryByTimeAndUser(Page<LogAbfOperate> page, Wrapper<LogAbfOperate> wrapper,String operateTime, String userId) throws OperateLogException {
-
-        if (null == operateTime){
-            throw new OperateLogException(ExceptionCodes.NOT_ALLOW_NULL_WHEN_QUERY,wrap("操作时间为空", "LOG_OPERATE_QUERYBYTIMEANDUSER"));
-        }
-        if (null == userId){
-            throw new OperateLogException(ExceptionCodes.NOT_ALLOW_NULL_WHEN_QUERY,wrap("操作员不能为空","LOG_OPERATE_QUERYBYTIMEANDUSER"));
-        }
-
-        if (null == wrapper){
-            wrapper = new EntityWrapper<LogAbfOperate>();
-        }
-
-        wrapper.orderBy(LogAbfOperate.COLUMN_OPERATE_TIME,false);
-        wrapper.like(LogAbfOperate.COLUMN_OPERATE_TIME,operateTime);
         wrapper.eq(LogAbfOperate.COLUMN_USER_ID,userId);
 
-        Page<LogAbfOperate> logAbfOperatePage = selectPage(page,wrapper);
+        Page<LogAbfOperate> pageOperate = selectPage(page,wrapper);
 
-        return logAbfOperatePage;
+        return pageOperate;
     }
 }

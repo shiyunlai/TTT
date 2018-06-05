@@ -92,6 +92,7 @@ public class AcOperatorController extends BaseController<AcOperator>  {
      * @param id
      * @return
      */
+    @OperateLog(type = OperateType.QUERY,desc = "根据ID查询操作员")
     @GetMapping("/{id}")
     public ResultVO detail(@PathVariable @NotBlank(message = "id不能为空") String id) {
         EntityWrapper<AcOperator> acOperatorEntityWrapper = new EntityWrapper<>();
@@ -102,11 +103,25 @@ public class AcOperatorController extends BaseController<AcOperator>  {
         }
         return ResultVO.success("查询成功", acOperator);
     }
-    
+
+    @OperateLog(type = OperateType.QUERY,desc = "查询操作员列表")
     @PostMapping("/list")
     public ResultVO list(@RequestBody @Validated SmartPage<AcOperator> page) {
         return  ResultVO.success("查询成功", acOperatorService.selectPage(getPage(page), getCondition(page)));
     }
-    
+
+
+    @OperateLog(type = OperateType.UPDATE,desc ="改变操作员状态")
+    @PutMapping("/changeStatus")
+    public ResultVO changeOperatorStatus(@RequestBody @Validated({AcOperatorUpdateGrop.class}) AcOperator acOperator){
+        AcOperator acOperatorQue  = acOperatorService.selectById(acOperator.getGuid());
+        if (acOperatorQue == null) {
+            return ResultVO.error("404", "找不到对应记录或已经被删除！");
+        }
+        acOperatorQue.setOperatorStatus(acOperator.getOperatorStatus());
+        acOperatorService.updateById(acOperatorQue);
+
+        return ResultVO.success("修改成功!",acOperatorQue);
+    }
 }
 
