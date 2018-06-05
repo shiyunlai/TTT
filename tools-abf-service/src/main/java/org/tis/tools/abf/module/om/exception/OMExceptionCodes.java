@@ -209,6 +209,18 @@ public class OMExceptionCodes {
 	 * 缺少生成岗位代码参数
 	 */
 	public static final String LAKE_PARMS_FOR_GEN_POSITION= R_EX_CODE("0042");
+	/**
+	 * 查询机构树失败
+	 */
+	public static final String FAILURE_WHEN_QUERY_ORG_TREE= R_EX_CODE("0043");
+	/**
+	 * 岗位对应的岗位不存在
+	 */
+	public static final String POSITION_NOT_EXIST_BY_POSITION_CODE = R_EX_CODE("0044");
+	/**
+	 * 查询岗位树失败
+	 */
+	public static final String FAILURE_WHEN_QUERY_POSITION_TREE= R_EX_CODE("004");
 
 
 	/**
