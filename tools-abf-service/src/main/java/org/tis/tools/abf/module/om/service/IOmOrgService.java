@@ -5,7 +5,12 @@ package org.tis.tools.abf.module.om.service;
 
 
 import com.baomidou.mybatisplus.service.IService;
+import org.tis.tools.abf.module.om.controller.request.OmOrgUpdateRequest;
 import org.tis.tools.abf.module.om.entity.OmOrg;
+import org.tis.tools.abf.module.om.entity.enums.OmOrgArea;
+import org.tis.tools.abf.module.om.entity.enums.OmOrgDegree;
+import org.tis.tools.abf.module.om.entity.enums.OmOrgType;
+import org.tis.tools.abf.module.om.entity.vo.OmOrgDetail;
 import org.tis.tools.abf.module.om.exception.OrgManagementException;
 
 import java.util.Date;
@@ -83,7 +88,7 @@ public interface IOmOrgService extends IService<OmOrg> {
 	 * @return 新建机构信息
 	 * @throws OrgManagementException
 	 */
-	OmOrg createRootOrg(String areaCode, String orgDegree, String orgName, String orgType)
+	OmOrg createRootOrg(OmOrgArea areaCode, OmOrgDegree orgDegree, String orgName, OmOrgType orgType,String orgAddr,String linkMan,String linkTel,Date startDate,Date endDate,String remark)
 			throws OrgManagementException;
 
 	/**
@@ -108,25 +113,8 @@ public interface IOmOrgService extends IService<OmOrg> {
 	 * @return 新建机构信息
 	 * @throws OrgManagementException
 	 */
-	OmOrg createChildOrg(String areaCode, String orgDegree, String orgName, String orgType, String guidParents)
+	OmOrg createChildOrg(OmOrgArea areaCode, OmOrgDegree orgDegree, String orgName, OmOrgType orgType, String guidParents,String orgAddr,String linkMan,String linkTel,Date startDate,Date endDate,String remark)
 			throws OrgManagementException;
-
-	/**
-	 * <pre>
-	 * 新建一个子节点机构
-	 *
-	 * 说明：
-	 * 以OmOrg指定入参时，需要调用者指定父机构GUID；
-	 * 系统检查“机构代码、机构名称、机构类型、机构等级、父机构GUID”等必输字段，通过后新建机构；
-	 * 新建后，机构状态停留在‘停用’；
-	 * </pre>
-	 *
-	 * @param newOrg
-	 *            新机构信息
-	 * @return 新建机构信息
-	 * @throws OrgManagementException
-	 */
-	OmOrg createChildOrg(OmOrg newOrg) throws OrgManagementException;
 
 	/**
 	 * <pre>
@@ -137,13 +125,25 @@ public interface IOmOrgService extends IService<OmOrg> {
 	 * 应避免对（逻辑上）不可直接修改字段的更新，如：机构状态不能直接通过修改而更新；
 	 * </pre>
 	 *
-	 * @param omOrg
+	 * @param omOrgUpdateRequest
 	 *            待修改机构信息
 	 * @return 修改后的机构信息
 	 * @throws OrgManagementException
 	 */
-	OmOrg updateOrg(OmOrg omOrg) throws OrgManagementException;
+	OmOrg changeOrg(OmOrgUpdateRequest omOrgUpdateRequest) throws OrgManagementException;
 
+	/**
+	 * 机构的树结构
+	 * @param id
+	 * @return
+	 * @throws OrgManagementException
+	 */
+	OmOrgDetail queryOrgTree(String id) throws OrgManagementException;
+
+
+
+
+	/******************下面的接口现在还没有使用 **********************/
 	/**
 	 * <pre>
 	 * 移动机构，及调整机构层级，将机构（orgCode）从原父机构（fromParentsOrgCode）调整到新父机构（toParentsOrgCode）下。
