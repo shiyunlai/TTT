@@ -45,7 +45,7 @@ public class OmPositionRequest extends RestRequest {
     @JSONField(deserializeUsing = CommonEnumDeserializer.class)
     private YON isleaf;
 
-    @NotBlank(message = "子节点数不能为空")
+    @NotNull(message = "子节点数不能为空")
     private BigDecimal subCount;
 
     private BigDecimal positionLevel;

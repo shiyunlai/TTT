@@ -12,8 +12,6 @@ import org.tis.tools.abf.module.jnl.entity.LogAbfData;
 import org.tis.tools.abf.module.jnl.exception.OperateLogException;
 import org.tis.tools.abf.module.jnl.service.ILogAbfDataService;
 
-import java.util.List;
-
 /**
  * logAbfData的Service接口实现类
  * 
@@ -41,14 +39,17 @@ public class LogAbfDataServiceImpl extends ServiceImpl<LogAbfDataMapper, LogAbfD
     }
 
     @Override
-    public List<LogAbfData> queryByDataId(String dataGuid) throws OperateLogException {
+    public Page<LogAbfData> queryByDataId(Page<LogAbfData> page, Wrapper<LogAbfData> wrapper,String dataGuid) throws OperateLogException {
 
-        Wrapper<LogAbfData> wrapper = new EntityWrapper<LogAbfData>();
+        if (null == wrapper){
+            wrapper = new EntityWrapper<LogAbfData>();
+        }
+
         wrapper.eq(LogAbfData.COLUMN_DATA_GUID,dataGuid);
 
-        List<LogAbfData> list = selectList(wrapper);
+        Page<LogAbfData> pageData = selectPage(page,wrapper);
 
-        return list;
+        return pageData;
     }
 }
 

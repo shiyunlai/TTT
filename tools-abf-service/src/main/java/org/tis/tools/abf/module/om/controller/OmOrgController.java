@@ -70,9 +70,13 @@ public class OmOrgController extends BaseController<OmOrg> {
             return ResultVO.error("404", "找不到对应记录或已经被删除！");
         }
 
-        omOrg = orgService.changeOrg(omOrgUpdateRequest);
+        boolean isexist = orgService.changeOrg(omOrgUpdateRequest);
+        if (!isexist){
+            return ResultVO.error("404","机构代码已存在,请重新输入!");
+        }
 
-        return ResultVO.success("修改成功！",omOrg);
+        OmOrg omOrgquery = orgService.selectById(omOrgUpdateRequest.getGuid());
+        return ResultVO.success("修改成功！",omOrgquery);
     }
 
     /**
