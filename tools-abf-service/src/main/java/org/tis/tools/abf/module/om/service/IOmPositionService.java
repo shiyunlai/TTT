@@ -19,14 +19,14 @@ public interface IOmPositionService extends IService<OmPosition>  {
      * @param omPositionRequest
      * @throws OrgManagementException
      */
-    void addRoot(OmPositionRequest omPositionRequest) throws OrgManagementException;
+    boolean addRoot(OmPositionRequest omPositionRequest) throws OrgManagementException;
 
     /**
      * 新增子岗位
      * @param omPositionRequest
      * @throws OrgManagementException
      */
-    void addChild(OmPositionRequest omPositionRequest) throws OrgManagementException;
+    boolean addChild(OmPositionRequest omPositionRequest) throws OrgManagementException;
 
     /**
      * 修改岗位
@@ -34,7 +34,7 @@ public interface IOmPositionService extends IService<OmPosition>  {
      * @return
      * @throws OrgManagementException
      */
-    OmPosition change(OmPositionRequest omPositionRequest) throws  OrgManagementException;
+    boolean change(OmPositionRequest omPositionRequest) throws  OrgManagementException;
 
     /**
      * 岗位的树结构
