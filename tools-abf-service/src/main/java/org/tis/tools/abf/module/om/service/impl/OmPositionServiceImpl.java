@@ -9,6 +9,7 @@ import org.tis.tools.abf.module.common.entity.enums.YON;
 import org.tis.tools.abf.module.om.controller.request.OmPositionRequest;
 import org.tis.tools.abf.module.om.dao.OmPositionMapper;
 import org.tis.tools.abf.module.om.entity.OmPosition;
+import org.tis.tools.abf.module.om.entity.enums.OmPositionStatus;
 import org.tis.tools.abf.module.om.entity.vo.OmPositionDetail;
 import org.tis.tools.abf.module.om.exception.OMExceptionCodes;
 import org.tis.tools.abf.module.om.exception.OrgManagementException;
@@ -30,20 +31,35 @@ import static org.tis.tools.core.utils.BasicUtil.wrap;
 public class OmPositionServiceImpl extends ServiceImpl<OmPositionMapper, OmPosition> implements IOmPositionService {
 
     @Override
-    public void addRoot(OmPositionRequest omPositionRequest) throws OrgManagementException {
+    public boolean addRoot(OmPositionRequest omPositionRequest) throws OrgManagementException {
+
+        boolean isexist = new Boolean(false);
+
+        //确保岗位代码唯一
+        Wrapper<OmPosition> wrapper = new EntityWrapper<OmPosition>();
+        List<OmPosition> list = selectList(wrapper);
+
+        for (OmPosition omPosition : list){
+            if (omPosition.getPositionCode().equals(omPositionRequest.getPositionCode())){
+                return isexist;
+            }
+        }
+
+        isexist = true;
 
         OmPosition omPosition = new OmPosition();
 
-        // 补充父机构，根节点没有父机构
+        // 补充父岗位，根节点没有父岗位
         omPosition.setGuidParents("");
         // 新增节点都先算叶子节点 Y
         omPosition.setIsleaf(YON.YES);
+        //新建岗位为正常状态
+        omPosition.setPositionStatus(OmPositionStatus.RUNNING);
 
         omPosition.setGuidOrg(omPositionRequest.getGuidOrg());
         omPosition.setPositionCode(omPositionRequest.getPositionCode());
         omPosition.setPositionName(omPositionRequest.getPositionName());
         omPosition.setPositionType(omPositionRequest.getPositionType());
-        omPosition.setPositionStatus(omPositionRequest.getPositionStatus());
         omPosition.setSubCount(omPositionRequest.getSubCount());
         omPosition.setPositionLevel(omPositionRequest.getPositionLevel());
         omPosition.setPositionSeq(omPositionRequest.getPositionSeq());
@@ -51,11 +67,26 @@ public class OmPositionServiceImpl extends ServiceImpl<OmPositionMapper, OmPosit
         omPosition.setEndDate(omPositionRequest.getEndDate());
 
         insert(omPosition);
+        return isexist;
     }
 
 
     @Override
-    public void addChild(OmPositionRequest omPositionRequest) throws OrgManagementException {
+    public boolean addChild(OmPositionRequest omPositionRequest) throws OrgManagementException {
+
+        boolean isexist = new Boolean(false);
+
+        //确保岗位代码唯一
+        Wrapper<OmPosition> wrapper = new EntityWrapper<OmPosition>();
+        List<OmPosition> list = selectList(wrapper);
+
+        for (OmPosition omPosition : list){
+            if (omPosition.getPositionCode().equals(omPositionRequest.getPositionCode())){
+                return isexist;
+            }
+        }
+
+        isexist = true;
 
         //查询父岗位信息
         OmPosition omPositionRoot = selectById(omPositionRequest.getGuidParents());
@@ -68,12 +99,13 @@ public class OmPositionServiceImpl extends ServiceImpl<OmPositionMapper, OmPosit
 
         // 新增节点都先算叶子节点 Y
         omPosition.setIsleaf(YON.YES);
+        //新建岗位为正常状态
+        omPosition.setPositionStatus(OmPositionStatus.RUNNING);
 
         omPosition.setGuidOrg(omPositionRequest.getGuidOrg());
         omPosition.setPositionCode(omPositionRequest.getPositionCode());
         omPosition.setPositionName(omPositionRequest.getPositionName());
         omPosition.setPositionType(omPositionRequest.getPositionType());
-        omPosition.setPositionStatus(omPositionRequest.getPositionStatus());
         omPosition.setSubCount(omPositionRequest.getSubCount());
         omPosition.setPositionLevel(omPositionRequest.getPositionLevel());
         omPosition.setPositionSeq(omPositionRequest.getPositionSeq());
@@ -85,11 +117,27 @@ public class OmPositionServiceImpl extends ServiceImpl<OmPositionMapper, OmPosit
         omPositionRoot.setIsleaf(YON.NO);
         insert(omPosition);
         updateById(omPositionRoot);
+
+        return isexist;
     }
 
 
     @Override
-    public OmPosition change(OmPositionRequest omPositionRequest) throws OrgManagementException {
+    public boolean change(OmPositionRequest omPositionRequest) throws OrgManagementException {
+
+        boolean isexist = new Boolean(false);
+
+        //确保岗位代码唯一
+        Wrapper<OmPosition> wrapper = new EntityWrapper<OmPosition>();
+        List<OmPosition> list = selectList(wrapper);
+
+        for (OmPosition omPosition : list){
+            if (omPosition.getPositionCode().equals(omPositionRequest.getPositionCode()) && !(omPosition.getGuid().equals(omPositionRequest.getGuid())) ){
+                return isexist;
+            }
+        }
+
+        isexist = true;
 
         OmPosition omPosition = new OmPosition();
 
@@ -108,7 +156,7 @@ public class OmPositionServiceImpl extends ServiceImpl<OmPositionMapper, OmPosit
         omPosition.setIsleaf(omPositionRequest.getIsleaf());
 
         updateById(omPosition);
-        return omPosition;
+        return isexist;
     }
 
 
