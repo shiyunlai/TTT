@@ -36,9 +36,9 @@ public class LogAbfDataController extends BaseController<LogAbfData> {
         return ResultVO.success("查询成功",logAbfData);
     }
 
-    @GetMapping("/list/{dataGuid}")
-    public ResultVO listByDataId(@PathVariable @NotBlank(message = "操作日志GUID不能为空") String dataGuid){
-        return ResultVO.success("查询成功",logAbfDataService.queryByDataId(dataGuid));
+    @PostMapping("/list/{dataGuid}")
+    public ResultVO listByDataId(@RequestBody @Validated SmartPage<LogAbfData> page ,@PathVariable @NotBlank(message = "操作日志GUID不能为空") String dataGuid){
+        return ResultVO.success("查询成功",logAbfDataService.queryByDataId(getPage(page), getCondition(page),dataGuid));
     }
 
 }
