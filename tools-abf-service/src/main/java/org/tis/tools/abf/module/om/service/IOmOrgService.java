@@ -130,7 +130,7 @@ public interface IOmOrgService extends IService<OmOrg> {
 	 * @return 修改后的机构信息
 	 * @throws OrgManagementException
 	 */
-	OmOrg changeOrg(OmOrgUpdateRequest omOrgUpdateRequest) throws OrgManagementException;
+	boolean changeOrg(OmOrgUpdateRequest omOrgUpdateRequest) throws OrgManagementException;
 
 	/**
 	 * 机构的树结构
