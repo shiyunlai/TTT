@@ -157,7 +157,23 @@ public class OmOrgServiceImpl extends ServiceImpl<OmOrgMapper, OmOrg> implements
 	}
 
 	@Override
-	public OmOrg changeOrg(OmOrgUpdateRequest omOrgUpdateRequest) throws OrgManagementException {
+	public boolean changeOrg(OmOrgUpdateRequest omOrgUpdateRequest) throws OrgManagementException {
+
+		boolean isexist = false;
+
+		try {
+
+		Wrapper<OmOrg> wrapper = new EntityWrapper<>();
+		List<OmOrg> lists = selectList(wrapper);
+
+		for (OmOrg omOrg:lists){
+			if (omOrg.getOrgCode().equals(omOrgUpdateRequest.getOrgCode()) && !(omOrg.getGuid().equals
+					(omOrgUpdateRequest.getGuid()))){
+				return isexist;
+			}
+		}
+
+		isexist = true;
 
 		OmOrg omOrg = new OmOrg();
 
@@ -180,14 +196,14 @@ public class OmOrgServiceImpl extends ServiceImpl<OmOrgMapper, OmOrg> implements
 		omOrg.setIsleaf(omOrgUpdateRequest.getIsleaf());
 		omOrg.setRemark(omOrgUpdateRequest.getRemark());
 
-		try {
-			updateById(omOrg);
+
+		updateById(omOrg);
 		}catch (Exception e){
 			e.printStackTrace();
 			throw new OrgManagementException(OMExceptionCodes.FAILURE_WHEN_UPDATE_ORG_APP,wrap(e.getMessage()));
 		}
 
-		return omOrg;
+		return isexist;
 	}
 
 
