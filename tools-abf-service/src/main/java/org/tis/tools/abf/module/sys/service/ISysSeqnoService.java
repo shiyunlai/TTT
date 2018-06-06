@@ -9,6 +9,14 @@ import org.tis.tools.abf.module.sys.exception.SysManagementException;
 public interface ISysSeqnoService extends IService<SysSeqno> {
 
     /**
+     * 新增序号资源
+     * @param sysSeqnoResetRequest
+     * @return
+     * @throws SysManagementException
+     */
+    void add(SysSeqnoResetRequest sysSeqnoResetRequest) throws SysManagementException;
+
+    /**
      * 修改序号资源
      * @param sysSeqnoResetRequest
      * @return

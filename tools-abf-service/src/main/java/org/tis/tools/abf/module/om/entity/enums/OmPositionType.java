@@ -5,27 +5,23 @@ import org.tis.tools.core.entity.enums.BaseEnum;
 import java.io.Serializable;
 
 /**
- * describe: 机构状态枚举类
- *
- * @author zhaoch
- * @date 2018/3/27
-**/
-public enum OmOrgStatus implements BaseEnum {
+ * 岗位类别:见业务字典： DICT_OM_POSITYPE
+ * Created by chenchao
+ * Created on 2018/6/5 17:36
+ */
+public enum OmPositionType implements BaseEnum {
 
-    /** 机构状态：正常 */
-    RUNNING("running", "正常"),
+    /** 岗位类别：机构岗位 */
+    ORGANIZATION("01", "机构岗位"),
 
-    /** 机构状态：注销 */
-    CANCEL("cancel", "注销"),
-
-    /** 机构状态：停用 */
-    STOP("stop", "停用");
+    /** 岗位类别：工作组岗位 */
+    WORKINGGROUP("02", "工作组岗位");
 
     private final String value;
 
     private final String name;
 
-    OmOrgStatus(final String value, final String name) {
+    OmPositionType(final String value, final String name) {
         this.value = value;
         this.name = name;
     }

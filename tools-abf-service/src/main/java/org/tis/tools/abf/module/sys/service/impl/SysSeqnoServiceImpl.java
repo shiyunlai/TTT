@@ -19,6 +19,31 @@ import static org.tis.tools.core.utils.BasicUtil.wrap;
 @Transactional( rollbackFor = Exception.class)
 public class SysSeqnoServiceImpl extends ServiceImpl<SysSeqnoMapper, SysSeqno> implements ISysSeqnoService {
 
+    @Override
+    public void add(SysSeqnoResetRequest sysSeqnoResetRequest) throws SysManagementException {
+
+        SysSeqno sysSeqno = new SysSeqno();
+
+//        SeqnoReset seqnoReset = null;
+//        if ("E".equals(sysSeqnoResetRequest.getReset())){
+//            seqnoReset = SeqnoReset.EVER;
+//        }
+
+        try {
+            //收集参数
+            sysSeqno.setSeqKey(sysSeqnoResetRequest.getSeqKey());
+            sysSeqno.setSeqName(sysSeqnoResetRequest.getSeqName());
+            sysSeqno.setReset(sysSeqnoResetRequest.getReset());
+            sysSeqno.setResetParams(sysSeqnoResetRequest.getResetParams());
+            sysSeqno.setSeqNo(BigDecimal.valueOf(Double.valueOf(sysSeqnoResetRequest.getSeqNo())));
+
+            insert(sysSeqno);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new SysManagementException(SYSExceptionCodes.FAILURE_WHEN_INSERT_SYS_SEQNO,wrap(e.getMessage()));
+        }
+
+    }
 
     @Override
     public SysSeqno change(SysSeqnoResetRequest sysSeqnoResetRequest) throws SysManagementException {
@@ -38,7 +63,7 @@ public class SysSeqnoServiceImpl extends ServiceImpl<SysSeqnoMapper, SysSeqno> i
             throw new SysManagementException(SYSExceptionCodes.FAILURE_WHEN_UPDATE_SYS_SEQNO,wrap(e.getMessage()));
         }
 
-        return null;
+        return sysSeqno;
     }
 
     /**

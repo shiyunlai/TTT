@@ -4,20 +4,27 @@
 package org.tis.tools.abf.module.om.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.tis.tools.abf.module.common.entity.enums.YON;
+import org.tis.tools.abf.module.om.controller.request.OmOrgUpdateRequest;
 import org.tis.tools.abf.module.om.dao.OmOrgMapper;
 import org.tis.tools.abf.module.om.entity.OmOrg;
+import org.tis.tools.abf.module.om.entity.enums.OmOrgArea;
+import org.tis.tools.abf.module.om.entity.enums.OmOrgDegree;
 import org.tis.tools.abf.module.om.entity.enums.OmOrgStatus;
+import org.tis.tools.abf.module.om.entity.enums.OmOrgType;
+import org.tis.tools.abf.module.om.entity.vo.OmOrgDetail;
 import org.tis.tools.abf.module.om.exception.OMExceptionCodes;
 import org.tis.tools.abf.module.om.exception.OrgManagementException;
 import org.tis.tools.abf.module.om.service.IOmOrgService;
 import org.tis.tools.abf.module.om.service.IOrgCodeGenerator;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -71,7 +78,7 @@ public class OmOrgServiceImpl extends ServiceImpl<OmOrgMapper, OmOrg> implements
 	 * @throws OrgManagementException
 	 */
 	@Override
-	public OmOrg createRootOrg(String areaCode, String orgDegree, String orgName,  String orgType)
+	public OmOrg createRootOrg(OmOrgArea areaCode, OmOrgDegree orgDegree, String orgName, OmOrgType orgType,String orgAddr,String linkMan,String linkTel,Date startDate,Date endDate,String remark)
 			throws OrgManagementException {
 
 		OmOrg org = new OmOrg();
@@ -90,17 +97,23 @@ public class OmOrgServiceImpl extends ServiceImpl<OmOrgMapper, OmOrg> implements
 		wrapper.isNull(OmOrg.COLUMN_GUID_PARENTS);
 		org.setSortNo(new BigDecimal(selectCount(wrapper)));
 		// 收集入参
-		org.setOrgCode(genOrgCode(orgDegree, areaCode));
+		org.setOrgCode(genOrgCode(orgDegree.toString(), areaCode.toString()));
 		org.setOrgName(orgName);
 		org.setOrgType(orgType);
 		org.setOrgDegree(orgDegree);
 		org.setArea(areaCode);
+		org.setOrgAddr(orgAddr);
+		org.setLinkMan(linkMan);
+		org.setLinkTel(linkTel);
+		org.setStartDate(startDate);
+		org.setEndDate(endDate);
+		org.setRemark(remark);
 		insert(org);
 		return org;
 	}
 
 	@Override
-	public OmOrg createChildOrg(String areaCode, String orgDegree, String orgName, String orgType, String guidParents)
+	public OmOrg createChildOrg(OmOrgArea areaCode, OmOrgDegree orgDegree, String orgName, OmOrgType orgType, String guidParents,String orgAddr,String linkMan,String linkTel,Date startDate,Date endDate,String remark)
 			throws OrgManagementException {
 		// 查询父机构信息
 		OmOrg parentsOrg = selectById(guidParents);
@@ -120,12 +133,22 @@ public class OmOrgServiceImpl extends ServiceImpl<OmOrgMapper, OmOrg> implements
 		String newOrgSeq = parentsOrgSeq + "." + org.getGuid();
 		// 设置机构序列,根据父机构的序列+"."+机构的GUID
 		org.setOrgSeq(newOrgSeq);
+		//设置排序字段
+		EntityWrapper<OmOrg> wrapper = new EntityWrapper<>();
+		wrapper.isNull(OmOrg.COLUMN_GUID_PARENTS);
+		org.setSortNo(new BigDecimal(selectCount(wrapper)));
 		// 收集入参
-		org.setOrgCode(orgCodeGenerator.genOrgCode(orgDegree, areaCode));
+		org.setOrgCode(orgCodeGenerator.genOrgCode(orgDegree.toString(), areaCode.toString()));
 		org.setOrgName(orgName);
 		org.setOrgType(orgType);
 		org.setOrgDegree(orgDegree);
 		org.setArea(areaCode);
+		org.setOrgAddr(orgAddr);
+		org.setLinkMan(linkMan);
+		org.setLinkTel(linkTel);
+		org.setStartDate(startDate);
+		org.setEndDate(endDate);
+		org.setRemark(remark);
 		// 更新父节点机构 是否叶子节点 节点数 最新更新时间 和最新更新人员
 		parentsOrg.setIsleaf(YON.NO);
 		insert(org);//新增子节点
@@ -134,13 +157,87 @@ public class OmOrgServiceImpl extends ServiceImpl<OmOrgMapper, OmOrg> implements
 	}
 
 	@Override
-	public OmOrg createChildOrg(OmOrg newOrg) throws OrgManagementException {
-		return null;
+	public OmOrg changeOrg(OmOrgUpdateRequest omOrgUpdateRequest) throws OrgManagementException {
+
+		OmOrg omOrg = new OmOrg();
+
+		//收集参数
+		omOrg.setGuid(omOrgUpdateRequest.getGuid());
+		omOrg.setOrgCode(omOrgUpdateRequest.getOrgCode());
+		omOrg.setOrgName(omOrgUpdateRequest.getOrgName());
+		omOrg.setOrgDegree(omOrgUpdateRequest.getOrgDegree());
+		omOrg.setOrgType(omOrgUpdateRequest.getOrgType());
+		omOrg.setOrgStatus(omOrgUpdateRequest.getOrgStatus());
+		omOrg.setGuidParents(omOrgUpdateRequest.getGuidParents());
+		omOrg.setOrgSeq(omOrgUpdateRequest.getOrgSeq());
+		omOrg.setOrgAddr(omOrgUpdateRequest.getOrgAddr());
+		omOrg.setLinkMan(omOrgUpdateRequest.getLinkMan());
+		omOrg.setLinkTel(omOrgUpdateRequest.getLinkTel());
+		omOrg.setStartDate(omOrgUpdateRequest.getStartDate());
+		omOrg.setEndDate(omOrgUpdateRequest.getEndDate());
+		omOrg.setArea(omOrgUpdateRequest.getArea());
+		omOrg.setSortNo(omOrgUpdateRequest.getSortNo());
+		omOrg.setIsleaf(omOrgUpdateRequest.getIsleaf());
+		omOrg.setRemark(omOrgUpdateRequest.getRemark());
+
+		try {
+			updateById(omOrg);
+		}catch (Exception e){
+			e.printStackTrace();
+			throw new OrgManagementException(OMExceptionCodes.FAILURE_WHEN_UPDATE_ORG_APP,wrap(e.getMessage()));
+		}
+
+		return omOrg;
 	}
 
+
 	@Override
-	public OmOrg updateOrg(OmOrg omOrg) throws OrgManagementException {
-		return null;
+	public OmOrgDetail queryOrgTree(String id) throws OrgManagementException {
+
+		OmOrgDetail omOrgDetail = new OmOrgDetail();
+
+		try {
+			OmOrg omOrg = selectById(id);
+
+			//创建子机构的list
+			List<OmOrg> list = new ArrayList<OmOrg>();
+
+			//查询子机构字典
+			Wrapper<OmOrg> wrapper = new EntityWrapper<OmOrg>();
+			wrapper.eq(OmOrg.COLUMN_GUID_PARENTS,id);
+
+			List<OmOrg> queryList = selectList(wrapper);
+
+			for (OmOrg omOrgQuery: queryList) {
+				list.add(omOrgQuery);
+			}
+
+			//收集查询出来的结果
+			omOrgDetail.setGuid(omOrg.getGuid());
+			omOrgDetail.setOrgCode(omOrg.getOrgCode());
+			omOrgDetail.setOrgName(omOrg.getOrgName());
+			omOrgDetail.setOrgDegree(omOrg.getOrgDegree());
+			omOrgDetail.setOrgType(omOrg.getOrgType());
+			omOrgDetail.setOrgStatus(omOrg.getOrgStatus());
+			omOrgDetail.setGuidParents(omOrg.getGuidParents());
+			omOrgDetail.setOrgSeq(omOrg.getOrgSeq());
+			omOrgDetail.setOrgAddr(omOrg.getOrgAddr());
+			omOrgDetail.setLinkMan(omOrg.getLinkMan());
+			omOrgDetail.setLinkTel(omOrg.getLinkTel());
+			omOrgDetail.setStartDate(omOrg.getStartDate());
+			omOrgDetail.setEndDate(omOrg.getEndDate());
+			omOrgDetail.setArea(omOrg.getArea());
+			omOrgDetail.setSortNo(omOrg.getSortNo());
+			omOrgDetail.setIsleaf(omOrg.getIsleaf());
+			omOrgDetail.setRemark(omOrg.getRemark());
+			omOrgDetail.setChildren(list);
+
+		}catch (Exception e){
+			e.printStackTrace();
+			throw new OrgManagementException(OMExceptionCodes.FAILURE_WHEN_QUERY_ORG_TREE,wrap(e.getMessage()));
+		}
+
+		return omOrgDetail;
 	}
 
 	@Override

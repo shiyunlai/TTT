@@ -1,19 +1,19 @@
 package org.tis.tools.abf.module.om.entity;
 
-import java.math.BigDecimal;
-
 import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotations.*;
-
-import java.util.Date;
-
 import com.baomidou.mybatisplus.enums.FieldFill;
 import lombok.Data;
 import org.tis.tools.abf.module.common.entity.enums.YON;
+import org.tis.tools.abf.module.om.entity.enums.OmOrgArea;
+import org.tis.tools.abf.module.om.entity.enums.OmOrgDegree;
 import org.tis.tools.abf.module.om.entity.enums.OmOrgStatus;
+import org.tis.tools.abf.module.om.entity.enums.OmOrgType;
 import org.tis.tools.core.entity.enums.CommonEnumDeserializer;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * omOrg机构部门（Organization）表
@@ -267,13 +267,15 @@ public class OmOrg implements Serializable {
      * 机构类型:见业务字典： DICT_OM_ORGTYPE
      * 如：总公司/总部部门/分公司/分公司部门...
      */
-    private String orgType;
+    @JSONField(deserializeUsing= CommonEnumDeserializer.class)
+    private OmOrgType orgType;
 
     /**
      * 机构等级:见业务字典： DICT_OM_ORGDEGREE
      * 如：总行，分行，海外分行...
      */
-    private String orgDegree;
+    @JSONField(deserializeUsing= CommonEnumDeserializer.class)
+    private OmOrgDegree orgDegree;
 
     /**
      * 机构状态:见业务字典： DICT_OM_ORGSTATUS
@@ -320,7 +322,8 @@ public class OmOrg implements Serializable {
     /**
      * 所属地域:见业务字典： DICT_SD_AREA
      */
-    private String area;
+    @JSONField(deserializeUsing= CommonEnumDeserializer.class)
+    private OmOrgArea area;
 
     /**
      * 排列顺序编号:维护时，可手工指定从0开始的自然数字；如果为空，系统将按照机构代码排序。

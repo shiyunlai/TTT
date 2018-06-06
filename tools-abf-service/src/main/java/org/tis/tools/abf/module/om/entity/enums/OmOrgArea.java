@@ -5,27 +5,23 @@ import org.tis.tools.core.entity.enums.BaseEnum;
 import java.io.Serializable;
 
 /**
- * describe: 机构状态枚举类
- *
- * @author zhaoch
- * @date 2018/3/27
-**/
-public enum OmOrgStatus implements BaseEnum {
+ * 所属区域
+ * Created by chenchao
+ * Created on 2018/6/5 13:59
+ */
+public enum OmOrgArea implements BaseEnum {
 
-    /** 机构状态：正常 */
-    RUNNING("running", "正常"),
+    /** 所属区域：北京 */
+    BEIJING("010", "北京"),
 
-    /** 机构状态：注销 */
-    CANCEL("cancel", "注销"),
-
-    /** 机构状态：停用 */
-    STOP("stop", "停用");
+    /** 所属区域：上海 */
+    SHANGHAI("021", "上海");
 
     private final String value;
 
     private final String name;
 
-    OmOrgStatus(final String value, final String name) {
+    OmOrgArea(final String value, final String name) {
         this.value = value;
         this.name = name;
     }

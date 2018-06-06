@@ -29,8 +29,8 @@ public class SysSeqnoController extends BaseController<SysSeqno>  {
 
     @OperateLog(type = OperateType.ADD, desc = "新增序号资源")
     @PostMapping
-    public ResultVO add(@RequestBody @Validated SysSeqno sysSeqno) {
-        sysSeqnoService.insert(sysSeqno);
+    public ResultVO add(@RequestBody @Validated SysSeqnoResetRequest sysSeqnoResetRequest) {
+        sysSeqnoService.add(sysSeqnoResetRequest);
         return ResultVO.success("添加成功");
     }
 

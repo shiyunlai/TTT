@@ -5,27 +5,34 @@ import org.tis.tools.core.entity.enums.BaseEnum;
 import java.io.Serializable;
 
 /**
- * describe: 机构状态枚举类
- *
- * @author zhaoch
- * @date 2018/3/27
-**/
-public enum OmOrgStatus implements BaseEnum {
+ * 机构登记
+ * Created by chenchao
+ * Created on 2018/6/5 11:55
+ */
+public enum OmOrgDegree implements BaseEnum {
 
-    /** 机构状态：正常 */
-    RUNNING("running", "正常"),
+    /** 机构登记:总行 */
+    HEADQUARTERS("BS", "总行"),
 
-    /** 机构状态：注销 */
-    CANCEL("cancel", "注销"),
+    /** 机构登记:分行 */
+    BRANCH("YF", "分行"),
 
-    /** 机构状态：停用 */
-    STOP("stop", "停用");
+    /** 机构登记:海外 */
+    OVERSEAS("HW", "海外"),
+
+    /** 机构登记:区域分行 */
+    REGIONALBRANCH("QY", "区域分行"),
+
+    /** 机构登记:网点 */
+    NETWORK("CN", "网点");
+
 
     private final String value;
 
     private final String name;
 
-    OmOrgStatus(final String value, final String name) {
+
+    OmOrgDegree(final String value, final String name){
         this.value = value;
         this.name = name;
     }

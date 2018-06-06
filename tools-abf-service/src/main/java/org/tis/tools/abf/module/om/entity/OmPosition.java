@@ -1,15 +1,17 @@
 package org.tis.tools.abf.module.om.entity;
 
-import java.math.BigDecimal;
-
+import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotations.*;
-
-import java.util.Date;
-
 import com.baomidou.mybatisplus.enums.FieldFill;
 import lombok.Data;
+import org.tis.tools.abf.module.common.entity.enums.YON;
+import org.tis.tools.abf.module.om.entity.enums.OmPositionStatus;
+import org.tis.tools.abf.module.om.entity.enums.OmPositionType;
+import org.tis.tools.core.entity.enums.CommonEnumDeserializer;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * omPosition岗位定义表
@@ -229,17 +231,20 @@ public class OmPosition implements Serializable {
      * 岗位类别:见业务字典： DICT_OM_POSITYPE
      * 机构岗位，工作组岗位
      */
-    private String positionType;
+    @JSONField(deserializeUsing = CommonEnumDeserializer.class)
+    private OmPositionType positionType;
 
     /**
      * 岗位状态:见业务字典： DICT_OM_POSISTATUS
      */
-    private String positionStatus;
+    @JSONField(deserializeUsing = CommonEnumDeserializer.class)
+    private OmPositionStatus positionStatus;
 
     /**
      * 是否叶子岗位:见业务字典： DICT_YON
      */
-    private String isleaf;
+    @JSONField(deserializeUsing = CommonEnumDeserializer.class)
+    private YON isleaf;
 
     /**
      * 子节点数
