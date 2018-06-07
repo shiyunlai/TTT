@@ -204,5 +204,30 @@ public class OmPositionServiceImpl extends ServiceImpl<OmPositionMapper, OmPosit
 
         return omPositionDetail;
     }
+
+
+    @Override
+    public void deleteRoot(String id) throws OrgManagementException {
+
+        try {
+            //查询所有的子岗位
+            Wrapper<OmPosition> wrapper = new EntityWrapper<OmPosition>();
+            wrapper.eq(OmPosition.COLUMN_GUID_PARENTS,id);
+            //子岗位列表
+            List<OmPosition> lists = selectList(wrapper);
+            //删除所有的子岗位
+            for (OmPosition omPosition:lists) {
+                deleteById(omPosition.getGuid());
+            }
+
+            //删除根岗位
+            deleteById(id);
+
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new OrgManagementException(OMExceptionCodes.FAILURE_WHEN_DELETE_ROOT_POSITION,wrap(e.getMessage()));
+        }
+    }
+
 }
 

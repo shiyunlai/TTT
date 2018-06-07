@@ -1,9 +1,12 @@
 package org.tis.tools.abf.module.ac.service.impl;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.tis.tools.abf.module.ac.controller.request.AcAppListRequest;
 import org.tis.tools.abf.module.ac.dao.AcAppMapper;
 import org.tis.tools.abf.module.ac.entity.AcApp;
 import org.tis.tools.abf.module.ac.entity.enums.AcAppType;
@@ -13,7 +16,9 @@ import org.tis.tools.abf.module.ac.service.IAcAppService;
 import org.tis.tools.abf.module.common.entity.enums.YON;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import static org.tis.tools.core.utils.BasicUtil.wrap;
 
@@ -122,5 +127,36 @@ public class AcAppServiceImpl extends ServiceImpl<AcAppMapper, AcApp> implements
         return app;
     }
 
+
+    @Override
+    public List<AcApp> queryAll() throws AcManagementException {
+
+        Wrapper<AcApp> wrapper = new EntityWrapper<AcApp>();
+
+        List<AcApp> list = selectList(wrapper);
+
+        return list;
+    }
+
+
+    @Override
+    public List<AcApp> batchQuery(AcAppListRequest acAppListRequest) throws AcManagementException{
+
+
+        List<AcApp> list = new ArrayList<AcApp>();
+
+        List<String> listGuid = acAppListRequest.getGuidList();
+
+
+        for (String guid : listGuid) {
+                AcApp acApp = selectById(guid);
+                if (null == acApp){
+                    throw new AcManagementException(AcExceptionCodes.FAILURE_WHRN_QUERY_AC_APP,wrap("查询的应用不存在",guid));
+                }
+                list.add(acApp);
+        }
+
+        return list;
+    }
 }
 

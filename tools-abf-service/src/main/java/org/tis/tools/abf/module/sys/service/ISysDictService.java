@@ -85,6 +85,14 @@ public interface ISysDictService extends IService<SysDict> {
     Page<SysDict> querySysDicts(Page<SysDict> page, Wrapper<SysDict> wrapper) throws SysManagementException;
 
     /**
+     * 查询所有的父业务字典,并不分页
+     *
+     * @return
+     * @throws SysManagementException
+     */
+    List<SysDict> queryParentList()throws SysManagementException;
+
+    /**
      * 根据GUID查询业务字典自身
      * @param id
      * 			业务字典GUID

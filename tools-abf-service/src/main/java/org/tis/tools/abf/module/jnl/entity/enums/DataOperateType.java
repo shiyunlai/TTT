@@ -35,4 +35,9 @@ public enum DataOperateType implements BaseEnum {
     public Serializable getValue() {
         return value;
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

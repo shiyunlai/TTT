@@ -92,7 +92,6 @@ public class AcOperatorController extends BaseController<AcOperator>  {
      * @param id
      * @return
      */
-    @OperateLog(type = OperateType.QUERY,desc = "根据ID查询操作员")
     @GetMapping("/{id}")
     public ResultVO detail(@PathVariable @NotBlank(message = "id不能为空") String id) {
         EntityWrapper<AcOperator> acOperatorEntityWrapper = new EntityWrapper<>();
@@ -104,7 +103,6 @@ public class AcOperatorController extends BaseController<AcOperator>  {
         return ResultVO.success("查询成功", acOperator);
     }
 
-    @OperateLog(type = OperateType.QUERY,desc = "查询操作员列表")
     @PostMapping("/list")
     public ResultVO list(@RequestBody @Validated SmartPage<AcOperator> page) {
         return  ResultVO.success("查询成功", acOperatorService.selectPage(getPage(page), getCondition(page)));

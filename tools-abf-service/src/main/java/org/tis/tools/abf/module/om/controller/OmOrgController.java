@@ -80,11 +80,29 @@ public class OmOrgController extends BaseController<OmOrg> {
     }
 
     /**
-     * 删除机构
+     * 删除父机构
      * @param id
      * @return
      */
-    @OperateLog(type = OperateType.DELETE, desc = "删除机构")
+    @OperateLog(type = OperateType.DELETE, desc = "删除父机构")
+    @DeleteMapping("/deleteRoot/{id}")
+    public ResultVO deleteRoot(@PathVariable @NotBlank(message = "id不能为空") String id) {
+        OmOrg omOrg = orgService.selectById(id);
+        if (omOrg == null) {
+            return ResultVO.error("404", "找不到对应记录或已经被删除！");
+        }
+
+        orgService.delectRoot(id);
+        return ResultVO.success("删除成功");
+    }
+
+
+    /**
+     * 删除子机构
+     * @param id
+     * @return
+     */
+    @OperateLog(type = OperateType.DELETE, desc = "删除子机构")
     @DeleteMapping("/{id}")
     public ResultVO delete(@PathVariable @NotBlank(message = "id不能为空") String id) {
         OmOrg omOrg = orgService.selectById(id);
@@ -101,7 +119,6 @@ public class OmOrgController extends BaseController<OmOrg> {
      * @param id
      * @return
      */
-    @OperateLog(type = OperateType.QUERY, desc = "查询机构")
     @GetMapping("/{id}")
     public ResultVO detail(@PathVariable @NotBlank(message = "id不能为空") String id) {
         OmOrg omOrg = orgService.selectById(id);
@@ -116,7 +133,6 @@ public class OmOrgController extends BaseController<OmOrg> {
      * @param page
      * @return
      */
-    @OperateLog(type = OperateType.QUERY,desc = "查询机构列表")
     @PostMapping("/list")
     public ResultVO list(@RequestBody @Validated SmartPage<OmOrg> page) {
         return  ResultVO.success("查询成功", orgService.selectPage(getPage(page), getCondition(page)));
@@ -128,7 +144,6 @@ public class OmOrgController extends BaseController<OmOrg> {
      * @param guid
      * @return
      */
-    @OperateLog(type = OperateType.QUERY,desc = "查询机构的树结构")
     @PostMapping("/tree/{guid}")
     public ResultVO tree(@PathVariable @NotBlank(message = "guid不能为空") String guid){
 
@@ -225,7 +240,5 @@ public class OmOrgController extends BaseController<OmOrg> {
 
         return ResultVO.success("启用成功！",omOrg);
     }
-
-
 
 }

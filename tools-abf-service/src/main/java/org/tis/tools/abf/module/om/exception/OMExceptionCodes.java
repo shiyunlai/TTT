@@ -220,7 +220,23 @@ public class OMExceptionCodes {
 	/**
 	 * 查询岗位树失败
 	 */
-	public static final String FAILURE_WHEN_QUERY_POSITION_TREE= R_EX_CODE("004");
+	public static final String FAILURE_WHEN_QUERY_POSITION_TREE= R_EX_CODE("0045");
+	/**
+	 * 创建岗位应用列表时岗位不存在
+	 */
+	public static final String POSITION_NOT_EXIST_BY_CREAT_POSITIONAPP= R_EX_CODE("0046");
+	/**
+	 * 创建岗位应用列表时应用不存在
+	 */
+	public static final String APP_NOT_EXIST_BY_CREAT_POSITIONAPP= R_EX_CODE("0047");
+	/**
+	 * 删除根机构失败
+	 */
+	public static final String FAILURE_WHEN_DELETE_ROOT_ORG = R_EX_CODE("0048");
+	/**
+	 * 删除根岗位失败
+	 */
+	public static final String FAILURE_WHEN_DELETE_ROOT_POSITION = R_EX_CODE("0049");
 
 
 	/**

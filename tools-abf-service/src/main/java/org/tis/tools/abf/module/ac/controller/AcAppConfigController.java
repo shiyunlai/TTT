@@ -63,7 +63,6 @@ public class AcAppConfigController extends BaseController<AcAppConfig> {
         return ResultVO.success("删除成功");
     }
 
-    @OperateLog(type = OperateType.QUERY, desc = "根据ID查询个性化配置")
     @GetMapping("/{id}")
     public ResultVO detail(@PathVariable @NotBlank(message = "id不能为空") String id) {
         AcAppConfig acAppConfig = acAppConfigService.selectById(id);
@@ -73,7 +72,6 @@ public class AcAppConfigController extends BaseController<AcAppConfig> {
         return ResultVO.success("查询成功", acAppConfig);
     }
 
-    @OperateLog(type = OperateType.QUERY, desc = "分页查询个性化配置")
     @PostMapping("/list")
     public ResultVO list(@RequestBody @Validated SmartPage<AcAppConfig> page) {
         return ResultVO.success("查询成功", acAppConfigService.selectPage(getPage(page), getCondition(page)));

@@ -256,6 +256,32 @@ public class OmOrgServiceImpl extends ServiceImpl<OmOrgMapper, OmOrg> implements
 		return omOrgDetail;
 	}
 
+
+	@Override
+	public void delectRoot(String id) throws OrgManagementException {
+
+		try {
+
+			//首先删除父机构对应的子机构
+			Wrapper<OmOrg> wrapper = new EntityWrapper<OmOrg>();
+			wrapper.eq(OmOrg.COLUMN_GUID_PARENTS,id);
+
+			//子机构的列表
+			List<OmOrg> lists = selectList(wrapper);
+			//删除所有的子机构
+			for (OmOrg omOrg:lists) {
+				deleteById(omOrg.getGuid());
+			}
+
+			//最后删除根机构
+			deleteById(id);
+		}catch (Exception e){
+			e.printStackTrace();
+			throw new OrgManagementException(OMExceptionCodes.FAILURE_WHEN_DELETE_ROOT_ORG,wrap(e.getMessage()));
+		}
+
+	}
+
 	@Override
 	public boolean moveOrg(String orgCode, String fromParentsOrgCode, String toParentsOrgCode, int toSortNo) throws OrgManagementException {
 		return false;

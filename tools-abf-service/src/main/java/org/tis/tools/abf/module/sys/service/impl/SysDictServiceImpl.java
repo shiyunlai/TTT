@@ -116,6 +116,42 @@ public class SysDictServiceImpl  extends ServiceImpl<SysDictMapper,SysDict> impl
     public Page<SysDict> querySysDicts(Page<SysDict> page, Wrapper<SysDict> wrapper){
         return selectPage(page,wrapper);
     }
+
+    /**
+     * 查询所有的父业务字典,并不分页
+     *
+     * @return
+     * @throws SysManagementException
+     */
+    @Override
+    public List<SysDict> queryParentList() throws SysManagementException {
+
+        Wrapper<SysDict> wrapper = new EntityWrapper<SysDict>();
+        wrapper.ne(SysDict.COLUMN_GUID_PARENTS,"");
+        List<SysDict> listSon = selectList(wrapper);
+
+
+        Wrapper<SysDict> wrapper1 = new EntityWrapper<SysDict>();
+        List<SysDict> listAll = selectList(wrapper1);
+
+        List<SysDict> listParent = new ArrayList<SysDict>();
+
+        for (SysDict sysDictAll :listAll){
+            String GuidAll = sysDictAll.getGuid();
+            Boolean  isexist = false;
+            for (SysDict sysDictSon : listSon){
+                if (GuidAll.equals(sysDictSon.getGuid())){
+                    isexist = true;
+                    break;
+                }
+            }
+            if (!isexist){
+                listParent.add(sysDictAll);
+            }
+        }
+        return listParent;
+    }
+
     /**
      * @param  id
      * @return

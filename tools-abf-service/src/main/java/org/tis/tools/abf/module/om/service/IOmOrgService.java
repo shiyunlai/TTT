@@ -140,6 +140,13 @@ public interface IOmOrgService extends IService<OmOrg> {
 	 */
 	OmOrgDetail queryOrgTree(String id) throws OrgManagementException;
 
+	/**
+	 * 删除父机构
+	 * @param id
+	 * @throws OrgManagementException
+	 */
+	void delectRoot(String id) throws OrgManagementException;
+
 
 
 
