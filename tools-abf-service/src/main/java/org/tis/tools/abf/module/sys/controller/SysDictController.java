@@ -20,6 +20,7 @@ import org.tis.tools.core.web.vo.SmartPage;
 
 import javax.validation.constraints.NotNull;
 import java.text.ParseException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/sysDicts")
@@ -103,8 +104,8 @@ public class SysDictController  extends BaseController {
     @ApiOperation(value = "查询业务字典", notes = "根据guid查询出对应的数据信息")
     @GetMapping("/{id}")
     public ResultVO querySysDict(@PathVariable @Validated  @NotBlank String id) {
-        SysDict list = iSysDictService.querySysDictByGuid(id);
-        return ResultVO.success("查询成功",list);
+        SysDict sysDict = iSysDictService.querySysDictByGuid(id);
+        return ResultVO.success("查询成功",sysDict);
     }
 
     /**
@@ -116,6 +117,18 @@ public class SysDictController  extends BaseController {
         Page<SysDict> sysDict = iSysDictService.querySysDicts(getPage(page),getCondition(page));
         return ResultVO.success("查询成功",sysDict);
     }
+
+
+    /**
+     * 查询所有的父业务字典
+     * @return
+     */
+    @GetMapping("/ParentList")
+    public ResultVO queryParentList(){
+        List<SysDict> list = iSysDictService.queryParentList();
+        return ResultVO.success("查询成功",list);
+    }
+
     @ApiOperation(value = "dictKey和dictName查询", notes = "只需要传入dictKey跟dictName参数进行筛选")
     @PostMapping("/lists")
     public ResultVO dictKeyOrQuery(@RequestBody @Validated SysDictQueryRequest request) {
@@ -125,7 +138,7 @@ public class SysDictController  extends BaseController {
         return ResultVO.success("查询成功",iSysDictService.dictKeyQuery(sysDict));
     }
 
-    @OperateLog(type = OperateType.QUERY ,desc = "查询业务字典树")
+
     @ApiOperation(value = "查询业务字典树", notes = "传入分页参数")
     @PostMapping("/tree/{guid}")
     public ResultVO tree(@PathVariable @NotNull(message = "guid不能为空") String guid){
