@@ -51,7 +51,6 @@ public class SysErrCodeController extends BaseController<SysErrCode>  {
         return ResultVO.success("删除成功");
     }
 
-    @OperateLog(type = OperateType.QUERY,desc = "根据ID查询错误码")
     @GetMapping("/{id}")
     public ResultVO detail(@PathVariable @NotBlank(message = "id不能为空") String id) {
         SysErrCode sysErrCode = sysErrCodeService.selectById(id);
@@ -60,7 +59,7 @@ public class SysErrCodeController extends BaseController<SysErrCode>  {
         }
         return ResultVO.success("查询成功", sysErrCode);
     }
-    @OperateLog(type = OperateType.QUERY,desc = "分页查询错误码")
+
     @PostMapping("/list")
     public ResultVO list(@RequestBody @Validated SmartPage<SysErrCode> page) {
         return  ResultVO.success("查询成功", sysErrCodeService.selectPage(getPage(page), getCondition(page)));
