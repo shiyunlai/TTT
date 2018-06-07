@@ -13,6 +13,8 @@ import org.tis.tools.core.web.controller.BaseController;
 import org.tis.tools.core.web.vo.ResultVO;
 import org.tis.tools.core.web.vo.SmartPage;
 
+import java.math.BigDecimal;
+
 /**
  * sysSeqno的Controller类
  * 
@@ -56,7 +58,12 @@ public class SysSeqnoController extends BaseController<SysSeqno>  {
         sysSeqnoService.deleteById(seqKey);
         return ResultVO.success("删除成功");
     }
-    
+
+    /**
+     * 根据seqKey查询序号
+     * @param seqKey
+     * @return
+     */
     @GetMapping("/{seqKey}")
     public ResultVO detail(@PathVariable @NotBlank(message = "id不能为空") String seqKey) {
         SysSeqno sysSeqno = sysSeqnoService.selectById(seqKey);
@@ -65,10 +72,33 @@ public class SysSeqnoController extends BaseController<SysSeqno>  {
         }
         return ResultVO.success("查询成功", sysSeqno);
     }
-    
+
+    /**
+     * 分页查询序号列表
+     * @param page
+     * @return
+     */
     @PostMapping("/list")
     public ResultVO list(@RequestBody @Validated SmartPage<SysSeqno> page) {
         return  ResultVO.success("查询成功", sysSeqnoService.selectPage(getPage(page), getCondition(page)));
+    }
+
+    /**
+     * 重置序号
+     * @param id
+     * @return
+     */
+    @OperateLog(type = OperateType.UPDATE,desc = "重置序号")
+    @PutMapping("/resetSeq/{id}")
+    public ResultVO resetSeq(@PathVariable @NotBlank(message = "id不能为空") String id ){
+        SysSeqno sysSeqno = sysSeqnoService.selectById(id);
+        if (sysSeqno == null) {
+            return ResultVO.error("404", "找不到对应记录或已经被删除！");
+        }
+
+        sysSeqno.setSeqNo(BigDecimal.valueOf(0));
+        sysSeqnoService.updateById(sysSeqno);
+        return ResultVO.success("重置成功",sysSeqno);
     }
 }
 
