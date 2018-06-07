@@ -67,7 +67,6 @@ public class OmEmployeeController extends BaseController<OmEmployee>  {
         return ResultVO.success("删除成功");
     }
 
-    @OperateLog(type = OperateType.QUERY,desc = "根据ID查询员工")
     @GetMapping("/{id}")
     public ResultVO detail(@PathVariable @NotBlank(message = "id不能为空") String id) {
         OmEmployee omEmployee = omEmployeeService.selectById(id);
@@ -77,7 +76,6 @@ public class OmEmployeeController extends BaseController<OmEmployee>  {
         return ResultVO.success("查询成功", omEmployee);
     }
 
-    @OperateLog(type = OperateType.QUERY,desc = "查询员工列表")
     @PostMapping("/list")
     public ResultVO list(@RequestBody @Validated SmartPage<OmEmployee> page) {
         return  ResultVO.success("查询成功", omEmployeeService.selectPage(getPage(page), getCondition(page)));
