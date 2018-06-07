@@ -43,5 +43,12 @@ public interface IOmPositionService extends IService<OmPosition>  {
      */
     OmPositionDetail queryPositionTree(String id) throws OrgManagementException;
 
+    /**
+     * 删除父岗位
+     * @param id
+     * @throws OrgManagementException
+     */
+    void deleteRoot(String id)throws OrgManagementException;
+
 }
 
