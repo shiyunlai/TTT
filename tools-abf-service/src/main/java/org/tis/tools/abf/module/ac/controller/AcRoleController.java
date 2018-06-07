@@ -39,7 +39,6 @@ public class AcRoleController extends BaseController<AcRole>  {
      * @return 分页内容
      *
      */
-    @OperateLog(type = OperateType.QUERY,desc = "分页查询角色信息")
     @PostMapping("/list")
     public ResultVO queryRoleWithPage(@RequestBody @Validated SmartPage<AcRole> page) {
         Page page1  =  acRoleService.selectPage(getPage(page),getCondition(page));
@@ -52,7 +51,6 @@ public class AcRoleController extends BaseController<AcRole>  {
      * 根据角色代码查询角色信息
      *
      */
-    @OperateLog(type =OperateType.QUERY,desc = "根据角色代码查询角色信息")
     @GetMapping("/{roleCode}")
     public ResultVO selectByRoleCode(@PathVariable @NotBlank(message = "roleCode不能为空") String roleCode) {
         AcRole acRole = new AcRole();
@@ -109,6 +107,7 @@ public class AcRoleController extends BaseController<AcRole>  {
         return ResultVO.success("删除成功");
     }
 
+    @OperateLog(type = OperateType.UPDATE,desc = "启用角色")
     @PutMapping("/{id}")
     public ResultVO openRole(@PathVariable @NotBlank(message = "id不能为空") String id){
 
