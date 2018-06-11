@@ -429,6 +429,10 @@ public class AcExceptionCodes {
      * 新增身份权限集时查询机构失败
      */
     public static final String FAILURE_WHEN_QUERY_ORG_BY_ACOPERATORIDENTITYRES = R_EX_CODE("0083");
+    /**
+     * 删除操作员重组菜单失败
+     */
+    public static final String FAILURE_WHEN_DELETE_OPERATORMENU = R_EX_CODE("0084");
 
 
 
