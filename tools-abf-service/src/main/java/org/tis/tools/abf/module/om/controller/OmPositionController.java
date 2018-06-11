@@ -103,6 +103,11 @@ public class OmPositionController extends BaseController<OmPosition>  {
         return ResultVO.success("修改成功！",omPositionService.queryPositionTree(guid));
     }
 
+    @PostMapping("/treeByOrgId/{guid}")
+    public ResultVO treeByOrgId(@RequestBody @Validated SmartPage<OmPosition> page, @PathVariable @NotBlank(message = "组织机构guid不能为空") String guid){
+        return ResultVO.success("修改成功！",omPositionService.treeByOrgId(getPage(page),getCondition(page),guid));
+    }
+
     /**
      * 设置岗位有效时间
      * @param omOrgSetDateRequest
