@@ -86,8 +86,8 @@ public class OmOrgServiceImpl extends ServiceImpl<OmOrgMapper, OmOrg> implements
 //		org.setGuid(GUID.org());// 补充GUID
 		// 补充机构状态，新增机构初始状态为 停用
 		org.setOrgStatus(OmOrgStatus.STOP);
-		// 补充父机构，根节点没有父机构
-		org.setGuidParents("");
+		// 补充父机构，根节点没有父机构,设置为默认值0
+		org.setGuidParents("0");
 		// 新增节点都先算叶子节点 Y
 		org.setIsleaf(YON.YES);
 		// 设置机构序列,根机构直接用guid
@@ -261,25 +261,32 @@ public class OmOrgServiceImpl extends ServiceImpl<OmOrgMapper, OmOrg> implements
 	public void delectRoot(String id) throws OrgManagementException {
 
 		try {
+			//删除父机构下的所有子机构
+			deleteAllChild(id);
 
-			//首先删除父机构对应的子机构
-			Wrapper<OmOrg> wrapper = new EntityWrapper<OmOrg>();
-			wrapper.eq(OmOrg.COLUMN_GUID_PARENTS,id);
-
-			//子机构的列表
-			List<OmOrg> lists = selectList(wrapper);
-			//删除所有的子机构
-			for (OmOrg omOrg:lists) {
-				deleteById(omOrg.getGuid());
-			}
-
-			//最后删除根机构
-			deleteById(id);
 		}catch (Exception e){
 			e.printStackTrace();
 			throw new OrgManagementException(OMExceptionCodes.FAILURE_WHEN_DELETE_ROOT_ORG,wrap(e.getMessage()));
 		}
+	}
 
+	//删除父机构下的所有子机构
+	public void deleteAllChild(String id){
+		//首先删除父机构对应的子机构
+		Wrapper<OmOrg> wrapper = new EntityWrapper<OmOrg>();
+		wrapper.eq(OmOrg.COLUMN_GUID_PARENTS,id);
+
+		//获取子机构列表
+		List<OmOrg> lists = selectList(wrapper);
+
+		if (0 == lists.size() || null == lists){
+			deleteById(id);
+		}else {
+			for (OmOrg omOrg :lists){
+				deleteAllChild(omOrg.getGuid());
+			}
+			deleteById(id);
+		}
 	}
 
 	@Override
