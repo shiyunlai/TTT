@@ -1,5 +1,7 @@
 package org.tis.tools.abf.module.om.service;
 
+import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import org.tis.tools.abf.module.om.controller.request.OmPositionRequest;
 import org.tis.tools.abf.module.om.entity.OmPosition;
 import com.baomidou.mybatisplus.service.IService;
@@ -49,6 +51,17 @@ public interface IOmPositionService extends IService<OmPosition>  {
      * @throws OrgManagementException
      */
     void deleteRoot(String id)throws OrgManagementException;
+
+    /**
+     * 根据机构ID查岗位
+     * @param page
+     * @param wrapper
+     * @param id
+     * @return
+     * @throws OrgManagementException
+     */
+    Page<OmPosition> treeByOrgId(Page<OmPosition> page , Wrapper<OmPosition> wrapper ,String id) throws
+            OrgManagementException;
 
 }
 

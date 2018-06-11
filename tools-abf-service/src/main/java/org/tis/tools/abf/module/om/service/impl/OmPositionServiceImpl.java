@@ -2,17 +2,21 @@ package org.tis.tools.abf.module.om.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.tis.tools.abf.module.common.entity.enums.YON;
 import org.tis.tools.abf.module.om.controller.request.OmPositionRequest;
 import org.tis.tools.abf.module.om.dao.OmPositionMapper;
+import org.tis.tools.abf.module.om.entity.OmOrg;
 import org.tis.tools.abf.module.om.entity.OmPosition;
 import org.tis.tools.abf.module.om.entity.enums.OmPositionStatus;
 import org.tis.tools.abf.module.om.entity.vo.OmPositionDetail;
 import org.tis.tools.abf.module.om.exception.OMExceptionCodes;
 import org.tis.tools.abf.module.om.exception.OrgManagementException;
+import org.tis.tools.abf.module.om.service.IOmOrgService;
 import org.tis.tools.abf.module.om.service.IOmPositionService;
 
 import java.util.ArrayList;
@@ -29,6 +33,9 @@ import static org.tis.tools.core.utils.BasicUtil.wrap;
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class OmPositionServiceImpl extends ServiceImpl<OmPositionMapper, OmPosition> implements IOmPositionService {
+
+    @Autowired
+    private IOmOrgService omOrgService;
 
     @Override
     public boolean addRoot(OmPositionRequest omPositionRequest) throws OrgManagementException {
@@ -210,18 +217,8 @@ public class OmPositionServiceImpl extends ServiceImpl<OmPositionMapper, OmPosit
     public void deleteRoot(String id) throws OrgManagementException {
 
         try {
-            //查询所有的子岗位
-            Wrapper<OmPosition> wrapper = new EntityWrapper<OmPosition>();
-            wrapper.eq(OmPosition.COLUMN_GUID_PARENTS,id);
-            //子岗位列表
-            List<OmPosition> lists = selectList(wrapper);
-            //删除所有的子岗位
-            for (OmPosition omPosition:lists) {
-                deleteById(omPosition.getGuid());
-            }
-
-            //删除根岗位
-            deleteById(id);
+            //删除父岗位下的所有子岗位
+            deleteAllChild(id);
 
         }catch (Exception e){
             e.printStackTrace();
@@ -229,5 +226,51 @@ public class OmPositionServiceImpl extends ServiceImpl<OmPositionMapper, OmPosit
         }
     }
 
+    //删除父岗位下的所有子岗位
+    public void deleteAllChild(String id){
+        //首先删除父岗位对应的子岗位
+        Wrapper<OmPosition> wrapper = new EntityWrapper<OmPosition>();
+        wrapper.eq(OmPosition.COLUMN_GUID_PARENTS,id);
+
+        //获取子岗位列表
+        List<OmPosition> lists = selectList(wrapper);
+
+        if (0 == lists.size() || null == lists){
+            deleteById(id);
+        }else {
+            for (OmPosition omPosition :lists){
+                deleteAllChild(omPosition.getGuid());
+            }
+            deleteById(id);
+        }
+    }
+
+    /**
+     * 根据岗位ID查询机构
+     *
+     * @param page
+     * @param wrapper
+     * @param id
+     * @return
+     * @throws OrgManagementException
+     */
+    @Override
+    public Page<OmPosition> treeByOrgId(Page<OmPosition> page, Wrapper<OmPosition> wrapper, String id) throws OrgManagementException {
+
+        OmOrg omOrg = omOrgService.selectById(id);
+        if (omOrg == null){
+            throw new OrgManagementException(OMExceptionCodes.FAILURE_WHEN_QUERY_OM_ORG,wrap("组织机构ID对应的组织机构不存在",id));
+        }
+
+        if (null == wrapper){
+            wrapper = new EntityWrapper<OmPosition>();
+        }
+
+        wrapper.eq(OmPosition.COLUMN_GUID_ORG,id);
+
+        Page<OmPosition> pageQuuery = selectPage(page,wrapper);
+
+        return pageQuuery;
+    }
 }
 

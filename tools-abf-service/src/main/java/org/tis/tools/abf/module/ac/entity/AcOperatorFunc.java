@@ -1,13 +1,14 @@
 package org.tis.tools.abf.module.ac.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotations.*;
-
-import java.util.Date;
-
 import com.baomidou.mybatisplus.enums.FieldFill;
 import lombok.Data;
+import org.tis.tools.abf.module.ac.entity.enums.AcAuthType;
+import org.tis.tools.core.entity.enums.CommonEnumDeserializer;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * acOperatorFunc针对人员配置的特殊权限，如特别开通的功能，或者特别禁止的功能
@@ -159,7 +160,8 @@ public class AcOperatorFunc implements Serializable {
      * 授权标志:取值来自业务菜单：DICT_AC_AUTHTYPE
      * 如：特别禁止、特别允许
      */
-    private String authType;
+    @JSONField(deserializeUsing = CommonEnumDeserializer.class)
+    private AcAuthType authType;
 
     /**
      * 有效开始日期
