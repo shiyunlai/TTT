@@ -2,17 +2,21 @@ package org.tis.tools.abf.module.om.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.tis.tools.abf.module.common.entity.enums.YON;
 import org.tis.tools.abf.module.om.controller.request.OmPositionRequest;
 import org.tis.tools.abf.module.om.dao.OmPositionMapper;
+import org.tis.tools.abf.module.om.entity.OmOrg;
 import org.tis.tools.abf.module.om.entity.OmPosition;
 import org.tis.tools.abf.module.om.entity.enums.OmPositionStatus;
 import org.tis.tools.abf.module.om.entity.vo.OmPositionDetail;
 import org.tis.tools.abf.module.om.exception.OMExceptionCodes;
 import org.tis.tools.abf.module.om.exception.OrgManagementException;
+import org.tis.tools.abf.module.om.service.IOmOrgService;
 import org.tis.tools.abf.module.om.service.IOmPositionService;
 
 import java.util.ArrayList;
@@ -29,6 +33,9 @@ import static org.tis.tools.core.utils.BasicUtil.wrap;
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class OmPositionServiceImpl extends ServiceImpl<OmPositionMapper, OmPosition> implements IOmPositionService {
+
+    @Autowired
+    private IOmOrgService omOrgService;
 
     @Override
     public boolean addRoot(OmPositionRequest omPositionRequest) throws OrgManagementException {
@@ -238,5 +245,32 @@ public class OmPositionServiceImpl extends ServiceImpl<OmPositionMapper, OmPosit
         }
     }
 
+    /**
+     * 根据岗位ID查询机构
+     *
+     * @param page
+     * @param wrapper
+     * @param id
+     * @return
+     * @throws OrgManagementException
+     */
+    @Override
+    public Page<OmPosition> treeByOrgId(Page<OmPosition> page, Wrapper<OmPosition> wrapper, String id) throws OrgManagementException {
+
+        OmOrg omOrg = omOrgService.selectById(id);
+        if (omOrg == null){
+            throw new OrgManagementException(OMExceptionCodes.FAILURE_WHEN_QUERY_OM_ORG,wrap("组织机构ID对应的组织机构不存在",id));
+        }
+
+        if (null == wrapper){
+            wrapper = new EntityWrapper<OmPosition>();
+        }
+
+        wrapper.eq(OmPosition.COLUMN_GUID_ORG,id);
+
+        Page<OmPosition> pageQuuery = selectPage(page,wrapper);
+
+        return pageQuuery;
+    }
 }
 
