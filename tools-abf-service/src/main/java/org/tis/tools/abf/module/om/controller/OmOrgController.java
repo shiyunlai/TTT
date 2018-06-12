@@ -129,12 +129,14 @@ public class OmOrgController extends BaseController<OmOrg> {
     @PostMapping("/tree/{guid}")
     public ResultVO tree(@PathVariable @NotBlank(message = "guid不能为空") String guid){
 
-        OmOrg omOrg = orgService.selectById(guid);
-        if (null == omOrg){
-            return ResultVO.error("404", "找不到对应记录或已经被删除！");
+        if (!"null".equals(guid)){
+            OmOrg omOrg = orgService.selectById(guid);
+            if (null == omOrg){
+                return ResultVO.error("404", "找不到对应记录或已经被删除！");
+            }
         }
 
-        return ResultVO.success("修改成功！",orgService.queryOrgTree(guid));
+        return ResultVO.success("查询成功！",orgService.queryOrgTree(guid));
     }
 
 
