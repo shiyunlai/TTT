@@ -4,6 +4,8 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.tis.tools.abf.module.jnl.annotation.OperateLog;
+import org.tis.tools.abf.module.jnl.entity.enums.OperateType;
 import org.tis.tools.abf.module.om.controller.request.OmPositionAppRequest;
 import org.tis.tools.abf.module.om.entity.OmPositionApp;
 import org.tis.tools.abf.module.om.service.IOmPositionAppService;
@@ -25,20 +27,31 @@ public class OmPositionAppController extends BaseController<OmPositionApp>  {
     @Autowired
     private IOmPositionAppService omPositionAppService;
 
+    @OperateLog(type = OperateType.ADD,desc = "新增岗位应用列表")
     @PostMapping
     public ResultVO add(@RequestBody @Validated OmPositionAppRequest omPositionAppRequest) {
         omPositionAppService.add(omPositionAppRequest);
         return ResultVO.success("新增成功！");
     }
-    
+
+    @OperateLog(type = OperateType.UPDATE,desc = "修改岗位应用列表")
     @PutMapping
-    public ResultVO update(@RequestBody @Validated OmPositionApp omPositionApp) {
-        omPositionAppService.updateById(omPositionApp);
-        return ResultVO.success("修改成功！");
+    public ResultVO update(@RequestBody @Validated OmPositionAppRequest omPositionAppRequest) {
+        OmPositionApp omPositionAppQuery = omPositionAppService.selectById(omPositionAppRequest.getGuid());
+        if (omPositionAppQuery == null) {
+            return ResultVO.error("404", "找不到对应记录或已经被删除！");
+        }
+        omPositionAppQuery = omPositionAppService.change(omPositionAppRequest);
+        return ResultVO.success("修改成功！",omPositionAppQuery);
     }
-    
+
+    @OperateLog(type = OperateType.DELETE,desc ="删除岗位应用列表")
     @DeleteMapping("/{id}")
     public ResultVO delete(@PathVariable @NotBlank(message = "id不能为空") String id) {
+        OmPositionApp omPositionApp = omPositionAppService.selectById(id);
+        if (omPositionApp == null) {
+            return ResultVO.error("404", "找不到对应记录或已经被删除！");
+        }
         omPositionAppService.deleteById(id);
         return ResultVO.success("删除成功");
     }
@@ -46,7 +59,7 @@ public class OmPositionAppController extends BaseController<OmPositionApp>  {
     @GetMapping("/{id}")
     public ResultVO detail(@PathVariable @NotBlank(message = "id不能为空") String id) {
         OmPositionApp omPositionApp = omPositionAppService.selectById(id);
-        if (omPositionAppService == null) {
+        if (omPositionApp == null) {
             return ResultVO.error("404", "找不到对应记录或已经被删除！");
         }
         return ResultVO.success("查询成功", omPositionApp);
