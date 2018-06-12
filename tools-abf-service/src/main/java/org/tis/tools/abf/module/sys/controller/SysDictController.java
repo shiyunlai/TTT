@@ -9,6 +9,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.tis.tools.abf.module.jnl.annotation.OperateLog;
 import org.tis.tools.abf.module.jnl.entity.enums.OperateType;
+import org.tis.tools.abf.module.sys.controller.request.SysDictDefaultValueRequest;
 import org.tis.tools.abf.module.sys.controller.request.SysDictQueryRequest;
 import org.tis.tools.abf.module.sys.controller.request.SysDictRequest;
 import org.tis.tools.abf.module.sys.entity.SysDict;
@@ -148,4 +149,17 @@ public class SysDictController  extends BaseController {
         }
         return ResultVO.success("查询成功",iSysDictService.queryDictTree(guid));
     }
+
+    @OperateLog(type =OperateType.UPDATE,desc = "设置默认字典项")
+    @PutMapping("/setDefaultValue")
+    public ResultVO setDefaultValue(@RequestBody @Validated SysDictDefaultValueRequest sysDictDefaultValueRequest){
+        SysDict sysDict = iSysDictService.selectById(sysDictDefaultValueRequest.getGuid());
+        if (sysDict == null){
+            return ResultVO.error("404", "找不到对应记录或已经被删除！");
+        }
+
+        sysDict = iSysDictService.setDefaultValue(sysDictDefaultValueRequest);
+        return ResultVO.success("设置默认字典项成功!",sysDict);
+    }
+
 }
