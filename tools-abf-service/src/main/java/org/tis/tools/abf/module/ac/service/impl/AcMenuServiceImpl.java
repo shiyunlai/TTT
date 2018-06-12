@@ -412,8 +412,10 @@ public class AcMenuServiceImpl extends ServiceImpl<AcMenuMapper, AcMenu> impleme
             }
             //查询应用下父节点字段为空的菜单，即为根菜单
             EntityWrapper wrapper = new EntityWrapper();
-            wrapper.eq(AcMenu.COLUMN_GUID_APP, GUID_APP).or(AcMenu.COLUMN_GUID_PARENTS,"")
-                    .isNull(AcMenu.COLUMN_GUID_PARENTS);
+           // wrapper.eq(AcMenu.COLUMN_GUID_APP, GUID_APP).or(AcMenu.COLUMN_GUID_PARENTS,"").isNull(AcMenu
+                   // .COLUMN_GUID_PARENTS);
+            wrapper.eq(AcMenu.COLUMN_GUID_APP,GUID_APP);
+            wrapper.isNull(AcMenu.COLUMN_GUID_PARENTS);
             return acMenuService.selectList(wrapper);
         } catch (ToolsRuntimeException ae) {
             throw ae;
