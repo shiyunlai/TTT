@@ -45,15 +45,13 @@ public class OmPositionAppServiceImpl extends ServiceImpl<OmPositionAppMapper, O
         //判断岗位是否存在
         OmPosition omPosition = omPositionService.selectById(omPositionAppRequest.getGuidPosition());
         if (omPosition == null){
-            throw new OrgManagementException(OMExceptionCodes.POSITION_NOT_EXIST_BY_CREAT_POSITIONAPP,wrap("岗位GUID",
-                    omPositionAppRequest.getGuidPosition()));
+            throw new OrgManagementException(OMExceptionCodes.POSITION_NOT_EXIST_BY_CREAT_POSITIONAPP,wrap("岗位GUID对应的岗位不存在", omPositionAppRequest.getGuidPosition()));
         }
 
         //判断应用是否存在
         AcApp acApp = acAppService.selectById(omPositionAppRequest.getGuidApp());
         if (acApp == null){
-            throw new OrgManagementException(OMExceptionCodes.APP_NOT_EXIST_BY_CREAT_POSITIONAPP,wrap("应用GUID",
-                    omPositionAppRequest.getGuidApp()));
+            throw new OrgManagementException(OMExceptionCodes.APP_NOT_EXIST_BY_CREAT_POSITIONAPP,wrap("应用GUID对应的应用不存在", omPositionAppRequest.getGuidApp()));
         }
 
         //如果岗位和应用均存在,插入数据
@@ -64,6 +62,34 @@ public class OmPositionAppServiceImpl extends ServiceImpl<OmPositionAppMapper, O
         omPositionApp.setGuidPosition(omPositionAppRequest.getGuidPosition());
 
         insert(omPositionApp);
+    }
+
+    @Override
+    public OmPositionApp change(OmPositionAppRequest omPositionAppRequest) throws OrgManagementException {
+
+        //判断岗位是否存在
+        OmPosition omPosition = omPositionService.selectById(omPositionAppRequest.getGuidPosition());
+        if (omPosition == null){
+            throw new OrgManagementException(OMExceptionCodes.POSITION_NOT_EXIST_BY_CREAT_POSITIONAPP,wrap("岗位GUID对应的岗位不存在", omPositionAppRequest.getGuidPosition()));
+        }
+
+        //判断应用是否存在
+        AcApp acApp = acAppService.selectById(omPositionAppRequest.getGuidApp());
+        if (acApp == null){
+            throw new OrgManagementException(OMExceptionCodes.APP_NOT_EXIST_BY_CREAT_POSITIONAPP,wrap("应用GUID对应的应用不存在", omPositionAppRequest.getGuidApp()));
+        }
+
+        //如果岗位和应用均存在,插入数据
+        OmPositionApp omPositionApp = new OmPositionApp();
+
+        //收集参数
+        omPositionApp.setGuid(omPositionAppRequest.getGuid());
+        omPositionApp.setGuidApp(omPositionAppRequest.getGuidApp());
+        omPositionApp.setGuidPosition(omPositionAppRequest.getGuidPosition());
+
+        updateById(omPositionApp);
+
+        return omPositionApp;
     }
 }
 
