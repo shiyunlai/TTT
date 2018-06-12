@@ -241,6 +241,18 @@ public class OMExceptionCodes {
 	 * 查询组织失败
 	 */
 	public static final String FAILURE_WHEN_QUERY_OM_ORG = R_EX_CODE("0050");
+	/**
+	 * 查询岗位失败
+	 */
+	public static final String FAILURE_WHEN_QUERY_OM_POSITION = R_EX_CODE("0051");
+	/**
+	 * 查询操作员失败
+	 */
+	public static final String FAILURE_WHEN_QUERY_AC_OPERATOR = R_EX_CODE("0052");
+	/**
+	 * 查询员工失败
+	 */
+	public static final String FAILURE_WHEN_QUERY_OM_EMPLOYEE = R_EX_CODE("0053");
 
 
 	/**
