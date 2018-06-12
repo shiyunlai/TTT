@@ -15,6 +15,8 @@ import org.tis.tools.core.web.controller.BaseController;
 import org.tis.tools.core.web.vo.ResultVO;
 import org.tis.tools.core.web.vo.SmartPage;
 
+import java.util.List;
+
 /**
  * omPosition的Controller类
  * 
@@ -93,6 +95,14 @@ public class OmPositionController extends BaseController<OmPosition>  {
         return  ResultVO.success("查询成功", omPositionService.selectPage(getPage(page), getCondition(page)));
     }
 
+    @GetMapping("/allPositionList")
+    public ResultVO QueryAllPosition(){
+
+        List<OmPosition> list = omPositionService.QueryAllPosition();
+
+        return ResultVO.success("查询成功",list);
+    }
+
     @PostMapping("/tree/{guid}")
     public ResultVO tree(@PathVariable @NotBlank(message = "guid不能为空") String guid){
 
@@ -106,6 +116,14 @@ public class OmPositionController extends BaseController<OmPosition>  {
     @PostMapping("/treeByOrgId/{guid}")
     public ResultVO treeByOrgId(@RequestBody @Validated SmartPage<OmPosition> page, @PathVariable @NotBlank(message = "组织机构guid不能为空") String guid){
         return ResultVO.success("修改成功！",omPositionService.treeByOrgId(getPage(page),getCondition(page),guid));
+    }
+
+    @GetMapping("/listsByOrgId/{guid}")
+    public ResultVO QueryPositionByOrgId(@PathVariable @NotBlank(message = "guid不能为空") String guid){
+
+        List<OmPosition> list = omPositionService.QueryPositionByOrgId(guid);
+
+        return ResultVO.success("查询成功",list);
     }
 
     /**

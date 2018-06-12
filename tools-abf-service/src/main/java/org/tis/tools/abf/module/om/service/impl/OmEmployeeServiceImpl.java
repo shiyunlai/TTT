@@ -2,18 +2,29 @@ package org.tis.tools.abf.module.om.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.tis.tools.abf.module.ac.entity.AcOperator;
+import org.tis.tools.abf.module.ac.service.IAcOperatorService;
 import org.tis.tools.abf.module.om.controller.request.OmEmployeeAddRequest;
 import org.tis.tools.abf.module.om.controller.request.OmEmployeeUpdateRequest;
 import org.tis.tools.abf.module.om.dao.OmEmployeeMapper;
 import org.tis.tools.abf.module.om.entity.OmEmployee;
+import org.tis.tools.abf.module.om.entity.OmOrg;
+import org.tis.tools.abf.module.om.entity.OmPosition;
 import org.tis.tools.abf.module.om.entity.enums.OmEmployeeStatus;
+import org.tis.tools.abf.module.om.exception.OMExceptionCodes;
 import org.tis.tools.abf.module.om.exception.OrgManagementException;
 import org.tis.tools.abf.module.om.service.IOmEmployeeService;
+import org.tis.tools.abf.module.om.service.IOmOrgService;
+import org.tis.tools.abf.module.om.service.IOmPositionService;
 
 import java.util.List;
+
+import static org.tis.tools.core.utils.BasicUtil.wrap;
 
 
 /**
@@ -26,8 +37,40 @@ import java.util.List;
 @Transactional(rollbackFor = Exception.class)
 public class OmEmployeeServiceImpl extends ServiceImpl<OmEmployeeMapper, OmEmployee> implements IOmEmployeeService {
 
+    @Autowired
+    private IOmOrgService omOrgService;
+
+    @Autowired
+    private IOmPositionService omPositionService;
+
+    @Autowired
+    private IAcOperatorService operatorService;
+
     @Override
     public boolean add(OmEmployeeAddRequest omEmployeeAddRequest) throws OrgManagementException {
+
+        //判断机构是否存在
+        OmOrg omOrg = omOrgService.selectById(omEmployeeAddRequest.getGuidOrg());
+        if (omOrg == null){
+            throw new OrgManagementException(OMExceptionCodes.FAILURE_WHEN_QUERY_OM_ORG,wrap("组织GUID对应的组织不存在",omEmployeeAddRequest.getGuidOrg()));
+        }
+
+        //判断岗位是否存在
+        OmPosition omPosition = omPositionService.selectById(omEmployeeAddRequest.getGuidPosition());
+        if (omPosition == null){
+            throw new OrgManagementException(OMExceptionCodes.FAILURE_WHEN_QUERY_OM_POSITION,wrap("岗位GUID对应的岗位不存在",omEmployeeAddRequest.getGuidPosition()));
+        }
+
+
+        //如果操作员ID存在,判断操作员是否存在
+        if (!"".equals(omEmployeeAddRequest.getGuidOperator())){
+            AcOperator acOperator = operatorService.selectById(omEmployeeAddRequest.getGuidOperator());
+            if (acOperator == null){
+                throw new OrgManagementException(OMExceptionCodes.FAILURE_WHEN_QUERY_AC_OPERATOR,wrap("应用GUID对应的应用不存在",omEmployeeAddRequest.getGuidOperator()));
+            }
+        }
+
+
 
         boolean isexist = new Boolean(false);
 
@@ -77,6 +120,29 @@ public class OmEmployeeServiceImpl extends ServiceImpl<OmEmployeeMapper, OmEmplo
     @Override
     public boolean change(OmEmployeeUpdateRequest omEmployeeUpdateRequest) throws OrgManagementException {
 
+        //判断机构是否存在
+        OmOrg omOrg = omOrgService.selectById(omEmployeeUpdateRequest.getGuidOrg());
+        if (omOrg == null){
+            throw new OrgManagementException(OMExceptionCodes.FAILURE_WHEN_QUERY_OM_ORG,wrap("组织GUID对应的组织不存在",omEmployeeUpdateRequest
+                    .getGuidOrg()));
+        }
+
+        //判断岗位是否存在
+        OmPosition omPosition = omPositionService.selectById(omEmployeeUpdateRequest.getGuidPosition());
+        if (omPosition == null){
+            throw new OrgManagementException(OMExceptionCodes.FAILURE_WHEN_QUERY_OM_POSITION,wrap("岗位GUID对应的岗位不存在",omEmployeeUpdateRequest
+                    .getGuidPosition()));
+        }
+
+
+        //如果操作员ID存在,判断操作员是否存在
+        if (!"".equals(omEmployeeUpdateRequest.getGuidOperator())){
+            AcOperator acOperator = operatorService.selectById(omEmployeeUpdateRequest.getGuidOperator());
+            if (acOperator == null){
+                throw new OrgManagementException(OMExceptionCodes.FAILURE_WHEN_QUERY_AC_OPERATOR,wrap("应用GUID对应的应用不存在",omEmployeeUpdateRequest.getGuidOperator()));
+            }
+        }
+
         boolean isexist = new Boolean(false);
 
         Wrapper<OmEmployee> wrapper = new EntityWrapper<OmEmployee>();
@@ -117,6 +183,32 @@ public class OmEmployeeServiceImpl extends ServiceImpl<OmEmployeeMapper, OmEmplo
 
         updateById(omEmployee);
         return isexist;
+    }
+
+
+    @Override
+    public Page<OmEmployee> queryEmpByOrg(Page<OmEmployee> page, Wrapper<OmEmployee> wrapper, String id) throws OrgManagementException {
+
+        if (wrapper == null){
+            wrapper = new EntityWrapper<OmEmployee>();
+        }
+
+        //分页查询机构ID为"id"的员工
+        wrapper.eq(OmEmployee.COLUMN_GUID_ORG,id);
+        Page<OmEmployee> pageQuery = selectPage(page,wrapper);
+
+        return pageQuery;
+    }
+
+
+    @Override
+    public List<OmEmployee> queryEmpListByOrg(String id) throws OrgManagementException {
+
+        Wrapper<OmEmployee> wrapper = new EntityWrapper<OmEmployee>();
+        wrapper.eq(OmEmployee.COLUMN_GUID_ORG,id);
+
+        List<OmEmployee> list = selectList(wrapper);
+        return list;
     }
 }
 

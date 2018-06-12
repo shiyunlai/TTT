@@ -16,6 +16,7 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.tis.tools.core.web.vo.ResultVO;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * omEmployee的Controller类
@@ -80,6 +81,22 @@ public class OmEmployeeController extends BaseController<OmEmployee>  {
     public ResultVO list(@RequestBody @Validated SmartPage<OmEmployee> page) {
         return  ResultVO.success("查询成功", omEmployeeService.selectPage(getPage(page), getCondition(page)));
     }
+
+
+    @PostMapping("/queryEmpByOrg/{id}")
+    public ResultVO queryEmpByOrg(@RequestBody @Validated SmartPage<OmEmployee> page,@PathVariable @NotBlank(message
+            = "id不能为空") String id){
+        return ResultVO.success("查询成功",omEmployeeService.queryEmpByOrg(getPage(page),getCondition(page),id));
+    }
+
+    @GetMapping("/listsByOrg/{id}")
+    public ResultVO queryEmpByOrg(@PathVariable @NotBlank(message = "id不能为空") String id){
+
+        List<OmEmployee> list = omEmployeeService.queryEmpListByOrg(id);
+
+        return ResultVO.success("查询成功",list);
+    }
+
 
     @OperateLog(type = OperateType.UPDATE,desc = "员工入职")
     @PutMapping("/onJob/{id}")

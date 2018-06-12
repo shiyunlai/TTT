@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.tis.tools.abf.module.ac.controller.request.AcOperatorAddRequest;
+import org.tis.tools.abf.module.ac.controller.request.AcOperatorStatusRequest;
 import org.tis.tools.abf.module.ac.controller.request.AcOperatorUpdateGrop;
 import org.tis.tools.abf.module.ac.entity.AcOperator;
 import org.tis.tools.abf.module.ac.service.IAcOperatorService;
@@ -111,13 +112,13 @@ public class AcOperatorController extends BaseController<AcOperator>  {
 
     @OperateLog(type = OperateType.UPDATE,desc ="改变操作员状态")
     @PutMapping("/changeStatus")
-    public ResultVO changeOperatorStatus(@RequestBody @Validated({AcOperatorUpdateGrop.class}) AcOperator acOperator){
-        AcOperator acOperatorQue  = acOperatorService.selectById(acOperator.getGuid());
+    public ResultVO changeOperatorStatus(@RequestBody @Validated AcOperatorStatusRequest acOperatorStatusRequest){
+        AcOperator acOperatorQue  = acOperatorService.selectById(acOperatorStatusRequest.getGuid());
         if (acOperatorQue == null) {
             return ResultVO.error("404", "找不到对应记录或已经被删除！");
         }
-        acOperatorQue.setOperatorStatus(acOperator.getOperatorStatus());
-        acOperatorService.updateById(acOperatorQue);
+
+        acOperatorQue = acOperatorService.changeOperatorStatus(acOperatorStatusRequest);
 
         return ResultVO.success("修改成功!",acOperatorQue);
     }
