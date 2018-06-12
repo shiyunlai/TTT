@@ -8,6 +8,8 @@ import com.baomidou.mybatisplus.service.IService;
 import org.tis.tools.abf.module.om.entity.vo.OmPositionDetail;
 import org.tis.tools.abf.module.om.exception.OrgManagementException;
 
+import java.util.List;
+
 /**
  * omPosition的Service接口类
  * 
@@ -62,6 +64,21 @@ public interface IOmPositionService extends IService<OmPosition>  {
      */
     Page<OmPosition> treeByOrgId(Page<OmPosition> page , Wrapper<OmPosition> wrapper ,String id) throws
             OrgManagementException;
+
+    /**
+     * 查询所有的岗位列表
+     * @return
+     * @throws OrgManagementException
+     */
+    List<OmPosition> QueryAllPosition() throws OrgManagementException;
+
+    /**
+     * 根据机构ID查询岗位列表
+     * @param id
+     * @return
+     * @throws OrgManagementException
+     */
+    List<OmPosition> QueryPositionByOrgId(String id) throws OrgManagementException;
 
 }
 
