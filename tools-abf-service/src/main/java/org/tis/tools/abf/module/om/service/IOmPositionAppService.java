@@ -19,5 +19,13 @@ public interface IOmPositionAppService extends IService<OmPositionApp>  {
      */
     void add(OmPositionAppRequest omPositionAppRequest) throws OrgManagementException;
 
+    /**
+     * 修改
+     * @param omPositionAppRequest
+     * @return
+     * @throws OrgManagementException
+     */
+    OmPositionApp change(OmPositionAppRequest omPositionAppRequest) throws OrgManagementException;
+
 }
 
