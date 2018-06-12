@@ -1,16 +1,14 @@
 package org.tis.tools.abf.module.ac.entity;
 
-import java.math.BigDecimal;
-
-import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotations.*;
-
-import java.util.Date;
-
 import com.baomidou.mybatisplus.enums.FieldFill;
 import lombok.Data;
+import org.tis.tools.abf.module.ac.entity.enums.AcOpenMode;
+import org.tis.tools.abf.module.common.entity.enums.YON;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * acOperatorMenu操作员对自己在某个应用系统的菜单重组
@@ -281,7 +279,7 @@ public class AcOperatorMenu implements Serializable {
     /**
      * 是否叶子菜单:见业务菜单： DICT_YON
      */
-    private String isleaf;
+    private YON isleaf;
 
     /**
      * UI入口:针对EXT模式提供，例如abf_auth/function/module.xml
@@ -322,7 +320,7 @@ public class AcOperatorMenu implements Serializable {
      * 页面打开方式:数值取自业务菜单： DICT_AC_OPENMODE
      * 如：主窗口打开、弹出窗口打开...
      */
-    private String openMode;
+    private AcOpenMode openMode;
 
     /**
      * 子节点数

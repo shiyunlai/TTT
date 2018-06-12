@@ -1,8 +1,12 @@
 package org.tis.tools.abf.module.ac.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotations.TableName;
 import lombok.Data;
 import com.baomidou.mybatisplus.annotations.TableId;
+import org.tis.tools.abf.module.ac.entity.enums.AcResourceType;
+import org.tis.tools.core.entity.enums.CommonEnumDeserializer;
+
 import java.io.Serializable;
 
 /**
@@ -82,7 +86,8 @@ public class AcOperatorIdentityres implements Serializable {
      * function 功能
      * role 角色
      */
-    private String acResourcetype;
+    @JSONField(deserializeUsing = CommonEnumDeserializer.class)
+    private AcResourceType acResourcetype;
 
     /**
      * 资源GUID:根据资源类型对应到不同权限资源的GUID

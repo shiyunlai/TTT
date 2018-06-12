@@ -66,25 +66,15 @@ public class OmPositionController extends BaseController<OmPosition>  {
         return ResultVO.success("修改成功！",omPositionQuery);
     }
 
-    @OperateLog(type = OperateType.DELETE,desc = "删除父岗位")
-    @DeleteMapping("/deleteRoot/{id}")
-    public ResultVO deleteRoot(@PathVariable @NotBlank(message = "id不能为空") String id) {
-        OmPosition omPosition = omPositionService.selectById(id);
-        if (omPosition == null) {
-            return ResultVO.error("404", "找不到对应记录或已经被删除！");
-        }
-        omPositionService.deleteRoot(id);
-        return ResultVO.success("删除成功");
-    }
 
-    @OperateLog(type = OperateType.DELETE,desc = "删除子岗位")
+    @OperateLog(type = OperateType.DELETE,desc = "删除岗位")
     @DeleteMapping("/{id}")
     public ResultVO delete(@PathVariable @NotBlank(message = "id不能为空") String id) {
         OmPosition omPosition = omPositionService.selectById(id);
         if (omPosition == null) {
             return ResultVO.error("404", "找不到对应记录或已经被删除！");
         }
-        omPositionService.deleteById(id);
+        omPositionService.deleteRoot(id);
         return ResultVO.success("删除成功");
     }
 
@@ -111,6 +101,11 @@ public class OmPositionController extends BaseController<OmPosition>  {
             return ResultVO.error("404", "找不到对应记录或已经被删除！");
         }
         return ResultVO.success("修改成功！",omPositionService.queryPositionTree(guid));
+    }
+
+    @PostMapping("/treeByOrgId/{guid}")
+    public ResultVO treeByOrgId(@RequestBody @Validated SmartPage<OmPosition> page, @PathVariable @NotBlank(message = "组织机构guid不能为空") String guid){
+        return ResultVO.success("修改成功！",omPositionService.treeByOrgId(getPage(page),getCondition(page),guid));
     }
 
     /**

@@ -237,6 +237,10 @@ public class OMExceptionCodes {
 	 * 删除根岗位失败
 	 */
 	public static final String FAILURE_WHEN_DELETE_ROOT_POSITION = R_EX_CODE("0049");
+	/**
+	 * 查询组织失败
+	 */
+	public static final String FAILURE_WHEN_QUERY_OM_ORG = R_EX_CODE("0050");
 
 
 	/**

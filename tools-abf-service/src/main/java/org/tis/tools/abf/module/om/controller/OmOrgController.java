@@ -80,29 +80,11 @@ public class OmOrgController extends BaseController<OmOrg> {
     }
 
     /**
-     * 删除父机构
+     * 删除机构
      * @param id
      * @return
      */
-    @OperateLog(type = OperateType.DELETE, desc = "删除父机构")
-    @DeleteMapping("/deleteRoot/{id}")
-    public ResultVO deleteRoot(@PathVariable @NotBlank(message = "id不能为空") String id) {
-        OmOrg omOrg = orgService.selectById(id);
-        if (omOrg == null) {
-            return ResultVO.error("404", "找不到对应记录或已经被删除！");
-        }
-
-        orgService.delectRoot(id);
-        return ResultVO.success("删除成功");
-    }
-
-
-    /**
-     * 删除子机构
-     * @param id
-     * @return
-     */
-    @OperateLog(type = OperateType.DELETE, desc = "删除子机构")
+    @OperateLog(type = OperateType.DELETE, desc = "删除机构")
     @DeleteMapping("/{id}")
     public ResultVO delete(@PathVariable @NotBlank(message = "id不能为空") String id) {
         OmOrg omOrg = orgService.selectById(id);
@@ -110,7 +92,7 @@ public class OmOrgController extends BaseController<OmOrg> {
             return ResultVO.error("404", "找不到对应记录或已经被删除！");
         }
 
-        orgService.deleteById(id);
+        orgService.delectRoot(id);
         return ResultVO.success("删除成功");
     }
 

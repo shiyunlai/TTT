@@ -1,10 +1,14 @@
 package org.tis.tools.abf.module.ac.entity;
 
-import java.math.BigDecimal;
+import com.alibaba.fastjson.annotation.JSONField;
+import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import lombok.Data;
-import com.baomidou.mybatisplus.annotations.TableId;
+import org.tis.tools.abf.module.common.entity.enums.YON;
+import org.tis.tools.core.entity.enums.CommonEnumDeserializer;
+
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * acOperatorIdentity操作员对自己的权限进行组合形成一个固定的登录身份；
@@ -110,7 +114,8 @@ public class AcOperatorIdentity implements Serializable {
      * 默认身份标志:见业务字典： DICT_YON
      * 只能有一个默认身份 Y是默认身份 N不是默认身份
      */
-    private String identityFlag;
+    @JSONField(deserializeUsing = CommonEnumDeserializer.class)
+    private YON identityFlag;
 
     /**
      * 适用于应用
