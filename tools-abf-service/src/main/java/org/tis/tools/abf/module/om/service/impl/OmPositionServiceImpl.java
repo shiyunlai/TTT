@@ -272,5 +272,26 @@ public class OmPositionServiceImpl extends ServiceImpl<OmPositionMapper, OmPosit
 
         return pageQuuery;
     }
+
+
+    @Override
+    public List<OmPosition> QueryAllPosition() throws OrgManagementException {
+
+        Wrapper<OmPosition> wrapper = new EntityWrapper<>();
+        List<OmPosition> list = selectList(wrapper);
+
+        return list;
+    }
+
+
+    @Override
+    public List<OmPosition> QueryPositionByOrgId(String id) throws OrgManagementException {
+
+        Wrapper<OmPosition> wrapper = new EntityWrapper<OmPosition>();
+        wrapper.eq(OmPosition.COLUMN_GUID_ORG,id);
+        List<OmPosition> list = selectList(wrapper);
+
+        return list;
+    }
 }
 
