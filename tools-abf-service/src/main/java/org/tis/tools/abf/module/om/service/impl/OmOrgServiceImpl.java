@@ -87,7 +87,7 @@ public class OmOrgServiceImpl extends ServiceImpl<OmOrgMapper, OmOrg> implements
 		// 补充机构状态，新增机构初始状态为 停用
 		org.setOrgStatus(OmOrgStatus.STOP);
 		// 补充父机构，根节点没有父机构,设置为默认值0
-		org.setGuidParents("0");
+		org.setGuidParents("");
 		// 新增节点都先算叶子节点 Y
 		org.setIsleaf(YON.YES);
 		// 设置机构序列,根机构直接用guid
@@ -213,39 +213,53 @@ public class OmOrgServiceImpl extends ServiceImpl<OmOrgMapper, OmOrg> implements
 		OmOrgDetail omOrgDetail = new OmOrgDetail();
 
 		try {
-			OmOrg omOrg = selectById(id);
-
 			//创建子机构的list
 			List<OmOrg> list = new ArrayList<OmOrg>();
 
-			//查询子机构字典
-			Wrapper<OmOrg> wrapper = new EntityWrapper<OmOrg>();
-			wrapper.eq(OmOrg.COLUMN_GUID_PARENTS,id);
+			if ("null".equals(id)){
+				//查询子机构字典
+				Wrapper<OmOrg> wrapper = new EntityWrapper<OmOrg>();
+				wrapper.isNull(OmOrg.COLUMN_GUID_PARENTS);
 
-			List<OmOrg> queryList = selectList(wrapper);
+				List<OmOrg> queryList = selectList(wrapper);
 
-			for (OmOrg omOrgQuery: queryList) {
-				list.add(omOrgQuery);
+				for (OmOrg omOrgQuery: queryList) {
+					list.add(omOrgQuery);
+				}
+
+			}else {
+				OmOrg omOrg = selectById(id);
+
+				//查询子机构字典
+				Wrapper<OmOrg> wrapper = new EntityWrapper<OmOrg>();
+				wrapper.eq(OmOrg.COLUMN_GUID_PARENTS,id);
+
+				List<OmOrg> queryList = selectList(wrapper);
+
+				for (OmOrg omOrgQuery: queryList) {
+					list.add(omOrgQuery);
+				}
+
+				//收集查询出来的结果
+				omOrgDetail.setGuid(omOrg.getGuid());
+				omOrgDetail.setOrgCode(omOrg.getOrgCode());
+				omOrgDetail.setOrgName(omOrg.getOrgName());
+				omOrgDetail.setOrgDegree(omOrg.getOrgDegree());
+				omOrgDetail.setOrgType(omOrg.getOrgType());
+				omOrgDetail.setOrgStatus(omOrg.getOrgStatus());
+				omOrgDetail.setGuidParents(omOrg.getGuidParents());
+				omOrgDetail.setOrgSeq(omOrg.getOrgSeq());
+				omOrgDetail.setOrgAddr(omOrg.getOrgAddr());
+				omOrgDetail.setLinkMan(omOrg.getLinkMan());
+				omOrgDetail.setLinkTel(omOrg.getLinkTel());
+				omOrgDetail.setStartDate(omOrg.getStartDate());
+				omOrgDetail.setEndDate(omOrg.getEndDate());
+				omOrgDetail.setArea(omOrg.getArea());
+				omOrgDetail.setSortNo(omOrg.getSortNo());
+				omOrgDetail.setIsleaf(omOrg.getIsleaf());
+				omOrgDetail.setRemark(omOrg.getRemark());
 			}
 
-			//收集查询出来的结果
-			omOrgDetail.setGuid(omOrg.getGuid());
-			omOrgDetail.setOrgCode(omOrg.getOrgCode());
-			omOrgDetail.setOrgName(omOrg.getOrgName());
-			omOrgDetail.setOrgDegree(omOrg.getOrgDegree());
-			omOrgDetail.setOrgType(omOrg.getOrgType());
-			omOrgDetail.setOrgStatus(omOrg.getOrgStatus());
-			omOrgDetail.setGuidParents(omOrg.getGuidParents());
-			omOrgDetail.setOrgSeq(omOrg.getOrgSeq());
-			omOrgDetail.setOrgAddr(omOrg.getOrgAddr());
-			omOrgDetail.setLinkMan(omOrg.getLinkMan());
-			omOrgDetail.setLinkTel(omOrg.getLinkTel());
-			omOrgDetail.setStartDate(omOrg.getStartDate());
-			omOrgDetail.setEndDate(omOrg.getEndDate());
-			omOrgDetail.setArea(omOrg.getArea());
-			omOrgDetail.setSortNo(omOrg.getSortNo());
-			omOrgDetail.setIsleaf(omOrg.getIsleaf());
-			omOrgDetail.setRemark(omOrg.getRemark());
 			omOrgDetail.setChildren(list);
 
 		}catch (Exception e){
