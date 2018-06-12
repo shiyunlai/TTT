@@ -98,9 +98,14 @@ public class SysDictItemController  extends BaseController {
      */
     @ApiOperation(value = "查询所有业务字典项", notes = "无需输入参数")
     @PostMapping("/list")
-    public ResultVO queryAllDictItem(@RequestBody @Validated SmartPage<SysDict> page) {
+    public ResultVO queryAllDictItem(@RequestBody @Validated SmartPage<SysDictItem> page) {
         return ResultVO.success("查询成功", iSysDictItemService.querySysDictItemList(getPage(page),getCondition(page)));
 }
+
+
+
+
+
 
 //    /**
 //     * 修改字典项默认值
