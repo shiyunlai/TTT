@@ -6,8 +6,11 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.tis.tools.abf.module.ac.controller.request.AcOperatorAddRequest;
+import org.tis.tools.abf.module.ac.controller.request.AcOperatorStatusRequest;
 import org.tis.tools.abf.module.ac.dao.AcOperatorMapper;
 import org.tis.tools.abf.module.ac.entity.AcOperator;
+import org.tis.tools.abf.module.ac.entity.enums.OperatorStatus;
+import org.tis.tools.abf.module.ac.exception.AcExceptionCodes;
 import org.tis.tools.abf.module.ac.exception.AcOperatorManagementException;
 import org.tis.tools.abf.module.ac.service.IAcOperatorService;
 import org.tis.tools.core.exception.i18.ExceptionCodes;
@@ -113,6 +116,65 @@ public class AcOperatorServiceImpl extends ServiceImpl<AcOperatorMapper, AcOpera
             throw new AcOperatorManagementException(ExceptionCodes.FAILURE_WHEN_UPDATE,wrap("ACOPERATOR",e));
         }
 
+    }
+
+
+    @Override
+    public AcOperator changeOperatorStatus(AcOperatorStatusRequest acOperatorStatusRequest) throws AcOperatorManagementException {
+
+        /*判断改变操作员状态时是否合法*/
+        //获取当前操作员状态
+        AcOperator acOperator = selectById(acOperatorStatusRequest.getGuid());
+        OperatorStatus operatorStatusNow = acOperator.getOperatorStatus();
+        OperatorStatus operatorStatusChange = acOperatorStatusRequest.getOperatorStatus();
+
+        switch (operatorStatusNow){
+            case stop:
+                if (!(operatorStatusChange.equals(OperatorStatus.logout))){
+                    throw new AcOperatorManagementException(AcExceptionCodes.CURRENT_STATUS_IS_NOT_ALLOWED_CHANGE,
+                            wrap("停用状态只能修改为退出状态"));
+                }
+                break;
+            case logout:
+                if (operatorStatusChange.equals(OperatorStatus.stop) || operatorStatusChange.equals(OperatorStatus
+                        .pause) ||operatorStatusChange.equals(OperatorStatus.lock)){
+                    throw new AcOperatorManagementException(AcExceptionCodes.CURRENT_STATUS_IS_NOT_ALLOWED_CHANGE,
+                            wrap("退出状态只能修改为正常状态或挂起状态"));
+                }
+                break;
+            case login:
+                if (operatorStatusChange.equals(OperatorStatus.stop) || operatorStatusChange.equals(OperatorStatus.clear) ||operatorStatusChange.equals(OperatorStatus.lock)){
+                    throw new AcOperatorManagementException(AcExceptionCodes.CURRENT_STATUS_IS_NOT_ALLOWED_CHANGE,
+                            wrap("正常状态只能修改为退出状态或挂起状态"));
+                }
+                break;
+            case clear:
+                if (!(operatorStatusChange.equals(OperatorStatus.logout))){
+                    throw new AcOperatorManagementException(AcExceptionCodes.CURRENT_STATUS_IS_NOT_ALLOWED_CHANGE,
+                            wrap("注销状态只能修改为退出状态"));
+                }
+                break;
+            case lock:
+                if (operatorStatusChange.equals(OperatorStatus.stop) || operatorStatusChange.equals(OperatorStatus.login) ||operatorStatusChange.equals(OperatorStatus.pause)){
+                    throw new AcOperatorManagementException(AcExceptionCodes.CURRENT_STATUS_IS_NOT_ALLOWED_CHANGE,
+                            wrap("锁定状态只能修改为退出状态和注销状态"));
+                }
+                break;
+            case pause:
+                if (operatorStatusChange.equals(OperatorStatus.stop) || operatorStatusChange.equals(OperatorStatus.clear) ||operatorStatusChange.equals(OperatorStatus.lock)){
+                    throw new AcOperatorManagementException(AcExceptionCodes.CURRENT_STATUS_IS_NOT_ALLOWED_CHANGE,
+                            wrap("挂起状态只能修改为退出状态和正常状态"));
+                }
+                break;
+            default:
+                    throw new AcOperatorManagementException(AcExceptionCodes.CURRENT_STATUS_IS_NOT_ALLOWED_CHANGE,
+                            wrap("该状态非操作员状态!"));
+        }
+
+        acOperator.setOperatorStatus(operatorStatusChange);
+        updateById(acOperator);
+
+        return acOperator;
     }
 }
 
