@@ -8,6 +8,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.tis.tools.abf.module.sys.controller.request.SysDictDefaultValueRequest;
 import org.tis.tools.abf.module.sys.dao.SysDictMapper;
 import org.tis.tools.abf.module.sys.entity.SysDict;
 import org.tis.tools.abf.module.sys.entity.SysDictItem;
@@ -164,10 +165,6 @@ public class SysDictServiceImpl  extends ServiceImpl<SysDictMapper,SysDict> impl
         return selectOne(wrapper);
     }
 
-    @Override
-    public SysDict setDefaultDictValue(String dictGuid, String itemValue) throws SysManagementException {
-        return null;
-    }
     /**
      * @param  sysDict
      * @return
@@ -243,5 +240,50 @@ public class SysDictServiceImpl  extends ServiceImpl<SysDictMapper,SysDict> impl
                     );
         }
         return sysDictDetail;
+    }
+
+
+    @Override
+    public SysDict setDefaultValue(SysDictDefaultValueRequest sysDictDefaultValueRequest) throws SysManagementException {
+
+        SysDict sysDictQuery = selectById(sysDictDefaultValueRequest.getGuid());
+
+        //判断被设置为默认字典项的子业务字典或字典项是否存在
+        //判断的标志位
+        boolean isexist = false;
+
+        //查询字典项为子业务字典
+        Wrapper<SysDict> wrapperDict = new EntityWrapper<SysDict>();
+        wrapperDict.eq(SysDict.COLUMN_GUID_PARENTS,sysDictDefaultValueRequest.getGuid());
+        List<SysDict> listDict = selectList(wrapperDict);
+
+        //查询字典项为字典项
+        Wrapper<SysDictItem> wrapperDictItem = new EntityWrapper<SysDictItem>();
+        wrapperDictItem.eq(SysDictItem.COLUMN_GUID_DICT,sysDictDefaultValueRequest.getGuid());
+        List<SysDictItem> listDictItem = iSysDictItemService.selectList(wrapperDictItem);
+
+        for (SysDict sysDict :listDict){
+            if (sysDictDefaultValueRequest.getDefaultValue().equals(sysDict.getGuid())){
+                isexist = true;
+                break;
+            }
+        }
+        for (SysDictItem sysDictItem :listDictItem){
+            if (sysDictDefaultValueRequest.getDefaultValue().equals(sysDictItem.getGuid())){
+                isexist = true;
+                break;
+            }
+        }
+
+        if (isexist == true){
+            //设置默认值
+            sysDictQuery.setDefaultValue(sysDictDefaultValueRequest.getDefaultValue());
+            updateById(sysDictQuery);
+        }else{
+            //抛出异常
+            throw new SysManagementException(SYSExceptionCodes.NOT_FOUND_SYS_DICT_ITEM_WITH_GUID,wrap("找不到默认值对应的字典项",sysDictDefaultValueRequest.getDefaultValue()));
+        }
+
+        return sysDictQuery;
     }
 }
