@@ -1,8 +1,12 @@
 package org.tis.tools.abf.module.om.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
+import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import lombok.Data;
-import com.baomidou.mybatisplus.annotations.TableId;
+import org.tis.tools.abf.module.common.entity.enums.YON;
+import org.tis.tools.core.entity.enums.CommonEnumDeserializer;
+
 import java.io.Serializable;
 
 /**
@@ -86,7 +90,8 @@ public class OmEmpOrg implements Serializable {
      * 是否主机构:取值来自业务菜单： DICT_YON
      * 必须有且只能有一个主机构，默认Y，人员管理时程序检查当前是否只有一条主机构；
      */
-    private String ismain;
+    @JSONField(deserializeUsing = CommonEnumDeserializer.class)
+    private YON ismain;
 
 }
 
