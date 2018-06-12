@@ -3,6 +3,7 @@ package org.tis.tools.abf.module.sys.service;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.IService;
+import org.tis.tools.abf.module.sys.controller.request.SysDictDefaultValueRequest;
 import org.tis.tools.abf.module.sys.entity.SysDict;
 import org.tis.tools.abf.module.sys.entity.vo.SysDictDetail;
 import org.tis.tools.abf.module.sys.exception.SysManagementException;
@@ -101,15 +102,6 @@ public interface ISysDictService extends IService<SysDict> {
      */
     SysDict queryOneSysDictByGuid(String id) throws SysManagementException;
 
-    /**
-     * 设置业务字典的默认字典项
-     *
-     * @param dictGuid 字典GUID
-     * @param itemValue 默认值
-     * @return
-     * @throws SysManagementException
-     */
-    SysDict setDefaultDictValue(String dictGuid, String itemValue) throws SysManagementException;
 
     /**
      * 设置业务字典的默认字典项
@@ -135,5 +127,13 @@ public interface ISysDictService extends IService<SysDict> {
      * @throws SysManagementException
      */
     SysDictDetail queryDictTree(String id) throws SysManagementException;
+
+    /**
+     * 设置默认字典项
+     * @param sysDictDefaultValueRequest
+     * @return
+     * @throws SysManagementException
+     */
+    SysDict setDefaultValue(SysDictDefaultValueRequest sysDictDefaultValueRequest) throws SysManagementException;
 
 }
