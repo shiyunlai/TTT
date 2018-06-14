@@ -10,12 +10,15 @@ import org.springframework.transaction.annotation.Transactional;
 import org.tis.tools.abf.module.common.entity.enums.YON;
 import org.tis.tools.abf.module.om.controller.request.OmPositionRequest;
 import org.tis.tools.abf.module.om.dao.OmPositionMapper;
+import org.tis.tools.abf.module.om.entity.OmEmployee;
 import org.tis.tools.abf.module.om.entity.OmOrg;
 import org.tis.tools.abf.module.om.entity.OmPosition;
 import org.tis.tools.abf.module.om.entity.enums.OmPositionStatus;
 import org.tis.tools.abf.module.om.entity.vo.OmPositionDetail;
+import org.tis.tools.abf.module.om.entity.vo.OmPositionForParentDetail;
 import org.tis.tools.abf.module.om.exception.OMExceptionCodes;
 import org.tis.tools.abf.module.om.exception.OrgManagementException;
+import org.tis.tools.abf.module.om.service.IOmEmployeeService;
 import org.tis.tools.abf.module.om.service.IOmOrgService;
 import org.tis.tools.abf.module.om.service.IOmPositionService;
 
@@ -36,6 +39,9 @@ public class OmPositionServiceImpl extends ServiceImpl<OmPositionMapper, OmPosit
 
     @Autowired
     private IOmOrgService omOrgService;
+
+    @Autowired
+    private IOmEmployeeService omEmployeeService;
 
     @Override
     public boolean addRoot(OmPositionRequest omPositionRequest) throws OrgManagementException {
@@ -255,7 +261,8 @@ public class OmPositionServiceImpl extends ServiceImpl<OmPositionMapper, OmPosit
      * @throws OrgManagementException
      */
     @Override
-    public Page<OmPosition> treeByOrgId(Page<OmPosition> page, Wrapper<OmPosition> wrapper, String id) throws OrgManagementException {
+    public Page<OmPositionForParentDetail> treeByOrgId(Page<OmPosition> page, Wrapper<OmPosition> wrapper, String id) throws
+            OrgManagementException {
 
         OmOrg omOrg = omOrgService.selectById(id);
         if (omOrg == null){
@@ -267,10 +274,43 @@ public class OmPositionServiceImpl extends ServiceImpl<OmPositionMapper, OmPosit
         }
 
         wrapper.eq(OmPosition.COLUMN_GUID_ORG,id);
-
         Page<OmPosition> pageQuuery = selectPage(page,wrapper);
+        List<OmPosition> list = pageQuuery.getRecords();
 
-        return pageQuuery;
+        Page<OmPositionForParentDetail> pageParent = new Page<OmPositionForParentDetail>();
+        List<OmPositionForParentDetail> listParent = new ArrayList<OmPositionForParentDetail>();
+
+        for (OmPosition omPosition : list){
+            //查询对应机构且在该岗位下的员工数
+            int employeeCountQue = 0;
+            Wrapper<OmEmployee> wrapperEmp = new EntityWrapper<OmEmployee>();
+            System.out.println("***************"+id);
+            System.out.println("***************"+omPosition.getGuid());
+            wrapperEmp.eq(OmEmployee.COLUMN_GUID_ORG,id);
+            wrapperEmp.eq(OmEmployee.COLUMN_GUID_POSITION,omPosition.getGuid());
+            employeeCountQue = omEmployeeService.selectList(wrapperEmp).size();
+            System.out.println("***************"+employeeCountQue);
+            System.out.println("***************"+omEmployeeService.selectCount(wrapperEmp));
+
+            //查询出父岗位的名称
+            String parentNameQue = "";
+            if ("".equals(omPosition.getGuidParents()) || null == omPosition.getGuidParents()){
+            }else {
+                OmPosition omPositionForParent = selectById(omPosition.getGuidParents());
+                parentNameQue = omPositionForParent.getPositionName();
+            }
+
+            OmPositionForParentDetail omPositionForParentDetail = new OmPositionForParentDetail(omPosition,
+                    parentNameQue, employeeCountQue);
+            listParent.add(omPositionForParentDetail);
+        }
+
+        pageParent.setRecords(listParent);
+        pageParent.setCurrent(pageQuuery.getCurrent());
+        pageParent.setSize(pageQuuery.getSize());
+        pageParent.setTotal(pageQuuery.getTotal());
+
+        return pageParent;
     }
 
 
