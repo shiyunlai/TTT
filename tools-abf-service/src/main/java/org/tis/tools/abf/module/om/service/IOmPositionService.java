@@ -6,6 +6,7 @@ import org.tis.tools.abf.module.om.controller.request.OmPositionRequest;
 import org.tis.tools.abf.module.om.entity.OmPosition;
 import com.baomidou.mybatisplus.service.IService;
 import org.tis.tools.abf.module.om.entity.vo.OmPositionDetail;
+import org.tis.tools.abf.module.om.entity.vo.OmPositionForParentDetail;
 import org.tis.tools.abf.module.om.exception.OrgManagementException;
 
 import java.util.List;
@@ -62,7 +63,7 @@ public interface IOmPositionService extends IService<OmPosition>  {
      * @return
      * @throws OrgManagementException
      */
-    Page<OmPosition> treeByOrgId(Page<OmPosition> page , Wrapper<OmPosition> wrapper ,String id) throws
+    Page<OmPositionForParentDetail> treeByOrgId(Page<OmPosition> page , Wrapper<OmPosition> wrapper , String id) throws
             OrgManagementException;
 
     /**
