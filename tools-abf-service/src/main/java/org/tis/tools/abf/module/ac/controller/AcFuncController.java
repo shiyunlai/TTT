@@ -107,6 +107,15 @@ public class AcFuncController extends BaseController<AcFunc>  {
     }
 
     /**
+     * 查询所有功能
+     * @return
+     */
+    @GetMapping("/queryAll")
+    public ResultVO queryAll(){
+        return ResultVO.success("查询成功",acFuncService.queryAll());
+    }
+
+    /**
      * 开通功能
      * @param id
      * @return ResultVO
