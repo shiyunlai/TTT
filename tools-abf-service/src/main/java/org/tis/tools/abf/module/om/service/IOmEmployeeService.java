@@ -18,6 +18,8 @@ import java.util.List;
  */
 public interface IOmEmployeeService extends IService<OmEmployee>  {
 
+
+    public List<OmEmployee> queryEmployeeByGuid(String orgGuid);
     /**
      * 新增员工
      * @param omEmployeeAddRequest
