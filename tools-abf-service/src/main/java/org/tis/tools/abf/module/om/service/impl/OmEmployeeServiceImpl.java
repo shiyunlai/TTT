@@ -11,17 +11,20 @@ import org.tis.tools.abf.module.ac.entity.AcOperator;
 import org.tis.tools.abf.module.ac.service.IAcOperatorService;
 import org.tis.tools.abf.module.om.controller.request.OmEmployeeAddRequest;
 import org.tis.tools.abf.module.om.controller.request.OmEmployeeUpdateRequest;
-import org.tis.tools.abf.module.om.dao.OmEmployeeMapper;
+import org.tis.tools.abf.module.om.entity.OmEmpOrg;
 import org.tis.tools.abf.module.om.entity.OmEmployee;
 import org.tis.tools.abf.module.om.entity.OmOrg;
 import org.tis.tools.abf.module.om.entity.OmPosition;
 import org.tis.tools.abf.module.om.entity.enums.OmEmployeeStatus;
 import org.tis.tools.abf.module.om.exception.OMExceptionCodes;
 import org.tis.tools.abf.module.om.exception.OrgManagementException;
+import org.tis.tools.abf.module.om.service.IOmEmpOrgService;
 import org.tis.tools.abf.module.om.service.IOmEmployeeService;
 import org.tis.tools.abf.module.om.service.IOmOrgService;
 import org.tis.tools.abf.module.om.service.IOmPositionService;
+import org.tis.tools.abf.module.om.dao.OmEmployeeMapper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.tis.tools.core.utils.BasicUtil.wrap;
@@ -45,6 +48,29 @@ public class OmEmployeeServiceImpl extends ServiceImpl<OmEmployeeMapper, OmEmplo
 
     @Autowired
     private IAcOperatorService operatorService;
+
+
+    @Autowired
+    private IOmEmpOrgService empOrgService;
+
+    @Override
+    public List<OmEmployee> queryEmployeeByGuid(String orgGuid) {
+        EntityWrapper<OmEmpOrg> omEmpOrgEntityWrapper = new EntityWrapper<>();
+        omEmpOrgEntityWrapper.eq(OmEmpOrg.COLUMN_GUID_ORG, orgGuid);
+        List<OmEmpOrg> list = empOrgService.selectList(omEmpOrgEntityWrapper);
+        if(list.isEmpty()){
+            return null;
+        }else{
+            List<String> list2 = new ArrayList<>();
+            for (OmEmpOrg oeo : list) {
+                list2.add(oeo.getGuidEmp());
+            }
+            EntityWrapper<OmEmployee> omEmployeeEntityWrapper = new EntityWrapper<>();
+            omEmployeeEntityWrapper.in(OmEmployee.COLUMN_GUID, list2);
+            List<OmEmployee> omEmployeeList = this.baseMapper.selectList(omEmployeeEntityWrapper);
+            return omEmployeeList;
+        }
+    }
 
     @Override
     public boolean add(OmEmployeeAddRequest omEmployeeAddRequest) throws OrgManagementException {
@@ -77,17 +103,17 @@ public class OmEmployeeServiceImpl extends ServiceImpl<OmEmployeeMapper, OmEmplo
         Wrapper<OmEmployee> wrapper = new EntityWrapper<OmEmployee>();
         List<OmEmployee> list = selectList(wrapper);
 
-        for (OmEmployee omEmployee : list){
-            if (omEmployee.getEmpCode().equals(omEmployeeAddRequest.getEmpCode())){
+        for (OmEmployee omEmployee : list) {
+            if (omEmployee.getEmpCode().equals(omEmployeeAddRequest.getEmpCode())) {
                 return isexist;
             }
         }
 
         isexist = true;
 
-         OmEmployee omEmployee = new OmEmployee();
+        OmEmployee omEmployee = new OmEmployee();
 
-         //新建人员后停留在在招状态
+        //新建人员后停留在在招状态
         omEmployee.setEmpstatus(OmEmployeeStatus.OFFER);
 
 
