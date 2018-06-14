@@ -104,12 +104,31 @@ public class AcOperatorController extends BaseController<AcOperator>  {
         return ResultVO.success("查询成功", acOperator);
     }
 
+    /**
+     * 分页查询
+     * @param page
+     * @return
+     */
     @PostMapping("/list")
     public ResultVO list(@RequestBody @Validated SmartPage<AcOperator> page) {
         return  ResultVO.success("查询成功", acOperatorService.selectPage(getPage(page), getCondition(page)));
     }
 
+    /**
+     * 不分页查询所有操作员
+     * @return
+     */
+    @GetMapping("/queryAllOperator")
+    public ResultVO queryAllOperator(){
+        return ResultVO.success("查询成功",acOperatorService.queryAllOperator());
+    }
 
+
+    /**
+     * 改变操作员状态
+     * @param acOperatorStatusRequest
+     * @return
+     */
     @OperateLog(type = OperateType.UPDATE,desc ="改变操作员状态")
     @PutMapping("/changeStatus")
     public ResultVO changeOperatorStatus(@RequestBody @Validated AcOperatorStatusRequest acOperatorStatusRequest){

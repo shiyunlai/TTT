@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.tis.tools.abf.module.ac.entity.AcApp;
 import org.tis.tools.abf.module.ac.service.IAcAppService;
+import org.tis.tools.abf.module.om.controller.request.OmPositionAppListRequest;
 import org.tis.tools.abf.module.om.controller.request.OmPositionAppRequest;
 import org.tis.tools.abf.module.om.dao.OmPositionAppMapper;
 import org.tis.tools.abf.module.om.entity.OmPosition;
@@ -62,6 +63,20 @@ public class OmPositionAppServiceImpl extends ServiceImpl<OmPositionAppMapper, O
         omPositionApp.setGuidPosition(omPositionAppRequest.getGuidPosition());
 
         insert(omPositionApp);
+    }
+
+
+    @Override
+    public void addList(OmPositionAppListRequest om) throws OrgManagementException {
+
+        OmPositionApp omPositionApp = new OmPositionApp();
+
+        omPositionApp.setGuidPosition(om.getGuidPosition());
+
+        for (String guidApp : om.getAppList()){
+            omPositionApp.setGuidApp(guidApp);
+            insert(omPositionApp);
+        }
     }
 
     @Override

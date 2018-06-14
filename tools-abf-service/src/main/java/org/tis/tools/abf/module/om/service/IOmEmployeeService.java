@@ -4,8 +4,10 @@ import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.IService;
 import org.tis.tools.abf.module.om.controller.request.OmEmployeeAddRequest;
+import org.tis.tools.abf.module.om.controller.request.OmEmployeeByOrgAndPositionRequest;
 import org.tis.tools.abf.module.om.controller.request.OmEmployeeUpdateRequest;
 import org.tis.tools.abf.module.om.entity.OmEmployee;
+import org.tis.tools.abf.module.om.entity.vo.OmEmployeeForPositionDetail;
 import org.tis.tools.abf.module.om.exception.OrgManagementException;
 
 import java.util.List;
@@ -43,7 +45,7 @@ public interface IOmEmployeeService extends IService<OmEmployee>  {
      * @return
      * @throws OrgManagementException
      */
-    Page<OmEmployee> queryEmpByOrg(Page<OmEmployee> page,Wrapper<OmEmployee> wrapper, String id)throws
+    Page<OmEmployeeForPositionDetail> queryEmpByOrg(Page<OmEmployee> page, Wrapper<OmEmployee> wrapper, String id)throws
             OrgManagementException;
 
     /**
@@ -53,6 +55,46 @@ public interface IOmEmployeeService extends IService<OmEmployee>  {
      * @throws OrgManagementException
      */
     List<OmEmployee> queryEmpListByOrg(String id) throws OrgManagementException;
+
+    /**
+     * 员工入职
+     * @param omEmployee
+     * @return
+     * @throws OrgManagementException
+     */
+    OmEmployee onJob(OmEmployee omEmployee) throws OrgManagementException;
+
+    /**
+     * 员工离职
+     * @param omEmployee
+     * @return
+     * @throws OrgManagementException
+     */
+    OmEmployee outJob(OmEmployee omEmployee) throws OrgManagementException;
+
+    /**
+     * 根据机构和岗位ID分页查询员工
+     * @return
+     * @throws OrgManagementException
+     */
+    Page<OmEmployee> queryByOrgPosition(Page<OmEmployee> page,String orgId, String
+            positionId)throws OrgManagementException;
+
+    /**
+     * 查询除了该机构该岗位下的其他员工
+     * @param om
+     * @return
+     * @throws OrgManagementException
+     */
+    List<OmEmployee> getOtherEmp(OmEmployeeByOrgAndPositionRequest om) throws OrgManagementException;
+
+    /**
+     * 为机构和员工添加员工
+     * @param omEmployee
+     * @return
+     * @throws OrgManagementException
+     */
+    void addInOrgAndPosition(OmEmployee omEmployee)throws  OrgManagementException;
 
 }
 

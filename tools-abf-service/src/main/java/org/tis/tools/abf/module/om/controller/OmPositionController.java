@@ -120,10 +120,7 @@ public class OmPositionController extends BaseController<OmPosition>  {
 
     @GetMapping("/listsByOrgId/{guid}")
     public ResultVO QueryPositionByOrgId(@PathVariable @NotBlank(message = "guid不能为空") String guid){
-
-        List<OmPosition> list = omPositionService.QueryPositionByOrgId(guid);
-
-        return ResultVO.success("查询成功",list);
+        return ResultVO.success("查询成功",omPositionService.QueryPositionByOrgId(guid));
     }
 
     /**

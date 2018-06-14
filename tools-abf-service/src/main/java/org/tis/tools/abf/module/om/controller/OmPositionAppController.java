@@ -6,6 +6,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.tis.tools.abf.module.jnl.annotation.OperateLog;
 import org.tis.tools.abf.module.jnl.entity.enums.OperateType;
+import org.tis.tools.abf.module.om.controller.request.OmPositionAppListRequest;
 import org.tis.tools.abf.module.om.controller.request.OmPositionAppRequest;
 import org.tis.tools.abf.module.om.entity.OmPositionApp;
 import org.tis.tools.abf.module.om.service.IOmPositionAppService;
@@ -31,7 +32,14 @@ public class OmPositionAppController extends BaseController<OmPositionApp>  {
     @PostMapping
     public ResultVO add(@RequestBody @Validated OmPositionAppRequest omPositionAppRequest) {
         omPositionAppService.add(omPositionAppRequest);
-        return ResultVO.success("新增成功！");
+        return ResultVO.success("新增成功!");
+    }
+
+    @OperateLog(type = OperateType.ADD,desc = "批量新增岗位应用列表")
+    @PostMapping("addByList")
+    public ResultVO add(@RequestBody @Validated OmPositionAppListRequest om ){
+        omPositionAppService.addList(om);
+        return ResultVO.success("新增成功!");
     }
 
     @OperateLog(type = OperateType.UPDATE,desc = "修改岗位应用列表")

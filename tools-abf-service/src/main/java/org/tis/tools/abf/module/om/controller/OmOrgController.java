@@ -120,6 +120,15 @@ public class OmOrgController extends BaseController<OmOrg> {
         return  ResultVO.success("查询成功", orgService.selectPage(getPage(page), getCondition(page)));
     }
 
+    /**
+     * 查询所有机构
+     * @return
+     */
+    @GetMapping("/queryAll")
+    public ResultVO queryAllOrg(){
+        return ResultVO.success("查询成功",orgService.queryAllOrg());
+    }
+
 
     /**
      * 查询机构的树结构

@@ -5,12 +5,12 @@ package org.tis.tools.abf.module.om.service;
 
 
 import com.baomidou.mybatisplus.service.IService;
+import org.tis.tools.abf.module.common.entity.vo.TreeDetail;
 import org.tis.tools.abf.module.om.controller.request.OmOrgUpdateRequest;
 import org.tis.tools.abf.module.om.entity.OmOrg;
 import org.tis.tools.abf.module.om.entity.enums.OmOrgArea;
 import org.tis.tools.abf.module.om.entity.enums.OmOrgDegree;
 import org.tis.tools.abf.module.om.entity.enums.OmOrgType;
-import org.tis.tools.abf.module.om.entity.vo.OmOrgDetail;
 import org.tis.tools.abf.module.om.exception.OrgManagementException;
 
 import java.util.Date;
@@ -138,7 +138,8 @@ public interface IOmOrgService extends IService<OmOrg> {
 	 * @return
 	 * @throws OrgManagementException
 	 */
-	OmOrgDetail queryOrgTree(String id) throws OrgManagementException;
+	TreeDetail queryOrgTree(String id) throws OrgManagementException;
+
 
 	/**
 	 * 删除父机构
@@ -444,5 +445,5 @@ public interface IOmOrgService extends IService<OmOrg> {
 	/**
 	 * 查询所有机构信息
 	 */
-	List<OmOrg> queryAllOrg();
+	List<OmOrg> queryAllOrg()throws OrgManagementException;
 }

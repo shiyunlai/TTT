@@ -9,7 +9,9 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.tis.tools.abf.module.common.entity.Tree;
 import org.tis.tools.abf.module.common.entity.enums.YON;
+import org.tis.tools.abf.module.common.entity.vo.TreeDetail;
 import org.tis.tools.abf.module.om.controller.request.OmOrgUpdateRequest;
 import org.tis.tools.abf.module.om.dao.OmOrgMapper;
 import org.tis.tools.abf.module.om.entity.OmOrg;
@@ -17,7 +19,6 @@ import org.tis.tools.abf.module.om.entity.enums.OmOrgArea;
 import org.tis.tools.abf.module.om.entity.enums.OmOrgDegree;
 import org.tis.tools.abf.module.om.entity.enums.OmOrgStatus;
 import org.tis.tools.abf.module.om.entity.enums.OmOrgType;
-import org.tis.tools.abf.module.om.entity.vo.OmOrgDetail;
 import org.tis.tools.abf.module.om.exception.OMExceptionCodes;
 import org.tis.tools.abf.module.om.exception.OrgManagementException;
 import org.tis.tools.abf.module.om.service.IOmOrgService;
@@ -208,13 +209,13 @@ public class OmOrgServiceImpl extends ServiceImpl<OmOrgMapper, OmOrg> implements
 
 
 	@Override
-	public OmOrgDetail queryOrgTree(String id) throws OrgManagementException {
+	public TreeDetail queryOrgTree(String id) throws OrgManagementException {
 
-		OmOrgDetail omOrgDetail = new OmOrgDetail();
+		TreeDetail treeDetail = new TreeDetail();
 
 		try {
 			//创建子机构的list
-			List<OmOrg> list = new ArrayList<OmOrg>();
+			List<Tree> list = new ArrayList<Tree>();
 
 			if ("null".equals(id)){
 				//查询子机构字典
@@ -224,7 +225,11 @@ public class OmOrgServiceImpl extends ServiceImpl<OmOrgMapper, OmOrg> implements
 				List<OmOrg> queryList = selectList(wrapper);
 
 				for (OmOrg omOrgQuery: queryList) {
-					list.add(omOrgQuery);
+					Tree tree = new Tree();
+					tree.setGuid(omOrgQuery.getGuid());
+					tree.setLabel(omOrgQuery.getOrgName());
+					tree.setIsleaf(omOrgQuery.getIsleaf());
+					list.add(tree);
 				}
 
 			}else {
@@ -237,37 +242,27 @@ public class OmOrgServiceImpl extends ServiceImpl<OmOrgMapper, OmOrg> implements
 				List<OmOrg> queryList = selectList(wrapper);
 
 				for (OmOrg omOrgQuery: queryList) {
-					list.add(omOrgQuery);
+					Tree treeSon = new Tree();
+					treeSon.setGuid(omOrgQuery.getGuid());
+					treeSon.setLabel(omOrgQuery.getOrgName());
+					treeSon.setIsleaf(omOrgQuery.getIsleaf());
+					list.add(treeSon);
 				}
 
 				//收集查询出来的结果
-				omOrgDetail.setGuid(omOrg.getGuid());
-				omOrgDetail.setOrgCode(omOrg.getOrgCode());
-				omOrgDetail.setOrgName(omOrg.getOrgName());
-				omOrgDetail.setOrgDegree(omOrg.getOrgDegree());
-				omOrgDetail.setOrgType(omOrg.getOrgType());
-				omOrgDetail.setOrgStatus(omOrg.getOrgStatus());
-				omOrgDetail.setGuidParents(omOrg.getGuidParents());
-				omOrgDetail.setOrgSeq(omOrg.getOrgSeq());
-				omOrgDetail.setOrgAddr(omOrg.getOrgAddr());
-				omOrgDetail.setLinkMan(omOrg.getLinkMan());
-				omOrgDetail.setLinkTel(omOrg.getLinkTel());
-				omOrgDetail.setStartDate(omOrg.getStartDate());
-				omOrgDetail.setEndDate(omOrg.getEndDate());
-				omOrgDetail.setArea(omOrg.getArea());
-				omOrgDetail.setSortNo(omOrg.getSortNo());
-				omOrgDetail.setIsleaf(omOrg.getIsleaf());
-				omOrgDetail.setRemark(omOrg.getRemark());
+				treeDetail.setGuid(omOrg.getGuid());
+				treeDetail.setLabel(omOrg.getOrgName());
+				treeDetail.setIsleaf(omOrg.getIsleaf());
 			}
 
-			omOrgDetail.setChildren(list);
+			treeDetail.setChildren(list);
 
 		}catch (Exception e){
 			e.printStackTrace();
 			throw new OrgManagementException(OMExceptionCodes.FAILURE_WHEN_QUERY_ORG_TREE,wrap(e.getMessage()));
 		}
 
-		return omOrgDetail;
+		return treeDetail;
 	}
 
 
@@ -375,6 +370,7 @@ public class OmOrgServiceImpl extends ServiceImpl<OmOrgMapper, OmOrg> implements
 
 	@Override
 	public List<OmOrg> queryAllOrg() {
-		return null;
+		Wrapper<OmOrg> wrapper = new EntityWrapper<OmOrg>();
+		return selectList(wrapper);
 	}
 }

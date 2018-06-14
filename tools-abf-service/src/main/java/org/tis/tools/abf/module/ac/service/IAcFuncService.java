@@ -8,6 +8,8 @@ import org.tis.tools.abf.module.ac.entity.enums.FuncType;
 import org.tis.tools.abf.module.ac.exception.AcManagementException;
 import org.tis.tools.abf.module.common.entity.enums.YON;
 
+import java.util.List;
+
 /**
  * acFunc的Service接口类
  *
@@ -59,6 +61,13 @@ public interface IAcFuncService extends IService<AcFunc>  {
      * @throws AcManagementException
      */
     Page<AcFunc> queryPageById(Page<AcFunc> page, Wrapper<AcFunc> wrapper ,String id)throws AcManagementException;
+
+    /**
+     * 查询所有功能的接口
+     * @return
+     * @throws AcManagementException
+     */
+    List<AcFunc> queryAll()throws AcManagementException;
 
 }
 

@@ -9,7 +9,6 @@ import org.tis.tools.abf.module.ac.entity.enums.OperatorStatus;
 import org.tis.tools.core.entity.enums.CommonEnumDeserializer;
 import org.tis.tools.core.entity.request.RestRequest;
 
-import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -28,17 +27,14 @@ public class AcOperatorAddRequest extends RestRequest {
 
     private String operatorName;
 
-    @NotNull (message = "操作员状态不能为空")
     @JSONField(deserializeUsing = CommonEnumDeserializer.class)
     private OperatorStatus operatorStatus;
 
     private Date invalDate;
 
-    @NotNull (message = "认证模式不能为空")
     @JSONField(deserializeUsing = CommonEnumDeserializer.class)
     private AuthMode authMode;
 
-    @NotNull(message = "锁定次数限制不能为空")
     private BigDecimal lockLimit;
 
     private BigDecimal errCount;

@@ -253,6 +253,11 @@ public class OMExceptionCodes {
 	 * 查询员工失败
 	 */
 	public static final String FAILURE_WHEN_QUERY_OM_EMPLOYEE = R_EX_CODE("0053");
+	/**
+	 * 新增员工和机构,员工和岗位失败
+	 */
+	public static final String FAILURE_WHEN_CREATE_OM_EMP_ORG_AND_POSITION = R_EX_CODE("0054");
+
 
 
 	/**

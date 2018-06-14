@@ -16,6 +16,7 @@ import org.tis.tools.abf.module.ac.service.IAcFuncService;
 import org.tis.tools.abf.module.common.entity.enums.YON;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import static org.tis.tools.core.utils.BasicUtil.wrap;
 
@@ -138,6 +139,13 @@ public class AcFuncServiceImpl extends ServiceImpl<AcFuncMapper, AcFunc> impleme
         }
 
         return pagefunc;
+    }
+
+
+    @Override
+    public List<AcFunc> queryAll() throws AcManagementException {
+        Wrapper<AcFunc> wrapper = new EntityWrapper<AcFunc>();
+        return selectList(wrapper);
     }
 }
 
