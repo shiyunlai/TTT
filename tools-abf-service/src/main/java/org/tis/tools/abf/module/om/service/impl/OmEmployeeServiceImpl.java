@@ -9,20 +9,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.tis.tools.abf.module.ac.entity.AcOperator;
 import org.tis.tools.abf.module.ac.service.IAcOperatorService;
+import org.tis.tools.abf.module.common.entity.enums.YON;
 import org.tis.tools.abf.module.om.controller.request.OmEmployeeAddRequest;
+import org.tis.tools.abf.module.om.controller.request.OmEmployeeByOrgAndPositionRequest;
 import org.tis.tools.abf.module.om.controller.request.OmEmployeeUpdateRequest;
-import org.tis.tools.abf.module.om.entity.OmEmpOrg;
-import org.tis.tools.abf.module.om.entity.OmEmployee;
-import org.tis.tools.abf.module.om.entity.OmOrg;
-import org.tis.tools.abf.module.om.entity.OmPosition;
+import org.tis.tools.abf.module.om.dao.OmEmployeeMapper;
+import org.tis.tools.abf.module.om.entity.*;
 import org.tis.tools.abf.module.om.entity.enums.OmEmployeeStatus;
+import org.tis.tools.abf.module.om.entity.vo.OmEmployeeForPositionDetail;
 import org.tis.tools.abf.module.om.exception.OMExceptionCodes;
 import org.tis.tools.abf.module.om.exception.OrgManagementException;
-import org.tis.tools.abf.module.om.service.IOmEmpOrgService;
-import org.tis.tools.abf.module.om.service.IOmEmployeeService;
-import org.tis.tools.abf.module.om.service.IOmOrgService;
-import org.tis.tools.abf.module.om.service.IOmPositionService;
-import org.tis.tools.abf.module.om.dao.OmEmployeeMapper;
+import org.tis.tools.abf.module.om.service.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +49,13 @@ public class OmEmployeeServiceImpl extends ServiceImpl<OmEmployeeMapper, OmEmplo
 
     @Autowired
     private IOmEmpOrgService empOrgService;
+
+    @Autowired
+    private IOmEmpOrgService omEmpOrgService;
+
+    @Autowired
+    private IOmEmpPositionService omEmpPositionService;
+
 
     @Override
     public List<OmEmployee> queryEmployeeByGuid(String orgGuid) {
@@ -86,16 +90,6 @@ public class OmEmployeeServiceImpl extends ServiceImpl<OmEmployeeMapper, OmEmplo
         if (omPosition == null){
             throw new OrgManagementException(OMExceptionCodes.FAILURE_WHEN_QUERY_OM_POSITION,wrap("岗位GUID对应的岗位不存在",omEmployeeAddRequest.getGuidPosition()));
         }
-
-
-        //如果操作员ID存在,判断操作员是否存在
-        if (!"".equals(omEmployeeAddRequest.getGuidOperator())){
-            AcOperator acOperator = operatorService.selectById(omEmployeeAddRequest.getGuidOperator());
-            if (acOperator == null){
-                throw new OrgManagementException(OMExceptionCodes.FAILURE_WHEN_QUERY_AC_OPERATOR,wrap("应用GUID对应的应用不存在",omEmployeeAddRequest.getGuidOperator()));
-            }
-        }
-
 
 
         boolean isexist = new Boolean(false);
@@ -139,6 +133,19 @@ public class OmEmployeeServiceImpl extends ServiceImpl<OmEmployeeMapper, OmEmplo
         omEmployee.setRemark(omEmployeeAddRequest.getRemark());
 
         insert(omEmployee);
+
+        //为员工隶属机构新增一条信息
+        OmEmpOrg omEmpOrg = new OmEmpOrg();
+        omEmpOrg.setGuidOrg(omEmployee.getGuidOrg());
+        omEmpOrg.setGuidEmp(omEmployee.getGuid());
+        omEmpOrg.setIsmain(YON.YES);
+        omEmpOrgService.insert(omEmpOrg);
+
+        OmEmpPosition omEmpPosition = new OmEmpPosition();
+        omEmpPosition.setGuidPosition(omEmployee.getGuidPosition());
+        omEmpPosition.setGuidEmp(omEmployee.getGuid());
+        omEmpPosition.setIsmain(YON.YES);
+        omEmpPositionService.insert(omEmpPosition);
 
         return isexist;
     }
@@ -213,7 +220,8 @@ public class OmEmployeeServiceImpl extends ServiceImpl<OmEmployeeMapper, OmEmplo
 
 
     @Override
-    public Page<OmEmployee> queryEmpByOrg(Page<OmEmployee> page, Wrapper<OmEmployee> wrapper, String id) throws OrgManagementException {
+    public Page<OmEmployeeForPositionDetail> queryEmpByOrg(Page<OmEmployee> page, Wrapper<OmEmployee> wrapper, String id) throws
+            OrgManagementException {
 
         if (wrapper == null){
             wrapper = new EntityWrapper<OmEmployee>();
@@ -221,9 +229,31 @@ public class OmEmployeeServiceImpl extends ServiceImpl<OmEmployeeMapper, OmEmplo
 
         //分页查询机构ID为"id"的员工
         wrapper.eq(OmEmployee.COLUMN_GUID_ORG,id);
-        Page<OmEmployee> pageQuery = selectPage(page,wrapper);
+        Page<OmEmployee>  pageQuery = selectPage(page,wrapper);
+        List<OmEmployee> list = pageQuery.getRecords();
 
-        return pageQuery;
+        Page<OmEmployeeForPositionDetail> pageForPosition = new Page<OmEmployeeForPositionDetail>();
+        List<OmEmployeeForPositionDetail> listPosition = new ArrayList<OmEmployeeForPositionDetail>();
+
+        for (OmEmployee omEmployee : list){
+            Wrapper<OmPosition> wrapperPosition = new EntityWrapper<OmPosition>();
+            wrapperPosition.eq(OmPosition.COLUMN_GUID,omEmployee.getGuidPosition());
+            OmPosition omPosition = omPositionService.selectOne(wrapperPosition);
+            String omPositionName = omPosition.getPositionName();
+
+            OmEmployeeForPositionDetail omEmployeeForPositionDetail = new OmEmployeeForPositionDetail(omEmployee,omPositionName);
+
+            //将查询回来的信息放回到list中
+            listPosition.add(omEmployeeForPositionDetail);
+        }
+
+        pageForPosition.setCondition(pageQuery.getCondition());
+        pageForPosition.setRecords(listPosition);
+        pageForPosition.setTotal(pageQuery.getTotal());
+        pageForPosition.setSize(pageQuery.getSize());
+        pageForPosition.setCurrent(pageQuery.getCurrent());
+
+        return pageForPosition;
     }
 
 
@@ -235,6 +265,105 @@ public class OmEmployeeServiceImpl extends ServiceImpl<OmEmployeeMapper, OmEmplo
 
         List<OmEmployee> list = selectList(wrapper);
         return list;
+    }
+
+
+    @Override
+    public OmEmployee onJob(OmEmployee omEmployee) throws OrgManagementException {
+
+        OmEmployee omEmployeeQue = selectById(omEmployee);
+
+            omEmployeeQue.setGuidOperator(omEmployee.getGuidOperator());
+            omEmployeeQue.setUserId(omEmployee.getUserId());
+            omEmployeeQue.setIndate(omEmployee.getIndate());
+            omEmployeeQue.setEmpstatus(OmEmployeeStatus.ONJOB);
+
+            updateById(omEmployeeQue);
+        return omEmployeeQue;
+    }
+
+
+    @Override
+    public OmEmployee outJob(OmEmployee omEmployee) throws OrgManagementException {
+        OmEmployee omEmployeeQue = selectById(omEmployee);
+
+        omEmployeeQue.setGuidOperator(omEmployee.getGuidOperator());
+        omEmployeeQue.setUserId(omEmployee.getUserId());
+        omEmployeeQue.setOutdate(omEmployee.getOutdate());
+        omEmployeeQue.setEmpstatus(OmEmployeeStatus.OFFJOB);
+
+        updateById(omEmployeeQue);
+        return omEmployeeQue;
+    }
+
+
+    @Override
+    public Page<OmEmployee> queryByOrgPosition(Page<OmEmployee> page,String orgId, String positionId) throws OrgManagementException {
+
+        Wrapper<OmEmployee>  wrapper = new EntityWrapper<OmEmployee>();
+        wrapper.eq(OmEmployee.COLUMN_GUID_ORG,orgId);
+        wrapper.eq(OmEmployee.COLUMN_GUID_POSITION,positionId);
+
+        Page<OmEmployee> pageQuery = selectPage(page,wrapper);
+
+        return pageQuery;
+    }
+
+
+    @Override
+    public List<OmEmployee> getOtherEmp(OmEmployeeByOrgAndPositionRequest om) throws OrgManagementException {
+
+
+        Wrapper<OmEmployee> wrapper = new EntityWrapper<OmEmployee>();
+        wrapper.ne(OmEmployee.COLUMN_GUID_ORG,om.getGuidOrg()).ne(OmEmployee.COLUMN_GUID_POSITION,om.getGuidPosition());
+
+        List<OmEmployee> list = selectList(wrapper);
+
+        return list;
+    }
+
+
+    @Override
+    public void addInOrgAndPosition(OmEmployee omEmployee) throws OrgManagementException {
+
+        boolean empOrgExist = false;
+        boolean empPositionExist = false;
+
+        if (!"".equals(omEmployee.getGuidOrg())){
+            Wrapper<OmEmpOrg> wrapper = new EntityWrapper<OmEmpOrg>();
+            wrapper.eq(OmEmpOrg.COLUMN_GUID_EMP,omEmployee.getGuid());
+            wrapper.eq(OmEmpOrg.COLUMN_GUID_ORG,omEmployee.getGuidOrg());
+            OmEmpOrg omEmpOrg = omEmpOrgService.selectOne(wrapper);
+            if (null == omEmpOrg){
+                OmEmpOrg omEmpOrgAdd = new OmEmpOrg();
+                omEmpOrgAdd.setGuidEmp(omEmployee.getGuid());
+                omEmpOrgAdd.setGuidOrg(omEmployee.getGuidOrg());
+                omEmpOrgAdd.setIsmain(YON.NO);
+                omEmpOrgService.insert(omEmpOrgAdd);
+            }else {
+               empOrgExist = true;
+            }
+        }
+
+        if (!"".equals(omEmployee.getGuidPosition())){
+            Wrapper<OmEmpPosition> wrapper = new EntityWrapper<OmEmpPosition>();
+            wrapper.eq(OmEmpPosition.COLUMN_GUID_EMP,omEmployee.getGuid());
+            wrapper.eq(OmEmpPosition.COLUMN_GUID_POSITION,omEmployee.getGuidPosition());
+            OmEmpPosition omEmpPosition = omEmpPositionService.selectOne(wrapper);
+            if (null == omEmpPosition){
+                OmEmpPosition omEmpPositionAdd = new OmEmpPosition();
+                omEmpPositionAdd.setGuidEmp(omEmployee.getGuid());
+                omEmpPositionAdd.setGuidPosition(omEmployee.getGuidPosition());
+                omEmpPositionAdd.setIsmain(YON.NO);
+                omEmpPositionService.insert(omEmpPositionAdd);
+            }else {
+                empPositionExist = true;
+            }
+        }
+
+        if (empOrgExist && empPositionExist){
+            throw new OrgManagementException(OMExceptionCodes.FAILURE_WHEN_CREATE_OM_EMP_ORG_AND_POSITION,wrap("该员工已存在于该机构的岗位下"));
+        }
     }
 }
 
