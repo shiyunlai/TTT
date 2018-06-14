@@ -17,16 +17,18 @@ public class OmGroupAddRequest extends RestRequest {
     public interface Child{}
 
     @NotBlank(message = "工作组名不能为空")
-    private String guidName;
+    private String groupName;
 
     @NotNull(message = "工作组类型不能为空或类型不存在")
     @JSONField(deserializeUsing = CommonEnumDeserializer.class)
     private OmGroupType groupType;
 
-    @NotBlank(message = "隶属机构编号不能为空")
-    private String groupOrg;
+    @NotBlank(message = "隶属机构code不能为空")
+    private String orgCode;
 
     @Null(message = "根工作组父GUID为空！", groups = {OmGroupAddRequest.Root.class})
     @NotBlank(message = "根工作组父GUID不能为空！", groups = {OmGroupAddRequest.Child.class})
     private String guidParents;
+
+    private String groupDesc;
 }

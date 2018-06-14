@@ -102,6 +102,13 @@ public class OmGroupServiceImpl extends ServiceImpl<OmGroupMapper, OmGroup> impl
     }
 
     @Override
+    public OmGroup selectGroupByCode(String groupCode){
+
+        OmGroup og = queryGroupByCode(groupCode);
+        return og;
+    }
+
+    @Override
     public void createGroup(OmGroupType groupType, String groupName, String orgCode, String parentGroupCode) throws OrgManagementException {
         //创建修改工作组序列对象
         OmGroup omGroup = new OmGroup();
@@ -118,11 +125,10 @@ public class OmGroupServiceImpl extends ServiceImpl<OmGroupMapper, OmGroup> impl
         //补充信息
         og.setGroupCode(genGroupCode(groupType.getValue()));
         og.setGroupStatus(OmGroupStatus.RUNNING);
-        og.setCreatetime(new Date());
-        // 补充最近更新时间
-        og.setLastupdate(new Date());
         // 新增节点都先算叶子节点 Y
         og.setIsleaf(YON.YES);
+        //开启时间
+        og.setStartDate(new Date());
         // 新增时子节点数为0
         og.setSubCount(new BigDecimal(0));
         //TODO
@@ -238,6 +244,7 @@ public class OmGroupServiceImpl extends ServiceImpl<OmGroupMapper, OmGroup> impl
             }
         }
         og.setGroupStatus(OmGroupStatus.ANCEL);
+        og.setEndDate(new Date());
         updateGroup(og);
     }
 
