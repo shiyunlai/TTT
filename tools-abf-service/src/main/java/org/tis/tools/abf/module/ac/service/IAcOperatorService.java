@@ -6,6 +6,8 @@ import org.tis.tools.abf.module.ac.controller.request.AcOperatorStatusRequest;
 import org.tis.tools.abf.module.ac.entity.AcOperator;
 import org.tis.tools.abf.module.ac.exception.AcOperatorManagementException;
 
+import java.util.List;
+
 /**
  * acOperator的Service接口类
  * 
@@ -26,5 +28,11 @@ public interface IAcOperatorService extends IService<AcOperator>  {
      */
     AcOperator changeOperatorStatus(AcOperatorStatusRequest acOperatorStatusRequest) throws AcOperatorManagementException;
 
+    /**
+     * 查询所有操作员
+     * @return
+     * @throws AcOperatorManagementException
+     */
+    List<AcOperator> queryAllOperator() throws AcOperatorManagementException;
 }
 
