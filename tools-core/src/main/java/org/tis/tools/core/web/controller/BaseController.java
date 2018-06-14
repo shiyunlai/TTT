@@ -30,4 +30,5 @@ public class BaseController<T> {
         }
         return new EntityWrapper<>(condition);
     }
+
 }

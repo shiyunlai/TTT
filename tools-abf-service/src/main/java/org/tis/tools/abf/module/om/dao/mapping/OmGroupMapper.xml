@@ -2,4 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.tis.tools.abf.module.om.dao.OmGroupMapper">
 
+    <select id="selectOrgEmpNotInGroup" resultType="org.tis.tools.abf.module.om.entity.OmEmployee">
+        SELECT * FROM OM_EMPLOYEE WHERE guid IN ( SELECT guid_emp FROM OM_EMP_ORG WHERE guid_org = #{guidOrg})
+              AND guid NOT IN ( SELECT a.guid_emp FROM OM_EMP_GROUP a, OM_GROUP b WHERE b.group_code = #{groupCode} AND a.guid_group = b.guid)
+    </select>
+
+    <select id="selectAppNotInGroup" resultType="org.tis.tools.abf.module.ac.entity.AcApp">
+        SELECT * FROM AC_APP WHERE guid NOT IN 
+                (SELECT oga.guid_app FROM OM_GROUP_APP oga, OM_GROUP og WHERE og.group_code = #{groudCode} AND oga.guid_group = og.guid )
+    </select>
+
 </mapper>

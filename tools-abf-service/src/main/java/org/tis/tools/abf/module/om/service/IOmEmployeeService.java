@@ -6,6 +6,8 @@ import org.tis.tools.abf.module.om.controller.request.OmEmployeeUpdateRequest;
 import org.tis.tools.abf.module.om.entity.OmEmployee;
 import org.tis.tools.abf.module.om.exception.OrgManagementException;
 
+import java.util.List;
+
 /**
  * omEmployee的Service接口类
  * 
@@ -14,6 +16,8 @@ import org.tis.tools.abf.module.om.exception.OrgManagementException;
  */
 public interface IOmEmployeeService extends IService<OmEmployee>  {
 
+
+    public List<OmEmployee> queryEmployeeByGuid(String orgGuid);
     /**
      * 新增员工
      * @param omEmployeeAddRequest
