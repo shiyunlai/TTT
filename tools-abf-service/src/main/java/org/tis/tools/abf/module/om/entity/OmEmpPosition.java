@@ -3,6 +3,8 @@ package org.tis.tools.abf.module.om.entity;
 import com.baomidou.mybatisplus.annotations.TableName;
 import lombok.Data;
 import com.baomidou.mybatisplus.annotations.TableId;
+import org.tis.tools.abf.module.common.entity.enums.YON;
+
 import java.io.Serializable;
 
 /**
@@ -85,7 +87,7 @@ public class OmEmpPosition implements Serializable {
      * 是否主岗位:取值来自业务菜单：DICT_YON
      * 只能有一个主岗位
      */
-    private String ismain;
+    private YON ismain;
 
 }
 
