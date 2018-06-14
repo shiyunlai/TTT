@@ -37,7 +37,7 @@ import static org.tis.tools.core.utils.BasicUtil.wrap;
 /**
  * omGroup的Service接口实现类
  * 
- * @author Auto Generate Tools
+ * @author ljhua
  * @date 2018/04/23
  */
 @Service

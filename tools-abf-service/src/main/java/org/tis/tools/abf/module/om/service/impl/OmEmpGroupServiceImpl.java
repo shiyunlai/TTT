@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * omEmpGroup的Service接口实现类
  * 
- * @author Auto Generate Tools
+ * @author ljhuan
  * @date 2018/04/23
  */
 @Service

@@ -44,7 +44,7 @@ import java.util.Map;
 /**
  * omGroup的Controller类
  * 
- * @author Auto Generate Tools
+ * @author ljhua
  * @date 2018/04/23
  */
 @RestController
@@ -55,7 +55,7 @@ public class OmGroupController extends BaseController<OmGroup>  {
     private IOmGroupService omGroupService;
 
     @Autowired
-    IOmEmpGroupService omEmpGroupService;
+    private IOmEmpGroupService omEmpGroupService;
 
     @PostMapping
     public ResultVO add(@RequestBody @Validated OmGroup omGroup) {
@@ -104,33 +104,6 @@ public class OmGroupController extends BaseController<OmGroup>  {
 
         return ResultVO.success("新增成功！");
     }
-
-//    /**
-//     * 编辑工作组
-//     *
-//     * @param model
-//     * @param content
-//     * @param age
-//     * @param request
-//     * @param response
-//     * @return
-//     */
-//    @RequestMapping(value = "/edit")
-//    public String edit(ModelMap model, @RequestBody String content, String age, HttpServletRequest request,
-//                       HttpServletResponse response) {
-//        try {
-//
-//            JSONObject jsonObj = JSONObject.parseObject(content);
-//            OmGroup og = new OmGroup();
-//            BeanUtils.populate(og, jsonObj);
-//            groupRService.createRootGroup(og);
-//            AjaxUtils.ajaxJsonSuccessMessage(response, "新增根工作组成功!");
-//        } catch (Exception e) {// TODO
-//            AjaxUtils.ajaxJsonErrorMessage(response, "新增根工作组失败!");
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
 
     /**
      * 删除工作组
