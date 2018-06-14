@@ -21,6 +21,4 @@ public class OmGroupUpdateRequest extends RestRequest {
     @NotBlank(message = "工作组隶属机构不能为空")
     private String groupOrg;
 
-    @NotNull(message = "分页信息不能为空")
-    Page<OmEmployee> page;
 }

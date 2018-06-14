@@ -39,6 +39,14 @@ public interface IOmGroupService extends IService<OmGroup>  {
      */
 
     /**
+     * 根据groupCode查询该工作组
+     *
+     * @param groupCode
+     * @return
+     */
+    OmGroup selectGroupByCode(String groupCode);
+
+    /**
      * <pre>
      * 生成工作组代码
      *
