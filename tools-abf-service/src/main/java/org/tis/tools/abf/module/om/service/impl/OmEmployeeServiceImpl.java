@@ -315,7 +315,7 @@ public class OmEmployeeServiceImpl extends ServiceImpl<OmEmployeeMapper, OmEmplo
 
 
         Wrapper<OmEmployee> wrapper = new EntityWrapper<OmEmployee>();
-        wrapper.ne(OmEmployee.COLUMN_GUID_ORG,om.getGuidOrg()).ne(OmEmployee.COLUMN_GUID_POSITION,om.getGuidPosition());
+        wrapper.eq(OmEmployee.COLUMN_GUID_ORG,om.getGuidOrg()).ne(OmEmployee.COLUMN_GUID_POSITION,om.getGuidPosition());
 
         List<OmEmployee> list = selectList(wrapper);
 
