@@ -236,10 +236,11 @@ public class OmEmployeeServiceImpl extends ServiceImpl<OmEmployeeMapper, OmEmplo
         List<OmEmployeeForPositionDetail> listPosition = new ArrayList<OmEmployeeForPositionDetail>();
 
         for (OmEmployee omEmployee : list){
-            Wrapper<OmPosition> wrapperPosition = new EntityWrapper<OmPosition>();
-            wrapperPosition.eq(OmPosition.COLUMN_GUID,omEmployee.getGuidPosition());
-            OmPosition omPosition = omPositionService.selectOne(wrapperPosition);
-            String omPositionName = omPosition.getPositionName();
+            OmPosition omPosition = omPositionService.selectById(omEmployee.getGuidPosition());
+            String omPositionName = "";
+            if (null != omPosition){
+                omPositionName = omPosition.getPositionName();
+            }
 
             OmEmployeeForPositionDetail omEmployeeForPositionDetail = new OmEmployeeForPositionDetail(omEmployee,omPositionName);
 
