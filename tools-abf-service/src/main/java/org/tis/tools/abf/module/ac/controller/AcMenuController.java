@@ -1,20 +1,19 @@
 package org.tis.tools.abf.module.ac.controller;
 
 import com.baomidou.mybatisplus.plugins.Page;
+import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.tis.tools.abf.module.ac.exception.AcMenuManagementException;
+import org.springframework.web.bind.annotation.*;
+import org.tis.tools.abf.module.ac.controller.request.AcMenuMoveRequest;
+import org.tis.tools.abf.module.ac.entity.AcMenu;
+import org.tis.tools.abf.module.ac.service.IAcMenuService;
 import org.tis.tools.abf.module.jnl.annotation.OperateLog;
 import org.tis.tools.abf.module.jnl.entity.enums.OperateType;
 import org.tis.tools.core.web.controller.BaseController;
-import org.tis.tools.abf.module.ac.service.IAcMenuService;
-import org.tis.tools.core.web.vo.SmartPage;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-import org.tis.tools.abf.module.ac.entity.AcMenu;
-import org.hibernate.validator.constraints.NotBlank;
 import org.tis.tools.core.web.vo.ResultVO;
+import org.tis.tools.core.web.vo.SmartPage;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -182,22 +181,18 @@ public class AcMenuController extends BaseController<AcMenu>  {
     }
 
     /**
-     * 菜单移动
-     *
-     * @param targetGuid 目标菜单GUID
-     * @param moveGuid   移动的菜单GUID
-     * @param order      排序
-     * @throws AcMenuManagementException
+     * 移动菜单
+     * @param acMenuMoveRequest
+     * @return
      */
     @OperateLog(
             type = OperateType.UPDATE,
             desc = "修改菜单（移动）")
     @ResponseBody
-    @GetMapping("/queryMoveMenuLists/{targetGuid}/{moveGuid}")
-    public ResultVO getMoveMenu(@PathVariable @NotBlank(message = "targetGuid不能为空") String targetGuid
-            , @PathVariable @NotBlank(message = "moveGuid不能为空")String moveGuid
-            ,@PathVariable @NotBlank(message = "order不能为空")BigDecimal order){
-        AcMenu lists = acMenuService.moveMenu(targetGuid,moveGuid,order);
+    @PostMapping("/queryMoveMenuLists")
+    public ResultVO getMoveMenu(@RequestBody @Validated AcMenuMoveRequest acMenuMoveRequest){
+        AcMenu lists = acMenuService.moveMenu(acMenuMoveRequest.getTargetGuid(),acMenuMoveRequest.getMoveGuid(),
+                acMenuMoveRequest.getOrder());
         if(lists == null){
             ResultVO.error("404","查询无数据！");
         }
