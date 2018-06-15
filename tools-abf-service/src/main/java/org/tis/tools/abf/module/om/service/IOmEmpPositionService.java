@@ -1,7 +1,9 @@
 package org.tis.tools.abf.module.om.service;
 
-import org.tis.tools.abf.module.om.entity.OmEmpPosition;
 import com.baomidou.mybatisplus.service.IService;
+import org.tis.tools.abf.module.om.controller.request.OmEmpPositionRequest;
+import org.tis.tools.abf.module.om.entity.OmEmpPosition;
+import org.tis.tools.abf.module.om.exception.OrgManagementException;
 
 /**
  * omEmpPosition的Service接口类
@@ -10,6 +12,13 @@ import com.baomidou.mybatisplus.service.IService;
  * @date 2018/04/23
  */
 public interface IOmEmpPositionService extends IService<OmEmpPosition>  {
+
+    /**
+     * 新增
+     * @param omEmpPositionRequest
+     * @throws OrgManagementException
+     */
+    void add(OmEmpPositionRequest omEmpPositionRequest)throws OrgManagementException;
 
 }
 
