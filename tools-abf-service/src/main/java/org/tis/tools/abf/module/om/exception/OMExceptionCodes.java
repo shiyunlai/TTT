@@ -257,6 +257,10 @@ public class OMExceptionCodes {
 	 * 新增员工和机构,员工和岗位失败
 	 */
 	public static final String FAILURE_WHEN_CREATE_OM_EMP_ORG_AND_POSITION = R_EX_CODE("0054");
+	/**
+	 * 创建岗位员工列表时已存在
+	 */
+	public static final String IS_EXIST_BY_CREAT_EMPPOSITION= R_EX_CODE("0055");
 
 
 
