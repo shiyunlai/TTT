@@ -1,14 +1,15 @@
 package org.tis.tools.abf.module.om.controller;
 
-import org.springframework.validation.annotation.Validated;
-import org.tis.tools.core.web.controller.BaseController;
-import org.tis.tools.core.web.vo.SmartPage;
-import org.tis.tools.abf.module.om.entity.OmEmpPosition;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 import org.hibernate.validator.constraints.NotBlank;
-import org.tis.tools.core.web.vo.ResultVO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import org.tis.tools.abf.module.om.controller.request.OmEmpPositionRequest;
+import org.tis.tools.abf.module.om.entity.OmEmpPosition;
 import org.tis.tools.abf.module.om.service.IOmEmpPositionService;
+import org.tis.tools.core.web.controller.BaseController;
+import org.tis.tools.core.web.vo.ResultVO;
+import org.tis.tools.core.web.vo.SmartPage;
 
 /**
  * omEmpPosition的Controller类
@@ -23,9 +24,9 @@ public class OmEmpPositionController extends BaseController<OmEmpPosition>  {
     @Autowired
     private IOmEmpPositionService omEmpPositionService;
 
-    @PostMapping("/add")
-    public ResultVO add(@RequestBody @Validated OmEmpPosition omEmpPosition) {
-        omEmpPositionService.insert(omEmpPosition);
+    @PostMapping
+    public ResultVO add(@RequestBody @Validated OmEmpPositionRequest OmEmpPositionRequest) {
+        omEmpPositionService.add(OmEmpPositionRequest);
         return ResultVO.success("新增成功！");
     }
     

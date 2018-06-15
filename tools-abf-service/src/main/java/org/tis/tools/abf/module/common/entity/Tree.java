@@ -1,5 +1,6 @@
 package org.tis.tools.abf.module.common.entity;
 
+import lombok.Data;
 import org.tis.tools.abf.module.common.entity.enums.YON;
 
 /**
@@ -7,6 +8,7 @@ import org.tis.tools.abf.module.common.entity.enums.YON;
  * Created by chenchao
  * Created on 2018/6/14 14:42
  */
+@Data
 public class Tree {
 
     //对象的名称
@@ -25,62 +27,6 @@ public class Tree {
     private YON isleaf;
 
     public Tree(){}
-
-    public String getLabel() {
-        return label;
-    }
-
-    public void setLabel(String label) {
-        this.label = label;
-    }
-
-    public String getData() {
-        return data;
-    }
-
-    public void setData(String data) {
-        this.data = data;
-    }
-
-    public String getGuid() {
-        return guid;
-    }
-
-    public void setGuid(String guid) {
-        this.guid = guid;
-    }
-
-    public String getExpandedIcon() {
-        return expandedIcon;
-    }
-
-    public void setExpandedIcon(String expandedIcon) {
-        this.expandedIcon = expandedIcon;
-    }
-
-    public String getCollapsedIcon() {
-        return collapsedIcon;
-    }
-
-    public void setCollapsedIcon(String collapsedIcon) {
-        this.collapsedIcon = collapsedIcon;
-    }
-
-    public YON getIsleaf() {
-        return isleaf;
-    }
-
-    public void setIsleaf(YON isleaf) {
-        this.isleaf = isleaf;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
 
     @Override
     public String toString() {

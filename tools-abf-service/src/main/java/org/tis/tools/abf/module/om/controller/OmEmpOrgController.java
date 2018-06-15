@@ -54,7 +54,12 @@ public class OmEmpOrgController extends BaseController<OmEmpOrg>  {
         omEmpOrgService.deleteById(id);
         return ResultVO.success("删除成功");
     }
-    
+
+    /**
+     * 根据ID查询员工
+     * @param id
+     * @return
+     */
     @GetMapping("/{id}")
     public ResultVO detail(@PathVariable @NotBlank(message = "id不能为空") String id) {
         OmEmpOrg omEmpOrg = omEmpOrgService.selectById(id);
@@ -63,7 +68,12 @@ public class OmEmpOrgController extends BaseController<OmEmpOrg>  {
         }
         return ResultVO.success("查询成功", omEmpOrg);
     }
-    
+
+    /**
+     * 分页查询所有信息
+     * @param page
+     * @return
+     */
     @PostMapping("/list")
     public ResultVO list(@RequestBody @Validated SmartPage<OmEmpOrg> page) {
         return  ResultVO.success("查询成功", omEmpOrgService.selectPage(getPage(page), getCondition(page)));
