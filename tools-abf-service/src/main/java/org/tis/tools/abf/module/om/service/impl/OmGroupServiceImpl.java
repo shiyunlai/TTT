@@ -477,7 +477,7 @@ public class OmGroupServiceImpl extends ServiceImpl<OmGroupMapper, OmGroup> impl
                 for (OmGroup omGroupQuery: queryList) {
                     Tree tree = new Tree();
                     tree.setGuid(omGroupQuery.getGuid());
-                    tree.setGuid(omGroupQuery.getGroupCode());
+                    tree.setCode(omGroupQuery.getGroupCode());
                     tree.setLabel(omGroupQuery.getGroupName());
                     tree.setIsleaf(omGroupQuery.getIsleaf());
                     list.add(tree);
