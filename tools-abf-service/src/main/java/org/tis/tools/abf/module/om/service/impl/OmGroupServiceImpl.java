@@ -1,6 +1,5 @@
 package org.tis.tools.abf.module.om.service.impl;
 
-import com.alibaba.druid.util.StringUtils;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
@@ -22,17 +21,13 @@ import org.tis.tools.abf.module.om.exception.OrgManagementException;
 import org.tis.tools.abf.module.om.service.*;
 import org.springframework.transaction.annotation.Transactional;
 import org.tis.tools.abf.module.om.dao.OmGroupMapper;
-import org.tis.tools.abf.module.sys.service.ISysDictService;
 import org.tis.tools.abf.module.sys.service.ISysSeqnoService;
 import org.tis.tools.core.utils.StringUtil;
-import org.tis.tools.core.web.vo.SmartPage;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.tis.tools.core.utils.BasicUtil.wrap;
 
@@ -62,8 +57,6 @@ public class OmGroupServiceImpl extends ServiceImpl<OmGroupMapper, OmGroup> impl
     ISysSeqnoService seqnoRService;
     @Autowired
     IAcAppService acAppService;
-    @Autowired
-    ISysDictService iDictRService;
 
     /**
      *
@@ -460,6 +453,7 @@ public class OmGroupServiceImpl extends ServiceImpl<OmGroupMapper, OmGroup> impl
 
     @Override
     public TreeDetail selectGroupTree(String guid) {
+
         TreeDetail treeDetail = new TreeDetail();
 
         try {

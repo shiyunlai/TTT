@@ -392,5 +392,22 @@ public class OmGroupController extends BaseController<OmGroup>  {
         omGroupService.deleteGroupApp(guid);
         return ResultVO.success("删除成功");
     }
+
+    /**
+     * 查询工作组树
+     *
+     * @param guid
+     * @return
+     */
+    @GetMapping(value = "/{guid}/tree")
+    public ResultVO selectGroupTree(@PathVariable @NotBlank(message = "guid不能为空")String guid){
+
+        OmGroup omGroup = omGroupService.selectById(guid);
+        if(omGroup == null){
+            return ResultVO.error("404", "找不到对应记录或已经被删除！");
+        }
+
+        return ResultVO.success("查询成功",omGroupService.selectGroupTree(guid));
+    }
 }
 
