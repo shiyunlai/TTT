@@ -10,17 +10,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.tis.tools.abf.module.common.entity.enums.YON;
 import org.tis.tools.abf.module.om.controller.request.OmPositionRequest;
 import org.tis.tools.abf.module.om.dao.OmPositionMapper;
-import org.tis.tools.abf.module.om.entity.OmEmployee;
-import org.tis.tools.abf.module.om.entity.OmOrg;
-import org.tis.tools.abf.module.om.entity.OmPosition;
+import org.tis.tools.abf.module.om.entity.*;
 import org.tis.tools.abf.module.om.entity.enums.OmPositionStatus;
 import org.tis.tools.abf.module.om.entity.vo.OmPositionDetail;
 import org.tis.tools.abf.module.om.entity.vo.OmPositionForParentDetail;
 import org.tis.tools.abf.module.om.exception.OMExceptionCodes;
 import org.tis.tools.abf.module.om.exception.OrgManagementException;
-import org.tis.tools.abf.module.om.service.IOmEmployeeService;
-import org.tis.tools.abf.module.om.service.IOmOrgService;
-import org.tis.tools.abf.module.om.service.IOmPositionService;
+import org.tis.tools.abf.module.om.service.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +38,15 @@ public class OmPositionServiceImpl extends ServiceImpl<OmPositionMapper, OmPosit
 
     @Autowired
     private IOmEmployeeService omEmployeeService;
+
+    @Autowired
+    private IOmEmpPositionService omEmpPositionService;
+
+    @Autowired
+    private IOmPositionAppService omPositionAppService;
+
+    @Autowired
+    private  IOmGroupPositionService omGroupPositionService;
 
     @Override
     public boolean addRoot(OmPositionRequest omPositionRequest) throws OrgManagementException {
@@ -222,13 +227,14 @@ public class OmPositionServiceImpl extends ServiceImpl<OmPositionMapper, OmPosit
     @Override
     public void deleteRoot(String id) throws OrgManagementException {
 
-        try {
-            //删除父岗位下的所有子岗位
-            deleteAllChild(id);
-
-        }catch (Exception e){
-            e.printStackTrace();
-            throw new OrgManagementException(OMExceptionCodes.FAILURE_WHEN_DELETE_ROOT_POSITION,wrap(e.getMessage()));
+        if (!"".equals(id)){
+            try {
+                //删除父岗位下的所有子岗位
+                deleteAllChild(id);
+            }catch (Exception e){
+                e.printStackTrace();
+                throw new OrgManagementException(OMExceptionCodes.FAILURE_WHEN_DELETE_ROOT_POSITION,wrap(e.getMessage()));
+            }
         }
     }
 
@@ -243,13 +249,74 @@ public class OmPositionServiceImpl extends ServiceImpl<OmPositionMapper, OmPosit
 
         if (0 == lists.size() || null == lists){
             deleteById(id);
+            deleteEmpPosition(id);
+            deleteAppPosition(id);
+            deleteGroupPosition(id);
         }else {
             for (OmPosition omPosition :lists){
                 deleteAllChild(omPosition.getGuid());
+                deleteEmpPosition(id);
+                deleteAppPosition(id);
+                deleteGroupPosition(id);
             }
             deleteById(id);
+            deleteEmpPosition(id);
+            deleteAppPosition(id);
+            deleteGroupPosition(id);
         }
     }
+
+    /** 删除岗位和员工的关系信息 */
+    public void deleteEmpPosition(String id) throws OrgManagementException {
+        try {
+            Wrapper<OmEmpPosition> wrapper = new EntityWrapper<OmEmpPosition>();
+            wrapper.eq(OmEmpPosition.COLUMN_GUID_POSITION,id);
+
+            List<OmEmpPosition> list = omEmpPositionService.selectList(wrapper);
+            if ( 0 != list.size()){
+                omEmpPositionService.delete(wrapper);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new OrgManagementException(OMExceptionCodes.FAILURE_WHEN_DELETE_OM_EMP_POSITION,wrap
+                    ("删除员工和岗位信息失败",id));
+        }
+    }
+
+    /** 删除岗位和应用的关系信息 */
+    public void deleteAppPosition(String id)throws OrgManagementException{
+        try {
+            Wrapper<OmPositionApp> wrapper = new EntityWrapper<OmPositionApp>();
+            wrapper.eq(OmPositionApp.COLUMN_GUID_POSITION,id);
+            List<OmPositionApp> list = omPositionAppService.selectList(wrapper);
+            if (0 != list.size()){
+                omPositionAppService.delete(wrapper);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new OrgManagementException(OMExceptionCodes.FAILURE_WHEN_DELETE_OM_APP_POSITION,wrap("删除应用和岗位关系是失败"),
+                    id);
+        }
+    }
+
+    public void deleteGroupPosition(String id)throws OrgManagementException{
+
+        try {
+            Wrapper<OmGroupPosition> wrapper = new EntityWrapper<OmGroupPosition>();
+            wrapper.eq(OmGroupPosition.COLUMN_GUID_POSITION,id);
+            List<OmGroupPosition> list = omGroupPositionService.selectList(wrapper);
+
+            if (0 != list.size()){
+                omGroupPositionService.delete(wrapper);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new OrgManagementException(OMExceptionCodes.FAILURE_WHEN_DELETE_OM_GROUP_POSITION,wrap
+                    ("删除工作组和岗位关系信息失败"),id);
+        }
+
+    }
+
 
     /**
      * 根据岗位ID查询机构
