@@ -9,15 +9,10 @@ import org.tis.tools.abf.module.jnl.annotation.OperateLog;
 import org.tis.tools.abf.module.jnl.entity.enums.OperateType;
 import org.tis.tools.abf.module.om.controller.request.*;
 import org.tis.tools.abf.module.om.entity.OmEmployee;
-import org.tis.tools.abf.module.om.entity.OmGroupPosition;
 import org.tis.tools.abf.module.om.entity.OmPosition;
 import org.tis.tools.abf.module.om.entity.enums.OmGroupType;
-import org.tis.tools.abf.module.om.exception.OMExceptionCodes;
-import org.tis.tools.abf.module.om.exception.OrgManagementException;
 import org.tis.tools.abf.module.om.service.IOmEmpGroupService;
-import org.tis.tools.abf.module.om.service.IOmEmployeeService;
 import org.tis.tools.core.exception.ToolsRuntimeException;
-import org.tis.tools.core.utils.BasicUtil;
 import org.tis.tools.core.web.controller.BaseController;
 import org.tis.tools.core.web.vo.SmartPage;
 import org.tis.tools.abf.module.om.service.IOmGroupService;
@@ -29,12 +24,8 @@ import org.tis.tools.abf.module.om.entity.OmGroup;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.constraints.NotNull;
 import javax.validation.groups.Default;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * omGroup的Controller类
@@ -159,7 +150,7 @@ public class OmGroupController extends BaseController<OmGroup>  {
      * @return
      */
     @OperateLog(type = OperateType.UPDATE, desc = "更改工作组状态")
-    @PutMapping(value = "/{groupCode}/reenabl/{reenableChild}")
+    @PutMapping(value = "/{groupCode}/reenable/{reenableChild}")
     public ResultVO reenableGroup(@PathVariable @NotBlank(message = "groupCode不能为空") String groupCode,
                                   @PathVariable @NotBlank(message = "groupCode不能为空") boolean reenableChild) {
         omGroupService.reenableGroup(groupCode,reenableChild);
@@ -179,7 +170,7 @@ public class OmGroupController extends BaseController<OmGroup>  {
         og.setGroupCode(omGroupUpdateRequest.getGroupCode());
         og.setGroupName(omGroupUpdateRequest.getGroupName());
         og.setGroupDesc(omGroupUpdateRequest.getGroupDesc());
-        og.setGuidOrg(omGroupUpdateRequest.getGroupOrg());
+        og.setGuidOrg(omGroupUpdateRequest.getOrgCode());
 
         omGroupService.updateGroup(og);
         return ResultVO.success("修改成功!");
@@ -235,8 +226,8 @@ public class OmGroupController extends BaseController<OmGroup>  {
      * @param groupCode
      * @return
      */
-    @PostMapping(value = "{groupCode}/empOrgNotin/{guidOrg}")
-    public ResultVO loadempNotin(@PathVariable @NotBlank(message = "guidOrg不能为空") String guidOrg,
+    @PostMapping(value = "/{groupCode}/empOrgNotin/{guidOrg}")
+    public ResultVO loadEmpNotIn(@PathVariable @NotBlank(message = "guidOrg不能为空") String guidOrg,
                                  @PathVariable @NotBlank(message = "groupCode不能为空") String groupCode,
                                  @RequestBody @Validated SmartPage<OmEmployee> page) {
         Page<OmEmployee> omEmployeePage = new Page<OmEmployee>(page.getPage().getCurrent(), page.getPage().getSize(),
@@ -281,7 +272,7 @@ public class OmGroupController extends BaseController<OmGroup>  {
      * @return
      */
     @PostMapping(value = "/{groupCode}/positionIn")
-    public ResultVO loadpositionin(@PathVariable @NotBlank(message = "groupCode不能为空") String groupCode,
+    public ResultVO loadPositionIn(@PathVariable @NotBlank(message = "groupCode不能为空") String groupCode,
                                    @RequestBody @Validated SmartPage<OmPosition> page) {
 
         Page<OmPosition> omPositionPage = new Page<OmPosition>(page.getPage().getCurrent(), page.getPage().getSize(),
@@ -338,13 +329,13 @@ public class OmGroupController extends BaseController<OmGroup>  {
 
 
     /**
-     * 查询所有工作组的应用
+     * 查询工作组的应用
      *
      * @param groupCode
      * @param page
      */
-    @PostMapping(value = "/{groupCode}/inGroupApp")
-    public ResultVO queryApp(@PathVariable @NotBlank(message = "groupCode不能为空") String groupCode,
+    @PostMapping(value = "/{groupCode}/inApp")
+    public ResultVO selectApp(@PathVariable @NotBlank(message = "groupCode不能为空") String groupCode,
                            @RequestBody @Validated SmartPage<AcApp> page) throws ToolsRuntimeException{
 
         Page<AcApp> acAppPage = new Page<AcApp>(page.getPage().getCurrent(), page.getPage().getSize(),
@@ -363,7 +354,7 @@ public class OmGroupController extends BaseController<OmGroup>  {
      * @throws ToolsRuntimeException
      */
     @PostMapping(value = "/{groupCode}/NotInApp")
-    public ResultVO queryNotInApp(@PathVariable @NotBlank(message = "groupCode不能为空") String groupCode,
+    public ResultVO selectNotInApp(@PathVariable @NotBlank(message = "groupCode不能为空") String groupCode,
                                   @RequestBody @Validated SmartPage<AcApp> page) throws ToolsRuntimeException{
 
         Page<AcApp> acAppPage = new Page<AcApp>(page.getPage().getCurrent(), page.getPage().getSize(),

@@ -19,6 +19,6 @@ public class OmGroupUpdateRequest extends RestRequest {
     private String groupDesc;
 
     @NotBlank(message = "工作组隶属机构不能为空")
-    private String groupOrg;
+    private String orgCode;
 
 }
