@@ -261,7 +261,10 @@ public class OMExceptionCodes {
 	 * 创建岗位员工列表时已存在
 	 */
 	public static final String IS_EXIST_BY_CREAT_EMPPOSITION= R_EX_CODE("0055");
-
+	/**
+	 * 查询工作组树失败
+	 */
+	public static final String FAILURE_WHEN_QUERY_GROUP_TREE = R_EX_CODE("056");
 
 
 	/**

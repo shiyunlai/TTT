@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.IService;
 import org.tis.tools.abf.module.ac.entity.AcApp;
 import org.tis.tools.abf.module.ac.entity.AcRole;
+import org.tis.tools.abf.module.common.entity.vo.TreeDetail;
 import org.tis.tools.abf.module.om.entity.OmEmployee;
 import org.tis.tools.abf.module.om.entity.OmGroup;
 import org.tis.tools.abf.module.om.entity.OmPosition;
@@ -425,6 +426,14 @@ public interface IOmGroupService extends IService<OmGroup>  {
      * @param guid
      */
     void deleteGroupApp(String guid);
+
+    /**
+     * 工作组树结构
+     *
+     * @param guid
+     * @return
+     */
+    TreeDetail selectGroupTree(String guid);
 
 }
 

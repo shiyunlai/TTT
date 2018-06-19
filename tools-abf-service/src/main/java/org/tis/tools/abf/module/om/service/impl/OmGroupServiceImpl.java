@@ -10,7 +10,9 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.tis.tools.abf.module.ac.entity.AcApp;
 import org.tis.tools.abf.module.ac.entity.AcRole;
 import org.tis.tools.abf.module.ac.service.IAcAppService;
+import org.tis.tools.abf.module.common.entity.Tree;
 import org.tis.tools.abf.module.common.entity.enums.YON;
+import org.tis.tools.abf.module.common.entity.vo.TreeDetail;
 import org.tis.tools.abf.module.om.entity.*;
 import org.tis.tools.abf.module.om.entity.enums.OmGroupStatus;
 import org.tis.tools.abf.module.om.entity.enums.OmGroupType;
@@ -225,7 +227,13 @@ public class OmGroupServiceImpl extends ServiceImpl<OmGroupMapper, OmGroup> impl
         }
         EntityWrapper<OmGroup> omGroupEntityWrapper = new EntityWrapper<>();
         omGroupEntityWrapper.like(OmGroup.COLUMN_GROUP_SEQ, og.getGroupSeq());
+
         this.baseMapper.delete(omGroupEntityWrapper);
+        //删除后修改工作组结束时间
+        OmGroup omGroup = new OmGroup();
+        omGroup.setGroupCode(groupCode);
+        omGroup.setEndDate(new Date());
+        updateGroup(omGroup);
     }
 
     @Override
@@ -244,7 +252,7 @@ public class OmGroupServiceImpl extends ServiceImpl<OmGroupMapper, OmGroup> impl
             }
         }
         og.setGroupStatus(OmGroupStatus.ANCEL);
-        og.setEndDate(new Date());
+
         updateGroup(og);
     }
 
@@ -448,6 +456,60 @@ public class OmGroupServiceImpl extends ServiceImpl<OmGroupMapper, OmGroup> impl
         EntityWrapper<OmGroupApp> omGroupAppEntityWrapper = new EntityWrapper<>();
         omGroupAppEntityWrapper.eq(OmGroupApp.COLUMN_GUID, guid);
         omGroupAppService.delete(omGroupAppEntityWrapper);
+    }
+
+    @Override
+    public TreeDetail selectGroupTree(String guid) {
+        TreeDetail treeDetail = new TreeDetail();
+
+        try {
+            //创建子机构的list
+            List<Tree> list = new ArrayList<Tree>();
+
+
+            if("null".equals(guid)){
+                Wrapper<OmGroup> wrapper = new EntityWrapper<OmGroup>();
+                wrapper.isNull(OmGroup.COLUMN_GUID_PARENTS);
+
+                List<OmGroup> queryList = selectList(wrapper);
+
+                for (OmGroup omGroupQuery: queryList) {
+                    Tree tree = new Tree();
+                    tree.setGuid(omGroupQuery.getGuid());
+                    tree.setLabel(omGroupQuery.getGroupName());
+                    tree.setIsleaf(omGroupQuery.getIsleaf());
+                    list.add(tree);
+                }
+
+            }else {
+                OmGroup omGroup = selectById(guid);
+
+                //查询子机构字典
+                Wrapper<OmGroup> wrapper = new EntityWrapper<OmGroup>();
+                wrapper.eq(OmGroup.COLUMN_GUID_PARENTS,guid);
+
+                List<OmGroup> queryList = selectList(wrapper);
+
+                for (OmGroup omGroupQuery: queryList) {
+                    Tree treeSon = new Tree();
+                    treeSon.setGuid(omGroupQuery.getGuid());
+                    treeSon.setLabel(omGroupQuery.getGroupName());
+                    treeSon.setIsleaf(omGroupQuery.getIsleaf());
+                    list.add(treeSon);
+                }
+
+                //收集查询出来的结果
+                treeDetail.setGuid(omGroup.getGuid());
+                treeDetail.setLabel(omGroup.getGroupName());
+                treeDetail.setIsleaf(omGroup.getIsleaf());
+            }
+            treeDetail.setChildren(list);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new OrgManagementException(OMExceptionCodes.FAILURE_WHEN_QUERY_GROUP_TREE,wrap(e.getMessage()));
+        }
+
+        return treeDetail;
     }
 
 

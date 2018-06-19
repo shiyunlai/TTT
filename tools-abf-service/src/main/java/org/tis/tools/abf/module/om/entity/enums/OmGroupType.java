@@ -4,6 +4,12 @@ import org.tis.tools.core.entity.enums.BaseEnum;
 
 import java.io.Serializable;
 
+/**
+ * describe: 工作组状态枚举类
+ *
+ * @author lijh
+ * @date 2018/6/14
+ **/
 public enum OmGroupType implements BaseEnum {
 
     /** 工作组类型：普通工作组 */
