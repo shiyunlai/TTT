@@ -1,10 +1,14 @@
 package org.tis.tools.abf.module.om.controller.request;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.validator.constraints.NotBlank;
 import org.tis.tools.abf.module.common.entity.enums.YON;
+import org.tis.tools.core.entity.enums.CommonEnumDeserializer;
 import org.tis.tools.core.entity.request.RestRequest;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * Created by chenchao
@@ -22,7 +26,8 @@ public class OmEmpPositionRequest extends RestRequest {
     @NotBlank(message = "所在岗位GUID不能为空")
     private String guidPosition;
 
-    @NotBlank(message = "是否主岗位不能为空")
+    @NotNull(message = "是否主岗位不能为空")
+    @JSONField(deserializeUsing = CommonEnumDeserializer.class)
     private YON ismain;
 
 }

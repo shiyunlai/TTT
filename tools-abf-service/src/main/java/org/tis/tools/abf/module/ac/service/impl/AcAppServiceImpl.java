@@ -9,11 +9,15 @@ import org.springframework.transaction.annotation.Transactional;
 import org.tis.tools.abf.module.ac.controller.request.AcAppListRequest;
 import org.tis.tools.abf.module.ac.dao.AcAppMapper;
 import org.tis.tools.abf.module.ac.entity.AcApp;
+import org.tis.tools.abf.module.ac.entity.AcAppConfig;
 import org.tis.tools.abf.module.ac.entity.enums.AcAppType;
 import org.tis.tools.abf.module.ac.exception.AcExceptionCodes;
 import org.tis.tools.abf.module.ac.exception.AcManagementException;
+import org.tis.tools.abf.module.ac.service.IAcAppConfigService;
 import org.tis.tools.abf.module.ac.service.IAcAppService;
 import org.tis.tools.abf.module.common.entity.enums.YON;
+import org.tis.tools.abf.module.om.entity.OmPositionApp;
+import org.tis.tools.abf.module.om.service.IOmPositionAppService;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -34,6 +38,12 @@ public class AcAppServiceImpl extends ServiceImpl<AcAppMapper, AcApp> implements
 
     @Autowired
     IAcAppService acAppService;
+
+    @Autowired
+    private IAcAppConfigService acAppConfigService;
+
+    @Autowired
+    private IOmPositionAppService omPositionAppService;
 
     /**
      * 应用新增
@@ -157,6 +167,36 @@ public class AcAppServiceImpl extends ServiceImpl<AcAppMapper, AcApp> implements
         }
 
         return list;
+    }
+
+
+    @Override
+    public void moveApp(String id) throws AcManagementException {
+
+        try {
+
+            //删除应用的个性化配置
+            Wrapper<AcAppConfig> wrapperConfig = new EntityWrapper<AcAppConfig>();
+            wrapperConfig.eq(AcAppConfig.COLUMN_GUID_APP,id);
+            List<AcAppConfig> listConfig = acAppConfigService.selectList(wrapperConfig);
+            if (listConfig.size() != 0){
+                acAppConfigService.delete(wrapperConfig);
+            }
+
+            //删除岗位的应用权限
+            Wrapper<OmPositionApp> wrapperPosition = new EntityWrapper<OmPositionApp>();
+            wrapperPosition.eq(OmPositionApp.COLUMN_GUID_APP,id);
+            List<OmPositionApp> listPosition = omPositionAppService.selectList(wrapperPosition);
+            if (0 != listPosition.size()){
+                omPositionAppService.delete(wrapperPosition);
+            }
+
+            //删除应用信息
+            deleteById(id);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new AcManagementException(AcExceptionCodes.FAILURE_WHRN_DELETE_AC_APP,wrap("删除应用系统失败"),id);
+        }
     }
 }
 

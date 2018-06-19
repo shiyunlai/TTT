@@ -80,7 +80,9 @@ public class OmPositionController extends BaseController<OmPosition>  {
         return ResultVO.success("删除成功");
     }
 
-
+    /**
+     * 根据ID查询岗位
+     */
     @GetMapping("/{id}")
     public ResultVO detail(@PathVariable @NotBlank(message = "id不能为空") String id) {
         OmPosition omPosition = omPositionService.selectById(id);
@@ -90,19 +92,26 @@ public class OmPositionController extends BaseController<OmPosition>  {
         return ResultVO.success("查询成功", omPosition);
     }
 
+    /**
+     * 查询所有的岗位,分页
+     */
     @PostMapping("/list")
     public ResultVO list(@RequestBody @Validated SmartPage<OmPosition> page) {
         return  ResultVO.success("查询成功", omPositionService.selectPage(getPage(page), getCondition(page)));
     }
 
+    /**
+     * 查询所有的岗位,不分页
+     */
     @GetMapping("/allPositionList")
     public ResultVO QueryAllPosition(){
-
         List<OmPosition> list = omPositionService.QueryAllPosition();
-
         return ResultVO.success("查询成功",list);
     }
 
+    /**
+     * 查询岗位的树
+     */
     @PostMapping("/tree/{guid}")
     public ResultVO tree(@PathVariable @NotBlank(message = "guid不能为空") String guid){
 
@@ -110,14 +119,20 @@ public class OmPositionController extends BaseController<OmPosition>  {
         if (omPosition == null) {
             return ResultVO.error("404", "找不到对应记录或已经被删除！");
         }
-        return ResultVO.success("修改成功！",omPositionService.queryPositionTree(guid));
+        return ResultVO.success("查询成功！",omPositionService.queryPositionTree(guid));
     }
 
+    /**
+     * 查询机构下的岗位,分页
+     */
     @PostMapping("/treeByOrgId/{guid}")
     public ResultVO treeByOrgId(@RequestBody @Validated SmartPage<OmPosition> page, @PathVariable @NotBlank(message = "组织机构guid不能为空") String guid){
-        return ResultVO.success("修改成功！",omPositionService.treeByOrgId(getPage(page),getCondition(page),guid));
+        return ResultVO.success("查询成功！",omPositionService.treeByOrgId(getPage(page),getCondition(page),guid));
     }
 
+    /**
+     * 查询机构下的岗位,不分页
+     */
     @GetMapping("/listsByOrgId/{guid}")
     public ResultVO QueryPositionByOrgId(@PathVariable @NotBlank(message = "guid不能为空") String guid){
         return ResultVO.success("查询成功",omPositionService.QueryPositionByOrgId(guid));
