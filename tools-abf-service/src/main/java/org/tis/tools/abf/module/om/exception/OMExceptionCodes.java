@@ -265,6 +265,27 @@ public class OMExceptionCodes {
 	 * 查询工作组树失败
 	 */
 	public static final String FAILURE_WHEN_QUERY_GROUP_TREE = R_EX_CODE("056");
+	/**
+	 * 删除员工和岗位关系时失败
+	 */
+	public static final String FAILURE_WHEN_DELETE_OM_EMP_POSITION = R_EX_CODE("0057");
+	/**
+	 * 删除员工和工作组关系时失败
+	 */
+	public static final String FAILURE_WHEN_DELETE_OM_EMP_GROUP = R_EX_CODE("0058");
+	/**
+	 * 删除应用和岗位关系时失败
+	 */
+	public static final String FAILURE_WHEN_DELETE_OM_APP_POSITION = R_EX_CODE("0059");
+	/**
+	 * 删除工作组和岗位关系时失败
+	 */
+	public static final String FAILURE_WHEN_DELETE_OM_GROUP_POSITION = R_EX_CODE("0060");
+	/**
+	 * 删除员工和机构关系时失败
+	 */
+	public static final String FAILURE_WHEN_DELETE_OM_EMP_ORG = R_EX_CODE("0061");
+
 
 
 	/**
