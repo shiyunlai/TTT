@@ -81,7 +81,7 @@ public class AcAppController extends BaseController<AcApp>  {
             return ResultVO.error("404", "找不到对应记录或已经被删除！");
         }
 
-        acAppService.deleteById(id);
+        acAppService.moveApp(id);
         return ResultVO.success("删除成功");
 
     }
