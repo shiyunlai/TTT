@@ -379,7 +379,7 @@ public interface IOmGroupService extends IService<OmGroup>  {
     /**
      * 添加岗位-工作组关系表数据
      */
-    void insertGroupPosition(String groupGuid,List<String> posGuidList);
+    void insertGroupPosition(String groupCode,List<String> posGuidList);
 
     /**
      * 删除岗位-工作组关系表数据
@@ -423,9 +423,9 @@ public interface IOmGroupService extends IService<OmGroup>  {
     /**
      * 删除一条工作组-应用关联信息
      *
-     * @param guid
+     * @param groupCode
      */
-    void deleteGroupApp(String guid);
+    void deleteGroupApp(String groupCode);
 
     /**
      * 工作组树结构

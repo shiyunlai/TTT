@@ -309,7 +309,7 @@ public class OmGroupController extends BaseController<OmGroup>  {
     @PostMapping(value = "/groupPosition")
     public ResultVO addGroupPosition(@RequestBody @Validated OmGroupPositionRequest omGroupPositionRequest) {
 
-        omGroupService.insertGroupPosition(omGroupPositionRequest.getGroupGuid(), omGroupPositionRequest.getPosGuidlist());
+        omGroupService.insertGroupPosition(omGroupPositionRequest.getGroupCode(), omGroupPositionRequest.getPosGuidlist());
 
         return ResultVO.success("新增成功！");
     }
@@ -374,7 +374,7 @@ public class OmGroupController extends BaseController<OmGroup>  {
     @OperateLog(type = OperateType.ADD, desc = "为工作组添加应用") // 操作对象的关键值的键值名
     @PostMapping(value = "/groupApp")
     public ResultVO addGroupApp(@RequestBody @Validated OmGroupAddAppRequest omGroupAddAppRequest) throws ToolsRuntimeException {
-        omGroupService.addGroupApp(omGroupAddAppRequest.getAppGuid(), omGroupAddAppRequest.getGroupGuid());
+        omGroupService.addGroupApp(omGroupAddAppRequest.getAppGuid(), omGroupAddAppRequest.getGroupCode());
 
         return ResultVO.success("新增成功！");
     }

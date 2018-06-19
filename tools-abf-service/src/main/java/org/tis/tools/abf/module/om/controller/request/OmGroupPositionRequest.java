@@ -10,7 +10,7 @@ import java.util.List;
 public class OmGroupPositionRequest extends RestRequest {
 
     @NotBlank(message = "工作组编号不能为空")
-    private String groupGuid;
+    private String groupCode;
 
     private List<String> posGuidlist;
 }

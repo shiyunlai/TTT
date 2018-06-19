@@ -8,7 +8,7 @@ import org.tis.tools.core.entity.request.RestRequest;
 public class OmGroupAddAppRequest extends RestRequest {
 
     @NotBlank(message = "工作组的groupGuid不能为空")
-    private String groupGuid;
+    private String groupCode;
 
     @NotBlank(message = "工作组的appGuid不能为空")
     private String appGuid;

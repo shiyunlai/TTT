@@ -289,8 +289,8 @@ public class OmGroupServiceImpl extends ServiceImpl<OmGroupMapper, OmGroup> impl
     }
 
     @Override
-    public Page<OmGroup> selectChildGroup(String parentsCode, Page<OmGroup> page) {
-        OmGroup og = queryGroupByCode(parentsCode);
+    public Page<OmGroup> selectChildGroup(String groupCode, Page<OmGroup> page) {
+        OmGroup og = queryGroupByCode(groupCode);
         EntityWrapper<OmGroup> omGroupEntityWrapper = new EntityWrapper<>();
         omGroupEntityWrapper.eq(OmGroup.COLUMN_GUID_PARENTS, og.getGuid());
         return selectPage(page, omGroupEntityWrapper);
@@ -384,12 +384,15 @@ public class OmGroupServiceImpl extends ServiceImpl<OmGroupMapper, OmGroup> impl
     }
 
     @Override
-    public void insertGroupPosition(String groupGuid, List<String> posGuidList) {
+    public void insertGroupPosition(String groupCode, List<String> posGuidList) {
         List<OmGroupPosition> ogpList = new ArrayList<>();
-
+        OmGroup og = queryGroupByCode(groupCode);
+        if(og == null){
+            throw new OrgManagementException(OMExceptionCodes.GROUP_NOT_EXIST_BY_GROUP_CODE, wrap(groupCode));
+        }
         for (String posGuid : posGuidList) {
             OmGroupPosition ogp = new OmGroupPosition();
-            ogp.setGuidGroup(groupGuid);
+            ogp.setGuidGroup(og.getGuid());
             ogp.setGuidPosition(posGuid);
             ogpList.add(ogp);
         }
@@ -437,10 +440,14 @@ public class OmGroupServiceImpl extends ServiceImpl<OmGroupMapper, OmGroup> impl
     }
 
     @Override
-    public void addGroupApp(String appGuid, String groupGuid) {
+    public void addGroupApp(String appGuid, String groupCode) {
+        OmGroup og = queryGroupByCode(groupCode);
+        if(og == null){
+            throw new OrgManagementException(OMExceptionCodes.GROUP_NOT_EXIST_BY_GROUP_CODE, wrap(groupCode));
+        }
         OmGroupApp ogp = new OmGroupApp();
         ogp.setGuidApp(appGuid);
-        ogp.setGuidGroup(groupGuid);
+        ogp.setGuidGroup(og.getGuid());
         omGroupAppService.insert(ogp);
     }
 
@@ -470,6 +477,7 @@ public class OmGroupServiceImpl extends ServiceImpl<OmGroupMapper, OmGroup> impl
                 for (OmGroup omGroupQuery: queryList) {
                     Tree tree = new Tree();
                     tree.setGuid(omGroupQuery.getGuid());
+                    tree.setGuid(omGroupQuery.getGroupCode());
                     tree.setLabel(omGroupQuery.getGroupName());
                     tree.setIsleaf(omGroupQuery.getIsleaf());
                     list.add(tree);
@@ -487,6 +495,7 @@ public class OmGroupServiceImpl extends ServiceImpl<OmGroupMapper, OmGroup> impl
                 for (OmGroup omGroupQuery: queryList) {
                     Tree treeSon = new Tree();
                     treeSon.setGuid(omGroupQuery.getGuid());
+                    treeSon.setCode(omGroupQuery.getGroupCode());
                     treeSon.setLabel(omGroupQuery.getGroupName());
                     treeSon.setIsleaf(omGroupQuery.getIsleaf());
                     list.add(treeSon);
@@ -494,6 +503,7 @@ public class OmGroupServiceImpl extends ServiceImpl<OmGroupMapper, OmGroup> impl
 
                 //收集查询出来的结果
                 treeDetail.setGuid(omGroup.getGuid());
+                treeDetail.setCode(omGroup.getGroupCode());
                 treeDetail.setLabel(omGroup.getGroupName());
                 treeDetail.setIsleaf(omGroup.getIsleaf());
             }
