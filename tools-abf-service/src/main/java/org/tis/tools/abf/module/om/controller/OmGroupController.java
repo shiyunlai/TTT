@@ -288,7 +288,7 @@ public class OmGroupController extends BaseController<OmGroup>  {
      * @param page
      * @return
      */
-    @PostMapping(value = "/{groupCode}/positionNotIn")
+    @PostMapping(value = "/{groupCode}/availablePosition")
     public ResultVO loadpositionNotin(@PathVariable @NotBlank(message = "groupCode不能为空") String groupCode,
                                       @RequestBody @Validated SmartPage<OmPosition> page) {
 
@@ -349,18 +349,13 @@ public class OmGroupController extends BaseController<OmGroup>  {
      * 查询可以为工作组添加的应用
      *
      * @param groupCode
-     * @param page
      * @return
      * @throws ToolsRuntimeException
      */
-    @PostMapping(value = "/{groupCode}/NotInApp")
-    public ResultVO selectNotInApp(@PathVariable @NotBlank(message = "groupCode不能为空") String groupCode,
-                                  @RequestBody @Validated SmartPage<AcApp> page) throws ToolsRuntimeException{
+    @GetMapping(value = "/{groupCode}/availableApp")
+    public ResultVO selectNotInApp(@PathVariable @NotBlank(message = "groupCode不能为空") String groupCode) throws ToolsRuntimeException{
 
-        Page<AcApp> acAppPage = new Page<AcApp>(page.getPage().getCurrent(), page.getPage().getSize(),
-                page.getPage().getOrderByField(), page.getPage().getAsc());
-
-        Page<AcApp> list = omGroupService.selectAppNotInGroup(groupCode,acAppPage);
+        List<AcApp> list = omGroupService.selectAppNotInGroup(groupCode);
         return ResultVO.success("查询成功！",list);
     }
 

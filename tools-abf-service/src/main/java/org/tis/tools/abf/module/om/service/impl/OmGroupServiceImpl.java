@@ -433,9 +433,9 @@ public class OmGroupServiceImpl extends ServiceImpl<OmGroupMapper, OmGroup> impl
     }
 
     @Override
-    public Page<AcApp> selectAppNotInGroup(String groupCode, Page<AcApp> page) {
+    public List<AcApp> selectAppNotInGroup(String groupCode) {
 
-         return page.setRecords(this.baseMapper.selectAppNotInGroup(groupCode,page));
+         return this.baseMapper.selectAppNotInGroup(groupCode);
     }
 
     @Override
