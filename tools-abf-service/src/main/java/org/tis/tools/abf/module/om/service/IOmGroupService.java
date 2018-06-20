@@ -344,7 +344,7 @@ public interface IOmGroupService extends IService<OmGroup>  {
      * @param groupCode
      * @return
      */
-    Page<OmEmployee> selectEmpNotInGroup(String guidOrg, String groupCode, Page<OmEmployee> page);
+    List<OmEmployee> selectEmpNotInGroup(String guidOrg, String groupCode);
 
     /**
      * 查询当前工作组下的岗位
@@ -387,7 +387,7 @@ public interface IOmGroupService extends IService<OmGroup>  {
      *
      * @param ogpGuidList
      */
-    void deleteGroupPosition(List<String> ogpGuidList);
+    void deleteGroupPosition(String groupCode, List<String> ogpGuidList);
 
     /**
      * 根据岗位code获取guid
@@ -434,7 +434,7 @@ public interface IOmGroupService extends IService<OmGroup>  {
      *
      * @param groupCode
      */
-    void deleteGroupApp(String groupCode);
+    void deleteGroupApp(String groupCode, String guidApp);
 
     /**
      * 工作组树结构

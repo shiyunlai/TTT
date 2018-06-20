@@ -20,7 +20,7 @@ import java.util.List;
 public interface OmGroupMapper extends BaseMapper<OmGroup>  {
 
 
-    List<OmEmployee> selectOrgEmpNotInGroup(String guidOrg,String groupCode, Pagination page);
+    List<OmEmployee> selectOrgEmpNotInGroup(String guidOrg,String groupCode);
 
     List<AcApp> selectAppNotInGroup(String groudCode);
 }
