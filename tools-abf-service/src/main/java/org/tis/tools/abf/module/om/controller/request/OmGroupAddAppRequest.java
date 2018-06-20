@@ -4,6 +4,8 @@ import lombok.Data;
 import org.hibernate.validator.constraints.NotBlank;
 import org.tis.tools.core.entity.request.RestRequest;
 
+import java.util.List;
+
 @Data
 public class OmGroupAddAppRequest extends RestRequest {
 
@@ -11,5 +13,5 @@ public class OmGroupAddAppRequest extends RestRequest {
     private String groupCode;
 
     @NotBlank(message = "工作组的appGuid不能为空")
-    private String appGuid;
+    private List<String> appGuidList;
 }
