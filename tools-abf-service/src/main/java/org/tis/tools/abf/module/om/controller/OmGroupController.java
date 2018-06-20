@@ -235,7 +235,7 @@ public class OmGroupController extends BaseController<OmGroup>  {
      * @param groupCode
      * @return
      */
-    @PostMapping(value = "/{groupCode}/empOrgNotin/{guidOrg}")
+    @GetMapping(value = "/{groupCode}/empNotIn/{guidOrg}")
     public ResultVO loadEmpNotIn(@PathVariable @NotBlank(message = "guidOrg不能为空") String guidOrg,
                                  @PathVariable @NotBlank(message = "groupCode不能为空") String groupCode) {
 
