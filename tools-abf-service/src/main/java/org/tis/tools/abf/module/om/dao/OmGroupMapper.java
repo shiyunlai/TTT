@@ -22,6 +22,6 @@ public interface OmGroupMapper extends BaseMapper<OmGroup>  {
 
     List<OmEmployee> selectOrgEmpNotInGroup(String guidOrg,String groupCode, Pagination page);
 
-    List<AcApp> selectAppNotInGroup(String groudCode, Pagination page);
+    List<AcApp> selectAppNotInGroup(String groudCode);
 }
 

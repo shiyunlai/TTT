@@ -411,7 +411,7 @@ public interface IOmGroupService extends IService<OmGroup>  {
      * @param groupCode
      * @return
      */
-    Page<AcApp> selectAppNotInGroup(String groupCode, Page<AcApp> page);
+    List<AcApp> selectAppNotInGroup(String groupCode);
 
     /**
      * 新增一条工作组-应用关联信息
