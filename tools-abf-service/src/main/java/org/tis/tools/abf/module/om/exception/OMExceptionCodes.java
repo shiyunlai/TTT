@@ -27,7 +27,7 @@ public class OMExceptionCodes {
 	/**
 	 * 机构代码对应的机构不存在
 	 */
-	public static final String ORGANIZATION_NOT_EXIST_BY_GUID_ORG = R_EX_CODE("0002");
+	public static final String ORGANIZATION_NOT_EXIST_BY_ORG_CODE = R_EX_CODE("0002");
 
 	/**
 	 * 参数不允许为空
@@ -264,7 +264,11 @@ public class OMExceptionCodes {
 	/**
 	 * 查询工作组树失败
 	 */
-	public static final String FAILURE_WHEN_QUERY_GROUP_TREE = R_EX_CODE("056");
+	public static final String FAILURE_WHEN_QUERY_GROUP_TREE = R_EX_CODE("0056");
+	/**
+	 * 机构代码对应的机构不存在
+	 */
+	public static final String ORGANIZATION_NOT_EXIST_BY_GUID_ORG = R_EX_CODE("0057");
 
 
 	/**

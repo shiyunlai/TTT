@@ -247,7 +247,7 @@ public class OmGroupController extends BaseController<OmGroup>  {
     @PostMapping(value = "/empGroup")
     public ResultVO addEmpGroup(@RequestBody @Validated OmGroupAddEmpRequest omGroupAddEmpRequest) {
 
-        omEmpGroupService.insertEmpGroup(omGroupAddEmpRequest.getGuidGroup(), omGroupAddEmpRequest.getGuidEmp());
+        omEmpGroupService.insertEmpGroup(omGroupAddEmpRequest.getGroupCode(), omGroupAddEmpRequest.getGuidEmp());
         return ResultVO.success("新增成功！");
     }
 
