@@ -264,7 +264,7 @@ public class OMExceptionCodes {
 	/**
 	 * 查询工作组树失败
 	 */
-	public static final String FAILURE_WHEN_QUERY_GROUP_TREE = R_EX_CODE("056");
+	public static final String FAILURE_WHEN_QUERY_GROUP_TREE = R_EX_CODE("0056");
 	/**
 	 * 删除员工和岗位关系时失败
 	 */
@@ -286,6 +286,10 @@ public class OMExceptionCodes {
 	 */
 	public static final String FAILURE_WHEN_DELETE_OM_EMP_ORG = R_EX_CODE("0061");
 
+    /**
+     * 机构代码对应的机构不存在
+     */
+    public static final String ORGANIZATION_NOT_EXIST_BY_GUID_CODE = R_EX_CODE("0062");
 
 
 	/**
