@@ -354,6 +354,13 @@ public interface IOmGroupService extends IService<OmGroup>  {
     Page<OmPosition> selectPositionInGroup(String groupCode, Page<OmPosition> page);
 
     /**
+     * 查询当前工作组下的岗位
+     * @param groupCode
+     * @return
+     */
+    List<OmPosition> selectPositionInGroupNotPage(String groupCode);
+
+    /**
      * 查询当前不在此工作组下的岗位,同时保证在同一机构下
      * @param groupCode
      * @return
@@ -385,9 +392,9 @@ public interface IOmGroupService extends IService<OmGroup>  {
     /**
      * 删除岗位-工作组关系表数据
      *
-     * @param ogpGuidList
+     * @param positionGuid
      */
-    void deleteGroupPosition(String groupCode, List<String> ogpGuidList);
+    void deleteGroupPosition(String groupCode, String positionGuid);
 
     /**
      * 根据岗位code获取guid
@@ -425,9 +432,9 @@ public interface IOmGroupService extends IService<OmGroup>  {
     /**
      * 新增一条工作组-应用关联信息
      * @param appGuidList
-     * @param groupGuid
+     * @param groupCode
      */
-    void addGroupApp(List<String> appGuidList, String groupGuid);
+    void addGroupApp(List<String> appGuidList, String groupCode);
 
     /**
      * 删除一条工作组-应用关联信息

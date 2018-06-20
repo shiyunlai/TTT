@@ -289,6 +289,11 @@ public class OMExceptionCodes {
      * 机构代码对应的机构不存在
      */
     public static final String ORGANIZATION_NOT_EXIST_BY_GUID_ORG = R_EX_CODE("0062");
+	/**
+	 * 工作组添加员工失败
+	 */
+	public static final String IS_EXIST_BY_GROUP_CREAT_EMP = R_EX_CODE("0063");
+
 
 
 	/**

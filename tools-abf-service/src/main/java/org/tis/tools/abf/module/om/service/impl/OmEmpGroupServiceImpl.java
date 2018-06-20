@@ -33,8 +33,15 @@ public class OmEmpGroupServiceImpl extends ServiceImpl<OmEmpGroupMapper, OmEmpGr
     IOmGroupService omGroupService;
 
     @Override
-    public void insertEmpGroup(String groupCode, String empGuid) throws OrgManagementException {
+    public void insertGroupEmp(String groupCode, String empGuid) throws OrgManagementException {
         OmGroup omGroup = omGroupService.selectGroupByCode(groupCode);
+        EntityWrapper<OmEmpGroup> omEmpGroupEntityWrapper = new EntityWrapper<>();
+        omEmpGroupEntityWrapper.eq(OmEmpGroup.COLUMN_GUID_EMP, empGuid);
+        omEmpGroupEntityWrapper.eq(OmEmpGroup.COLUMN_GUID_GROUP, omGroup.getGuid());
+        List<OmEmpGroup> oegList = selectList(omEmpGroupEntityWrapper);
+        if (oegList.size() > 0) {
+            throw new OrgManagementException(OMExceptionCodes.IS_EXIST_BY_GROUP_CREAT_EMP, wrap(groupCode,empGuid));
+        }
         OmEmpGroup oeg = new OmEmpGroup();
         oeg.setGuidEmp(empGuid);
         oeg.setGuidGroup(omGroup.getGuid());
@@ -42,7 +49,7 @@ public class OmEmpGroupServiceImpl extends ServiceImpl<OmEmpGroupMapper, OmEmpGr
     }
 
     @Override
-    public void deleteEmpGroup(String guid) {
+    public void deleteGroupEmp(String guid) {
 
         EntityWrapper<OmEmpGroup> omEmpGroupEntityWrapper = new EntityWrapper<>();
         omEmpGroupEntityWrapper.eq(OmEmpGroup.COLUMN_GUID,guid);

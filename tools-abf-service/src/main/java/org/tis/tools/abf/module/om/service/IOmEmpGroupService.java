@@ -16,11 +16,11 @@ public interface IOmEmpGroupService extends IService<OmEmpGroup>  {
     /**
      * 添加人员-工作组关系表数据
      */
-    void insertEmpGroup(String groupGuid,String empGuid) throws OrgManagementException;
+    void insertGroupEmp(String groupGuid,String empGuid) throws OrgManagementException;
 
     /**
      * 删除人员-工作组关系表数据
      */
-    void deleteEmpGroup(String guid);
+    void deleteGroupEmp(String guid);
 }
 
