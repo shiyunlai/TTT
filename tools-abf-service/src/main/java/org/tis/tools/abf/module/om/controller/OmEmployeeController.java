@@ -66,7 +66,7 @@ public class OmEmployeeController extends BaseController<OmEmployee>  {
         if (omEmployee == null) {
             return ResultVO.error("404", "找不到对应记录或已经被删除！");
         }
-        omEmployeeService.deleteById(id);
+        omEmployeeService.moveEmp(id);
         return ResultVO.success("删除成功");
     }
 

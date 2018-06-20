@@ -14,14 +14,18 @@ import org.tis.tools.abf.module.common.entity.enums.YON;
 import org.tis.tools.abf.module.common.entity.vo.TreeDetail;
 import org.tis.tools.abf.module.om.controller.request.OmOrgUpdateRequest;
 import org.tis.tools.abf.module.om.dao.OmOrgMapper;
+import org.tis.tools.abf.module.om.entity.OmEmpOrg;
 import org.tis.tools.abf.module.om.entity.OmOrg;
+import org.tis.tools.abf.module.om.entity.OmPosition;
 import org.tis.tools.abf.module.om.entity.enums.OmOrgArea;
 import org.tis.tools.abf.module.om.entity.enums.OmOrgDegree;
 import org.tis.tools.abf.module.om.entity.enums.OmOrgStatus;
 import org.tis.tools.abf.module.om.entity.enums.OmOrgType;
 import org.tis.tools.abf.module.om.exception.OMExceptionCodes;
 import org.tis.tools.abf.module.om.exception.OrgManagementException;
+import org.tis.tools.abf.module.om.service.IOmEmpOrgService;
 import org.tis.tools.abf.module.om.service.IOmOrgService;
+import org.tis.tools.abf.module.om.service.IOmPositionService;
 import org.tis.tools.abf.module.om.service.IOrgCodeGenerator;
 
 import java.math.BigDecimal;
@@ -50,6 +54,12 @@ public class OmOrgServiceImpl extends ServiceImpl<OmOrgMapper, OmOrg> implements
 
 	@Autowired
 	private IOrgCodeGenerator orgCodeGenerator;
+
+	@Autowired
+	private IOmEmpOrgService omEmpOrgService;
+
+	@Autowired
+	private IOmPositionService omPositionService;
 
 
 	/**
@@ -270,7 +280,7 @@ public class OmOrgServiceImpl extends ServiceImpl<OmOrgMapper, OmOrg> implements
 	public void delectRoot(String id) throws OrgManagementException {
 
 		try {
-			//删除父机构下的所有子机构
+			//删除父机构下的所有子机构和所有机构和员工的信息
 			deleteAllChild(id);
 
 		}catch (Exception e){
@@ -280,21 +290,61 @@ public class OmOrgServiceImpl extends ServiceImpl<OmOrgMapper, OmOrg> implements
 	}
 
 	//删除父机构下的所有子机构
-	public void deleteAllChild(String id){
+	public void deleteAllChild(String id) throws OrgManagementException{
 		//首先删除父机构对应的子机构
 		Wrapper<OmOrg> wrapper = new EntityWrapper<OmOrg>();
 		wrapper.eq(OmOrg.COLUMN_GUID_PARENTS,id);
 
-		//获取子机构列表
-		List<OmOrg> lists = selectList(wrapper);
+		try {
+			//获取子机构列表
+			List<OmOrg> lists = selectList(wrapper);
 
-		if (0 == lists.size() || null == lists){
-			deleteById(id);
-		}else {
-			for (OmOrg omOrg :lists){
-				deleteAllChild(omOrg.getGuid());
+			if (0 == lists.size() || null == lists){
+				deleteById(id);
+				deleteOmEmpOrg(id);
+			}else {
+				for (OmOrg omOrg :lists){
+					deleteAllChild(omOrg.getGuid());
+					deleteOmEmpOrg(id);
+				}
+				deleteById(id);
+				deleteOmEmpOrg(id);
 			}
-			deleteById(id);
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+	}
+
+	//删除机构之后,需要删除结构和员工的中间表信息
+	public void deleteOmEmpOrg(String id) throws OrgManagementException{
+		try {
+			Wrapper<OmEmpOrg> wrapper = new EntityWrapper<OmEmpOrg>();
+			wrapper.eq(OmEmpOrg.COLUMN_GUID_ORG,id);
+
+			List<OmEmpOrg> list = omEmpOrgService.selectList(wrapper);
+			if ( 0 != list.size() ){
+				omEmpOrgService.delete(wrapper);
+			}
+		}catch (Exception e){
+			e.printStackTrace();
+			throw new OrgManagementException(OMExceptionCodes.FAILURE_WHEN_DELETE_OM_EMP_ORG,wrap("删除员工机构信息失败"),id);
+		}
+	}
+
+	public void deletePosition(String id) throws OrgManagementException{
+		try {
+			Wrapper<OmPosition> wrapper = new EntityWrapper<OmPosition>();
+			wrapper.eq(OmPosition.COLUMN_GUID_ORG,id);
+			List<OmPosition> list = omPositionService.selectList(wrapper);
+			for (OmPosition omPosition:list){
+				if (omPosition != null){
+					omPositionService.deleteRoot(omPosition.getGuid());
+				}
+			}
+		}catch (Exception e){
+			e.printStackTrace();
+			throw new OrgManagementException(OMExceptionCodes.FAILURE_WHEN_DELETE_ROOT_POSITION,wrap("删除机构所关联的岗位失败")
+					,id);
 		}
 	}
 

@@ -27,7 +27,7 @@ public class OMExceptionCodes {
 	/**
 	 * 机构代码对应的机构不存在
 	 */
-	public static final String ORGANIZATION_NOT_EXIST_BY_ORG_CODE = R_EX_CODE("0002");
+	public static final String ORGANIZATION_NOT_EXIST_BY_GUID_ORG = R_EX_CODE("0002");
 
 	/**
 	 * 参数不允许为空
@@ -266,9 +266,30 @@ public class OMExceptionCodes {
 	 */
 	public static final String FAILURE_WHEN_QUERY_GROUP_TREE = R_EX_CODE("0056");
 	/**
-	 * 机构代码对应的机构不存在
+	 * 删除员工和岗位关系时失败
 	 */
-	public static final String ORGANIZATION_NOT_EXIST_BY_GUID_ORG = R_EX_CODE("0057");
+	public static final String FAILURE_WHEN_DELETE_OM_EMP_POSITION = R_EX_CODE("0057");
+	/**
+	 * 删除员工和工作组关系时失败
+	 */
+	public static final String FAILURE_WHEN_DELETE_OM_EMP_GROUP = R_EX_CODE("0058");
+	/**
+	 * 删除应用和岗位关系时失败
+	 */
+	public static final String FAILURE_WHEN_DELETE_OM_APP_POSITION = R_EX_CODE("0059");
+	/**
+	 * 删除工作组和岗位关系时失败
+	 */
+	public static final String FAILURE_WHEN_DELETE_OM_GROUP_POSITION = R_EX_CODE("0060");
+	/**
+	 * 删除员工和机构关系时失败
+	 */
+	public static final String FAILURE_WHEN_DELETE_OM_EMP_ORG = R_EX_CODE("0061");
+
+    /**
+     * 机构代码对应的机构不存在
+     */
+    public static final String ORGANIZATION_NOT_EXIST_BY_GUID_CODE = R_EX_CODE("0062");
 
 
 	/**

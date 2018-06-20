@@ -1,6 +1,9 @@
 package org.tis.tools.abf.module.om.service;
 
+import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.IService;
+import org.tis.tools.abf.module.ac.entity.AcApp;
 import org.tis.tools.abf.module.om.controller.request.OmPositionAppListRequest;
 import org.tis.tools.abf.module.om.controller.request.OmPositionAppRequest;
 import org.tis.tools.abf.module.om.entity.OmPositionApp;
@@ -34,6 +37,13 @@ public interface IOmPositionAppService extends IService<OmPositionApp>  {
      * @throws OrgManagementException
      */
     OmPositionApp change(OmPositionAppRequest omPositionAppRequest) throws OrgManagementException;
+
+    /**
+     * 查询岗位下已有的应用权限
+     * @throws OrgManagementException
+     */
+    Page<AcApp> queryAppByPosition(Page<OmPositionApp> page, Wrapper<OmPositionApp> wrapper,String id)throws
+            OrgManagementException;
 
 }
 

@@ -1,20 +1,26 @@
 package org.tis.tools.abf.module.om.service.impl;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import org.springframework.transaction.annotation.Transactional;
 import org.tis.tools.abf.module.ac.entity.AcApp;
 import org.tis.tools.abf.module.ac.service.IAcAppService;
 import org.tis.tools.abf.module.om.controller.request.OmPositionAppListRequest;
 import org.tis.tools.abf.module.om.controller.request.OmPositionAppRequest;
 import org.tis.tools.abf.module.om.dao.OmPositionAppMapper;
 import org.tis.tools.abf.module.om.entity.OmPosition;
+import org.tis.tools.abf.module.om.entity.OmPositionApp;
 import org.tis.tools.abf.module.om.exception.OMExceptionCodes;
 import org.tis.tools.abf.module.om.exception.OrgManagementException;
 import org.tis.tools.abf.module.om.service.IOmPositionAppService;
-import org.springframework.transaction.annotation.Transactional;
-import org.tis.tools.abf.module.om.entity.OmPositionApp;
 import org.tis.tools.abf.module.om.service.IOmPositionService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.tis.tools.core.utils.BasicUtil.wrap;
 
@@ -105,6 +111,43 @@ public class OmPositionAppServiceImpl extends ServiceImpl<OmPositionAppMapper, O
         updateById(omPositionApp);
 
         return omPositionApp;
+    }
+
+
+    @Override
+    public Page<AcApp> queryAppByPosition(Page<OmPositionApp> page, Wrapper<OmPositionApp> wrapper, String id) throws
+            OrgManagementException {
+
+        if (wrapper == null){
+            wrapper = new EntityWrapper<OmPositionApp>();
+        }
+
+        //应用的分页信息
+        Page<AcApp> pageApp = new Page<AcApp>();
+        List<AcApp> listApp = new ArrayList<AcApp>();
+
+        //查询某岗位的应用权限信息
+        wrapper.eq(OmPositionApp.COLUMN_GUID_POSITION,id);
+        Page<OmPositionApp> positionAppPage = selectPage(page,wrapper);
+
+        //岗位应用权限信息集合
+        List<OmPositionApp> list = positionAppPage.getRecords();
+
+        //根据应用权限集合查询出应用信息
+        for (OmPositionApp omPositionApp : list){
+            if (null != omPositionApp){
+                AcApp acApp = acAppService.selectById(omPositionApp.getGuidApp());
+                listApp.add(acApp);
+            }
+        }
+
+        //收集分页信息
+        pageApp.setSize(page.getSize());
+        pageApp.setCurrent(page.getCurrent());
+        pageApp.setTotal(page.getTotal());
+        pageApp.setRecords(listApp);
+
+        return pageApp;
     }
 }
 

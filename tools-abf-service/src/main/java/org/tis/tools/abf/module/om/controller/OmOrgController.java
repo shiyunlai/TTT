@@ -44,7 +44,7 @@ public class OmOrgController extends BaseController<OmOrg> {
     }
 
     /**
-     * 新增机构综合
+     * 新增机构
      *
      * @param request
      * @return

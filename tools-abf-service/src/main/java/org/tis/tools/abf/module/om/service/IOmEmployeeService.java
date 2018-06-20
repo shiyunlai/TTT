@@ -38,6 +38,13 @@ public interface IOmEmployeeService extends IService<OmEmployee>  {
     boolean change(OmEmployeeUpdateRequest omEmployeeUpdateRequest) throws OrgManagementException;
 
     /**
+     * 删除员工
+     * @param id
+     * @throws OrgManagementException
+     */
+    void moveEmp(String id) throws OrgManagementException;
+
+    /**
      * 根据机构ID分页查员工
      * @param page
      * @param wrapper

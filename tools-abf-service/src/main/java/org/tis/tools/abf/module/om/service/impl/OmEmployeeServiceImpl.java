@@ -56,6 +56,9 @@ public class OmEmployeeServiceImpl extends ServiceImpl<OmEmployeeMapper, OmEmplo
     @Autowired
     private IOmEmpPositionService omEmpPositionService;
 
+    @Autowired
+    private IOmEmpGroupService omEmpGroupService;
+
 
     @Override
     public List<OmEmployee> queryEmployeeByGuid(String orgGuid) {
@@ -218,8 +221,56 @@ public class OmEmployeeServiceImpl extends ServiceImpl<OmEmployeeMapper, OmEmplo
         return isexist;
     }
 
-
+    /**
+     * 删除员工
+     */
     @Override
+    public void moveEmp(String id) throws OrgManagementException {
+        boolean isDelete = deleteById(id);
+
+        if (isDelete){
+            //删除员工和机构之间的关系
+            Wrapper<OmEmpOrg> wrapperOrg = new EntityWrapper<OmEmpOrg>();
+            wrapperOrg.eq(OmEmpOrg.COLUMN_GUID_EMP,id);
+            List<OmEmpOrg> listOrg = omEmpOrgService.selectList(wrapperOrg);
+            if (null != listOrg){
+                //进行删除
+                boolean deleteEmpOrg = omEmpOrgService.delete(wrapperOrg);
+                if (!deleteEmpOrg){
+                    throw new OrgManagementException(OMExceptionCodes.FAILURE_WHEN_DELETE_OM_EMP_ORG,wrap
+                            ("删除员工和机构之间的关系失败"));
+                }
+            }
+
+            //删除员工和岗位之间的关系
+            Wrapper<OmEmpPosition> wrapperPosition = new EntityWrapper<OmEmpPosition>();
+            wrapperPosition.eq(OmEmpPosition.COLUMN_GUID_EMP,id);
+            List<OmEmpPosition> listPosition = omEmpPositionService.selectList(wrapperPosition);
+            if (null != listPosition){
+                //进行删除
+                boolean deleteEmpPosition = omEmpPositionService.delete(wrapperPosition);
+                if (!deleteEmpPosition){
+                    throw new OrgManagementException(OMExceptionCodes.FAILURE_WHEN_DELETE_OM_EMP_POSITION,wrap
+                            ("删除员工和岗位之间的关系失败"));
+                }
+            }
+
+            //删除员工和工作组之间的关系
+            Wrapper<OmEmpGroup> wrapperGroup = new EntityWrapper<OmEmpGroup>();
+            wrapperGroup.eq(OmEmpPosition.COLUMN_GUID_EMP,id);
+            List<OmEmpGroup> listGroup = omEmpGroupService.selectList(wrapperGroup);
+            if (null != listGroup){
+                //进行删除
+                boolean deleteEmpGroup = omEmpGroupService.delete(wrapperGroup);
+                if (!deleteEmpGroup){
+                    throw new OrgManagementException(OMExceptionCodes.FAILURE_WHEN_DELETE_OM_EMP_GROUP,wrap
+                            ("删除员工和工作组之间的关系失败"));
+                }
+            }
+        }
+    }
+
+/*    @Override
     public Page<OmEmployeeForPositionDetail> queryEmpByOrg(Page<OmEmployee> page, Wrapper<OmEmployee> wrapper, String id) throws
             OrgManagementException {
 
@@ -255,17 +306,83 @@ public class OmEmployeeServiceImpl extends ServiceImpl<OmEmployeeMapper, OmEmplo
         pageForPosition.setCurrent(pageQuery.getCurrent());
 
         return pageForPosition;
+    }*/
+
+    /**
+     *根据机构查询员工
+     */
+    @Override
+    public Page<OmEmployeeForPositionDetail> queryEmpByOrg(Page<OmEmployee> page, Wrapper<OmEmployee> wrapper, String id) throws OrgManagementException {
+
+        if (wrapper == null){
+            wrapper = new EntityWrapper<OmEmployee>();
+        }
+
+        //查询员工和机构
+        Page<OmEmpOrg> pageOrg = new Page<OmEmpOrg>();
+        pageOrg.setCurrent(page.getCurrent());
+        pageOrg.setSize(page.getSize());
+        Wrapper<OmEmpOrg> wrapperOrg = new EntityWrapper<OmEmpOrg>();
+        wrapperOrg.eq(OmEmpOrg.COLUMN_GUID_ORG,id);
+
+        Page<OmEmpOrg> orgPageQue = omEmpOrgService.selectPage(pageOrg,wrapperOrg);
+        List<OmEmpOrg> orgListQue = orgPageQue.getRecords();
+
+
+        List<OmEmployee> listEmp = new ArrayList<OmEmployee>();
+        //查询机构和员工关系下的员工
+        for (OmEmpOrg omEmpOrg : orgListQue){
+            OmEmployee omEmployee = selectById(omEmpOrg.getGuidEmp());
+            if (null != omEmployee){
+                listEmp.add(omEmployee);
+            }
+        }
+
+        Page<OmEmployeeForPositionDetail> pageForPosition = new Page<OmEmployeeForPositionDetail>();
+        List<OmEmployeeForPositionDetail> listPosition = new ArrayList<OmEmployeeForPositionDetail>();
+
+        for (OmEmployee omEmployee : listEmp){
+            OmPosition omPosition = omPositionService.selectById(omEmployee.getGuidPosition());
+            String omPositionName = "";
+            if (null != omPosition){
+                omPositionName = omPosition.getPositionName();
+            }
+            OmEmployeeForPositionDetail omEmployeeForPositionDetail = new OmEmployeeForPositionDetail(omEmployee,omPositionName);
+
+            //将查询回来的信息放回到list中
+            listPosition.add(omEmployeeForPositionDetail);
+        }
+
+        pageForPosition.setCondition(pageOrg.getCondition());
+        pageForPosition.setRecords(listPosition);
+        pageForPosition.setTotal(pageOrg.getTotal());
+        pageForPosition.setSize(pageOrg.getSize());
+        pageForPosition.setCurrent(pageOrg.getCurrent());
+
+        return pageForPosition;
     }
 
 
     @Override
     public List<OmEmployee> queryEmpListByOrg(String id) throws OrgManagementException {
 
-        Wrapper<OmEmployee> wrapper = new EntityWrapper<OmEmployee>();
-        wrapper.eq(OmEmployee.COLUMN_GUID_ORG,id);
+        Wrapper<OmEmpOrg> wrapper = new EntityWrapper<OmEmpOrg>();
+        wrapper.eq(OmEmpOrg.COLUMN_GUID_ORG,id);
+        //查询出机构和员工关系表中的所有信息
+        List<OmEmpOrg> listorg = omEmpOrgService.selectList(wrapper);
 
-        List<OmEmployee> list = selectList(wrapper);
-        return list;
+        //查询出所有相关的员工
+        List<OmEmployee> listEmp = new ArrayList<OmEmployee>();
+        for (OmEmpOrg omEmpOrg:listorg){
+            if (null != omEmpOrg){
+                OmEmployee omEmployee = selectById(omEmpOrg.getGuidEmp());
+                if (null != omEmployee){
+                    listEmp.add(omEmployee);
+                }
+            }
+        }
+
+        return listEmp;
     }
 
 
@@ -297,7 +414,7 @@ public class OmEmployeeServiceImpl extends ServiceImpl<OmEmployeeMapper, OmEmplo
         return omEmployeeQue;
     }
 
-
+    /**  该方法需要写sql **/
     @Override
     public Page<OmEmployee> queryByOrgPosition(Page<OmEmployee> page,String orgId, String positionId) throws OrgManagementException {
 
@@ -314,13 +431,41 @@ public class OmEmployeeServiceImpl extends ServiceImpl<OmEmployeeMapper, OmEmplo
     @Override
     public List<OmEmployee> getOtherEmp(OmEmployeeByOrgAndPositionRequest om) throws OrgManagementException {
 
+        //查询机构下的所有员工
+        Wrapper<OmEmpOrg> wrapperOrg = new EntityWrapper<OmEmpOrg>();
+        wrapperOrg.eq(OmEmpOrg.COLUMN_GUID_ORG,om.getGuidOrg());
+        List<OmEmpOrg> listOrg = omEmpOrgService.selectList(wrapperOrg);
 
-        Wrapper<OmEmployee> wrapper = new EntityWrapper<OmEmployee>();
-        wrapper.eq(OmEmployee.COLUMN_GUID_ORG,om.getGuidOrg()).ne(OmEmployee.COLUMN_GUID_POSITION,om.getGuidPosition());
+        //查询机构下的所有员工
+        List<OmEmployee> listByOrg = new ArrayList<OmEmployee>();
+        for (OmEmpOrg omEmpOrg:listOrg){
+            if (null != omEmpOrg){
+                OmEmployee omEmployee = selectById(omEmpOrg.getGuidEmp());
+                if (null != omEmployee){
+                    listByOrg.add(omEmployee);
+                }
+            }
+        }
 
-        List<OmEmployee> list = selectList(wrapper);
+        //查询岗位下的所有员工
+        Wrapper<OmEmpPosition> wrapperPosition = new EntityWrapper<OmEmpPosition>();
+        wrapperPosition.eq(OmEmpPosition.COLUMN_GUID_POSITION,om.getGuidPosition());
+        List<OmEmpPosition> listPosition = omEmpPositionService.selectList(wrapperPosition);
 
-        return list;
+        //查询岗位下的所有员工
+        List<OmEmployee> listByPosition = new ArrayList<OmEmployee>();
+        for (OmEmpPosition omEmpPosition:listPosition){
+            if (null != omEmpPosition){
+                OmEmployee omEmployee = selectById(omEmpPosition.getGuidEmp());
+                if (null != omEmployee){
+                    listByPosition.add(omEmployee);
+                }
+            }
+        }
+
+        listByOrg.removeAll(listByPosition);
+
+        return listByOrg;
     }
 
 

@@ -63,7 +63,10 @@ public class OmPositionAppController extends BaseController<OmPositionApp>  {
         omPositionAppService.deleteById(id);
         return ResultVO.success("删除成功");
     }
-    
+
+    /**
+     * 根据ID查询岗位应用
+     */
     @GetMapping("/{id}")
     public ResultVO detail(@PathVariable @NotBlank(message = "id不能为空") String id) {
         OmPositionApp omPositionApp = omPositionAppService.selectById(id);
@@ -72,10 +75,23 @@ public class OmPositionAppController extends BaseController<OmPositionApp>  {
         }
         return ResultVO.success("查询成功", omPositionApp);
     }
-    
+
+    /**
+     * 查询所有岗位应用,分页
+     */
     @PostMapping("/list")
     public ResultVO list(@RequestBody @Validated SmartPage<OmPositionApp> page) {
         return  ResultVO.success("查询成功", omPositionAppService.selectPage(getPage(page), getCondition(page)));
+    }
+
+    /**
+     * 查询岗位已经有的应用权限
+     */
+    @PostMapping("/listByPosition/{guidPosition}")
+    public ResultVO listByPosition(@RequestBody @Validated SmartPage<OmPositionApp> page,@PathVariable @NotBlank
+            (message = "岗位guidPosition不能为空") String guidPosition){
+        return ResultVO.success("查询成功",omPositionAppService.queryAppByPosition(getPage(page),getCondition(page),
+                guidPosition));
     }
     
 }

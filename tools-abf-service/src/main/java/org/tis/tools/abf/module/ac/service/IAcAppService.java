@@ -62,5 +62,12 @@ public interface IAcAppService extends IService<AcApp>  {
      */
     List<AcApp> batchQuery(AcAppListRequest acAppListRequest) throws AcManagementException;
 
+    /**
+     * 删除应用
+     * @param id
+     * @throws AcManagementException
+     */
+    void moveApp(String id) throws AcManagementException;
+
 }
 
