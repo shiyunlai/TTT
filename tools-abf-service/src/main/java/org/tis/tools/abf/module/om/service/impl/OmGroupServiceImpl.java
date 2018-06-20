@@ -348,6 +348,26 @@ public class OmGroupServiceImpl extends ServiceImpl<OmGroupMapper, OmGroup> impl
     }
 
     @Override
+    public List<OmPosition> selectPositionInGroupNotPage(String groupCode) {
+        //查询方法中自带参数校验
+        OmGroup og = queryGroupByCode(groupCode);
+        EntityWrapper<OmGroupPosition> omGroupPositionEntityWrapper = new EntityWrapper<>();
+        omGroupPositionEntityWrapper.eq(OmGroupPosition.COLUMN_GUID_GROUP, og.getGuid());
+        List<OmPosition> opList = new ArrayList<>();
+        List<OmGroupPosition> ogpList = omGroupPositionService.selectList(omGroupPositionEntityWrapper);
+        if (ogpList.isEmpty()) {
+            return opList;
+        }
+        List<String> posGuidList = new ArrayList<>();
+        for (OmGroupPosition ogp : ogpList) {
+            posGuidList.add(ogp.getGuidPosition());
+        }
+        EntityWrapper<OmPosition> omPositionEntityWrapper = new EntityWrapper<>();
+        omPositionEntityWrapper.in(OmPosition.COLUMN_GUID, posGuidList);
+        return omPositionService.selectList(omPositionEntityWrapper);
+    }
+
+    @Override
     public Page<OmPosition> selectPositionNotInGroup(String groupCode, Page<OmPosition> page) {
         OmGroup og = queryGroupByCode(groupCode);
 
@@ -407,10 +427,10 @@ public class OmGroupServiceImpl extends ServiceImpl<OmGroupMapper, OmGroup> impl
     }
 
     @Override
-    public void deleteGroupPosition(String groupCode, List<String> posGuidList) {
+    public void deleteGroupPosition(String groupCode, String positionGuid) {
         OmGroup omGroup = queryGroupByCode(groupCode);
         EntityWrapper<OmGroupPosition> omGroupPositionEntityWrapper = new EntityWrapper<>();
-        omGroupPositionEntityWrapper.in(OmGroupPosition.COLUMN_GUID_POSITION,posGuidList);
+        omGroupPositionEntityWrapper.eq(OmGroupPosition.COLUMN_GUID_POSITION,positionGuid);
         omGroupPositionEntityWrapper.eq(OmGroupPosition.COLUMN_GUID_GROUP,omGroup.getGuid());
         omGroupPositionService.delete(omGroupPositionEntityWrapper);
     }
@@ -425,7 +445,7 @@ public class OmGroupServiceImpl extends ServiceImpl<OmGroupMapper, OmGroup> impl
         }
         OmPosition parentOg = opList.get(0);
 
-        return parentOg.getPositionCode();
+        return parentOg.getGuid();
     }
 
     @Override
