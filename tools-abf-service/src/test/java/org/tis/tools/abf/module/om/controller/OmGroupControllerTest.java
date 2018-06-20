@@ -213,4 +213,14 @@ public class OmGroupControllerTest extends BaseTest {
                 .accept(MediaType.APPLICATION_JSON);
         mvc.perform(request).andExpect(content().string(startsWith("{\"code\":\"200\",")));
     }
+
+    @Test
+    public void selectTree() throws Exception {
+        RequestBuilder request = null;
+        request = get("/omGroups/null/tree")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content("")
+                .accept(MediaType.APPLICATION_JSON);
+        mvc.perform(request).andExpect(content().string(startsWith("{\"code\":\"200\",")));
+    }
 }

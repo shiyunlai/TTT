@@ -23,8 +23,8 @@ public class OmGroupAddRequest extends RestRequest {
     @JSONField(deserializeUsing = CommonEnumDeserializer.class)
     private OmGroupType groupType;
 
-    @NotBlank(message = "隶属机构code不能为空")
-    private String orgCode;
+    @NotBlank(message = "隶属机构guid不能为空")
+    private String guidOrg;
 
     @Null(message = "根工作组父GUID为空！", groups = {OmGroupAddRequest.Root.class})
     @NotBlank(message = "根工作组父GUID不能为空！", groups = {OmGroupAddRequest.Child.class})

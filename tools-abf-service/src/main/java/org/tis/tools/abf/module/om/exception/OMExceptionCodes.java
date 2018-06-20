@@ -27,7 +27,7 @@ public class OMExceptionCodes {
 	/**
 	 * 机构代码对应的机构不存在
 	 */
-	public static final String ORGANIZATION_NOT_EXIST_BY_ORG_CODE = R_EX_CODE("0002");
+	public static final String ORGANIZATION_NOT_EXIST_BY_GUID_ORG = R_EX_CODE("0002");
 
 	/**
 	 * 参数不允许为空

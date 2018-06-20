@@ -83,7 +83,7 @@ public class OmGroupController extends BaseController<OmGroup>  {
     @OperateLog(type = OperateType.ADD, desc = "新增根工作组")
     @PostMapping(value = "/root")
     public ResultVO addRoot(@RequestBody @Validated({OmGroupAddRequest.Root.class,Default.class}) OmGroupAddRequest groupAddRequest) {
-        omGroupService.createGroup(groupAddRequest.getGroupType(),groupAddRequest.getGroupName(),groupAddRequest.getOrgCode(),null);
+        omGroupService.createGroup(groupAddRequest.getGroupType(),groupAddRequest.getGroupName(),groupAddRequest.getGuidOrg(),null);
 
         return ResultVO.success("新增成功！");
     }
@@ -97,7 +97,7 @@ public class OmGroupController extends BaseController<OmGroup>  {
     @OperateLog(type = OperateType.ADD, desc = "新增子工作组")
     @PostMapping(value = "/child")
     public ResultVO addChild(@RequestBody @Validated(OmGroupAddRequest.Child.class) OmGroupAddRequest groupAddRequest) {
-        omGroupService.createGroup(groupAddRequest.getGroupType(),groupAddRequest.getGroupName(),groupAddRequest.getOrgCode(),groupAddRequest.getGuidParents());
+        omGroupService.createGroup(groupAddRequest.getGroupType(),groupAddRequest.getGroupName(),groupAddRequest.getGuidOrg(),groupAddRequest.getGuidParents());
 
         return ResultVO.success("新增成功！");
     }

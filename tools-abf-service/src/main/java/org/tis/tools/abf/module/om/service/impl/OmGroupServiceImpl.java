@@ -104,18 +104,17 @@ public class OmGroupServiceImpl extends ServiceImpl<OmGroupMapper, OmGroup> impl
     }
 
     @Override
-    public void createGroup(OmGroupType groupType, String groupName, String orgCode, String parentGroupCode) throws OrgManagementException {
+    public void createGroup(OmGroupType groupType, String groupName, String guidOrg, String parentGroupCode) throws OrgManagementException {
         //创建修改工作组序列对象
         OmGroup omGroup = new OmGroup();
 
         EntityWrapper<OmOrg> omOrgEntityWrapper = new EntityWrapper<>();
-        omOrgEntityWrapper.eq(OmOrg.COLUMN_ORG_CODE, orgCode);
+        omOrgEntityWrapper.eq(OmOrg.COLUMN_GUID, guidOrg);
         List<OmOrg> orgList = omOrgService.selectList(omOrgEntityWrapper);
         if (orgList.size() != 1) {
-            throw new OrgManagementException(OMExceptionCodes.ORGANIZATION_NOT_EXIST_BY_ORG_CODE, wrap(orgCode));
+            throw new OrgManagementException(OMExceptionCodes.ORGANIZATION_NOT_EXIST_BY_GUID_ORG, wrap(guidOrg));
         }
         OmOrg org = orgList.get(0);
-        String guidOrg = org.getGuid();
         OmGroup og = new OmGroup();
         //补充信息
         og.setGroupCode(genGroupCode(groupType.getValue()));
