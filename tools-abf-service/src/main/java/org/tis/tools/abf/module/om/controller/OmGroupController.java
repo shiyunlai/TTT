@@ -260,14 +260,16 @@ public class OmGroupController extends BaseController<OmGroup>  {
     /**
      * 删除人员-工作组关联
      *
-     * @param guid
+     * @param groupCode
+     * @param guidEmp
      * @return
      */
     @OperateLog(type = OperateType.DELETE, desc = "为工作组删除员工")
-    @DeleteMapping(value = "/{guid}/empGroup")
-    public ResultVO deleteEmpGroup(@PathVariable @NotBlank(message = "guidGroup不能为空")String guid) {
+    @DeleteMapping(value = "/{groupCode}/empGroup/{guidEmp}")
+    public ResultVO deleteEmpGroup(@PathVariable @NotBlank(message = "groupCode不能为空")String groupCode,
+                                   @PathVariable @NotBlank(message = "guidEmp不能为空")String guidEmp) {
 
-        omEmpGroupService.deleteGroupEmp(guid);
+        omEmpGroupService.deleteGroupEmp(groupCode,guidEmp);
         return ResultVO.success("删除成功！");
     }
 
@@ -293,7 +295,7 @@ public class OmGroupController extends BaseController<OmGroup>  {
      * @param groupCode
      * @return
      */
-    @PostMapping(value = "/{groupCode}/positionNotPage")
+    @GetMapping(value = "/{groupCode}/positionNotPage")
     public ResultVO loadPositionNotPage(@PathVariable @NotBlank(message = "groupCode不能为空") String groupCode) {
 
         List<OmPosition> omList = omGroupService.selectPositionInGroupNotPage(groupCode);
@@ -404,7 +406,7 @@ public class OmGroupController extends BaseController<OmGroup>  {
      * @throws ToolsRuntimeException
      */
     @OperateLog(type = OperateType.DELETE, desc = "为工作组删除应用")
-    @DeleteMapping(value = "/{groupCode}/app/guidApp")
+    @DeleteMapping(value = "/{groupCode}/app/{guidApp}")
     public ResultVO deleteGroupApp(@PathVariable @NotBlank(message = "guidApp不能为空")String guidApp,
                                    @PathVariable @NotBlank(message = "groupCode不能为空")String groupCode) throws ToolsRuntimeException{
         omGroupService.deleteGroupApp(groupCode, guidApp);

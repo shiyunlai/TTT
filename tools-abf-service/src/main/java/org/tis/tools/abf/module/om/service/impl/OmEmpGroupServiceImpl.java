@@ -49,10 +49,11 @@ public class OmEmpGroupServiceImpl extends ServiceImpl<OmEmpGroupMapper, OmEmpGr
     }
 
     @Override
-    public void deleteGroupEmp(String guid) {
-
+    public void deleteGroupEmp(String groupCode,String guidEmp) {
+        OmGroup omGroup = omGroupService.queryGroupByCode(groupCode);
         EntityWrapper<OmEmpGroup> omEmpGroupEntityWrapper = new EntityWrapper<>();
-        omEmpGroupEntityWrapper.eq(OmEmpGroup.COLUMN_GUID,guid);
+        omEmpGroupEntityWrapper.eq(OmEmpGroup.COLUMN_GUID_GROUP,omGroup.getGuid());
+        omEmpGroupEntityWrapper.eq(OmEmpGroup.COLUMN_GUID_EMP,guidEmp);
         this.baseMapper.delete(omEmpGroupEntityWrapper);
     }
 }
