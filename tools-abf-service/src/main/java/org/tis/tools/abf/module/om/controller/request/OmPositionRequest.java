@@ -33,8 +33,6 @@ public class OmPositionRequest extends RestRequest {
     @NotBlank(message = "岗位名称不能为空")
     private String positionName;
 
-    @NotNull(message = "岗位类别不能为空")
-    @JSONField(deserializeUsing = CommonEnumDeserializer.class)
     private OmPositionType positionType;
 
     @NotNull(message = "岗位状态不能为空")

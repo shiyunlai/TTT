@@ -10,6 +10,7 @@ import org.tis.tools.abf.module.om.controller.request.OmOrgSetDateRequest;
 import org.tis.tools.abf.module.om.controller.request.OmPositionRequest;
 import org.tis.tools.abf.module.om.entity.OmPosition;
 import org.tis.tools.abf.module.om.entity.enums.OmPositionStatus;
+import org.tis.tools.abf.module.om.entity.enums.OmPositionType;
 import org.tis.tools.abf.module.om.service.IOmPositionService;
 import org.tis.tools.core.web.controller.BaseController;
 import org.tis.tools.core.web.vo.ResultVO;
@@ -33,7 +34,7 @@ public class OmPositionController extends BaseController<OmPosition>  {
     @OperateLog(type = OperateType.ADD,desc = "新增根岗位")
     @PostMapping("/addRoot")
     public ResultVO addRoot(@RequestBody @Validated OmPositionRequest omPositionRequest) {
-
+        omPositionRequest.setPositionType(OmPositionType.ORGANIZATION);
         boolean isexist = omPositionService.addRoot(omPositionRequest);
         if (!isexist){
             return ResultVO.error("404","岗位代码已存在,请重新输入!");
@@ -44,7 +45,7 @@ public class OmPositionController extends BaseController<OmPosition>  {
     @OperateLog(type = OperateType.ADD,desc = "新增子岗位")
     @PostMapping("/addChild")
     public ResultVO addChild(@RequestBody @Validated OmPositionRequest omPositionRequest) {
-
+        omPositionRequest.setPositionType(OmPositionType.ORGANIZATION);
         boolean isexist = omPositionService.addChild(omPositionRequest);
         if (!isexist){
             return ResultVO.error("404","岗位代码已存在,请重新输入!");

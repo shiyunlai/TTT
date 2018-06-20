@@ -16,6 +16,7 @@ import org.tis.tools.abf.module.om.controller.request.OmPositionRequest;
 import org.tis.tools.abf.module.om.entity.*;
 import org.tis.tools.abf.module.om.entity.enums.OmGroupStatus;
 import org.tis.tools.abf.module.om.entity.enums.OmGroupType;
+import org.tis.tools.abf.module.om.entity.enums.OmPositionType;
 import org.tis.tools.abf.module.om.entity.vo.OmPositionDetail;
 import org.tis.tools.abf.module.om.exception.OMExceptionCodes;
 import org.tis.tools.abf.module.om.exception.OrgManagementException;
@@ -322,8 +323,8 @@ public class OmGroupServiceImpl extends ServiceImpl<OmGroupMapper, OmGroup> impl
     }
 
     @Override
-    public Page<OmEmployee> selectEmpNotInGroup(String guidOrg, String groupCode, Page<OmEmployee> page) {
-        return page.setRecords(this.baseMapper.selectOrgEmpNotInGroup(guidOrg,groupCode,page));
+    public List<OmEmployee> selectEmpNotInGroup(String guidOrg, String groupCode) {
+        return this.baseMapper.selectOrgEmpNotInGroup(guidOrg,groupCode);
     }
 
     @Override
@@ -385,6 +386,7 @@ public class OmGroupServiceImpl extends ServiceImpl<OmGroupMapper, OmGroup> impl
 
     @Override
     public void insertGroupPosition(String groupCode, OmPositionRequest omPositionRequest) {
+        omPositionRequest.setPositionType(OmPositionType.WORKINGGROUP);
         if(null == omPositionRequest.getGuidParents() || "" == omPositionRequest.getGuidParents()){
             //添加根岗位
             omPositionService.addRoot(omPositionRequest);
@@ -405,9 +407,11 @@ public class OmGroupServiceImpl extends ServiceImpl<OmGroupMapper, OmGroup> impl
     }
 
     @Override
-    public void deleteGroupPosition(List<String> posGuidList) {
+    public void deleteGroupPosition(String groupCode, List<String> posGuidList) {
+        OmGroup omGroup = queryGroupByCode(groupCode);
         EntityWrapper<OmGroupPosition> omGroupPositionEntityWrapper = new EntityWrapper<>();
-        omGroupPositionEntityWrapper.in(OmGroupPosition.COLUMN_GUID,posGuidList);
+        omGroupPositionEntityWrapper.in(OmGroupPosition.COLUMN_GUID_POSITION,posGuidList);
+        omGroupPositionEntityWrapper.eq(OmGroupPosition.COLUMN_GUID_GROUP,omGroup.getGuid());
         omGroupPositionService.delete(omGroupPositionEntityWrapper);
     }
 
@@ -468,16 +472,17 @@ public class OmGroupServiceImpl extends ServiceImpl<OmGroupMapper, OmGroup> impl
             OmGroupApp ogp = new OmGroupApp();
             ogp.setGuidApp(guidApp);
             ogp.setGuidGroup(og.getGuid());
-            omGroupAppService.insert(ogp);
             ogpList.add(ogp);
         }
         omGroupAppService.insertBatch(ogpList);
     }
 
     @Override
-    public void deleteGroupApp(String guid) {
+    public void deleteGroupApp(String groupCode,String guidApp) {
+        OmGroup omGroup = queryGroupByCode(groupCode);
         EntityWrapper<OmGroupApp> omGroupAppEntityWrapper = new EntityWrapper<>();
-        omGroupAppEntityWrapper.eq(OmGroupApp.COLUMN_GUID, guid);
+        omGroupAppEntityWrapper.eq(OmGroupApp.COLUMN_GUID_APP, guidApp);
+        omGroupAppEntityWrapper.eq(OmGroupApp.COLUMN_GUID_GROUP, omGroup.getGuid());
         omGroupAppService.delete(omGroupAppEntityWrapper);
     }
 
