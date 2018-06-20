@@ -21,6 +21,6 @@ public interface IOmEmpGroupService extends IService<OmEmpGroup>  {
     /**
      * 删除人员-工作组关系表数据
      */
-    void deleteGroupEmp(String guid);
+    void deleteGroupEmp(String groupCode,String guidEmp);
 }
 
