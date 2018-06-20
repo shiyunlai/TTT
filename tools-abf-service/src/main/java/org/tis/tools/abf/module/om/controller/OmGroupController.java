@@ -294,13 +294,10 @@ public class OmGroupController extends BaseController<OmGroup>  {
      * @return
      */
     @PostMapping(value = "/{groupCode}/positionNotPage")
-    public ResultVO loadPositionNotPage(@PathVariable @NotBlank(message = "groupCode不能为空") String groupCode,
-                                   @RequestBody @Validated SmartPage<OmPosition> page) {
+    public ResultVO loadPositionNotPage(@PathVariable @NotBlank(message = "groupCode不能为空") String groupCode) {
 
-        Page<OmPosition> omPositionPage = new Page<OmPosition>(page.getPage().getCurrent(), page.getPage().getSize(),
-                page.getPage().getOrderByField(), page.getPage().getAsc());
-        Page<OmPosition> pageList = omGroupService.selectPositionInGroup(groupCode,omPositionPage);
-        return ResultVO.success("查询成功！",pageList);
+        List<OmPosition> omList = omGroupService.selectPositionInGroupNotPage(groupCode);
+        return ResultVO.success("查询成功！",omList);
     }
 
     /**
