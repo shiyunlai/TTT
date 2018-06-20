@@ -52,6 +52,7 @@ public class OmPositionRequest extends RestRequest {
 
     private String positionSeq;
 
+
     private String guidParents;
 
     private Date startDate;

@@ -12,6 +12,7 @@ import org.tis.tools.abf.module.ac.service.IAcAppService;
 import org.tis.tools.abf.module.common.entity.Tree;
 import org.tis.tools.abf.module.common.entity.enums.YON;
 import org.tis.tools.abf.module.common.entity.vo.TreeDetail;
+import org.tis.tools.abf.module.om.controller.request.OmPositionRequest;
 import org.tis.tools.abf.module.om.entity.*;
 import org.tis.tools.abf.module.om.entity.enums.OmGroupStatus;
 import org.tis.tools.abf.module.om.entity.enums.OmGroupType;
@@ -383,19 +384,24 @@ public class OmGroupServiceImpl extends ServiceImpl<OmGroupMapper, OmGroup> impl
     }
 
     @Override
-    public void insertGroupPosition(String groupCode, List<String> posGuidList) {
-        List<OmGroupPosition> ogpList = new ArrayList<>();
+    public void insertGroupPosition(String groupCode, OmPositionRequest omPositionRequest) {
+        if(null == omPositionRequest.getGuidParents() || "" == omPositionRequest.getGuidParents()){
+            //添加根岗位
+            omPositionService.addRoot(omPositionRequest);
+        }else{
+            //添加子岗位
+            omPositionService.addChild(omPositionRequest);
+        }
+
+        String positionGuid= selectPositionGuidByCode(omPositionRequest.getPositionCode());
         OmGroup og = queryGroupByCode(groupCode);
         if(og == null){
             throw new OrgManagementException(OMExceptionCodes.GROUP_NOT_EXIST_BY_GROUP_CODE, wrap(groupCode));
         }
-        for (String posGuid : posGuidList) {
-            OmGroupPosition ogp = new OmGroupPosition();
-            ogp.setGuidGroup(og.getGuid());
-            ogp.setGuidPosition(posGuid);
-            ogpList.add(ogp);
-        }
-        omGroupPositionService.insertBatch(ogpList);
+        OmGroupPosition ogp = new OmGroupPosition();
+        ogp.setGuidGroup(og.getGuid());
+        ogp.setGuidPosition(positionGuid);
+        omGroupPositionService.insert(ogp);
     }
 
     @Override
@@ -403,6 +409,19 @@ public class OmGroupServiceImpl extends ServiceImpl<OmGroupMapper, OmGroup> impl
         EntityWrapper<OmGroupPosition> omGroupPositionEntityWrapper = new EntityWrapper<>();
         omGroupPositionEntityWrapper.in(OmGroupPosition.COLUMN_GUID,posGuidList);
         omGroupPositionService.delete(omGroupPositionEntityWrapper);
+    }
+
+    @Override
+    public String selectPositionGuidByCode(String positionCode) {
+        EntityWrapper<OmPosition> omPositionEntityWrapper = new EntityWrapper<>();
+        omPositionEntityWrapper.eq(OmPosition.COLUMN_POSITION_CODE,positionCode);
+        List<OmPosition> opList = omPositionService.selectList(omPositionEntityWrapper);
+        if (opList.size() != 1) {
+            throw new OrgManagementException(OMExceptionCodes.POSITANIZATION_NOT_EXIST_BY_POSIT_CODE, wrap(positionCode));
+        }
+        OmPosition parentOg = opList.get(0);
+
+        return parentOg.getPositionCode();
     }
 
     @Override
@@ -439,15 +458,20 @@ public class OmGroupServiceImpl extends ServiceImpl<OmGroupMapper, OmGroup> impl
     }
 
     @Override
-    public void addGroupApp(String appGuid, String groupCode) {
+    public void addGroupApp(List<String> appGuidList, String groupCode) {
+        List<OmGroupApp> ogpList = new ArrayList<>();
         OmGroup og = queryGroupByCode(groupCode);
-        if(og == null){
+        if (og == null) {
             throw new OrgManagementException(OMExceptionCodes.GROUP_NOT_EXIST_BY_GROUP_CODE, wrap(groupCode));
         }
-        OmGroupApp ogp = new OmGroupApp();
-        ogp.setGuidApp(appGuid);
-        ogp.setGuidGroup(og.getGuid());
-        omGroupAppService.insert(ogp);
+        for (String guidApp : appGuidList){
+            OmGroupApp ogp = new OmGroupApp();
+            ogp.setGuidApp(guidApp);
+            ogp.setGuidGroup(og.getGuid());
+            omGroupAppService.insert(ogp);
+            ogpList.add(ogp);
+        }
+        omGroupAppService.insertBatch(ogpList);
     }
 
     @Override

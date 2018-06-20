@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.service.IService;
 import org.tis.tools.abf.module.ac.entity.AcApp;
 import org.tis.tools.abf.module.ac.entity.AcRole;
 import org.tis.tools.abf.module.common.entity.vo.TreeDetail;
+import org.tis.tools.abf.module.om.controller.request.OmPositionRequest;
 import org.tis.tools.abf.module.om.entity.OmEmployee;
 import org.tis.tools.abf.module.om.entity.OmGroup;
 import org.tis.tools.abf.module.om.entity.OmPosition;
@@ -379,7 +380,7 @@ public interface IOmGroupService extends IService<OmGroup>  {
     /**
      * 添加岗位-工作组关系表数据
      */
-    void insertGroupPosition(String groupCode,List<String> posGuidList);
+    void insertGroupPosition(String groupCode, OmPositionRequest omPositionRequest);
 
     /**
      * 删除岗位-工作组关系表数据
@@ -387,6 +388,14 @@ public interface IOmGroupService extends IService<OmGroup>  {
      * @param ogpGuidList
      */
     void deleteGroupPosition(List<String> ogpGuidList);
+
+    /**
+     * 根据岗位code获取guid
+     *
+     * @param positionCode
+     * @return
+     */
+    String selectPositionGuidByCode(String positionCode);
 
     /**
      * 通过工作组名称检索工作组
@@ -415,10 +424,10 @@ public interface IOmGroupService extends IService<OmGroup>  {
 
     /**
      * 新增一条工作组-应用关联信息
-     * @param appGuid
+     * @param appGuidList
      * @param groupGuid
      */
-    void addGroupApp(String appGuid, String groupGuid);
+    void addGroupApp(List<String> appGuidList, String groupGuid);
 
     /**
      * 删除一条工作组-应用关联信息

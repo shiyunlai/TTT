@@ -1,5 +1,6 @@
 package org.tis.tools.abf.module.om.controller;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.ui.ModelMap;
@@ -11,7 +12,10 @@ import org.tis.tools.abf.module.om.controller.request.*;
 import org.tis.tools.abf.module.om.entity.OmEmployee;
 import org.tis.tools.abf.module.om.entity.OmPosition;
 import org.tis.tools.abf.module.om.entity.enums.OmGroupType;
+import org.tis.tools.abf.module.om.exception.OMExceptionCodes;
+import org.tis.tools.abf.module.om.exception.OrgManagementException;
 import org.tis.tools.abf.module.om.service.IOmEmpGroupService;
+import org.tis.tools.abf.module.om.service.IOmPositionService;
 import org.tis.tools.core.exception.ToolsRuntimeException;
 import org.tis.tools.core.web.controller.BaseController;
 import org.tis.tools.core.web.vo.SmartPage;
@@ -26,6 +30,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.groups.Default;
 import java.util.List;
+
+import static org.tis.tools.core.utils.BasicUtil.wrap;
 
 /**
  * omGroup的Controller类
@@ -42,6 +48,9 @@ public class OmGroupController extends BaseController<OmGroup>  {
 
     @Autowired
     private IOmEmpGroupService omEmpGroupService;
+
+    @Autowired
+    private IOmPositionService omPositionService;
 
     @PostMapping
     public ResultVO add(@RequestBody @Validated OmGroup omGroup) {
@@ -309,7 +318,7 @@ public class OmGroupController extends BaseController<OmGroup>  {
     @PostMapping(value = "/groupPosition")
     public ResultVO addGroupPosition(@RequestBody @Validated OmGroupPositionRequest omGroupPositionRequest) {
 
-        omGroupService.insertGroupPosition(omGroupPositionRequest.getGroupCode(), omGroupPositionRequest.getPosGuidlist());
+        omGroupService.insertGroupPosition(omGroupPositionRequest.getGroupCode(), omGroupPositionRequest.getOmPositionRequest());
 
         return ResultVO.success("新增成功！");
     }
@@ -369,7 +378,7 @@ public class OmGroupController extends BaseController<OmGroup>  {
     @OperateLog(type = OperateType.ADD, desc = "为工作组添加应用") // 操作对象的关键值的键值名
     @PostMapping(value = "/groupApp")
     public ResultVO addGroupApp(@RequestBody @Validated OmGroupAddAppRequest omGroupAddAppRequest) throws ToolsRuntimeException {
-        omGroupService.addGroupApp(omGroupAddAppRequest.getAppGuid(), omGroupAddAppRequest.getGroupCode());
+        omGroupService.addGroupApp(omGroupAddAppRequest.getAppGuidList(), omGroupAddAppRequest.getGroupCode());
 
         return ResultVO.success("新增成功！");
     }
@@ -406,5 +415,7 @@ public class OmGroupController extends BaseController<OmGroup>  {
 
         return ResultVO.success("查询成功",omGroupService.selectGroupTree(guid));
     }
+
+
 }
 
