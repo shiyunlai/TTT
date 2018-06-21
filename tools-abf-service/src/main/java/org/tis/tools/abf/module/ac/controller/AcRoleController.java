@@ -90,20 +90,17 @@ public class AcRoleController extends BaseController<AcRole>  {
     }
 
     /**
-     * @param roleCode
+     * @param id
      * @return 删除角色结果
-     * 根据角色代码修改角色信息
      */
-    @OperateLog(type = OperateType.DELETE, desc = "根据角色代码删除角色")
-    @DeleteMapping("/{roleCode}")
-    public ResultVO deleteRoleByRoleCode(@PathVariable @NotBlank(message = "roleCode不能为空") String roleCode) {
-        AcRole acRole = new AcRole();
-        acRole.setRoleCode(roleCode);
-        AcRole acRole1 = acRoleService.queryByCondition(acRole);
+    @OperateLog(type = OperateType.DELETE, desc = "根据ID删除角色")
+    @DeleteMapping("/{id}")
+    public ResultVO deleteRoleByRoleCode(@PathVariable @NotBlank(message = "id不能为空") String id) {
+        AcRole acRole1 = acRoleService.selectById(id);
         if (acRole1 == null) {
             return ResultVO.error("404", "找不到对应记录或已经被删除！");
         }
-        boolean bolen = acRoleService.deleteByRoleCode(roleCode);
+        boolean bolen = acRoleService.deleteByRoleCode(id);
         return ResultVO.success("删除成功");
     }
 
