@@ -293,6 +293,14 @@ public class OMExceptionCodes {
 	 * 工作组添加员工失败
 	 */
 	public static final String IS_EXIST_BY_GROUP_CREAT_EMP = R_EX_CODE("0063");
+	/**
+	 * 查询岗位应用权限失败
+	 */
+	public static final String FAILURE_WHEN_QUERY_OM_APP_POSITION = R_EX_CODE("0064");
+	/**
+	 * 新增应用权限失败,因已存在该应用权限
+	 */
+	public static final String IS_EXIST_BY_OM_APP_POSITION = R_EX_CODE("0065");
 
 
 
