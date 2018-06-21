@@ -34,5 +34,13 @@ public interface IAcOperatorService extends IService<AcOperator>  {
      * @throws AcOperatorManagementException
      */
     List<AcOperator> queryAllOperator() throws AcOperatorManagementException;
+
+    /**
+     * 删除操作员
+     * @param id
+     * @throws AcOperatorManagementException
+     */
+    void moveOperator(String id) throws AcOperatorManagementException;
+
 }
 
