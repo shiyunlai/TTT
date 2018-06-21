@@ -1,19 +1,26 @@
 package org.tis.tools.abf.module.ac.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.tis.tools.abf.module.ac.entity.AcOperatorRole;
 import org.tis.tools.abf.module.ac.entity.AcRole;
 import org.tis.tools.abf.module.ac.dao.AcRoleMapper;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.transaction.annotation.Transactional;
 import org.tis.tools.abf.module.ac.entity.AcRoleFunc;
+import org.tis.tools.abf.module.ac.exception.AcExceptionCodes;
 import org.tis.tools.abf.module.ac.exception.AcRoleManagementException;
+import org.tis.tools.abf.module.ac.service.IAcOperatorRoleService;
 import org.tis.tools.abf.module.ac.service.IAcRoleFuncService;
 import org.tis.tools.abf.module.ac.service.IAcRoleService;
 import org.tis.tools.abf.module.common.entity.enums.YON;
 import org.tis.tools.core.exception.i18.ExceptionCodes;
+
+import java.util.List;
+
 import static org.tis.tools.core.utils.BasicUtil.wrap;
 
 /**
@@ -30,6 +37,9 @@ public class AcRoleServiceImpl extends ServiceImpl<AcRoleMapper, AcRole> impleme
     IAcRoleFuncService acRoleFuncService;
     @Autowired
     IAcRoleService acRoleService;
+
+    @Autowired
+    private IAcOperatorRoleService acOperatorRoleService;
 
 
     /**
@@ -128,24 +138,37 @@ public class AcRoleServiceImpl extends ServiceImpl<AcRoleMapper, AcRole> impleme
      *
      * </pre>
      *
-     * @param roleCode
+     * @param id
      *
      * @return 删除结果
      * @throws AcRoleManagementException
      */
     @Override
-    public boolean deleteByRoleCode(String roleCode) throws AcRoleManagementException {
-        AcRoleFunc acRoleFunc = new AcRoleFunc();
-        acRoleFunc.setGuidRole(roleCode);
+    public boolean deleteByRoleCode(String id) throws AcRoleManagementException {
+
         try{
-            //删掉对应功能表格数据
-            acRoleFuncService.queryRoleFunByCondition(acRoleFunc);
-            EntityWrapper<AcRole> acRoleEntityWrapper = new EntityWrapper<>();
-            acRoleEntityWrapper.eq(AcRole.COLUMN_ROLE_CODE, roleCode);
-            boolean bolen = delete(acRoleEntityWrapper);
+
+            //删除掉权限集(角色)功能对应关系数据
+            Wrapper<AcRoleFunc> wrapper = new EntityWrapper<AcRoleFunc>();
+            wrapper.eq(AcRoleFunc.COLUMN_GUID_ROLE,id);
+            List<AcRoleFunc> list = acRoleFuncService.selectList(wrapper);
+            if (0 != list.size()){
+                acRoleFuncService.delete(wrapper);
+            }
+
+            //删除操作员与权限集（角色）对应关系数据
+            Wrapper<AcOperatorRole> wrapperOper = new EntityWrapper<AcOperatorRole>();
+            wrapperOper.eq(AcOperatorRole.COLUMN_GUID_ROLE,id);
+            List<AcOperatorRole> listRole = acOperatorRoleService.selectList(wrapperOper);
+            if (0 != listRole.size()){
+                acOperatorRoleService.delete(wrapperOper);
+            }
+
+            //删除掉角色
+            boolean bolen = deleteById(id);
             return bolen;
         }catch (Exception e ){
-            throw new AcRoleManagementException(ExceptionCodes.FAILURE_WHEN_DELETE,wrap("ACROLE",e));
+            throw new AcRoleManagementException(AcExceptionCodes.FAILURE_WHEN_DELETE_AC_ROLE,wrap(e.getMessage()));
         }
 
     }
