@@ -118,6 +118,14 @@ public class SYSExceptionCodes {
 	 * 异常:删除序号资源失败
 	 */
 	public static final String FAILURE_WHEN_DELETE_SYS_SEQNO = R_EX_CODE("0021");
+	/**
+	 * 异常:删除业务字典失败
+	 */
+	public static final String FAILURE_WHEN_DELETE_SYS_DICT = R_EX_CODE("0022");
+	/**
+	 * 异常:删除业务字典项失败
+	 */
+	public static final String FAILURE_WHEN_DELETE_SYS_DICT_ITEM = R_EX_CODE("0023");
 
 	/**
 	 * 以烤串方式拼接异常码
