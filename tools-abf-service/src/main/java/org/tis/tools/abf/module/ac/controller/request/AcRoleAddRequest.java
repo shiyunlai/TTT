@@ -1,6 +1,5 @@
 package org.tis.tools.abf.module.ac.controller.request;
 
-import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -31,6 +30,6 @@ public class AcRoleAddRequest extends RestRequest {
 
     private String roleDesc;
 
-
+    private String roleGroup;
 
 }
