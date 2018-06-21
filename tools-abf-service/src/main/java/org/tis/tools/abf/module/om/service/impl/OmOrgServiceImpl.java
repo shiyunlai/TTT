@@ -302,16 +302,22 @@ public class OmOrgServiceImpl extends ServiceImpl<OmOrgMapper, OmOrg> implements
 			if (0 == lists.size() || null == lists){
 				deleteById(id);
 				deleteOmEmpOrg(id);
+				deletePosition(id);
 			}else {
 				for (OmOrg omOrg :lists){
-					deleteAllChild(omOrg.getGuid());
-					deleteOmEmpOrg(id);
+					if (null != omOrg){
+						deleteAllChild(omOrg.getGuid());
+						deleteOmEmpOrg(id);
+						deletePosition(id);
+					}
 				}
 				deleteById(id);
 				deleteOmEmpOrg(id);
+				deletePosition(id);
 			}
 		}catch (Exception e){
 			e.printStackTrace();
+			throw new OrgManagementException(OMExceptionCodes.FAILURE_WHEN_DELETE_ROOT_ORG,wrap(e.getMessage()));
 		}
 	}
 
@@ -327,10 +333,11 @@ public class OmOrgServiceImpl extends ServiceImpl<OmOrgMapper, OmOrg> implements
 			}
 		}catch (Exception e){
 			e.printStackTrace();
-			throw new OrgManagementException(OMExceptionCodes.FAILURE_WHEN_DELETE_OM_EMP_ORG,wrap("删除员工机构信息失败"),id);
+			throw new OrgManagementException(OMExceptionCodes.FAILURE_WHEN_DELETE_OM_EMP_ORG,wrap(e.getMessage()));
 		}
 	}
 
+	//删除机构之后,删除机构下的岗位
 	public void deletePosition(String id) throws OrgManagementException{
 		try {
 			Wrapper<OmPosition> wrapper = new EntityWrapper<OmPosition>();
@@ -343,8 +350,7 @@ public class OmOrgServiceImpl extends ServiceImpl<OmOrgMapper, OmOrg> implements
 			}
 		}catch (Exception e){
 			e.printStackTrace();
-			throw new OrgManagementException(OMExceptionCodes.FAILURE_WHEN_DELETE_ROOT_POSITION,wrap("删除机构所关联的岗位失败")
-					,id);
+			throw new OrgManagementException(OMExceptionCodes.FAILURE_WHEN_DELETE_ROOT_POSITION,wrap(e.getMessage()));
 		}
 	}
 
