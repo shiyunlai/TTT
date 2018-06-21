@@ -43,5 +43,11 @@ public interface IAcAppConfigService extends IService<AcAppConfig>  {
      */
     AcAppConfig changeById(String guid,String guidApp,String configType,String configName,String configDict,String configStyle,String configValue,String enabled,String displayOrder,String configDesc) throws AcManagementException ;
 
+    /**
+     * 删除应用配置
+     * @throws AcManagementException
+     */
+    void moveAppConfig(String id)throws AcManagementException;
+
 }
 
