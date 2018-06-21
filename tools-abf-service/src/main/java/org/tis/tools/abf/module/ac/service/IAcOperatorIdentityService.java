@@ -41,5 +41,12 @@ public interface IAcOperatorIdentityService extends IService<AcOperatorIdentity>
     Page<AcOperatorIdentity> queryByOperator(Page<AcOperatorIdentity> page, Wrapper<AcOperatorIdentity> wrapper,
                                              String id)throws AcManagementException;
 
+    /**
+     * 删除操作员身份
+     * @param id
+     * @throws AcManagementException
+     */
+    void moveIdentity(String id)throws AcManagementException;
+
 }
 
