@@ -71,7 +71,8 @@ public class AcRoleController extends BaseController<AcRole>  {
     @OperateLog(type = OperateType.ADD, desc = "新增角色")
     @PostMapping
     public ResultVO add(@RequestBody @Validated AcRoleAddRequest request) {
-        boolean bolen = acRoleService.createAcRole(request.getRoleCode(),request.getRoleName(),request.getEnabled(),request.getRoleDesc());
+        boolean bolen = acRoleService.createAcRole(request.getRoleCode(),request.getRoleName(),request.getEnabled(),
+                request.getRoleDesc(),request.getRoleGroup());
         return ResultVO.success("新增成功",bolen);
     }
 
