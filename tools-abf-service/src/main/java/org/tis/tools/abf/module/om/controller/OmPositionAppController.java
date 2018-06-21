@@ -93,6 +93,17 @@ public class OmPositionAppController extends BaseController<OmPositionApp>  {
         return ResultVO.success("查询成功",omPositionAppService.queryAppByPosition(getPage(page),getCondition(page),
                 guidPosition));
     }
+
+    /**
+     * 根据岗位ID,查询不在该岗位下的应用
+     * @param id
+     * @return
+     */
+    @GetMapping("/appNotInPosition/{id}")
+    public ResultVO listNotInPosition(@PathVariable @NotBlank(message = "岗位id不能为空") String id){
+        return ResultVO.success("查询成功",omPositionAppService.queryNotInPosition(id));
+    }
+
     
 }
 
