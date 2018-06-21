@@ -9,6 +9,8 @@ import org.tis.tools.abf.module.om.controller.request.OmPositionAppRequest;
 import org.tis.tools.abf.module.om.entity.OmPositionApp;
 import org.tis.tools.abf.module.om.exception.OrgManagementException;
 
+import java.util.List;
+
 /**
  * omPositionApp的Service接口类
  * 
@@ -44,6 +46,14 @@ public interface IOmPositionAppService extends IService<OmPositionApp>  {
      */
     Page<AcApp> queryAppByPosition(Page<OmPositionApp> page, Wrapper<OmPositionApp> wrapper,String id)throws
             OrgManagementException;
+
+    /**
+     * 查询不在该岗位下的应用权限
+     * @param id
+     * @return
+     * @throws OrgManagementException
+     */
+    List<AcApp> queryNotInPosition(String id)throws OrgManagementException;
 
 }
 
