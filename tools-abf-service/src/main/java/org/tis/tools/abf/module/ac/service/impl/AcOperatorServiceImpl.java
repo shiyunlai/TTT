@@ -98,20 +98,21 @@ public class AcOperatorServiceImpl extends ServiceImpl<AcOperatorMapper, AcOpera
                 acOperator.setAuthMode(request.getAuthMode());
                 acOperator.setPassword(request.getPassword());
             }
+            //设置当前错误登录次数为0
+            acOperator.setErrCount(new BigDecimal("0"));
 
-        //收集参数
-        acOperator.setUserId(request.getUserId());
-        acOperator.setOperatorName(request.getOperatorName());
-        acOperator.setInvalDate(request.getInvalDate());
-        acOperator.setErrCount(request.getErrCount());
-        acOperator.setLockTime(request.getLockTime());
-        acOperator.setUnlockTime(request.getUnlockTime());
-        acOperator.setLastLogin(request.getLastLogin());
-        acOperator.setStartDate(request.getStartDate());
-        acOperator.setEndDate(request.getEndDate());
-        acOperator.setValidTime(request.getValidTime());
-        acOperator.setMacCode(request.getMacCode());
-        acOperator.setIpAddress(request.getIpAddress());
+            //收集参数
+            acOperator.setUserId(request.getUserId());
+            acOperator.setOperatorName(request.getOperatorName());
+            acOperator.setInvalDate(request.getInvalDate());
+            acOperator.setLockTime(request.getLockTime());
+            acOperator.setUnlockTime(request.getUnlockTime());
+            acOperator.setLastLogin(request.getLastLogin());
+            acOperator.setStartDate(request.getStartDate());
+            acOperator.setEndDate(request.getEndDate());
+            acOperator.setValidTime(request.getValidTime());
+            acOperator.setMacCode(request.getMacCode());
+            acOperator.setIpAddress(request.getIpAddress());
 
         insert(acOperator);
 
