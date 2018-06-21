@@ -9,10 +9,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.tis.tools.abf.module.ac.dao.AcFuncMapper;
 import org.tis.tools.abf.module.ac.entity.AcFunc;
+import org.tis.tools.abf.module.ac.entity.AcFuncAttr;
+import org.tis.tools.abf.module.ac.entity.AcOperatorFunc;
+import org.tis.tools.abf.module.ac.entity.AcRoleFunc;
 import org.tis.tools.abf.module.ac.entity.enums.FuncType;
 import org.tis.tools.abf.module.ac.exception.AcExceptionCodes;
 import org.tis.tools.abf.module.ac.exception.AcManagementException;
+import org.tis.tools.abf.module.ac.service.IAcFuncAttrService;
 import org.tis.tools.abf.module.ac.service.IAcFuncService;
+import org.tis.tools.abf.module.ac.service.IAcOperatorFuncService;
+import org.tis.tools.abf.module.ac.service.IAcRoleFuncService;
 import org.tis.tools.abf.module.common.entity.enums.YON;
 
 import java.math.BigDecimal;
@@ -32,6 +38,15 @@ public class AcFuncServiceImpl extends ServiceImpl<AcFuncMapper, AcFunc> impleme
 
     @Autowired
     IAcFuncService acFuncService;
+
+    @Autowired
+    private IAcFuncAttrService acFuncAttrService;
+
+    @Autowired
+    private IAcRoleFuncService acRoleFuncService;
+
+    @Autowired
+    private IAcOperatorFuncService acOperatorFuncService;
 
 
     /**
@@ -146,6 +161,48 @@ public class AcFuncServiceImpl extends ServiceImpl<AcFuncMapper, AcFunc> impleme
     public List<AcFunc> queryAll() throws AcManagementException {
         Wrapper<AcFunc> wrapper = new EntityWrapper<AcFunc>();
         return selectList(wrapper);
+    }
+
+
+    @Override
+    public void moveFunc(String id) throws AcManagementException {
+
+        try {
+
+            //查询出功能属性
+            Wrapper<AcFuncAttr> wrapperAttr = new EntityWrapper<AcFuncAttr>();
+            wrapperAttr.eq(AcFuncAttr.COLUMN_GUID_FUNC,id);
+            List<AcFuncAttr> listAttr = acFuncAttrService.selectList(wrapperAttr);
+            if (0 != listAttr.size()){
+                //删除功能属性
+                acFuncAttrService.delete(wrapperAttr);
+            }
+
+            //查询出权限集(角色)功能对应关系信息
+            Wrapper<AcRoleFunc> wrapperRole = new EntityWrapper<AcRoleFunc>();
+            wrapperRole.eq(AcRoleFunc.COLUMN_GUID_FUNC,id);
+            List<AcRoleFunc> listRole = acRoleFuncService.selectList(wrapperRole);
+            if (0 != listRole.size()){
+                //删除权限集(角色)功能数据
+                acRoleFuncService.delete(wrapperRole);
+            }
+
+            //查询出操作员特殊权限配置信息
+            Wrapper<AcOperatorFunc> wrapperOper = new EntityWrapper<AcOperatorFunc>();
+            wrapperOper.eq(AcOperatorFunc.COLUMN_GUID_FUNC,id);
+            List<AcOperatorFunc> listOper = acOperatorFuncService.selectList(wrapperOper);
+            if (0 != listOper.size()){
+                //删除操作员特殊权限配置数据
+                acOperatorFuncService.delete(wrapperOper);
+            }
+
+            //删除功能
+            deleteById(id);
+
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new AcManagementException(AcExceptionCodes.FAILURE_WHRN_DELETE_AC_FUNC,wrap(e.getMessage()));
+        }
     }
 }
 
