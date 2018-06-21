@@ -84,7 +84,7 @@ public class AcOperatorController extends BaseController<AcOperator>  {
         if (acOperator == null) {
             return ResultVO.error("404", "找不到对应记录或已经被删除！");
         }
-        acOperatorService.deleteById(id);
+        acOperatorService.moveOperator(id);
         return ResultVO.success("删除成功");
     }
 
