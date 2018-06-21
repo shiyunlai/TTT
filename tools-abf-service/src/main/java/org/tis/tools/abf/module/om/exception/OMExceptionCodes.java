@@ -301,6 +301,19 @@ public class OMExceptionCodes {
 	 * 新增应用权限失败,因已存在该应用权限
 	 */
 	public static final String IS_EXIST_BY_OM_APP_POSITION = R_EX_CODE("0065");
+	/**
+	 * 修改员工入职信息时参数不足
+	 */
+	public static final String FAILURE_WHEN_UPDATE_OM_EMPLOYEE_ONJOB = R_EX_CODE("0066");
+	/**
+	 * 员工入职失败
+	 */
+	public static final String FAILURE_WHEN_OM_EMPLOYEE_ONJOB = R_EX_CODE("0067");
+	/**
+	 * 员工离职失败
+	 */
+	public static final String FAILURE_WHEN_OM_EMPLOYEE_OUTJOB = R_EX_CODE("0068");
+
 
 
 
