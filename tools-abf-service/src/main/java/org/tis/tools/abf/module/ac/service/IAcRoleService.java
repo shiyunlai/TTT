@@ -50,7 +50,8 @@ public interface IAcRoleService extends IService<AcRole>{
      * @return 新建角色信息
      * @throws AcRoleManagementException
      */
-    boolean createAcRole(String roleCode, String roleName, YON enabled, String roleDesc) throws AcRoleManagementException;
+    boolean createAcRole(String roleCode, String roleName, YON enabled, String roleDesc,String roleGroup) throws
+            AcRoleManagementException;
 
     /**
      * <pre>
