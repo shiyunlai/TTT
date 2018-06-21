@@ -46,7 +46,6 @@ public class OmEmployeeServiceImpl extends ServiceImpl<OmEmployeeMapper, OmEmplo
     @Autowired
     private IAcOperatorService operatorService;
 
-
     @Autowired
     private IOmEmpOrgService empOrgService;
 
@@ -389,10 +388,25 @@ public class OmEmployeeServiceImpl extends ServiceImpl<OmEmployeeMapper, OmEmplo
     @Override
     public OmEmployee onJob(OmEmployee omEmployee) throws OrgManagementException {
 
-        OmEmployee omEmployeeQue = selectById(omEmployee);
+        OmEmployee omEmployeeQue = selectById(omEmployee.getGuid());
 
-            omEmployeeQue.setGuidOperator(omEmployee.getGuidOperator());
-            omEmployeeQue.setUserId(omEmployee.getUserId());
+            String guidOperator = omEmployee.getGuidOperator();
+            String userId = omEmployee.getUserId();
+
+            if (!(null == guidOperator || "".equals(guidOperator))){
+                userId = queryUserIdByOpertary(guidOperator);
+            }
+            if (!(null == userId || "".equals(userId))){
+                guidOperator = queryGuidByUserId(userId);
+            }
+
+        if (null == omEmployee.getIndate()){
+            throw new OrgManagementException(OMExceptionCodes.FAILURE_WHEN_OM_EMPLOYEE_ONJOB,wrap
+                    ("员工入职日期不能为空"));
+        }
+
+            omEmployeeQue.setGuidOperator(guidOperator);
+            omEmployeeQue.setUserId(userId);
             omEmployeeQue.setIndate(omEmployee.getIndate());
             omEmployeeQue.setEmpstatus(OmEmployeeStatus.ONJOB);
 
@@ -402,8 +416,45 @@ public class OmEmployeeServiceImpl extends ServiceImpl<OmEmployeeMapper, OmEmplo
 
 
     @Override
+    public OmEmployee changeOnJob(OmEmployee omEmployee) throws OrgManagementException {
+
+        OmEmployee omEmployeeQue = selectById(omEmployee.getGuid());
+
+        String guidOperator = omEmployee.getGuidOperator();
+        String userId = omEmployee.getUserId();
+
+        if ((null == userId || "".equals(userId)) && (null == guidOperator || "".equals(guidOperator))){
+            throw new OrgManagementException(OMExceptionCodes.FAILURE_WHEN_UPDATE_OM_EMPLOYEE_ONJOB,wrap("修改员工入职信息时操作员用户名不能为空"));
+        }else {
+            if (!(null == guidOperator || "".equals(guidOperator))){
+                userId = queryUserIdByOpertary(guidOperator);
+            }
+            if (!(null == userId || "".equals(userId))){
+                guidOperator = queryGuidByUserId(userId);
+            }
+        }
+
+        if (null == omEmployee.getIndate()){
+            throw new OrgManagementException(OMExceptionCodes.FAILURE_WHEN_UPDATE_OM_EMPLOYEE_ONJOB,wrap
+                    ("修改员工入职信息时入职时间不能为空"));
+        }
+
+        omEmployeeQue.setGuidOperator(guidOperator);
+        omEmployeeQue.setUserId(userId);
+        omEmployeeQue.setIndate(omEmployee.getIndate());
+
+        updateById(omEmployeeQue);
+        return omEmployeeQue;
+    }
+
+    @Override
     public OmEmployee outJob(OmEmployee omEmployee) throws OrgManagementException {
-        OmEmployee omEmployeeQue = selectById(omEmployee);
+        OmEmployee omEmployeeQue = selectById(omEmployee.getGuid());
+
+        if (null == omEmployee.getOutdate()){
+            throw new OrgManagementException(OMExceptionCodes.FAILURE_WHEN_OM_EMPLOYEE_OUTJOB,wrap
+                    ("员工离职日期不能为空"));
+        }
 
         omEmployeeQue.setGuidOperator(omEmployee.getGuidOperator());
         omEmployeeQue.setUserId(omEmployee.getUserId());
@@ -412,6 +463,36 @@ public class OmEmployeeServiceImpl extends ServiceImpl<OmEmployeeMapper, OmEmplo
 
         updateById(omEmployeeQue);
         return omEmployeeQue;
+    }
+
+    public String queryUserIdByOpertary(String guidOperator){
+
+        String userId = null;
+
+        AcOperator acOperator = operatorService.selectById(guidOperator);
+        if (null != acOperator){
+            userId = acOperator.getUserId();
+        }else {
+            throw new OrgManagementException(OMExceptionCodes.FAILURE_WHEN_QUERY_AC_OPERATOR,wrap("查询操作员失败",guidOperator));
+        }
+
+        return userId;
+    }
+
+    public String queryGuidByUserId(String userId){
+
+        String guidOperator = null;
+
+        Wrapper<AcOperator> wrapper = new EntityWrapper<AcOperator>();
+        wrapper.eq(AcOperator.COLUMN_USER_ID,userId);
+        AcOperator acOperator = operatorService.selectOne(wrapper);
+        if (null != acOperator){
+            guidOperator = acOperator.getGuid();
+        }else {
+            throw new OrgManagementException(OMExceptionCodes.FAILURE_WHEN_QUERY_AC_OPERATOR,wrap("查询操作员失败",userId));
+        }
+
+        return guidOperator;
     }
 
     /**  该方法需要写sql **/
