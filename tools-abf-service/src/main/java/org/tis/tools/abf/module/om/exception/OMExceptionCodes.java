@@ -293,6 +293,10 @@ public class OMExceptionCodes {
 	 * 工作组添加员工失败
 	 */
 	public static final String IS_EXIST_BY_GROUP_CREAT_EMP = R_EX_CODE("0063");
+	/**
+	 * 工作组添加应用失败
+	 */
+	public static final String IS_EXIST_BY_GROUP_CREAT_APP = R_EX_CODE("0064");
 
 
 

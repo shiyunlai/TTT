@@ -52,12 +52,6 @@ public class OmGroupController extends BaseController<OmGroup>  {
     @Autowired
     private IOmPositionService omPositionService;
 
-    @PostMapping
-    public ResultVO add(@RequestBody @Validated OmGroup omGroup) {
-        omGroupService.insert(omGroup);
-        return ResultVO.success("新增成功！");
-    }
-
     /**
      * 条件查询工作组列表
      *
@@ -65,7 +59,7 @@ public class OmGroupController extends BaseController<OmGroup>  {
      * @return
      */
     @GetMapping("/{groupCode}")
-    public ResultVO detail(@PathVariable @NotBlank(message = "id不能为空") String groupCode) {
+    public ResultVO detail(@PathVariable @NotBlank(message = "groupCode不能为空") String groupCode) {
         OmGroup omGroup = omGroupService.selectGroupByCode(groupCode);
         if (omGroup == null) {
             return ResultVO.error("404", "找不到对应记录或已经被删除！");
@@ -212,7 +206,7 @@ public class OmGroupController extends BaseController<OmGroup>  {
     }
 
     /**
-     * 生成下级人员列表
+     * 查询在此工作组的员工
      *
      * @param groupCode
      * @param page
@@ -352,7 +346,7 @@ public class OmGroupController extends BaseController<OmGroup>  {
 
 
     /**
-     * 查询工作组的应用
+     * 查询工作组下的应用
      *
      * @param groupCode
      * @param page
