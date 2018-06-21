@@ -180,7 +180,11 @@ public class AcAppServiceImpl extends ServiceImpl<AcAppMapper, AcApp> implements
             wrapperConfig.eq(AcAppConfig.COLUMN_GUID_APP,id);
             List<AcAppConfig> listConfig = acAppConfigService.selectList(wrapperConfig);
             if (listConfig.size() != 0){
-                acAppConfigService.delete(wrapperConfig);
+                for (AcAppConfig acAppConfig : listConfig){
+                    if (null != acAppConfig){
+                        acAppConfigService.moveAppConfig(acAppConfig.getGuid());
+                    }
+                }
             }
 
             //删除岗位的应用权限
@@ -195,7 +199,7 @@ public class AcAppServiceImpl extends ServiceImpl<AcAppMapper, AcApp> implements
             deleteById(id);
         }catch (Exception e){
             e.printStackTrace();
-            throw new AcManagementException(AcExceptionCodes.FAILURE_WHRN_DELETE_AC_APP,wrap("删除应用系统失败"),id);
+            throw new AcManagementException(AcExceptionCodes.FAILURE_WHRN_DELETE_AC_APP,wrap(e.getMessage()));
         }
     }
 }

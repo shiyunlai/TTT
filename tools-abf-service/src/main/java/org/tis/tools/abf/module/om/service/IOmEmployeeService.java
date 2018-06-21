@@ -72,6 +72,14 @@ public interface IOmEmployeeService extends IService<OmEmployee>  {
     OmEmployee onJob(OmEmployee omEmployee) throws OrgManagementException;
 
     /**
+     * 修改员工入职
+     * @param omEmployee
+     * @return
+     * @throws OrgManagementException
+     */
+    OmEmployee changeOnJob(OmEmployee omEmployee) throws OrgManagementException;
+
+    /**
      * 员工离职
      * @param omEmployee
      * @return

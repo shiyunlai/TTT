@@ -76,7 +76,7 @@ public class AcFuncController extends BaseController<AcFunc>  {
         if (acFunc == null) {
             return ResultVO.error("404", "找不到对应记录或已经被删除！");
         }
-        Boolean isDel = acFuncService.deleteById(id);
+        acFuncService.moveFunc(id);
         return ResultVO.success("删除成功!");
     }
 

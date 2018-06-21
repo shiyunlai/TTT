@@ -68,7 +68,16 @@ public class OmPositionAppServiceImpl extends ServiceImpl<OmPositionAppMapper, O
         omPositionApp.setGuidApp(omPositionAppRequest.getGuidApp());
         omPositionApp.setGuidPosition(omPositionAppRequest.getGuidPosition());
 
-        insert(omPositionApp);
+        //如果该岗位下已存在应用权限,则不需要重复插入
+        Wrapper<OmPositionApp> wrapper = new EntityWrapper<OmPositionApp>();
+        wrapper.eq(OmPositionApp.COLUMN_GUID_POSITION,omPositionAppRequest.getGuidPosition());
+        wrapper.eq(OmPositionApp.COLUMN_GUID_APP,omPositionAppRequest.getGuidApp());
+        OmPositionApp omPositionAppQue = selectOne(wrapper);
+        if (null != omPositionAppQue){
+            throw new OrgManagementException(OMExceptionCodes.IS_EXIST_BY_OM_APP_POSITION,wrap("新增应用权限失败,因已存在该应用权限"));
+        }else {
+            insert(omPositionApp);
+        }
     }
 
 
@@ -79,9 +88,20 @@ public class OmPositionAppServiceImpl extends ServiceImpl<OmPositionAppMapper, O
 
         omPositionApp.setGuidPosition(om.getGuidPosition());
 
+        OmPositionAppRequest omPositionAppRequest = new OmPositionAppRequest();
+
         for (String guidApp : om.getAppList()){
             omPositionApp.setGuidApp(guidApp);
-            insert(omPositionApp);
+            //如果该岗位下已存在应用权限,则不需要重复插入
+            Wrapper<OmPositionApp> wrapper = new EntityWrapper<OmPositionApp>();
+            wrapper.eq(OmPositionApp.COLUMN_GUID_POSITION,om.getGuidPosition());
+            wrapper.eq(OmPositionApp.COLUMN_GUID_APP,guidApp);
+            OmPositionApp omPositionAppQue = selectOne(wrapper);
+            if (null != omPositionAppQue){
+                throw new OrgManagementException(OMExceptionCodes.IS_EXIST_BY_OM_APP_POSITION,wrap("新增应用权限失败,因已存在该应用权限"));
+            }else {
+                insert(omPositionApp);
+            }
         }
     }
 
@@ -134,10 +154,14 @@ public class OmPositionAppServiceImpl extends ServiceImpl<OmPositionAppMapper, O
         List<OmPositionApp> list = positionAppPage.getRecords();
 
         //根据应用权限集合查询出应用信息
+        System.out.println("**********************************"+list.size());
         for (OmPositionApp omPositionApp : list){
             if (null != omPositionApp){
                 AcApp acApp = acAppService.selectById(omPositionApp.getGuidApp());
-                listApp.add(acApp);
+                System.out.println("**********************************"+acApp);
+                if (acApp != null){
+                    listApp.add(acApp);
+                }
             }
         }
 
@@ -148,6 +172,41 @@ public class OmPositionAppServiceImpl extends ServiceImpl<OmPositionAppMapper, O
         pageApp.setRecords(listApp);
 
         return pageApp;
+    }
+
+
+    @Override
+    public List<AcApp> queryNotInPosition(String id) throws OrgManagementException {
+
+        try {
+
+            //查询岗位下的应用权限
+            Wrapper<OmPositionApp> wrapperPosition = new EntityWrapper<OmPositionApp>();
+            wrapperPosition.eq(OmPositionApp.COLUMN_GUID_POSITION,id);
+            List<OmPositionApp> listPosition = selectList(wrapperPosition);
+            List<AcApp> listPositionApp = new ArrayList<AcApp>();
+            if (null != listPosition || 0 != listPosition.size()){
+                //查询出所有的应用
+                for (OmPositionApp omPositionApp : listPosition){
+                    if (null != omPositionApp){
+                        AcApp acApp = acAppService.selectById(omPositionApp.getGuidApp());
+                        listPositionApp.add(acApp);
+                    }
+                }
+            }
+
+            //查询所有的应用
+            Wrapper<AcApp> wrapperApp = new EntityWrapper<AcApp>();
+            List<AcApp> listApp = acAppService.selectList(wrapperApp);
+
+            //从所有的应用中除去岗位下的应用
+            listApp.removeAll(listPositionApp);
+
+            return listApp;
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new OrgManagementException(OMExceptionCodes.FAILURE_WHEN_QUERY_OM_APP_POSITION,wrap(e.getMessage()));
+        }
     }
 }
 

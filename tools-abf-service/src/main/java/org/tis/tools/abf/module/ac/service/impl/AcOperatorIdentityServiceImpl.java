@@ -12,10 +12,12 @@ import org.tis.tools.abf.module.ac.dao.AcOperatorIdentityMapper;
 import org.tis.tools.abf.module.ac.entity.AcApp;
 import org.tis.tools.abf.module.ac.entity.AcOperator;
 import org.tis.tools.abf.module.ac.entity.AcOperatorIdentity;
+import org.tis.tools.abf.module.ac.entity.AcOperatorIdentityres;
 import org.tis.tools.abf.module.ac.exception.AcExceptionCodes;
 import org.tis.tools.abf.module.ac.exception.AcManagementException;
 import org.tis.tools.abf.module.ac.service.IAcAppService;
 import org.tis.tools.abf.module.ac.service.IAcOperatorIdentityService;
+import org.tis.tools.abf.module.ac.service.IAcOperatorIdentityresService;
 import org.tis.tools.abf.module.ac.service.IAcOperatorService;
 import org.tis.tools.abf.module.common.entity.enums.YON;
 
@@ -38,6 +40,9 @@ public class AcOperatorIdentityServiceImpl extends ServiceImpl<AcOperatorIdentit
 
     @Autowired
     private IAcAppService acAppService;
+
+    @Autowired
+    private IAcOperatorIdentityresService acOperatorIdentityresService;
 
 
     @Override
@@ -113,6 +118,28 @@ public class AcOperatorIdentityServiceImpl extends ServiceImpl<AcOperatorIdentit
         Page<AcOperatorIdentity> pageQue = selectPage(page,wrapper);
 
         return pageQue;
+    }
+
+
+    @Override
+    public void moveIdentity(String id) throws AcManagementException {
+
+        try {
+            //删除身份权限集数据
+            Wrapper<AcOperatorIdentityres> wrapper = new EntityWrapper<AcOperatorIdentityres>();
+            wrapper.eq(AcOperatorIdentityres.COLUMN_GUID_IDENTITY,id);
+            List<AcOperatorIdentityres> list = acOperatorIdentityresService.selectList(wrapper);
+            if (0 != list.size()){
+                acOperatorIdentityresService.delete(wrapper);
+            }
+
+            //删除操作员身份
+            deleteById(id);
+        }catch (Exception e){
+            throw new AcManagementException(AcExceptionCodes.FAILURE_WHEN_DELETE_AC_OPERATOR_IDENTITY,wrap(e
+                    .getMessage()));
+        }
+
     }
 
     /**如果设置该操作员身份为默认操作员身份,则设置该操作员的其他操作员身份为非默认*/

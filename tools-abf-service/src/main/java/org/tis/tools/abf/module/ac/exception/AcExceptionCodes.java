@@ -433,6 +433,10 @@ public class AcExceptionCodes {
      * 删除操作员重组菜单失败
      */
     public static final String FAILURE_WHEN_DELETE_OPERATORMENU = R_EX_CODE("0084");
+    /**
+     * 删除角色失败
+     */
+    public static final String FAILURE_WHEN_DELETE_AC_ROLE = R_EX_CODE("0085");
 
 
 

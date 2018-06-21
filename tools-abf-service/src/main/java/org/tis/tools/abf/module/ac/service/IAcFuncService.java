@@ -69,5 +69,12 @@ public interface IAcFuncService extends IService<AcFunc>  {
      */
     List<AcFunc> queryAll()throws AcManagementException;
 
+    /**
+     * 删除功能
+     * @param id
+     * @throws AcManagementException
+     */
+    void moveFunc(String id) throws AcManagementException;
+
 }
 

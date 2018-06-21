@@ -351,13 +351,9 @@ public class OmPositionServiceImpl extends ServiceImpl<OmPositionMapper, OmPosit
             //查询对应机构且在该岗位下的员工数
             int employeeCountQue = 0;
             Wrapper<OmEmployee> wrapperEmp = new EntityWrapper<OmEmployee>();
-            System.out.println("***************"+id);
-            System.out.println("***************"+omPosition.getGuid());
             wrapperEmp.eq(OmEmployee.COLUMN_GUID_ORG,id);
             wrapperEmp.eq(OmEmployee.COLUMN_GUID_POSITION,omPosition.getGuid());
             employeeCountQue = omEmployeeService.selectList(wrapperEmp).size();
-            System.out.println("***************"+employeeCountQue);
-            System.out.println("***************"+omEmployeeService.selectCount(wrapperEmp));
 
             //查询出父岗位的名称
             String parentNameQue = "";

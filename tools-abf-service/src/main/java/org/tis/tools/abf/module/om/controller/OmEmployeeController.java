@@ -172,6 +172,20 @@ public class OmEmployeeController extends BaseController<OmEmployee>  {
         return ResultVO.success("入职成功！",omEmployeeQue);
     }
 
+    @OperateLog(type = OperateType.UPDATE,desc = "修改员工入职")
+    @PutMapping("/changeOnJob")
+    public ResultVO changeOnJob(@RequestBody @Validated OmEmployee omEmployee){
+        OmEmployee omEmployeeQue = omEmployeeService.selectById(omEmployee.getGuid());
+        if (omEmployeeQue == null) {
+            return ResultVO.error("404", "找不到对应记录或已经被删除！");
+        }
+        if (OmEmployeeStatus.ONJOB != omEmployeeQue.getEmpstatus()){
+            return ResultVO.error("404", "员工不是入职状态不能修改");
+        }
+        omEmployeeQue = omEmployeeService.changeOnJob(omEmployee);
+        return ResultVO.success("修改成功！",omEmployeeQue);
+    }
+
     @OperateLog(type = OperateType.UPDATE,desc = "员工离职")
     @PutMapping("/outJob")
     public ResultVO outJob(@RequestBody @Validated OmEmployee omEmployee) {

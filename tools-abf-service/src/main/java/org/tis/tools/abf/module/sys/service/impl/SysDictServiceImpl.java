@@ -97,22 +97,54 @@ public class SysDictServiceImpl  extends ServiceImpl<SysDictMapper,SysDict> impl
      * */
     @Override
     public SysDict deleteDict(String id) throws SysManagementException {
-        EntityWrapper<SysDict> wrapper = new EntityWrapper<>();
-        wrapper.eq(SysDict.COLUMN_GUID,id);
-        SysDict sysDict = selectOne(wrapper);
-        if(sysDict == null){
-            throw new SysManagementException(
-                    ExceptionCodes.NOT_FOUND_WHEN_QUERY,
-                    wrap(SysDictItem.COLUMN_GUID,id),id);
-        }
-        delete(wrapper);
-        return sysDict;
+
+        //删除该节点对应的子节点数据
+        deleteAllChild(id);
+
+        return null;
     }
-    /**
-     * @param
-     * @return
-     * @throws SysManagementException
-     * */
+
+    public void deleteAllChild(String id) throws SysManagementException{
+
+        Wrapper<SysDict> wrapper = new EntityWrapper<SysDict>();
+        wrapper.eq(SysDict.COLUMN_GUID_PARENTS,id);
+        try {
+            //获取子列表
+            List<SysDict> list = selectList(wrapper);
+
+            if (0 == list.size() || null == list){
+                deleteById(id);
+                deleteItem(id);
+            }else {
+                for (SysDict sysDict : list){
+                    if (sysDict != null){
+                        deleteAllChild(sysDict.getGuid());
+                        deleteItem(id);
+                    }
+                }
+                deleteById(id);
+                deleteItem(id);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new SysManagementException(SYSExceptionCodes.FAILURE_WHEN_DELETE_SYS_DICT,wrap(e.getMessage()));
+        }
+    }
+
+    public void deleteItem(String id) throws SysManagementException{
+        try {
+            Wrapper<SysDictItem> wrapper = new EntityWrapper<SysDictItem>();
+            wrapper.eq(SysDictItem.COLUMN_GUID_DICT,id);
+            List<SysDictItem> list = iSysDictItemService.selectList(wrapper);
+            if (0 != list.size()){
+               iSysDictItemService.delete(wrapper);
+            }
+        }catch (Exception e){
+            throw new SysManagementException(SYSExceptionCodes.FAILURE_WHEN_DELETE_SYS_DICT_ITEM,wrap(e.getMessage()));
+        }
+    }
+
+
     @Override
     public Page<SysDict> querySysDicts(Page<SysDict> page, Wrapper<SysDict> wrapper){
         return selectPage(page,wrapper);

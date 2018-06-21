@@ -59,7 +59,7 @@ public class AcAppConfigController extends BaseController<AcAppConfig> {
             return ResultVO.error("404", "找不到对应记录或已经被删除！");
         }
 
-        acAppConfigService.deleteById(id);
+        acAppConfigService.moveAppConfig(id);
         return ResultVO.success("删除成功");
     }
 

@@ -1,16 +1,21 @@
 package org.tis.tools.abf.module.ac.service.impl;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.tis.tools.abf.module.ac.dao.AcAppConfigMapper;
 import org.tis.tools.abf.module.ac.entity.AcAppConfig;
+import org.tis.tools.abf.module.ac.entity.AcOperatorConfig;
 import org.tis.tools.abf.module.ac.exception.AcExceptionCodes;
 import org.tis.tools.abf.module.ac.exception.AcManagementException;
 import org.tis.tools.abf.module.ac.service.IAcAppConfigService;
+import org.tis.tools.abf.module.ac.service.IAcOperatorConfigService;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import static org.tis.tools.core.utils.BasicUtil.wrap;
 
@@ -26,6 +31,9 @@ public class AcAppConfigServiceImpl extends ServiceImpl<AcAppConfigMapper, AcApp
 
     @Autowired
     IAcAppConfigService acAppConfigService;
+
+    @Autowired
+    private IAcOperatorConfigService acOperatorConfigService;
 
     /**
      * 新增应用个性化配置
@@ -109,6 +117,29 @@ public class AcAppConfigServiceImpl extends ServiceImpl<AcAppConfigMapper, AcApp
             );
         }
         return acAppConfig;
+    }
+
+
+    @Override
+    public void moveAppConfig(String id) throws AcManagementException {
+
+        try {
+            //根据个性化配置ID查询出有关 操作员个性配置的信息
+            Wrapper<AcOperatorConfig> wrapper = new EntityWrapper<AcOperatorConfig>();
+            wrapper.eq(AcOperatorConfig.COLUMN_GUID_CONFIG,id);
+            //查询出所有数据
+            List<AcOperatorConfig> list = acOperatorConfigService.selectList(wrapper);
+            if (0 != list.size()){
+                //删除掉相关数据
+                acOperatorConfigService.delete(wrapper);
+            }
+
+            //删除个性化配置
+            deleteById(id);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new AcManagementException(AcExceptionCodes.FAILURE_WHRN_DELETE_AC_APPCONFIG,wrap(e.getMessage()));
+        }
     }
 }
 

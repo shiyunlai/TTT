@@ -444,10 +444,14 @@ public class AcMenuServiceImpl extends ServiceImpl<AcMenuMapper, AcMenu> impleme
 
         BigDecimal oreder = acMenu.getDisplayOrder();
         BigDecimal ore = new BigDecimal("1");
-        if(flag.equals("plus")){
-            oreder = oreder.add(ore);
-        }else{
-            oreder = oreder.subtract(ore);
+        if(null != oreder){
+            if(flag.equals("plus")){
+                oreder = oreder.add(ore);
+            }else{
+                oreder = oreder.subtract(ore);
+            }
+        }else {
+            //当displayOrder字段为空时,他的处理逻辑是什么
         }
         acMenu.setDisplayOrder(oreder);
         EntityWrapper wrapper = new EntityWrapper();
