@@ -90,12 +90,14 @@ public class AcRoleServiceImpl extends ServiceImpl<AcRoleMapper, AcRole> impleme
      * @throws AcRoleManagementException
      */
     @Override
-    public boolean createAcRole(String roleCode, String roleName, YON enabled, String roleDesc) throws AcRoleManagementException {
+    public boolean createAcRole(String roleCode, String roleName, YON enabled, String roleDesc,String roleGroup) throws
+            AcRoleManagementException {
         AcRole acRole = new AcRole();
         acRole.setRoleCode(roleCode);
         acRole.setRoleName(roleName);
         acRole.setEnabled(YON.YES);
         acRole.setRoleDesc(roleDesc);
+        acRole.setRoleGroup(roleGroup);
         try {
             boolean bole = insert(acRole);
             return bole;
