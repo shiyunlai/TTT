@@ -64,6 +64,13 @@ public class OmPositionAppController extends BaseController<OmPositionApp>  {
         return ResultVO.success("删除成功");
     }
 
+    @OperateLog(type = OperateType.DELETE,desc ="根据岗位id和应用id删除岗位应用列表")
+    @DeleteMapping("/delete")
+    public ResultVO deleteByPositionAndApp(@RequestBody @Validated OmPositionAppRequest omPositionAppRequest) {
+        omPositionAppService.deleteByPositionAndApp(omPositionAppRequest);
+        return ResultVO.success("删除成功！");
+    }
+
     /**
      * 根据ID查询岗位应用
      */
