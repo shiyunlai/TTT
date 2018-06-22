@@ -2,4 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.tis.tools.abf.module.om.dao.OmEmployeeMapper">
 
+    <select id="queryByOrgPosition" resultType="org.tis.tools.abf.module.om.entity.OmEmployee">
+        SELECT
+        e.guid,e.emp_Code,e.emp_Name,e.emp_Realname,e.gender,e.empstatus,e.guid_Org,e.guid_Position,e.guid_Emp_Major,e.indate,e.outdate,e.mobileno,e.paper_Type,e.paper_No,e.birthdate,e.htel,e.haddress,e.hzipcode,e.guid_Operator,e.user_Id,e.remark FROM OM_EMPLOYEE e
+        WHERE guid IN ( SELECT guid_emp FROM OM_EMP_ORG WHERE guid_org = #{guidorg})
+        AND guid IN (SELECT guid_emp FROM OM_EMP_POSITION WHERE guid_Position = #{guidPosition})
+    </select>
+
 </mapper>
