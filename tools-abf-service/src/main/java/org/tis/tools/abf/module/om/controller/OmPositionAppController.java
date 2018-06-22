@@ -65,9 +65,9 @@ public class OmPositionAppController extends BaseController<OmPositionApp>  {
     }
 
     @OperateLog(type = OperateType.DELETE,desc ="根据岗位id和应用id删除岗位应用列表")
-    @DeleteMapping("/delete")
-    public ResultVO deleteByPositionAndApp(@RequestBody @Validated OmPositionAppRequest omPositionAppRequest) {
-        omPositionAppService.deleteByPositionAndApp(omPositionAppRequest);
+    @DeleteMapping("/delete/{guidApp}/{guidPosition}")
+    public ResultVO deleteByPositionAndApp(@PathVariable @NotBlank(message = "应用GUID不能为空") String guidApp,@PathVariable @NotBlank(message = "岗位GUID不能为空") String guidPosition) {
+        omPositionAppService.deleteByPositionAndApp(guidApp,guidPosition);
         return ResultVO.success("删除成功！");
     }
 
