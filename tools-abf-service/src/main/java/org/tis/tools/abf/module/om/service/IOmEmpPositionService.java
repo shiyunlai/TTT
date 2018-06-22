@@ -20,5 +20,12 @@ public interface IOmEmpPositionService extends IService<OmEmpPosition>  {
      */
     void add(OmEmpPositionRequest omEmpPositionRequest)throws OrgManagementException;
 
+    /**
+     * 根据员工和岗位ID删除岗位员工
+     * @param guidEmp
+     * @param guidPosition
+     */
+    void deleteByEmpPositionId(String guidEmp,String guidPosition)throws OrgManagementException;
+
 }
 

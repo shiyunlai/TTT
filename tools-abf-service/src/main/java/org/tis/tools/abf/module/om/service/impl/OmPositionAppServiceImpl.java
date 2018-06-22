@@ -208,11 +208,11 @@ public class OmPositionAppServiceImpl extends ServiceImpl<OmPositionAppMapper, O
 
 
     @Override
-    public void deleteByPositionAndApp(OmPositionAppRequest om) throws OrgManagementException {
+    public void deleteByPositionAndApp(String guidApp, String guidPosition) throws OrgManagementException {
 
         Wrapper<OmPositionApp> wrapper = new EntityWrapper<OmPositionApp>();
-        wrapper.eq(OmPositionApp.COLUMN_GUID_APP,om.getGuidApp());
-        wrapper.eq(OmPositionApp.COLUMN_GUID_POSITION,om.getGuidPosition());
+        wrapper.eq(OmPositionApp.COLUMN_GUID_APP,guidApp);
+        wrapper.eq(OmPositionApp.COLUMN_GUID_POSITION,guidPosition);
 
         OmPositionApp omPositionAppQue = selectOne(wrapper);
         if (null == omPositionAppQue){

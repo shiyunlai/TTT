@@ -57,10 +57,9 @@ public interface IOmPositionAppService extends IService<OmPositionApp>  {
 
     /**
      * 根据岗位id和应用id删除这条数据
-     * @param om
      * @throws OrgManagementException
      */
-    void deleteByPositionAndApp(OmPositionAppRequest om)throws OrgManagementException;
+    void deleteByPositionAndApp(String guidApp, String guidPosition )throws OrgManagementException;
 
 }
 
