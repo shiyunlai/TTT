@@ -52,5 +52,21 @@ public class OmEmpPositionServiceImpl extends ServiceImpl<OmEmpPositionMapper, O
             insert(omEmpPositionAdd);
         }
     }
+
+
+    @Override
+    public void deleteByEmpPositionId(String guidEmp, String guidPosition) throws OrgManagementException {
+
+        Wrapper<OmEmpPosition> wrapper = new EntityWrapper<OmEmpPosition>();
+        wrapper.eq(OmEmpPosition.COLUMN_GUID_EMP,guidEmp);
+        wrapper.eq(OmEmpPosition.COLUMN_GUID_POSITION,guidPosition);
+
+        OmEmpPosition omEmpPosition = selectOne(wrapper);
+        if (null == omEmpPosition){
+            throw new OrgManagementException(OMExceptionCodes.FAILURE_WHEN_DELETE_OM_EMP_POSITION,wrap("找不到对应记录或已经被删除"));
+        }
+
+        delete(wrapper);
+    }
 }
 
