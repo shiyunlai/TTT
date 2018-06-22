@@ -350,17 +350,22 @@ public class OmPositionServiceImpl extends ServiceImpl<OmPositionMapper, OmPosit
         for (OmPosition omPosition : list){
             //查询对应机构且在该岗位下的员工数
             int employeeCountQue = 0;
-            Wrapper<OmEmployee> wrapperEmp = new EntityWrapper<OmEmployee>();
-            wrapperEmp.eq(OmEmployee.COLUMN_GUID_ORG,id);
-            wrapperEmp.eq(OmEmployee.COLUMN_GUID_POSITION,omPosition.getGuid());
-            employeeCountQue = omEmployeeService.selectList(wrapperEmp).size();
+
+            if (null != omPosition){
+                employeeCountQue = this.baseMapper.queryEmpCountByOrgPosition(id,omPosition.getGuid());
+            }
+
+//            Wrapper<OmEmployee> wrapperEmp = new EntityWrapper<OmEmployee>();
+//            wrapperEmp.eq(OmEmployee.COLUMN_GUID_ORG,id);
+//            wrapperEmp.eq(OmEmployee.COLUMN_GUID_POSITION,omPosition.getGuid());
+//            employeeCountQue = omEmployeeService.selectList(wrapperEmp).size();
 
             //查询出父岗位的名称
             String parentNameQue = "";
-            if ("".equals(omPosition.getGuidParents()) || null == omPosition.getGuidParents()){
-            }else {
-                OmPosition omPositionForParent = selectById(omPosition.getGuidParents());
-                parentNameQue = omPositionForParent.getPositionName();
+            if (!("".equals(omPosition.getGuidParents()) || null == omPosition.getGuidParents())){
+                parentNameQue = this.baseMapper.queryParentName(omPosition.getGuidParents());
+//                OmPosition omPositionForParent = selectById(omPosition.getGuidParents());
+//                parentNameQue = omPositionForParent.getPositionName();
             }
 
             OmPositionForParentDetail omPositionForParentDetail = new OmPositionForParentDetail(omPosition,
