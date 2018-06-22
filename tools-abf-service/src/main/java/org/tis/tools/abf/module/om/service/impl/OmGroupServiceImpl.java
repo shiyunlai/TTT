@@ -488,6 +488,14 @@ public class OmGroupServiceImpl extends ServiceImpl<OmGroupMapper, OmGroup> impl
         if (og == null) {
             throw new OrgManagementException(OMExceptionCodes.GROUP_NOT_EXIST_BY_GROUP_CODE, wrap(groupCode));
         }
+        EntityWrapper<OmGroupApp> omEmpGroupEntityWrapper = new EntityWrapper<>();
+        omEmpGroupEntityWrapper.eq(OmGroupApp.COLUMN_GUID_GROUP, og.getGuid());
+        omEmpGroupEntityWrapper.in(OmGroupApp.COLUMN_GUID_APP, appGuidList);
+        List<OmGroupApp> oegList = omGroupAppService.selectList(omEmpGroupEntityWrapper);
+        if (oegList.size() > 0) {
+            throw new OrgManagementException(OMExceptionCodes.IS_EXIST_BY_GROUP_CREAT_APP, wrap(groupCode));
+        }
+
         for (String guidApp : appGuidList){
             OmGroupApp ogp = new OmGroupApp();
             ogp.setGuidApp(guidApp);

@@ -313,10 +313,10 @@ public class OMExceptionCodes {
 	 * 员工离职失败
 	 */
 	public static final String FAILURE_WHEN_OM_EMPLOYEE_OUTJOB = R_EX_CODE("0068");
-
-
-
-
+  /**
+	 * 工作组添加应用失败
+	 */
+	public static final String IS_EXIST_BY_GROUP_CREAT_APP = R_EX_CODE("0069");
 	/**
 	 * 以烤串方式拼接异常码
 	 *
