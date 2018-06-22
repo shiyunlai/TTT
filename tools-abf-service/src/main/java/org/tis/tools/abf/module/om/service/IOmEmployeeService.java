@@ -92,8 +92,7 @@ public interface IOmEmployeeService extends IService<OmEmployee>  {
      * @return
      * @throws OrgManagementException
      */
-    Page<OmEmployee> queryByOrgPosition(Page<OmEmployee> page,String orgId, String
-            positionId)throws OrgManagementException;
+    Page<OmEmployee> queryByOrgPosition(Page<OmEmployee> page,String orgId, String positionId)throws OrgManagementException;
 
     /**
      * 查询除了该机构该岗位下的其他员工

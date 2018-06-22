@@ -55,5 +55,12 @@ public interface IOmPositionAppService extends IService<OmPositionApp>  {
      */
     List<AcApp> queryNotInPosition(String id)throws OrgManagementException;
 
+    /**
+     * 根据岗位id和应用id删除这条数据
+     * @param om
+     * @throws OrgManagementException
+     */
+    void deleteByPositionAndApp(OmPositionAppRequest om)throws OrgManagementException;
+
 }
 

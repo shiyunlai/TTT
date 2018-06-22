@@ -423,15 +423,11 @@ public class OmEmployeeServiceImpl extends ServiceImpl<OmEmployeeMapper, OmEmplo
         String guidOperator = omEmployee.getGuidOperator();
         String userId = omEmployee.getUserId();
 
-        if ((null == userId || "".equals(userId)) && (null == guidOperator || "".equals(guidOperator))){
-            throw new OrgManagementException(OMExceptionCodes.FAILURE_WHEN_UPDATE_OM_EMPLOYEE_ONJOB,wrap("修改员工入职信息时操作员用户名不能为空"));
-        }else {
-            if (!(null == guidOperator || "".equals(guidOperator))){
-                userId = queryUserIdByOpertary(guidOperator);
-            }
-            if (!(null == userId || "".equals(userId))){
-                guidOperator = queryGuidByUserId(userId);
-            }
+        if (!(null == guidOperator || "".equals(guidOperator))){
+            userId = queryUserIdByOpertary(guidOperator);
+        }
+        if (!(null == userId || "".equals(userId))){
+            guidOperator = queryGuidByUserId(userId);
         }
 
         if (null == omEmployee.getIndate()){
@@ -497,15 +493,9 @@ public class OmEmployeeServiceImpl extends ServiceImpl<OmEmployeeMapper, OmEmplo
 
     /**  该方法需要写sql **/
     @Override
-    public Page<OmEmployee> queryByOrgPosition(Page<OmEmployee> page,String orgId, String positionId) throws OrgManagementException {
+    public Page<OmEmployee> queryByOrgPosition(Page<OmEmployee> page, String orgId, String positionId) throws OrgManagementException {
 
-        Wrapper<OmEmployee>  wrapper = new EntityWrapper<OmEmployee>();
-        wrapper.eq(OmEmployee.COLUMN_GUID_ORG,orgId);
-        wrapper.eq(OmEmployee.COLUMN_GUID_POSITION,positionId);
-
-        Page<OmEmployee> pageQuery = selectPage(page,wrapper);
-
-        return pageQuery;
+        return page.setRecords(this.baseMapper.queryByOrgPosition(page,orgId,positionId));
     }
 
 

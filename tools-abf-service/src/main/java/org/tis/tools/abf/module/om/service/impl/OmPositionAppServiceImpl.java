@@ -84,13 +84,10 @@ public class OmPositionAppServiceImpl extends ServiceImpl<OmPositionAppMapper, O
     @Override
     public void addList(OmPositionAppListRequest om) throws OrgManagementException {
 
-        OmPositionApp omPositionApp = new OmPositionApp();
-
-        omPositionApp.setGuidPosition(om.getGuidPosition());
-
-        OmPositionAppRequest omPositionAppRequest = new OmPositionAppRequest();
-
         for (String guidApp : om.getAppList()){
+
+            OmPositionApp omPositionApp = new OmPositionApp();
+            omPositionApp.setGuidPosition(om.getGuidPosition());
             omPositionApp.setGuidApp(guidApp);
             //如果该岗位下已存在应用权限,则不需要重复插入
             Wrapper<OmPositionApp> wrapper = new EntityWrapper<OmPositionApp>();
@@ -207,6 +204,21 @@ public class OmPositionAppServiceImpl extends ServiceImpl<OmPositionAppMapper, O
             e.printStackTrace();
             throw new OrgManagementException(OMExceptionCodes.FAILURE_WHEN_QUERY_OM_APP_POSITION,wrap(e.getMessage()));
         }
+    }
+
+
+    @Override
+    public void deleteByPositionAndApp(OmPositionAppRequest om) throws OrgManagementException {
+
+        Wrapper<OmPositionApp> wrapper = new EntityWrapper<OmPositionApp>();
+        wrapper.eq(OmPositionApp.COLUMN_GUID_APP,om.getGuidApp());
+        wrapper.eq(OmPositionApp.COLUMN_GUID_POSITION,om.getGuidPosition());
+
+        OmPositionApp omPositionAppQue = selectOne(wrapper);
+        if (null == omPositionAppQue){
+            throw new OrgManagementException(OMExceptionCodes.FAILURE_WHEN_DELETE_OM_APP_POSITION,wrap("找不到对应记录或已经被删除"));
+        }
+        delete(wrapper);
     }
 }
 
