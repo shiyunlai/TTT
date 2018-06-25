@@ -2,16 +2,16 @@ package org.tis.tools.abf.module.ac.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.tis.tools.abf.module.ac.dao.AcMenuMapper;
+import org.tis.tools.abf.module.ac.entity.AcMenu;
 import org.tis.tools.abf.module.ac.exception.AcExceptionCodes;
 import org.tis.tools.abf.module.ac.exception.AcMenuManagementException;
 import org.tis.tools.abf.module.ac.service.IAcMenuService;
-import org.springframework.stereotype.Service;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import org.tis.tools.abf.module.ac.entity.AcMenu;
-import org.tis.tools.abf.module.ac.dao.AcMenuMapper;
-import org.springframework.transaction.annotation.Transactional;
 import org.tis.tools.core.exception.ToolsRuntimeException;
 import org.tis.tools.core.exception.i18.ExceptionCodes;
 import org.tis.tools.core.utils.StringUtil;
@@ -32,13 +32,12 @@ import static org.tis.tools.core.utils.BasicUtil.wrap;
 @Transactional(rollbackFor = Exception.class)
 public class AcMenuServiceImpl extends ServiceImpl<AcMenuMapper, AcMenu> implements IAcMenuService {
 
-
     /**
      * 重新排序： 自增
      */
     public static final String REORDER_AUTO_PLUS = "plus";
     /**
-     * 重新排序： 自增
+     * 重新排序： 自减
      */
     public static final String REORDER_AUTO_MINUS = "minus";
     /**
@@ -115,27 +114,31 @@ public class AcMenuServiceImpl extends ServiceImpl<AcMenuMapper, AcMenu> impleme
                 throw new AcMenuManagementException(ExceptionCodes.NOT_FOUND_WHEN_QUERY,
                         wrap("GUID '" + targetGuid + "' ", "AC_MENU"));
             }
+
             // 源菜单节点
+             // 源菜单GUID
             String sourceGuid = moveMenu.getGuidParents();
-            // 源菜单GUID
-            BigDecimal sourceOrder = moveMenu.getDisplayOrder();
             // 源菜单显示顺序
+            BigDecimal sourceOrder = moveMenu.getDisplayOrder();
             String sourceSeq = moveMenu.getMenuSeq();
 
+
             // 处理移动菜单信息
-            moveMenu.setGuidParents(goalMenu.getGuid());
             // 改变父菜单信息
-            moveMenu.setMenuSeq(goalMenu.getMenuSeq() + "." + moveGuid);
+            moveMenu.setGuidParents(targetGuid);
             // 改变序列
-            moveMenu.setDisplayOrder(order);
+            moveMenu.setMenuSeq(goalMenu.getMenuSeq() + "." + moveGuid);
             // 改变显示顺序
+            moveMenu.setDisplayOrder(order);
+
+
             // 重新排序源菜单下的子菜单自减
-            acMenuService.reorderMenu(sourceGuid, sourceOrder, REORDER_AUTO_MINUS);
+
+            this.baseMapper.reorderMenu(sourceGuid, sourceOrder, REORDER_AUTO_MINUS);
             // 重新排序目标菜单下的子菜单自增
-            acMenuService.reorderMenu(targetGuid, order, REORDER_AUTO_PLUS);
+            this.baseMapper.reorderMenu(targetGuid, order,REORDER_AUTO_PLUS);
             // 更改移动的重组菜单信息
             acMenuService.updateById(moveMenu);
-
             // 如果改变了父节点需要同步改变子节点
             if (!StringUtils.equals(moveMenu.getGuidParents(), targetGuid)) {
                 // 更改移动菜单下的子菜单
@@ -152,6 +155,7 @@ public class AcMenuServiceImpl extends ServiceImpl<AcMenuMapper, AcMenu> impleme
                     }
                 }
             }
+
             return moveMenu;
         } catch (ToolsRuntimeException ae) {
             throw ae;
