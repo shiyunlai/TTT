@@ -2,21 +2,15 @@ package org.tis.tools.abf.module.ac.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.tis.tools.abf.base.BaseTest;
 import org.tis.tools.abf.module.ac.entity.AcMenu;
+import org.tis.tools.abf.module.common.entity.enums.YON;
 import org.tis.tools.core.web.vo.PageVO;
 import org.tis.tools.core.web.vo.SmartPage;
 
-
-import static org.hamcrest.core.StringStartsWith.startsWith;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * Created by ministrator on 2018/5/10.
@@ -29,7 +23,7 @@ public class AcMenuControllerTest extends BaseTest {
         acMenu.setGuidApp("201832148213");
         acMenu.setMenuLabel("测试菜单");
         acMenu.setMenuCode("AC00001");
-        acMenu.setIsleaf("Y");
+        acMenu.setIsleaf(YON.YES);
         acMenu.setMenuSeq("1");
         ObjectMapper mapper = new ObjectMapper();
         mvc.perform(post("/addAcMenu")
@@ -44,7 +38,7 @@ public class AcMenuControllerTest extends BaseTest {
         acMenu.setGuidApp("2018321482212");
         acMenu.setMenuLabel("测试菜单1");
         acMenu.setMenuCode("AC00001");
-        acMenu.setIsleaf("Y");
+        acMenu.setIsleaf(YON.YES);
         acMenu.setMenuSeq("1");
         acMenu.setGuidParents("201832148213");
         ObjectMapper mapper = new ObjectMapper();
@@ -60,7 +54,7 @@ public class AcMenuControllerTest extends BaseTest {
         acMenu.setGuidApp("201832148212");
         acMenu.setMenuLabel("测试菜单2");
         acMenu.setMenuCode("AC00002");
-        acMenu.setIsleaf("Y");
+        acMenu.setIsleaf(YON.YES);
         acMenu.setMenuSeq("12");
         acMenu.setGuidParents("201832148213");
         ObjectMapper mapper = new ObjectMapper();
