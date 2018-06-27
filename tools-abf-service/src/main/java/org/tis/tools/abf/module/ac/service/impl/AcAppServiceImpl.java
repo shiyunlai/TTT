@@ -10,11 +10,13 @@ import org.tis.tools.abf.module.ac.controller.request.AcAppListRequest;
 import org.tis.tools.abf.module.ac.dao.AcAppMapper;
 import org.tis.tools.abf.module.ac.entity.AcApp;
 import org.tis.tools.abf.module.ac.entity.AcAppConfig;
+import org.tis.tools.abf.module.ac.entity.AcFunc;
 import org.tis.tools.abf.module.ac.entity.enums.AcAppType;
 import org.tis.tools.abf.module.ac.exception.AcExceptionCodes;
 import org.tis.tools.abf.module.ac.exception.AcManagementException;
 import org.tis.tools.abf.module.ac.service.IAcAppConfigService;
 import org.tis.tools.abf.module.ac.service.IAcAppService;
+import org.tis.tools.abf.module.ac.service.IAcFuncService;
 import org.tis.tools.abf.module.common.entity.enums.YON;
 import org.tis.tools.abf.module.om.entity.OmPositionApp;
 import org.tis.tools.abf.module.om.service.IOmPositionAppService;
@@ -44,6 +46,9 @@ public class AcAppServiceImpl extends ServiceImpl<AcAppMapper, AcApp> implements
 
     @Autowired
     private IOmPositionAppService omPositionAppService;
+
+    @Autowired
+    private IAcFuncService acFuncService;
 
     /**
      * 应用新增
@@ -193,6 +198,18 @@ public class AcAppServiceImpl extends ServiceImpl<AcAppMapper, AcApp> implements
             List<OmPositionApp> listPosition = omPositionAppService.selectList(wrapperPosition);
             if (0 != listPosition.size()){
                 omPositionAppService.delete(wrapperPosition);
+            }
+
+            //删除应用ID对应的功能
+            Wrapper<AcFunc> wrapperFunc = new EntityWrapper<AcFunc>();
+            wrapperFunc.eq(AcFunc.COLUMN_GUID_APP,id);
+            List<AcFunc> listFunc = acFuncService.selectList(wrapperFunc);
+            if (0 != listFunc.size()){
+                for (AcFunc acFunc :listFunc){
+                    if (null != acFunc){
+                        acFuncService.moveFunc(acFunc.getGuid());
+                    }
+                }
             }
 
             //删除应用信息
