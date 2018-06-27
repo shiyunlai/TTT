@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.tis.tools.abf.base.BaseTest;
 import org.tis.tools.abf.module.ac.entity.AcMenu;
 import org.tis.tools.abf.module.ac.service.IAcMenuService;
+import org.tis.tools.abf.module.common.entity.enums.YON;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -52,7 +53,7 @@ public class AcMenuServiceImplTest extends BaseTest {
         acMenu.setGuidApp("201832148213");
         acMenu.setMenuLabel("测试菜单");
         acMenu.setMenuCode("AC00001");
-        acMenu.setIsleaf("Y");
+        acMenu.setIsleaf(YON.YES);
         acMenu.setMenuSeq("1");
         acMenu.setGuidParents("201832148213");
         AcMenu result = acMenuService.updateAcMenu(acMenu);
@@ -66,7 +67,7 @@ public class AcMenuServiceImplTest extends BaseTest {
         acMenu.setGuidApp("App002");
         acMenu.setMenuLabel("测试菜单2");
         acMenu.setMenuCode("AC00002");
-        acMenu.setIsleaf("Y");
+        acMenu.setIsleaf(YON.YES);
         acMenu.setMenuSeq("998583132815122434");
         acMenu.setImagePath("a.jpg");
         acMenu.setUpdator("测试用户1");
