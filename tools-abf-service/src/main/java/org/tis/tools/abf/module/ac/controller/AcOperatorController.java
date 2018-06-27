@@ -58,11 +58,6 @@ public class AcOperatorController extends BaseController<AcOperator>  {
     @PutMapping
     public ResultVO update(@RequestBody @Validated({AcOperatorUpdateGrop.class}) AcOperator acOperator) {
 
-        AcOperator acOperatorQue  = acOperatorService.selectById(acOperator.getGuid());
-        if (acOperatorQue == null) {
-            return ResultVO.error("404", "找不到对应记录或已经被删除！");
-        }
-
         boolean isexist = acOperatorService.updateAcOperatorByCondition(acOperator);
         if (!isexist){
             return ResultVO.error("404","登录用户名已存在,请重新输入!");

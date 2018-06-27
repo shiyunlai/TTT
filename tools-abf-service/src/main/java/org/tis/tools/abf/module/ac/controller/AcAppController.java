@@ -16,6 +16,7 @@ import org.tis.tools.core.web.controller.BaseController;
 import org.tis.tools.core.web.vo.ResultVO;
 import org.tis.tools.core.web.vo.SmartPage;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -100,6 +101,7 @@ public class AcAppController extends BaseController<AcApp>  {
             return ResultVO.error("404", "找不到对应记录或已经被删除！");
         }
         acApp.setIsopen(YON.YES);
+        acApp.setOpenDate(new Date());
         acAppService.updateById(acApp);
         return ResultVO.success("应用已开通",acApp);
     }
@@ -118,6 +120,7 @@ public class AcAppController extends BaseController<AcApp>  {
             return ResultVO.error("404", "找不到对应记录或已经被删除！");
         }
         acApp.setIsopen(YON.NO);
+        acApp.setOpenDate(null);
         acAppService.updateById(acApp);
         return ResultVO.success("应用已停用",acApp);
     }

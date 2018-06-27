@@ -12,6 +12,7 @@ import org.tis.tools.abf.module.ac.entity.AcMenu;
 import org.tis.tools.abf.module.ac.exception.AcExceptionCodes;
 import org.tis.tools.abf.module.ac.exception.AcMenuManagementException;
 import org.tis.tools.abf.module.ac.service.IAcMenuService;
+import org.tis.tools.abf.module.common.entity.enums.YON;
 import org.tis.tools.core.exception.ToolsRuntimeException;
 import org.tis.tools.core.exception.i18.ExceptionCodes;
 import org.tis.tools.core.utils.StringUtil;
@@ -200,30 +201,33 @@ public class AcMenuServiceImpl extends ServiceImpl<AcMenuMapper, AcMenu> impleme
     public AcMenu deleteAllSubAcMenu(String menuGuid) throws AcMenuManagementException {
         try {
             if (StringUtil.isEmpty(menuGuid)) {
-                throw new AcMenuManagementException(ExceptionCodes.LACK_PARAMETERS_WHEN_QUERY, wrap("GUID_MENU"));
+                throw new AcMenuManagementException(ExceptionCodes.LACK_PARAMETERS_WHEN_QUERY, wrap("ID不能为空"));
             }
             /*查询对应菜单是否存在*/
             AcMenu acMenu = acMenuService.selectById(menuGuid);
             if (acMenu == null) {
-                throw new AcMenuManagementException(ExceptionCodes.NOT_FOUND_WHEN_QUERY, wrap(menuGuid, "AC_MENU"));
+                throw new AcMenuManagementException(ExceptionCodes.NOT_FOUND_WHEN_QUERY, wrap("找不到对应记录或已经被删除"));
             }
             /*查询子菜单，一并删除*/
             List<AcMenu> menuList = acMenuService.selectSubMenu(menuGuid);
             String parentGuid = "";
             BigDecimal index = new BigDecimal("0");
+            parentGuid = acMenu.getGuidParents();
+            index = acMenu.getDisplayOrder();
             boolean result = false;
             List<String> guidList = new ArrayList<String>(menuList.size());
             for (AcMenu menu : menuList) {
-                if (StringUtils.equals(menu.getGuid(), menuGuid)) {
-                    parentGuid = menu.getGuidParents();
-                    index = menu.getDisplayOrder();
-                }
+//                if (StringUtils.equals(menu.getGuid(), menuGuid)) {
+//                    parentGuid = menu.getGuidParents();
+//                    index = menu.getDisplayOrder();
+//                }
                 guidList.add(menu.getGuid());
             }
             if (guidList.size() > 0) {
                 result = acMenuService.deleteBatchIds(guidList);
                 // 其余兄弟菜单重新排序
-                acMenuService.reorderMenu(parentGuid, index, "minus");
+                this.baseMapper.reorderMenu(parentGuid,index,REORDER_AUTO_MINUS);
+//                acMenuService.reorderMenu(parentGuid, index, "minus");
             }
             result = acMenuService.delete(new EntityWrapper<AcMenu>().eq(AcMenu.COLUMN_GUID,acMenu.getGuid()));
             return acMenu;
@@ -262,11 +266,11 @@ public class AcMenuServiceImpl extends ServiceImpl<AcMenuMapper, AcMenu> impleme
             if (StringUtil.isEmpty(acMenu.getMenuCode())) {
                 throw new AcMenuManagementException(AcExceptionCodes.PARMS_NOT_ALLOW_EMPTY, wrap("MENU_CODE"));
             }
-            if (StringUtil.isEmpty(acMenu.getIsleaf())) {
+            if (acMenu.getIsleaf() == null) {
                 throw new AcMenuManagementException(AcExceptionCodes.PARMS_NOT_ALLOW_EMPTY, wrap("ISLEAF"));
             }
             // 如果是叶子菜单，功能GUID不能为空
-            if (StringUtils.equals(acMenu.getIsleaf(), YES)) {
+            if (acMenu.getIsleaf().equals(YON.YES)) {
                 if (StringUtil.isEmpty(acMenu.getGuidFunc())) {
                     throw new AcMenuManagementException(AcExceptionCodes.PARMS_NOT_ALLOW_EMPTY, wrap("GUID_FUNC"));
                 }
@@ -316,15 +320,15 @@ public class AcMenuServiceImpl extends ServiceImpl<AcMenuMapper, AcMenu> impleme
             if (StringUtil.isEmpty(acMenu.getMenuCode())) {
                 throw new AcMenuManagementException(AcExceptionCodes.PARMS_NOT_ALLOW_EMPTY, wrap("MENU_CODE"));
             }
-            if (StringUtil.isEmpty(acMenu.getIsleaf())) {
+            if (null == acMenu.getIsleaf()) {
                 throw new AcMenuManagementException(AcExceptionCodes.PARMS_NOT_ALLOW_EMPTY, wrap("ISLEAF"));
             }
             if (StringUtil.isEmpty(acMenu.getGuidParents())) {
                 throw new AcMenuManagementException(AcExceptionCodes.PARMS_NOT_ALLOW_EMPTY, wrap("GUID_PARENTS"));
             }
             // 如果是叶子菜单，功能GUID不能为空
-            if (StringUtils.equals(acMenu.getIsleaf(), YES)) {
-                if (StringUtil.isEmpty(acMenu.getIsleaf())) {
+            if (acMenu.getIsleaf().equals(YON.YES)) {
+                if (null == acMenu.getIsleaf()) {
                     throw new AcMenuManagementException(AcExceptionCodes.PARMS_NOT_ALLOW_EMPTY, wrap("GUID_FUNC"));
                 }
             }
@@ -385,7 +389,7 @@ public class AcMenuServiceImpl extends ServiceImpl<AcMenuMapper, AcMenu> impleme
 //            acMenu.setGuid(GUID.menu());
 //            acMenu.setMenuSeq(acMenu.getGuid());
             acMenu.setGuidParents(null);
-            acMenu.setIsleaf(NO);
+            acMenu.setIsleaf(YON.YES);
             acMenu.setGuidRoot(acMenu.getGuid());
             acMenu.setDisplayOrder(new BigDecimal("0"));
             acMenuService.insert(acMenu);
