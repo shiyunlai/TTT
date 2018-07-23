@@ -8,6 +8,7 @@ import lombok.Data;
 import org.hibernate.validator.constraints.NotBlank;
 import org.tis.tools.core.validation.AddValidateGroup;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -48,7 +49,7 @@ public class ERCategory {
      */
     @JSONField(name = "node_element")
     @TableField(exist = false)
-    private List<String> tableIds;
+    private List<String> tableIds = new ArrayList<>();
 
 
     @TableField(exist = false)
