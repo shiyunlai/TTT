@@ -1,15 +1,14 @@
 package org.tis.tools.abf.module.sys.entity;
 
-import java.math.BigDecimal;
-
 import com.alibaba.fastjson.annotation.JSONField;
+import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import lombok.Data;
-import com.baomidou.mybatisplus.annotations.TableId;
 import org.tis.tools.abf.module.sys.entity.enums.SeqnoReset;
 import org.tis.tools.core.entity.enums.CommonEnumDeserializer;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * sysSeqno每个SEQ_KEY表示一个序号资源，顺序增加使用序号。
@@ -113,6 +112,5 @@ public class SysSeqno implements Serializable {
      * 重置处理参数:重置程序执行时的输入参数，通过本参数指定六重置周期，重置执行时间，重置起始数字等
      */
     private String resetParams;
-
 }
 

@@ -3,9 +3,9 @@ package org.tis.tools.abf.module.sys.service;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.IService;
-import org.apache.poi.ss.formula.functions.T;
+import org.tis.tools.abf.module.sys.controller.request.SysDictDefaultValueRequest;
 import org.tis.tools.abf.module.sys.entity.SysDict;
-import org.tis.tools.abf.module.sys.entity.SysDictItem;
+import org.tis.tools.abf.module.sys.entity.vo.SysDictDetail;
 import org.tis.tools.abf.module.sys.exception.SysManagementException;
 
 import java.util.List;
@@ -86,6 +86,14 @@ public interface ISysDictService extends IService<SysDict> {
     Page<SysDict> querySysDicts(Page<SysDict> page, Wrapper<SysDict> wrapper) throws SysManagementException;
 
     /**
+     * 查询所有的父业务字典,并不分页
+     *
+     * @return
+     * @throws SysManagementException
+     */
+    List<SysDict> queryParentList()throws SysManagementException;
+
+    /**
      * 根据GUID查询业务字典自身
      * @param id
      * 			业务字典GUID
@@ -94,15 +102,6 @@ public interface ISysDictService extends IService<SysDict> {
      */
     SysDict queryOneSysDictByGuid(String id) throws SysManagementException;
 
-    /**
-     * 设置业务字典的默认字典项
-     *
-     * @param dictGuid 字典GUID
-     * @param itemValue 默认值
-     * @return
-     * @throws SysManagementException
-     */
-    SysDict setDefaultDictValue(String dictGuid, String itemValue) throws SysManagementException;
 
     /**
      * 设置业务字典的默认字典项
@@ -120,5 +119,21 @@ public interface ISysDictService extends IService<SysDict> {
      * @throws SysManagementException
      */
     SysDict querySysDictByGuid(String id) throws SysManagementException;
+
+    /**
+     * 查询业务字典的树结构
+     * @param id
+     * @return
+     * @throws SysManagementException
+     */
+    SysDictDetail queryDictTree(String id) throws SysManagementException;
+
+    /**
+     * 设置默认字典项
+     * @param sysDictDefaultValueRequest
+     * @return
+     * @throws SysManagementException
+     */
+    SysDict setDefaultValue(SysDictDefaultValueRequest sysDictDefaultValueRequest) throws SysManagementException;
 
 }

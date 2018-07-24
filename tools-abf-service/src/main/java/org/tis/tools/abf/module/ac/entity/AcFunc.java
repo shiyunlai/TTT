@@ -1,5 +1,6 @@
 package org.tis.tools.abf.module.ac.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotations.*;
 import com.baomidou.mybatisplus.enums.FieldFill;
 import lombok.Data;
@@ -230,6 +231,7 @@ public class AcFunc implements Serializable {
      * 创建时间
      */
     @TableField(fill = FieldFill.INSERT)
+    @JSONField(serialize = false)
     private Date createtime;
 
     /**
@@ -237,12 +239,14 @@ public class AcFunc implements Serializable {
      */
     @Version
     @TableField(fill = FieldFill.UPDATE)
+    @JSONField(serialize = false)
     private Date lastupdate;
 
     /**
      * 最近更新人员
      */
     @TableField(fill = FieldFill.INSERT_UPDATE)
+    @JSONField(serialize = false)
     private String updator;
 
     /**
@@ -251,6 +255,7 @@ public class AcFunc implements Serializable {
      */
     @TableLogic
     @TableField(fill = FieldFill.INSERT)
+    @JSONField(serialize = false)
     private String dataStatus;
 
 }

@@ -1,13 +1,12 @@
 package org.tis.tools.abf.module.ac.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotations.*;
-
-import java.util.Date;
-
 import com.baomidou.mybatisplus.enums.FieldFill;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * acFuncAttr功能表字段之外的属性
@@ -164,6 +163,7 @@ public class AcFuncAttr implements Serializable {
      * 创建时间
      */
     @TableField(fill = FieldFill.INSERT)
+    @JSONField(serialize = false)
     private Date createtime;
 
     /**
@@ -171,12 +171,14 @@ public class AcFuncAttr implements Serializable {
      */
     @Version
     @TableField(fill = FieldFill.UPDATE)
+    @JSONField(serialize = false)
     private Date lastupdate;
 
     /**
      * 最近更新人员
      */
     @TableField(fill = FieldFill.INSERT_UPDATE)
+    @JSONField(serialize = false)
     private String updator;
 
     /**
@@ -185,6 +187,7 @@ public class AcFuncAttr implements Serializable {
      */
     @TableLogic
     @TableField(fill = FieldFill.INSERT)
+    @JSONField(serialize = false)
     private String dataStatus;
 
 }

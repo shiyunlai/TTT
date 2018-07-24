@@ -1,25 +1,21 @@
 package org.tis.tools.abf.module.ac.controller;
 
 import com.baomidou.mybatisplus.plugins.Page;
-import org.apache.commons.lang.StringUtils;
+import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import org.tis.tools.abf.module.ac.controller.request.AcRoleAddRequest;
-import org.tis.tools.abf.module.ac.controller.request.AcRoleFuncAddRequest;
 import org.tis.tools.abf.module.ac.controller.request.AcRoleUpdateValidateGrop;
 import org.tis.tools.abf.module.ac.entity.AcRole;
-import org.springframework.validation.annotation.Validated;
-import org.tis.tools.abf.module.ac.entity.AcRoleFunc;
 import org.tis.tools.abf.module.ac.service.IAcRoleFuncService;
+import org.tis.tools.abf.module.ac.service.IAcRoleService;
+import org.tis.tools.abf.module.common.entity.enums.YON;
 import org.tis.tools.abf.module.jnl.annotation.OperateLog;
 import org.tis.tools.abf.module.jnl.entity.enums.OperateType;
 import org.tis.tools.core.web.controller.BaseController;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-import org.hibernate.validator.constraints.NotBlank;
 import org.tis.tools.core.web.vo.ResultVO;
-import org.tis.tools.abf.module.ac.service.IAcRoleService;
 import org.tis.tools.core.web.vo.SmartPage;
-
-import java.util.List;
 
 /**
  * acRole的Controller类
@@ -38,12 +34,11 @@ public class AcRoleController extends BaseController<AcRole>  {
     IAcRoleFuncService acRoleFuncService;
 
 
-/**
- * @param page
- * @return 分页内容
- *
- */
-
+    /**
+     * @param page
+     * @return 分页内容
+     *
+     */
     @PostMapping("/list")
     public ResultVO queryRoleWithPage(@RequestBody @Validated SmartPage<AcRole> page) {
         Page page1  =  acRoleService.selectPage(getPage(page),getCondition(page));
@@ -74,13 +69,11 @@ public class AcRoleController extends BaseController<AcRole>  {
      * 新增角色信息
      */
     @OperateLog(type = OperateType.ADD, desc = "新增角色")
-    @PostMapping("/add")
+    @PostMapping
     public ResultVO add(@RequestBody @Validated AcRoleAddRequest request) {
-        boolean bolen = acRoleService.createAcRole(request.getRoleCode(),request.getRoleName(),request.getEnabled(),request.getRoleDesc());
-        AcRole acRole = new AcRole();
-        acRole.setRoleCode(request.getRoleCode());
-        AcRole acRole1 = acRoleService.queryByCondition(acRole);
-        return ResultVO.success("新增成功",acRole1);
+        boolean bolen = acRoleService.createAcRole(request.getRoleCode(),request.getRoleName(),request.getEnabled(),
+                request.getRoleDesc(),request.getRoleGroup());
+        return ResultVO.success("新增成功",bolen);
     }
 
 
@@ -98,23 +91,36 @@ public class AcRoleController extends BaseController<AcRole>  {
     }
 
     /**
-     * @param roleCode
+     * @param id
      * @return 删除角色结果
-     * 根据角色代码修改角色信息
      */
-    @OperateLog(type = OperateType.DELETE, desc = "根据角色代码删除角色")
-    @DeleteMapping("/{roleCode}")
-    public ResultVO deleteRoleByRoleCode(@PathVariable @NotBlank(message = "roleCode不能为空") String roleCode) {
-        AcRole acRole = new AcRole();
-        acRole.setRoleCode(roleCode);
-        AcRole acRole1 = acRoleService.queryByCondition(acRole);
-        boolean bolen = acRoleService.deleteByRoleCode(roleCode);
-        return ResultVO.success("删除成功",acRole1);
+    @OperateLog(type = OperateType.DELETE, desc = "根据ID删除角色")
+    @DeleteMapping("/{id}")
+    public ResultVO deleteRoleByRoleCode(@PathVariable @NotBlank(message = "id不能为空") String id) {
+        AcRole acRole1 = acRoleService.selectById(id);
+        if (acRole1 == null) {
+            return ResultVO.error("404", "找不到对应记录或已经被删除！");
+        }
+        boolean bolen = acRoleService.deleteByRoleCode(id);
+        return ResultVO.success("删除成功");
     }
 
+    @OperateLog(type = OperateType.UPDATE,desc = "启用角色")
+    @PutMapping("/{id}")
+    public ResultVO openRole(@PathVariable @NotBlank(message = "id不能为空") String id){
 
+        AcRole acRole = acRoleService.selectById(id);
+        if (null == acRole){
+            return ResultVO.error("404","找不到对应记录或已经被删除");
+        }
 
+        YON enabled = YON.YES;
 
+        acRole.setEnabled(enabled);
+        acRoleService.updateById(acRole);
+
+        return ResultVO.success("启用成功",acRole);
+    }
 
 }
 

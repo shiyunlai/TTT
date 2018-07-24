@@ -1,14 +1,10 @@
 package org.tis.tools.abf.module.sys.controller.request;
 
 
-import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
 import org.hibernate.validator.constraints.NotBlank;
-import org.tis.tools.abf.module.sys.entity.enums.DictFromType;
-import org.tis.tools.core.entity.enums.CommonEnumDeserializer;
 import org.tis.tools.core.entity.request.RestRequest;
 
-import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 @Data
@@ -21,7 +17,7 @@ public class SysDictItemRequest extends RestRequest {
     private String itemType;
 //    @JSONField(deserializeUsing= CommonEnumDeserializer.class)
     @NotBlank(message = "字典项不能为空")
-    private String itemVlaue;
+    private String itemValue;
     @NotBlank(message = "实际值不能为空")
     private String sendValue;
     private BigDecimal seqNo;

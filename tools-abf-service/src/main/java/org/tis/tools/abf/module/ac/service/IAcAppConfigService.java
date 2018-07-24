@@ -1,13 +1,8 @@
 package org.tis.tools.abf.module.ac.service;
 
-import com.baomidou.mybatisplus.mapper.Wrapper;
-import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.IService;
 import org.tis.tools.abf.module.ac.entity.AcAppConfig;
-import org.tis.tools.abf.module.common.entity.enums.YON;
-
-import java.math.BigDecimal;
-import java.util.List;
+import org.tis.tools.abf.module.ac.exception.AcManagementException;
 
 /**
  * acAppConfig的Service接口类
@@ -30,7 +25,7 @@ public interface IAcAppConfigService extends IService<AcAppConfig>  {
      * @param configDesc  配置描述说明
      * @return
      */
-    AcAppConfig createRootAppConfig(String guidApp, String configType, String configName, String configDict, String configStyle, String configValue, String enabled, String displayOrder, String configDesc);
+    AcAppConfig createRootAppConfig(String guidApp, String configType, String configName, String configDict, String configStyle, String configValue, String enabled, String displayOrder, String configDesc) throws AcManagementException;
 
     /**
      *
@@ -46,7 +41,13 @@ public interface IAcAppConfigService extends IService<AcAppConfig>  {
      * @param configDesc    配置描述说明
      * @return
      */
-    AcAppConfig changeById(String guid,String guidApp,String configType,String configName,String configDict,String configStyle,String configValue,String enabled,String displayOrder,String configDesc);
+    AcAppConfig changeById(String guid,String guidApp,String configType,String configName,String configDict,String configStyle,String configValue,String enabled,String displayOrder,String configDesc) throws AcManagementException ;
+
+    /**
+     * 删除应用配置
+     * @throws AcManagementException
+     */
+    void moveAppConfig(String id)throws AcManagementException;
 
 }
 

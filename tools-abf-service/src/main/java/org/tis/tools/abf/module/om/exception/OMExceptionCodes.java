@@ -209,8 +209,114 @@ public class OMExceptionCodes {
 	 * 缺少生成岗位代码参数
 	 */
 	public static final String LAKE_PARMS_FOR_GEN_POSITION= R_EX_CODE("0042");
-
-
+	/**
+	 * 查询机构树失败
+	 */
+	public static final String FAILURE_WHEN_QUERY_ORG_TREE= R_EX_CODE("0043");
+	/**
+	 * 岗位对应的岗位不存在
+	 */
+	public static final String POSITION_NOT_EXIST_BY_POSITION_CODE = R_EX_CODE("0044");
+	/**
+	 * 查询岗位树失败
+	 */
+	public static final String FAILURE_WHEN_QUERY_POSITION_TREE= R_EX_CODE("0045");
+	/**
+	 * 创建岗位应用列表时岗位不存在
+	 */
+	public static final String POSITION_NOT_EXIST_BY_CREAT_POSITIONAPP= R_EX_CODE("0046");
+	/**
+	 * 创建岗位应用列表时应用不存在
+	 */
+	public static final String APP_NOT_EXIST_BY_CREAT_POSITIONAPP= R_EX_CODE("0047");
+	/**
+	 * 删除根机构失败
+	 */
+	public static final String FAILURE_WHEN_DELETE_ROOT_ORG = R_EX_CODE("0048");
+	/**
+	 * 删除根岗位失败
+	 */
+	public static final String FAILURE_WHEN_DELETE_ROOT_POSITION = R_EX_CODE("0049");
+	/**
+	 * 查询组织失败
+	 */
+	public static final String FAILURE_WHEN_QUERY_OM_ORG = R_EX_CODE("0050");
+	/**
+	 * 查询岗位失败
+	 */
+	public static final String FAILURE_WHEN_QUERY_OM_POSITION = R_EX_CODE("0051");
+	/**
+	 * 查询操作员失败
+	 */
+	public static final String FAILURE_WHEN_QUERY_AC_OPERATOR = R_EX_CODE("0052");
+	/**
+	 * 查询员工失败
+	 */
+	public static final String FAILURE_WHEN_QUERY_OM_EMPLOYEE = R_EX_CODE("0053");
+	/**
+	 * 新增员工和机构,员工和岗位失败
+	 */
+	public static final String FAILURE_WHEN_CREATE_OM_EMP_ORG_AND_POSITION = R_EX_CODE("0054");
+	/**
+	 * 创建岗位员工列表时已存在
+	 */
+	public static final String IS_EXIST_BY_CREAT_EMPPOSITION= R_EX_CODE("0055");
+	/**
+	 * 查询工作组树失败
+	 */
+	public static final String FAILURE_WHEN_QUERY_GROUP_TREE = R_EX_CODE("0056");
+	/**
+	 * 删除员工和岗位关系时失败
+	 */
+	public static final String FAILURE_WHEN_DELETE_OM_EMP_POSITION = R_EX_CODE("0057");
+	/**
+	 * 删除员工和工作组关系时失败
+	 */
+	public static final String FAILURE_WHEN_DELETE_OM_EMP_GROUP = R_EX_CODE("0058");
+	/**
+	 * 删除应用和岗位关系时失败
+	 */
+	public static final String FAILURE_WHEN_DELETE_OM_APP_POSITION = R_EX_CODE("0059");
+	/**
+	 * 删除工作组和岗位关系时失败
+	 */
+	public static final String FAILURE_WHEN_DELETE_OM_GROUP_POSITION = R_EX_CODE("0060");
+	/**
+	 * 删除员工和机构关系时失败
+	 */
+	public static final String FAILURE_WHEN_DELETE_OM_EMP_ORG = R_EX_CODE("0061");
+    /**
+     * 机构代码对应的机构不存在
+     */
+    public static final String ORGANIZATION_NOT_EXIST_BY_GUID_ORG = R_EX_CODE("0062");
+	/**
+	 * 工作组添加员工失败
+	 */
+	public static final String IS_EXIST_BY_GROUP_CREAT_EMP = R_EX_CODE("0063");
+	/**
+	 * 查询岗位应用权限失败
+	 */
+	public static final String FAILURE_WHEN_QUERY_OM_APP_POSITION = R_EX_CODE("0064");
+	/**
+	 * 新增应用权限失败,因已存在该应用权限
+	 */
+	public static final String IS_EXIST_BY_OM_APP_POSITION = R_EX_CODE("0065");
+	/**
+	 * 修改员工入职信息时参数不足
+	 */
+	public static final String FAILURE_WHEN_UPDATE_OM_EMPLOYEE_ONJOB = R_EX_CODE("0066");
+	/**
+	 * 员工入职失败
+	 */
+	public static final String FAILURE_WHEN_OM_EMPLOYEE_ONJOB = R_EX_CODE("0067");
+	/**
+	 * 员工离职失败
+	 */
+	public static final String FAILURE_WHEN_OM_EMPLOYEE_OUTJOB = R_EX_CODE("0068");
+  /**
+	 * 工作组添加应用失败
+	 */
+	public static final String IS_EXIST_BY_GROUP_CREAT_APP = R_EX_CODE("0069");
 	/**
 	 * 以烤串方式拼接异常码
 	 *

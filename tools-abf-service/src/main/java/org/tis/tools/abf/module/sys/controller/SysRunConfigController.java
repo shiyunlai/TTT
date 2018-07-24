@@ -36,7 +36,7 @@ public class SysRunConfigController extends BaseController {
     public ResultVO add(@RequestBody @Validated SysRunConfigAddRequest request) {
         SysRunConfig sysRunConfig = iSysRunConfigService.createSysRunConfig(request.getGuidApp(), request.getGroupName(),
                 request.getKeyName(), request.getValueFrom(), request.getValue(), request.getDescription());
-        return ResultVO.success("添加成功", sysRunConfig);
+        return ResultVO.success("添加成功");
     }
 
     /**
@@ -63,8 +63,7 @@ public class SysRunConfigController extends BaseController {
     @ApiOperation(value = "查询系统参数机构", notes = "分页查询")
     @PostMapping("/list")
     public ResultVO queryConfig(@RequestBody @Validated SmartPage<SysRunConfig> page) {
-        return ResultVO.success("查询成功",
-                iSysRunConfigService.queryAllSysRunConfig(getPage(page), getCondition(page)));
+        return ResultVO.success("查询成功", iSysRunConfigService.queryAllSysRunConfig(getPage(page), getCondition(page)));
     }
 
     /**

@@ -1,13 +1,17 @@
 package org.tis.tools.abf.module.om.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotations.*;
-
-import java.util.Date;
-
 import com.baomidou.mybatisplus.enums.FieldFill;
 import lombok.Data;
+import org.tis.tools.abf.module.om.entity.enums.OmEmployeeStatus;
+import org.tis.tools.abf.module.om.entity.enums.OmGender;
+import org.tis.tools.abf.module.om.entity.enums.OmPaperType;
+import org.tis.tools.abf.module.om.entity.enums.OmZipCode;
+import org.tis.tools.core.entity.enums.CommonEnumDeserializer;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * omEmployee人员信息表
@@ -305,12 +309,14 @@ public class OmEmployee implements Serializable {
     /**
      * 性别:见业务菜单：DICT_OM_GENDER
      */
-    private String gender;
+    @JSONField(deserializeUsing = CommonEnumDeserializer.class)
+    private OmGender gender;
 
     /**
      * 员工状态:见业务字典： DICT_OM_EMPSTATUS
      */
-    private String empstatus;
+    @JSONField(deserializeUsing = CommonEnumDeserializer.class)
+    private OmEmployeeStatus empstatus;
 
     /**
      * 主机构编号:人员所属主机构编号（冗余设计）
@@ -345,7 +351,8 @@ public class OmEmployee implements Serializable {
     /**
      * 证件类型:见业务字典： DICT_SD_PAPERTYPE
      */
-    private String paperType;
+    @JSONField(deserializeUsing = CommonEnumDeserializer.class)
+    private OmPaperType paperType;
 
     /**
      * 证件号码
@@ -370,7 +377,8 @@ public class OmEmployee implements Serializable {
     /**
      * 家庭邮编:见业务字典： DICT_SD_ZIPCODE
      */
-    private String hzipcode;
+    @JSONField(deserializeUsing = CommonEnumDeserializer.class)
+    private OmZipCode hzipcode;
 
     /**
      * 操作员编号

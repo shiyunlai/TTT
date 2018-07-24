@@ -2,12 +2,17 @@ package org.tis.tools.abf.module.om.entity;
 
 import java.math.BigDecimal;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotations.*;
 
 import java.util.Date;
 
 import com.baomidou.mybatisplus.enums.FieldFill;
 import lombok.Data;
+import org.tis.tools.abf.module.common.entity.enums.YON;
+import org.tis.tools.abf.module.om.entity.enums.OmGroupStatus;
+import org.tis.tools.abf.module.om.entity.enums.OmGroupType;
+import org.tis.tools.core.entity.enums.CommonEnumDeserializer;
 
 import java.io.Serializable;
 
@@ -241,12 +246,13 @@ public class OmGroup implements Serializable {
     /**
      * 工作组类型:见业务字典： DICT_OM_GROUPTYPE
      */
-    private String groupType;
+    private OmGroupType groupType;
 
     /**
      * 工作组状态:见业务字典： DICT_OM_GROUPSTATUS
      */
-    private String groupStatus;
+    @JSONField(deserializeUsing= CommonEnumDeserializer.class)
+    private OmGroupStatus groupStatus;
 
     /**
      * 工作组描述
@@ -271,7 +277,8 @@ public class OmGroup implements Serializable {
     /**
      * 是否叶子节点:见业务菜单： DICT_YON
      */
-    private String isleaf;
+    @JSONField(deserializeUsing= CommonEnumDeserializer.class)
+    private YON isleaf ;
 
     /**
      * 子节点数

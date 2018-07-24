@@ -98,6 +98,35 @@ public class SYSExceptionCodes {
 	 * 异常：获取序号资源失败.<br>
 	 */
 	public static final String FAILURE_WHEN_GET_SEQUENCE_NUMBER = R_EX_CODE("0017");
+
+	/**
+	 * 异常:查询序号资源失败
+	 */
+	public static final String FAILURE_WHEN_QUERY_SYS_SEQNO = R_EX_CODE("0018");
+
+	/**
+	 * 异常:新增序号资源失败
+	 */
+	public static final String FAILURE_WHEN_INSERT_SYS_SEQNO = R_EX_CODE("0019");
+
+	/**
+	 * 异常:更新序号资源失败
+	 */
+	public static final String FAILURE_WHEN_UPDATE_SYS_SEQNO = R_EX_CODE("0020");
+
+	/**
+	 * 异常:删除序号资源失败
+	 */
+	public static final String FAILURE_WHEN_DELETE_SYS_SEQNO = R_EX_CODE("0021");
+	/**
+	 * 异常:删除业务字典失败
+	 */
+	public static final String FAILURE_WHEN_DELETE_SYS_DICT = R_EX_CODE("0022");
+	/**
+	 * 异常:删除业务字典项失败
+	 */
+	public static final String FAILURE_WHEN_DELETE_SYS_DICT_ITEM = R_EX_CODE("0023");
+
 	/**
 	 * 以烤串方式拼接异常码
 	 * @param code 业务域范围内的异常编码

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.tis.tools.abf.module.ac.controller.request.AcAppAddRequest;
+import org.tis.tools.abf.module.ac.controller.request.AcAppListRequest;
 import org.tis.tools.abf.module.ac.controller.request.AcAppUpdateRequest;
 import org.tis.tools.abf.module.ac.entity.AcApp;
 import org.tis.tools.abf.module.ac.service.IAcAppService;
@@ -14,6 +15,9 @@ import org.tis.tools.abf.module.jnl.entity.enums.OperateType;
 import org.tis.tools.core.web.controller.BaseController;
 import org.tis.tools.core.web.vo.ResultVO;
 import org.tis.tools.core.web.vo.SmartPage;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * acApp的Controller类
@@ -78,7 +82,7 @@ public class AcAppController extends BaseController<AcApp>  {
             return ResultVO.error("404", "找不到对应记录或已经被删除！");
         }
 
-        acAppService.deleteById(id);
+        acAppService.moveApp(id);
         return ResultVO.success("删除成功");
 
     }
@@ -97,6 +101,7 @@ public class AcAppController extends BaseController<AcApp>  {
             return ResultVO.error("404", "找不到对应记录或已经被删除！");
         }
         acApp.setIsopen(YON.YES);
+        acApp.setOpenDate(new Date());
         acAppService.updateById(acApp);
         return ResultVO.success("应用已开通",acApp);
     }
@@ -115,6 +120,7 @@ public class AcAppController extends BaseController<AcApp>  {
             return ResultVO.error("404", "找不到对应记录或已经被删除！");
         }
         acApp.setIsopen(YON.NO);
+        acApp.setOpenDate(null);
         acAppService.updateById(acApp);
         return ResultVO.success("应用已停用",acApp);
     }
@@ -124,7 +130,6 @@ public class AcAppController extends BaseController<AcApp>  {
      * @param id
      * @return
      */
-    @OperateLog(type = OperateType.QUERY, desc = "查询应用")
     @GetMapping("/{id}")
     public ResultVO detail(@PathVariable @NotBlank(message = "id不能为空") String id) {
         AcApp acApp = acAppService.selectById(id);
@@ -135,6 +140,17 @@ public class AcAppController extends BaseController<AcApp>  {
     }
 
     /**
+     * 不分页查询所有应用
+     * @return
+     */
+    @GetMapping("/queryAll")
+    public ResultVO queryAll(){
+
+        List<AcApp> list = acAppService.queryAll();
+        return ResultVO.success("查询成功",list);
+    }
+
+    /**
      * 分页查询应用
      * @param page
      * @return
@@ -142,6 +158,17 @@ public class AcAppController extends BaseController<AcApp>  {
     @PostMapping("/list")
     public ResultVO list(@RequestBody @Validated SmartPage<AcApp> page) {
         return  ResultVO.success("查询成功", acAppService.selectPage(getPage(page), getCondition(page)));
+    }
+
+    /**
+     * 批量查询应用信息
+     * @param acAppListRequest
+     * @return
+     */
+    @PostMapping("/batchQuery")
+    public ResultVO batchQuery(@RequestBody @Validated AcAppListRequest acAppListRequest){
+        List<AcApp> lists = acAppService.batchQuery(acAppListRequest);
+        return ResultVO.success("查询成功",lists);
     }
 
 }

@@ -1,8 +1,10 @@
 package org.tis.tools.abf.module.sys.entity;
 
+import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import lombok.Data;
-import com.baomidou.mybatisplus.annotations.TableId;
+import org.tis.tools.abf.module.sys.entity.enums.ErrCodeKind;
+
 import java.io.Serializable;
 
 /**
@@ -76,7 +78,7 @@ public class SysErrCode implements Serializable {
      * SYS 系统错误码
      * TRANS 交易错误码
      */
-    private String errcodeKind;
+    private ErrCodeKind errcodeKind;
 
     /**
      * 错误代码
@@ -87,6 +89,5 @@ public class SysErrCode implements Serializable {
      * 错误信息
      */
     private String errMsg;
-
 }
 

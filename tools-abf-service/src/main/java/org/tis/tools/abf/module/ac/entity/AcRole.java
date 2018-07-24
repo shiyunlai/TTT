@@ -2,9 +2,6 @@ package org.tis.tools.abf.module.ac.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotations.*;
-
-import java.util.Date;
-
 import com.baomidou.mybatisplus.enums.FieldFill;
 import lombok.Data;
 import org.hibernate.validator.constraints.NotBlank;
@@ -13,6 +10,7 @@ import org.tis.tools.abf.module.common.entity.enums.YON;
 import org.tis.tools.core.entity.enums.CommonEnumDeserializer;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * acRole权限集（角色）定义表
@@ -60,6 +58,11 @@ public class AcRole implements Serializable {
     public static final String COLUMN_ROLE_DESC = "role_desc";
 
     /**
+     * roleGroup对应表字段
+     */
+    public static final String COLUMN_ROLE_GROUP = "role_group";
+
+    /**
      * createtime对应表字段
      */
     public static final String COLUMN_CREATETIME = "createtime";
@@ -103,6 +106,11 @@ public class AcRole implements Serializable {
      * roleDesc逻辑名
      */
     public static final String NAME_ROLE_DESC = "角色描述";
+
+    /**
+     * roleGroup逻辑名
+     */
+    public static final String NAME_ROLE_GROUP = "角色分组";
 
     /**
      * createtime逻辑名
@@ -151,6 +159,11 @@ public class AcRole implements Serializable {
      * 角色描述
      */
     private String roleDesc;
+
+    /**
+     * 角色分组
+     */
+    private String roleGroup;
 
     /**
      * 创建时间

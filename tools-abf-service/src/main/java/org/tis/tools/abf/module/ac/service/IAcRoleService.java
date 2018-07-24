@@ -1,14 +1,10 @@
 package org.tis.tools.abf.module.ac.service;
 
-import org.tis.tools.abf.module.ac.entity.AcRole;
 import com.baomidou.mybatisplus.service.IService;
+import org.tis.tools.abf.module.ac.entity.AcRole;
 import org.tis.tools.abf.module.ac.entity.AcRoleFunc;
 import org.tis.tools.abf.module.ac.exception.AcRoleManagementException;
 import org.tis.tools.abf.module.common.entity.enums.YON;
-
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.List;
 
 
 /**
@@ -54,7 +50,8 @@ public interface IAcRoleService extends IService<AcRole>{
      * @return 新建角色信息
      * @throws AcRoleManagementException
      */
-    boolean createAcRole(String roleCode, String roleName, YON enabled, String roleDesc) throws AcRoleManagementException;
+    boolean createAcRole(String roleCode, String roleName, YON enabled, String roleDesc,String roleGroup) throws
+            AcRoleManagementException;
 
     /**
      * <pre>
@@ -77,12 +74,12 @@ public interface IAcRoleService extends IService<AcRole>{
      *
      * </pre>
      *
-     * @param roleCode
+     * @param id
      *
      * @return 删除角色信息
      * @throws AcRoleManagementException
      */
-    boolean deleteByRoleCode(String roleCode) throws AcRoleManagementException;
+    boolean deleteByRoleCode(String id) throws AcRoleManagementException;
 
 
     /**

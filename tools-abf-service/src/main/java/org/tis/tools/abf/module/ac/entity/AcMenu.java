@@ -1,15 +1,15 @@
 package org.tis.tools.abf.module.ac.entity;
 
-import java.math.BigDecimal;
-
+import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotations.*;
-
-import java.util.Date;
-
 import com.baomidou.mybatisplus.enums.FieldFill;
 import lombok.Data;
+import org.tis.tools.abf.module.common.entity.enums.YON;
+import org.tis.tools.core.entity.enums.CommonEnumDeserializer;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * acMenu应用菜单表，从逻辑上为某个应用系统中的功能组织为一个有分类，有层级的树结构。
@@ -266,7 +266,8 @@ public class AcMenu implements Serializable {
     /**
      * 是否叶子菜单:数值取自业务菜单：DICT_YON
      */
-    private String isleaf;
+    @JSONField(deserializeUsing = CommonEnumDeserializer.class )
+    private YON isleaf;
 
     /**
      * UI入口:针对EXT模式提供，例如abf_auth/function/module.xml

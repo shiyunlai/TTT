@@ -16,7 +16,7 @@ public enum OmOrgStatus implements BaseEnum {
     RUNNING("running", "正常"),
 
     /** 机构状态：注销 */
-    ANCEL("cancel", "注销"),
+    CANCEL("cancel", "注销"),
 
     /** 机构状态：停用 */
     STOP("stop", "停用");
@@ -43,7 +43,6 @@ public enum OmOrgStatus implements BaseEnum {
     public String toString() {
         return name;
     }
-
 
     @Override
     public Serializable deserialze() {

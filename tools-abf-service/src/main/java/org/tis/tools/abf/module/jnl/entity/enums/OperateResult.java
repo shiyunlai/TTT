@@ -34,4 +34,9 @@ public enum OperateResult implements BaseEnum {
     public Serializable deserialze() {
         return value;
     }
+
+    @Override
+    public String toString() {
+        return desc;
+    }
 }

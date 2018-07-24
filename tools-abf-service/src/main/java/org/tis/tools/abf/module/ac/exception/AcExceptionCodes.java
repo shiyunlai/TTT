@@ -359,7 +359,7 @@ public class AcExceptionCodes {
      */
     public static final String AC_OPERATOR_IS_NOT_FOUND  = R_EX_CODE("0067");
     /**
-     * 查询操作员身份权限失败
+     * 查询角色失败
      */
     public static final String AC_ROLE_IS_NOT_FOUND  = R_EX_CODE("0068");
 
@@ -417,6 +417,26 @@ public class AcExceptionCodes {
      * 查询应用个性化配置异常
      */
     public static final String FAILURE_WHRN_QUERY_AC_APPCONFIG = R_EX_CODE("0080");
+    /**
+     * 新增身份权限集时查询岗位失败
+     */
+    public static final String FAILURE_WHEN_QUERY_POSITION_BY_ACOPERATORIDENTITYRES = R_EX_CODE("0081");
+    /**
+     * 新增身份权限集时查询工作组失败
+     */
+    public static final String FAILURE_WHEN_QUERY_GROUP_BY_ACOPERATORIDENTITYRES = R_EX_CODE("0082");
+    /**
+     * 新增身份权限集时查询机构失败
+     */
+    public static final String FAILURE_WHEN_QUERY_ORG_BY_ACOPERATORIDENTITYRES = R_EX_CODE("0083");
+    /**
+     * 删除操作员重组菜单失败
+     */
+    public static final String FAILURE_WHEN_DELETE_OPERATORMENU = R_EX_CODE("0084");
+    /**
+     * 删除角色失败
+     */
+    public static final String FAILURE_WHEN_DELETE_AC_ROLE = R_EX_CODE("0085");
 
 
 

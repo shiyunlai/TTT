@@ -81,7 +81,6 @@ public class AcFuncAttrController extends BaseController<AcFuncAttr>  {
      * @param id
      * @return ResultVO
      */
-    @OperateLog(type = OperateType.QUERY,desc = "根据ID查询功能属性")
     @GetMapping("/{id}")
     public ResultVO detail(@PathVariable @NotBlank(message = "id不能为空") String id) {
         AcFuncAttr acFuncAttr = acFuncAttrService.selectById(id);
@@ -97,7 +96,6 @@ public class AcFuncAttrController extends BaseController<AcFuncAttr>  {
      * @param page
      * @return ResultVO
      */
-    @OperateLog(type = OperateType.QUERY,desc = "分页查询功能属性")
     @PostMapping("/list/{id}")
     public ResultVO list(@RequestBody @Validated SmartPage<AcFuncAttr> page,@PathVariable @NotBlank(message = "id不能为空") String id) {
         return  ResultVO.success("查询成功", acFuncAttrService.queryPageById(getPage(page), getCondition(page),id));

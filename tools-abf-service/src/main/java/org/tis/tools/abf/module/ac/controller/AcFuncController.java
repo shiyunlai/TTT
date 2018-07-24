@@ -76,7 +76,7 @@ public class AcFuncController extends BaseController<AcFunc>  {
         if (acFunc == null) {
             return ResultVO.error("404", "找不到对应记录或已经被删除！");
         }
-        Boolean isDel = acFuncService.deleteById(id);
+        acFuncService.moveFunc(id);
         return ResultVO.success("删除成功!");
     }
 
@@ -86,7 +86,6 @@ public class AcFuncController extends BaseController<AcFunc>  {
      * @param id
      * @return ResultVO
      */
-    @OperateLog(type = OperateType.QUERY,desc = "查询功能行为")
     @GetMapping("/{id}")
     public ResultVO detail(@PathVariable @NotBlank(message = "id不能为空") String id) {
         AcFunc acFunc = acFuncService.selectById(id);
@@ -102,10 +101,18 @@ public class AcFuncController extends BaseController<AcFunc>  {
      * @param page
      * @return ResultVO
      */
-    @OperateLog(type = OperateType.QUERY,desc = "查询功能列表")
-    @PostMapping("/list")
-    public ResultVO list(@RequestBody @Validated SmartPage<AcFunc> page) {
-        return  ResultVO.success("查询成功", acFuncService.selectPage(getPage(page), getCondition(page)));
+    @PostMapping("/list/{id}")
+    public ResultVO list(@RequestBody @Validated SmartPage<AcFunc> page,@PathVariable @NotBlank(message = "id不能为空") String id ) {
+        return  ResultVO.success("查询成功", acFuncService.queryPageById(getPage(page), getCondition(page),id));
+    }
+
+    /**
+     * 查询所有功能
+     * @return
+     */
+    @GetMapping("/queryAll")
+    public ResultVO queryAll(){
+        return ResultVO.success("查询成功",acFuncService.queryAll());
     }
 
     /**

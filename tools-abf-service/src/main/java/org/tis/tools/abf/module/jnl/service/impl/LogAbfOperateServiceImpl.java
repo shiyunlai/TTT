@@ -1,5 +1,8 @@
 package org.tis.tools.abf.module.jnl.service.impl;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -53,5 +56,20 @@ public class LogAbfOperateServiceImpl extends ServiceImpl<LogAbfOperateMapper, L
                 logAbfChangeService.insert(logAbfChange);
             }
         }
+    }
+
+    @Override
+    public Page<LogAbfOperate> queryListByUser(Page<LogAbfOperate> page, Wrapper<LogAbfOperate> wrapper, String
+            userId) throws OperateLogException {
+
+        if (null == wrapper){
+            wrapper = new EntityWrapper<LogAbfOperate>();
+        }
+
+        wrapper.eq(LogAbfOperate.COLUMN_USER_ID,userId);
+
+        Page<LogAbfOperate> pageOperate = selectPage(page,wrapper);
+
+        return pageOperate;
     }
 }
