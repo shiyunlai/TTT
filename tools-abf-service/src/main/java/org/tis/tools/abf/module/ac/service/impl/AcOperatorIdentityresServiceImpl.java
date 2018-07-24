@@ -26,6 +26,7 @@ import org.tis.tools.abf.module.om.entity.OmPosition;
 import org.tis.tools.abf.module.om.service.IOmGroupService;
 import org.tis.tools.abf.module.om.service.IOmOrgService;
 import org.tis.tools.abf.module.om.service.IOmPositionService;
+import org.tis.tools.core.exception.i18.ExceptionCodes;
 
 import static org.tis.tools.core.utils.BasicUtil.wrap;
 
@@ -61,6 +62,15 @@ public class AcOperatorIdentityresServiceImpl extends ServiceImpl<AcOperatorIden
     @Override
     public void add(AcOperatorIdentityresRequest acOperatorIdentityres) throws AcManagementException {
 
+        //判断需要新增的对象是否已经存在
+        Wrapper<AcOperatorIdentityres> wrapper = new EntityWrapper<AcOperatorIdentityres>();
+        wrapper.eq(AcOperatorIdentityres.COLUMN_GUID_IDENTITY,acOperatorIdentityres.getGuidIdentity())
+                .eq(AcOperatorIdentityres.COLUMN_AC_RESOURCETYPE,acOperatorIdentityres.getAcResourcetype())
+                .eq(AcOperatorIdentityres.COLUMN_GUID_AC_RESOURCE,acOperatorIdentityres.getGuidAcResource());
+        if (null != selectOne(wrapper)){
+            throw new AcManagementException(ExceptionCodes.OBJECT_IS_ALREADY_EXIST,wrap("该对象已存在,不需要新增"));
+        }
+
         //判断身份guid对应的身份是否存在
         String guidIdentity = acOperatorIdentityres.getGuidIdentity();
         AcOperatorIdentity acOperatorIdentity = acOperatorIdentityService.selectById(guidIdentity);
@@ -77,6 +87,7 @@ public class AcOperatorIdentityresServiceImpl extends ServiceImpl<AcOperatorIden
         AcOperatorIdentityres acOperatorIdentityresAdd = new AcOperatorIdentityres();
 
         acOperatorIdentityresAdd.setAcResourcetype(acResourceType);
+
         acOperatorIdentityresAdd.setGuidAcResource(guidAcResource);
         acOperatorIdentityresAdd.setGuidIdentity(guidIdentity);
 
