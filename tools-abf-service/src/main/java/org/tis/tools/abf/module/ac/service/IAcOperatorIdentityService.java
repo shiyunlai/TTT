@@ -3,6 +3,7 @@ package org.tis.tools.abf.module.ac.service;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.IService;
+import org.tis.tools.abf.module.ac.controller.request.AcOperatorDefaultIdentity;
 import org.tis.tools.abf.module.ac.controller.request.AcOperatorIdentityRequest;
 import org.tis.tools.abf.module.ac.entity.AcOperatorIdentity;
 import org.tis.tools.abf.module.ac.exception.AcManagementException;
@@ -47,6 +48,14 @@ public interface IAcOperatorIdentityService extends IService<AcOperatorIdentity>
      * @throws AcManagementException
      */
     void moveIdentity(String id)throws AcManagementException;
+
+    /**
+     * 修改操作员默认身份
+     * @param acDefault
+     * @return
+     * @throws AcManagementException
+     */
+    AcOperatorIdentity changeDefaultOperatorIdentity(AcOperatorDefaultIdentity acDefault) throws AcManagementException;
 
 }
 
