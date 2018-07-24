@@ -42,3 +42,4 @@ conf/
 logs/
 
 download/
+*.iml
