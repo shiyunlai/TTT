@@ -16,6 +16,7 @@ import org.tis.tools.abf.module.ac.service.IAcAppService;
 import org.tis.tools.abf.module.ac.service.IAcFuncService;
 import org.tis.tools.abf.module.ac.service.IAcOperatorFuncService;
 import org.tis.tools.abf.module.ac.service.IAcOperatorService;
+import org.tis.tools.core.utils.StringUtil;
 
 import static org.tis.tools.core.utils.BasicUtil.wrap;
 
@@ -59,7 +60,7 @@ public class AcOperatorFuncServiceImpl extends ServiceImpl<AcOperatorFuncMapper,
 
         //判断应用是否存在
         String appGuid = acOperatorFuncRequestc.getGuidApp();
-        if ((!"".equals(appGuid)) || null != appGuid){
+        if (!StringUtil.isEmpty(appGuid)){
             AcApp acApp = acAppService.selectById(appGuid);
             if (acApp == null){
                 throw new AcManagementException(AcExceptionCodes.FAILURE_WHRN_QUERY_AC_APP,wrap("应用ID对应的应用不存在",
@@ -102,7 +103,7 @@ public class AcOperatorFuncServiceImpl extends ServiceImpl<AcOperatorFuncMapper,
 
         //判断应用是否存在
         String appGuid = acOperatorFuncRequestc.getGuidApp();
-        if ((!"".equals(appGuid)) || null != appGuid){
+        if (!StringUtil.isEmpty(appGuid)){
             AcApp acApp = acAppService.selectById(appGuid);
             if (acApp == null){
                 throw new AcManagementException(AcExceptionCodes.FAILURE_WHRN_QUERY_AC_APP,wrap("应用ID对应的应用不存在",
