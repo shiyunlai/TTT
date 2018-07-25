@@ -204,5 +204,63 @@ public class AcFuncServiceImpl extends ServiceImpl<AcFuncMapper, AcFunc> impleme
             throw new AcManagementException(AcExceptionCodes.FAILURE_WHRN_DELETE_AC_FUNC,wrap(e.getMessage()));
         }
     }
+
+
+    @Override
+    public List<AcFunc> queryFuncTreeByApp(String appId) throws AcManagementException {
+
+        Wrapper<AcFunc> funcWrapper = new EntityWrapper<AcFunc>();
+        funcWrapper.eq(AcFunc.COLUMN_GUID_APP,appId);
+        funcWrapper.isNull(AcFunc.COLUMN_GUID_FUNC);
+        funcWrapper.eq(AcFunc.COLUMN_FUNC_TYPE,FuncType.FUNCTION);
+
+        List<AcFunc> funcList = selectList(funcWrapper);
+
+
+        return funcList;
+    }
+
+    /**
+     * 根据应用和父功能下的子功能查询功能列表
+     *
+     * @param appId
+     * @param funcId
+     * @return
+     * @throws AcManagementException
+     */
+    @Override
+    public List<AcFunc> queryFuncTreeByAppFunc(String appId, String funcId) throws AcManagementException {
+
+        Wrapper<AcFunc> wrapper = new EntityWrapper<AcFunc>();
+
+        wrapper.eq(AcFunc.COLUMN_GUID_APP,appId);
+        wrapper.eq(AcFunc.COLUMN_GUID_FUNC,funcId);
+        wrapper.eq(AcFunc.COLUMN_FUNC_TYPE,FuncType.FUNCTION);
+
+        List<AcFunc> list = selectList(wrapper);
+
+        return list;
+    }
+
+    /**
+     * 根据应用和功能查询行为列表
+     *
+     * @param appId
+     * @param funcId
+     * @return
+     * @throws AcManagementException
+     */
+    @Override
+    public List<AcFunc> queryBehaveTreeByAppFunc(String appId, String funcId) throws AcManagementException {
+        Wrapper<AcFunc> wrapper = new EntityWrapper<AcFunc>();
+
+        wrapper.eq(AcFunc.COLUMN_GUID_APP,appId);
+        wrapper.eq(AcFunc.COLUMN_GUID_FUNC,funcId);
+        wrapper.eq(AcFunc.COLUMN_FUNC_TYPE,FuncType.BEHAVE);
+
+        List<AcFunc> list = selectList(wrapper);
+
+        return list;
+    }
 }
 
