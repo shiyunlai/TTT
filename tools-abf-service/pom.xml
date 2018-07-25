@@ -110,6 +110,33 @@
 
     <build>
         <plugins>
+            <!-- 使用flyway 在开发阶段，对开发环境进行数据库版本管理 mvn flyway:migrate mvn flyway:info
+				mvn flyway:clean -->
+
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>${flyway-maven-plugin.version}</version>
+                <configuration>
+                    <driver>com.mysql.jdbc.Driver</driver>
+                    <url>jdbc:mysql://47.96.147.236:3306/tistools?useUnicode=true&amp;characterEncoding=utf8</url>
+                    <user>tools</user>
+                    <password>tools123</password>
+                    <!-- 设置sql脚本文件的编码 -->
+                    <encoding>UTF-8</encoding>
+                    <!-- 设置执行migrate操作之前的validation行为 -->
+                    <!--<validationMode>ALL</validationMode> -->
+                    <!-- 设置当validation失败时的系统行为 -->
+                    <!--<validationErrorMode>FAIL</validationErrorMode> -->
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>mysql</groupId>
+                        <artifactId>mysql-connector-java</artifactId>
+                        <version>${mysql-connector-java.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>

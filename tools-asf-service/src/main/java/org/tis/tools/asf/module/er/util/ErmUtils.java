@@ -45,31 +45,40 @@ public class ErmUtils {
         ParserConfig.getGlobalInstance().putDeserializer(ERColumnType.class, new CommonEnumDeserializer());
         com.alibaba.fastjson.JSONObject diagram = JSON.parseObject(xmlString).getJSONObject("diagram");
         List<ERTable> erTables = JSONArray.parseArray(diagram.getJSONObject("contents").getString("table"), ERTable.class);
-        Map<String, List<ERColumnGroup>> columnGroupMap = JSONArray.parseArray(diagram.getJSONObject("column_groups")
+        Map<String, List<ERColumnGroup>> columnGroupMap = diagram.getJSONObject("column_groups") == null ?
+                Collections.EMPTY_MAP : JSONArray.parseArray(diagram.getJSONObject("column_groups")
                 .getString("column_group"), ERColumnGroup.class)
                 .stream().collect(Collectors.groupingBy(ERColumnGroup::getId));
         Map<String, ERWord> wordMap = JSONArray.parseArray(diagram.getJSONObject("dictionary")
                 .getString("word"), ERWord.class)
                 .stream().collect(Collectors.toMap(ERWord::getId, w -> w));
-        String categoryString = diagram
+        JSONObject categoryJB = diagram
                 .getJSONObject("settings")
                 .getJSONObject("category_settings")
-                .getJSONObject("categories")
-                .getString("category");
-        List<ERCategory> erCategories;
-        if (categoryString.charAt(0) == '{') {
-            erCategories = Collections.singletonList(JSONObject.parseObject(categoryString, ERCategory.class));
-        } else if (categoryString.charAt(0) == '['){
-            erCategories = JSONArray.parseArray(categoryString, ERCategory.class);
+                .getJSONObject("categories");
+        List<ERCategory> erCategories = null;
+        boolean defaultCategory = false;
+        if (categoryJB != null) {
+            String categoryString = categoryJB.getString("category");
+            if (categoryString.charAt(0) == '{') {
+                erCategories = Collections.singletonList(JSONObject.parseObject(categoryString, ERCategory.class));
+            } else if (categoryString.charAt(0) == '[') {
+                erCategories = JSONArray.parseArray(categoryString, ERCategory.class);
+            }
         } else {
-            throw new CodeBuilderException("找不到ERM分类！");
+            // 没有分类创建默认分类
+            ERCategory c = new ERCategory();
+            c.setName("default");
+            erCategories = Collections.singletonList(c);
+            defaultCategory = true;
         }
         Map<String, List<ERColumn>> refColumnsMap = new HashMap<>(16);
         Map<String, ERColumn> columnMap = new HashMap<>(16);
         List<ERCategory> finalErCategories = erCategories;
+        boolean finalDefaultCategory = defaultCategory;
         erTables.forEach(t -> {
             for (ERCategory c : finalErCategories) {
-                if (c.getTableIds().contains(t.getId())) {
+                if (c.getTableIds().contains(t.getId()) || finalDefaultCategory) {
                     t.setCategoryId(c.getId());
                     if (c.getTableList() == null) {
                         List<ERTable> tables = new ArrayList<>();

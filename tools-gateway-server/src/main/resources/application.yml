@@ -1,0 +1,75 @@
+server:
+  port: 18088
+  context-path: /
+spring:
+  application:
+    name: gateway-server
+
+management:
+  security:
+    enabled: false
+endpoints:
+  refresh:
+    enabled: true
+
+tools:
+  cors:
+    open: true
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:18000/eureka/    # 注册服务地址
+  instance:
+    appname: 网关服务
+    prefer-ip-address: true   #访问的路径变为IP地址
+    lease-renewal-interval-in-seconds: 2  #设置心跳的时间间隔（默认是30秒）
+    lease-expiration-duration-in-seconds: 5  #如果现在超过了5秒的间隔（默认90秒）
+zuul:
+  routes:
+    uaa:
+       path: /uaa/**
+       sensitiveHeaders:
+       serviceId: auth-server
+    abf:
+       path: /abf/**
+       sensitiveHeaders:
+       serviceId: abf-service
+  add-proxy-headers: true
+  host:
+    connect-timeout-millis: 20000
+    socket-timeout-millis: 60000
+
+####超时配置####
+ribbon:
+  ReadTimeout: 20000
+  ConnectTimeout: 20000
+  MaxAutoRetries: 1
+  MaxAutoRetriesNextServer: 2
+  eureka:
+    enabled: true
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: true
+        isolation:
+          thread:
+            timeoutInMilliseconds: 600000
+security:
+  basic:
+    enabled: false
+  oauth2:
+#    client:
+#      ##网关的地址
+#      access-token-uri: http://localhost:18088/uaa/oauth/token
+#      user-authorization-uri: http://localhost:18088/uaa/oauth/authorize
+#      client-id: gateway-server
+    resource:
+      user-info-uri:  http://localhost:18084/user
+      prefer-token-info: false
+proxy:
+  auth:
+    load-balanced: true
+    routes:

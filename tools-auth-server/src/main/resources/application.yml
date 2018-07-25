@@ -1,0 +1,157 @@
+######################################
+#            base
+######################################
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://127.0.0.1:18000/eureka/    # 注册服务地址
+  instance:
+    prefer-ip-address: true   #访问的路径变为IP地址
+    lease-renewal-interval-in-seconds: 2  #设置心跳的时间间隔（默认是30秒）
+    lease-expiration-duration-in-seconds: 5
+    appname: 授权服务 #如果现在超过了5秒的间隔（默认90秒）
+
+security:
+  oauth2:
+    resource:
+      filter-order: 3
+#    client:
+#      client-id: auth
+#      client-secret: auth
+#      access-token-uri: http://localhost:18084/oauth/access_token
+#      user-authorization-uri: http://localhost:18084/oauth/authorize
+
+# :::::::::::
+
+server:
+  port: 18084
+
+# :::::: spring ::::::
+
+spring:
+  application:
+    name: auth-server
+  profiles:
+    active: dev
+  devtools:
+    restart:
+      enabled: false
+  redis:
+    database: 6                   # Redis数据库索引（默认为0）
+    host: 47.96.147.236           # Redis服务器地址
+    port: 6379                    # Redis服务器连接端口
+    password: tools123    # Redis服务器连接密码（默认为空）
+    timeout: 0                    # 连接超时时间（毫秒）
+    pool:
+      max-active: 8               # 连接池最大连接数（使用负值表示没有限制）
+      max-wait: -1                # 连接池最大阻塞等待时间（使用负值表示没有限制）
+      max-idle: 8                 # 连接池中的最大空闲连接
+      min-idle: 0                 # 连接池中的最小空闲连接
+
+
+# :::::: tools ::::::
+
+tools:
+  multi-datasource-open: true
+  cors:
+    open: true
+
+# :::::: mybatis-plus ::::::
+
+mybatis-plus:
+  mapper-locations: classpath*:org/tis/tools/security/dao/mapping/*.xml
+  typeAliasesPackage: org.tis.tools.security.entity
+#  typeEnumsPackage: org.tis.tools.security.entity.enums
+  global-config:
+    id-type: 5
+    field-strategy: 2
+    db-column-underline: false
+    refresh-mapper: true
+    logic-delete-value: D
+    logic-not-delete-value: 0
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: true
+    lazyLoadingEnabled: true
+    multipleResultSetsEnabled: true
+
+---
+
+######################################
+#            dev
+######################################
+
+# ::::::::::::
+spring:
+  http:
+    encoding:
+      charset: UTF-8
+  profiles: dev
+  datasource:
+    datasource-name: default
+    url: jdbc:mysql://47.96.147.236:3306/tools_auth?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false
+    username: tools
+    password: tools123
+    filters: log4j,wall,mergeStat
+  messages:
+    encoding: utf-8
+
+
+# :::::::::::
+
+tools:
+  mybatis-performance-open: true
+  multi-datasource:
+    datasource-name: otherDataSource
+    url: jdbc:mysql://47.96.147.236:3306/tistools?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false
+    username: tools
+    password: tools123
+
+# ::::::::::::
+logging:
+  level.root: info
+  level.org.tis.tools: debug
+  path: logs/
+  file: fortest.jnl
+
+# ::::::::::::
+swagger:
+  enabled: true
+  title: tools-auth-service
+  description: tools 认证服务
+  version: 0.0.1-SANPSHOT
+  license: Apache License, Version 2.0
+  licenseUrl: https://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfServiceUrl: https://github.com/shiyunlai/TTT
+  contact.name: Shiyunlai
+  contact.url: http://www.example.com
+  contact.email: shi.yunlai@chinamworld.com
+  base-package: org.tis
+
+
+---
+
+######################################
+#            pro
+######################################
+
+spring:
+  profiles: pro
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/tools?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false
+    username: root
+    password: root123
+    filters: log4j,wall,mergeStat
+
+tools:
+  mybatis-performance-open: false
+
+logging:
+  level.root: error
+  level.org.tis.tools: error
+  path: logs/
+  file: fortest.jnl
+
+swagger:
+  enabled: false
