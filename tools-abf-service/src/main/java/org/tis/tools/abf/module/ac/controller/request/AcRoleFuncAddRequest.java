@@ -14,6 +14,8 @@ import org.tis.tools.core.entity.request.RestRequest;
 @EqualsAndHashCode(callSuper = false)
 public class AcRoleFuncAddRequest extends RestRequest {
 
+    private String guid;
+
     @NotBlank(message = "角色GUID不能为空")
     private String guidRole;
 
