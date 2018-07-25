@@ -2,9 +2,11 @@ package org.tis.tools.abf.module.ac.service;
 
 import com.baomidou.mybatisplus.service.IService;
 import org.tis.tools.abf.module.ac.entity.AcRole;
-import org.tis.tools.abf.module.ac.entity.AcRoleFunc;
 import org.tis.tools.abf.module.ac.exception.AcRoleManagementException;
 import org.tis.tools.abf.module.common.entity.enums.YON;
+import org.tis.tools.abf.module.common.entity.vo.TreeDetail;
+
+import java.util.List;
 
 
 /**
@@ -82,18 +84,13 @@ public interface IAcRoleService extends IService<AcRole>{
     boolean deleteByRoleCode(String id) throws AcRoleManagementException;
 
 
+
     /**
-     * <pre>
-     * 增加某个角色的功能
-     *
-     * </pre>
-     * @param acRoleFunc
-     * @return 返回增加结果
+     * 查询角色树
+     * @return
      * @throws AcRoleManagementException
      */
-    boolean addRoleFunc(AcRoleFunc acRoleFunc) throws AcRoleManagementException;
-
-
+    List<TreeDetail> queryRoleTree() throws AcRoleManagementException;
 
 }
 
