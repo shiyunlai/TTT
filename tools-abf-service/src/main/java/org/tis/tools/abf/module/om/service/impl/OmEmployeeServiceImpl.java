@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.tis.tools.abf.module.ac.entity.AcOperator;
+import org.tis.tools.abf.module.ac.entity.vo.OperatorEmp;
 import org.tis.tools.abf.module.ac.service.IAcOperatorService;
 import org.tis.tools.abf.module.common.entity.enums.YON;
 import org.tis.tools.abf.module.om.controller.request.OmEmployeeAddRequest;
@@ -20,6 +21,7 @@ import org.tis.tools.abf.module.om.entity.vo.OmEmployeeForPositionDetail;
 import org.tis.tools.abf.module.om.exception.OMExceptionCodes;
 import org.tis.tools.abf.module.om.exception.OrgManagementException;
 import org.tis.tools.abf.module.om.service.*;
+import org.tis.tools.core.utils.StringUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -582,5 +584,93 @@ public class OmEmployeeServiceImpl extends ServiceImpl<OmEmployeeMapper, OmEmplo
             throw new OrgManagementException(OMExceptionCodes.FAILURE_WHEN_CREATE_OM_EMP_ORG_AND_POSITION,wrap("该员工已存在于该机构的岗位下"));
         }
     }
+
+
+    @Override
+    public Page<OperatorEmp> queryEmpByName(Page<OmEmployee> page, Wrapper<OmEmployee> wrapper , String name) throws OrgManagementException {
+
+        //返回的信息
+        Page<OperatorEmp> operatorEmpPage = new Page<OperatorEmp>();
+        List<OperatorEmp> operatorEmpList = new ArrayList<OperatorEmp>();
+
+        if (null == wrapper){
+            wrapper = new EntityWrapper<OmEmployee>();
+        }
+
+        //判断姓名是否为空 为空则查询该姓名下的操作员  不为空则查询所有操作员
+        Page<OmEmployee> empPage = new Page<OmEmployee>();
+        List<OmEmployee> empList = new ArrayList<OmEmployee>();
+        //if(StringUtil.isEmpty(name)){
+        if("queryAll".equals(name)){
+            //分页查询所有员工
+            empPage = selectPage(page,wrapper);
+            empList = empPage.getRecords();
+
+        }else {
+            //根据姓名查询员工
+            wrapper.eq(OmEmployee.COLUMN_EMP_NAME,name);
+            empPage = selectPage(page,wrapper);
+            empList = empPage.getRecords();
+        }
+
+        for (OmEmployee omEmployee : empList){
+            if (null != omEmployee){
+
+                //新建OperatorEmp对象
+                OperatorEmp operatorEmp = new OperatorEmp();
+
+                operatorEmp.setEmpCode(omEmployee.getEmpCode());
+                operatorEmp.setEmpName(omEmployee.getEmpName());
+
+                //根据员工信息查询员工所在主机构信息
+                Wrapper<OmEmpOrg> empOrgWrapper = new EntityWrapper<OmEmpOrg>();
+                empOrgWrapper.eq(OmEmpOrg.COLUMN_GUID_EMP,omEmployee.getGuid());
+                empOrgWrapper.eq(OmEmpOrg.COLUMN_ISMAIN,YON.YES);
+
+                OmEmpOrg omEmpOrg = omEmpOrgService.selectOne(empOrgWrapper);
+                //如果非空则根据该机构id查询机构名称,否则根据员工的主机构id查询机构信息
+                if (null != omEmpOrg){
+                    OmOrg omOrg = omOrgService.selectById(omEmpOrg.getGuidOrg());
+                    if (null != omOrg){
+                        operatorEmp.setOrgName(omOrg.getOrgName());
+                    }else {
+                        operatorEmp.setOrgName("");
+                    }
+                }else {
+                    OmOrg omOrg = omOrgService.selectById(omEmployee.getGuidOrg());
+                    if (null != omOrg){
+                        operatorEmp.setOrgName(omOrg.getOrgName());
+                    }else {
+                        operatorEmp.setOrgName("");
+                    }
+                }
+
+                //根据员工的user_id查询对应的操作员信息
+                if (StringUtil.isEmpty(omEmployee.getUserId())){
+                    operatorEmp.setOperatorId("");
+                }else {
+                    Wrapper<AcOperator> operatorWrapper = new EntityWrapper<AcOperator>();
+                    operatorWrapper.eq(AcOperator.COLUMN_USER_ID, omEmployee.getUserId());
+
+                    AcOperator acOperator = operatorService.selectOne(operatorWrapper);
+                    if (null != acOperator) {
+                        operatorEmp.setOperatorId(acOperator.getGuid());
+                    } else {
+                        operatorEmp.setOperatorId("");
+                    }
+                }
+                operatorEmpList.add(operatorEmp);
+            }
+        }
+
+        operatorEmpPage.setCondition(empPage.getCondition());
+        operatorEmpPage.setRecords(operatorEmpList);
+        operatorEmpPage.setTotal(empPage.getTotal());
+        operatorEmpPage.setSize(empPage.getSize());
+        operatorEmpPage.setCurrent(empPage.getCurrent());
+
+        return operatorEmpPage;
+    }
+
 }
 
