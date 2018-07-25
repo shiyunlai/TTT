@@ -2,24 +2,30 @@ package org.tis.tools.abf.module.ac.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.tis.tools.abf.module.ac.dao.AcRoleMapper;
 import org.tis.tools.abf.module.ac.entity.AcOperatorRole;
 import org.tis.tools.abf.module.ac.entity.AcRole;
-import org.tis.tools.abf.module.ac.dao.AcRoleMapper;
-import org.springframework.stereotype.Service;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import org.springframework.transaction.annotation.Transactional;
 import org.tis.tools.abf.module.ac.entity.AcRoleFunc;
 import org.tis.tools.abf.module.ac.exception.AcExceptionCodes;
 import org.tis.tools.abf.module.ac.exception.AcRoleManagementException;
 import org.tis.tools.abf.module.ac.service.IAcOperatorRoleService;
 import org.tis.tools.abf.module.ac.service.IAcRoleFuncService;
 import org.tis.tools.abf.module.ac.service.IAcRoleService;
+import org.tis.tools.abf.module.common.entity.Tree;
 import org.tis.tools.abf.module.common.entity.enums.YON;
+import org.tis.tools.abf.module.common.entity.vo.TreeDetail;
 import org.tis.tools.core.exception.i18.ExceptionCodes;
+import org.tis.tools.core.utils.StringUtil;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.tis.tools.core.utils.BasicUtil.wrap;
 
@@ -177,28 +183,49 @@ public class AcRoleServiceImpl extends ServiceImpl<AcRoleMapper, AcRole> impleme
 
 
     /**
-     * <pre>
-     * 增加某个角色的功能
+     * 查询角色树
      *
-     *
-     * </pre>
-     * @param acRoleFunc
-     * @return 返回增加结果
+     * @return
      * @throws AcRoleManagementException
      */
     @Override
-    public boolean addRoleFunc(AcRoleFunc acRoleFunc) throws AcRoleManagementException {
-            try {
-                boolean bolen = acRoleFuncService.addRoleFunc(acRoleFunc);
-                return  bolen;
-            }catch (Exception e){
-                throw new AcRoleManagementException(ExceptionCodes.FAILURE_WHEN_INSERT,wrap("AC_ROLE_FUNC","AC_ROLE_FUNC"));
+    public List<TreeDetail> queryRoleTree() throws AcRoleManagementException {
+
+        //查询角色中有几种分组
+        List<String> distinctGroupList = this.baseMapper.queryDistinctRoleGroup();
+        //为了避免查询回来的数组还有重复值
+        Set<String> set = new HashSet<String>(distinctGroupList);
+        distinctGroupList.clear();
+        distinctGroupList.addAll(set);
+
+        List<TreeDetail> list = new ArrayList<TreeDetail>();
+        for(String groupName : distinctGroupList){
+            if (StringUtil.isNotNull(groupName)){
+                    TreeDetail treeDetail = new TreeDetail();
+                    treeDetail.setLabel(groupName);
+
+                    //查询该分组下对应的角色
+                    Wrapper<AcRole> wrapper = new EntityWrapper<AcRole>();
+                    wrapper.eq(AcRole.COLUMN_ROLE_GROUP,groupName);
+
+                    List<Tree> treeList = new ArrayList<Tree>();
+
+                    List<AcRole> roleList = selectList(wrapper);
+                    //将查询出来的角色放到列表中
+                    for (AcRole acRole : roleList){
+                        if (null != acRole){
+                            Tree tree = new Tree();
+                            tree.setGuid(acRole.getGuid());
+                            tree.setLabel(acRole.getRoleName());
+                            treeList.add(tree);
+                        }
+                    }
+
+                    treeDetail.setChildren(treeList);
+                    list.add(treeDetail);
             }
-
+        }
+        return list;
     }
-
-
-
-
 }
 
