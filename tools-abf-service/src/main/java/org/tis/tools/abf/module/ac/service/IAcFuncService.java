@@ -76,5 +76,28 @@ public interface IAcFuncService extends IService<AcFunc>  {
      */
     void moveFunc(String id) throws AcManagementException;
 
+    /**
+     * 根据应用查询功能列表
+     * @param appId
+     * @return
+     * @throws AcManagementException
+     */
+    List<AcFunc> queryFuncTreeByApp(String appId) throws AcManagementException;
+
+    /**
+     * 根据应用和父功能下的子功能查询功能列表
+     * @param appId
+     * @return
+     * @throws AcManagementException
+     */
+    List<AcFunc> queryFuncTreeByAppFunc(String appId,String funcId) throws AcManagementException;
+
+    /**
+     * 根据应用和功能查询行为列表
+     * @param appId
+     * @return
+     * @throws AcManagementException
+     */
+    List<AcFunc> queryBehaveTreeByAppFunc(String appId,String funcId) throws AcManagementException;
 }
 
