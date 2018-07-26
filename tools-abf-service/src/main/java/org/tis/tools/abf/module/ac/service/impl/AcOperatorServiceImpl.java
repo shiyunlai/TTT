@@ -15,7 +15,10 @@ import org.tis.tools.abf.module.ac.entity.enums.OperatorStatus;
 import org.tis.tools.abf.module.ac.exception.AcExceptionCodes;
 import org.tis.tools.abf.module.ac.exception.AcOperatorManagementException;
 import org.tis.tools.abf.module.ac.service.*;
+import org.tis.tools.abf.module.common.entity.enums.YON;
 import org.tis.tools.core.exception.i18.ExceptionCodes;
+import org.tis.tools.core.utils.BeanFieldValidateUtil;
+import org.tis.tools.core.utils.StringUtil;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -31,6 +34,9 @@ import static org.tis.tools.core.utils.BasicUtil.wrap;
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class AcOperatorServiceImpl extends ServiceImpl<AcOperatorMapper, AcOperator> implements IAcOperatorService {
+
+    @Autowired
+    private IAcOperatorService acOperatorService;
 
     @Autowired
     private IAcOperatorRoleService acOperatorRoleService;
@@ -114,7 +120,15 @@ public class AcOperatorServiceImpl extends ServiceImpl<AcOperatorMapper, AcOpera
             acOperator.setMacCode(request.getMacCode());
             acOperator.setIpAddress(request.getIpAddress());
 
-        insert(acOperator);
+            insert(acOperator);
+
+            //新增 默认操作员身份
+            AcOperatorIdentity acOperatorIdentity = new AcOperatorIdentity();
+            //固定名称
+            acOperatorIdentity.setIdentityName("系统默认身份");
+            acOperatorIdentity.setIdentityFlag(YON.YES);
+            acOperatorIdentity.setGuidOperator(acOperator.getGuid());
+            acOperatorIdentityService.insert(acOperatorIdentity);
 
         return isexist;
         }catch (Exception e){
@@ -135,18 +149,36 @@ public class AcOperatorServiceImpl extends ServiceImpl<AcOperatorMapper, AcOpera
         boolean isexist = new Boolean(false);
 
         try {
+            //判断传入的对象是否为空
+            if (acOperator == null) {
+                throw new AcOperatorManagementException(AcExceptionCodes.OBJECT_IS_NULL, wrap("acOperator"));
+            }
+            // TODO 验证不全
+            String[] validateFields = {
+                    "guid", "operatorName", "authMode"
+            };
+            String result = BeanFieldValidateUtil.checkObjFieldRequired(acOperator, validateFields);
+            //USER_ID 必填
+            if (!StringUtil.isBlank(result)) {
+                throw new AcOperatorManagementException(ExceptionCodes.LACK_PARAMETERS_WHEN_UPDATE, wrap(result,AcOperator.NAME));
+            }
 
-                //判断user_id是否已经存在,确保user_id的唯一性
-                Wrapper<AcOperator> wrapper = new EntityWrapper<AcOperator>();
-                List<AcOperator > lists = selectList(wrapper);
+            //判断user_id是否已经存在,确保user_id的唯一性
+            Wrapper<AcOperator> wrapper = new EntityWrapper<AcOperator>();
+            wrapper.eq(AcOperator.COLUMN_USER_ID,acOperator.getUserId());
+            wrapper.eq(AcOperator.COLUMN_GUID,acOperator.getGuid());
 
-                for (AcOperator acOperatorNew:lists) {
-                    if (acOperator.getUserId().equals(acOperatorNew.getUserId()) && !(acOperator.getGuid().equals(acOperatorNew.getGuid())) ){
-                        return isexist;
-                    }
+           // List<AcOperator > lists = selectList(wrapper);
+           //  for (AcOperator acOperatorNew:lists) {
+                if (acOperatorService.selectCount(wrapper) > 0){
+                    return isexist;
                 }
-                //循环结束之后表示没有重复,故设置标志位为true
-                isexist = true;
+           //   }
+            //循环结束之后表示没有重复,故设置标志位为true
+            isexist = true;
+
+
+
 
             updateById(acOperator);
             return isexist;
@@ -235,6 +267,12 @@ public class AcOperatorServiceImpl extends ServiceImpl<AcOperatorMapper, AcOpera
     public void moveOperator(String id) throws AcOperatorManagementException {
 
         try {
+            AcOperator acOperator = new AcOperator();
+
+            if(!acOperator.getOperatorStatus().equals(OperatorStatus.stop)){
+                throw new AcOperatorManagementException(AcExceptionCodes.CURRENT_STATUS_IS_NOT_ALLOWED_DELETE,
+                        wrap(acOperator.getOperatorStatus(), AcOperator.NAME));
+            }
 
             //删除操作员与权限集（角色）对应关系数据
             Wrapper<AcOperatorRole> wrapperRole = new EntityWrapper<AcOperatorRole>();

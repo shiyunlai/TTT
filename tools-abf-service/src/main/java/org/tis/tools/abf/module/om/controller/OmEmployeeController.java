@@ -211,6 +211,16 @@ public class OmEmployeeController extends BaseController<OmEmployee>  {
         omEmployeeService.addInOrgAndPosition(omEmployee);
         return ResultVO.success("添加成功");
     }
+
+    /**
+     * 根据姓名查询员工分页
+     * @param name
+     * @return
+     */
+    @PostMapping("/queryByName/{name}")
+    public ResultVO queryByName(@RequestBody @Validated SmartPage<OmEmployee> page, @PathVariable String name){
+        return  ResultVO.success("查询成功", omEmployeeService.queryEmpByName(getPage(page),getCondition(page),name));
+    }
     
 }
 

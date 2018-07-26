@@ -151,5 +151,38 @@ public class AcFuncController extends BaseController<AcFunc>  {
         acFuncService.updateById(acFunc);
         return ResultVO.success("停用成功！",acFunc);
     }
+
+    /**
+     * 根据应用id查询功能树
+     * @param appId
+     * @return
+     */
+    @GetMapping("/funcTreeByApp/{appId}")
+    public ResultVO queryFuncTreeByApp(@PathVariable @NotBlank(message = "应用id不能为空") String appId){
+        return ResultVO.success("查询成功",acFuncService.queryFuncTreeByApp(appId));
+    }
+
+    /**
+     * 根据应用和功能id查询子功能树
+     * @param appId
+     * @param funcId
+     * @return
+     */
+    @GetMapping("/funcTreeByAppFunc/{appId}/{funcId}")
+    public ResultVO queryTreeByAppFunc(@PathVariable @NotBlank(message = "应用id不能为空") String appId,@PathVariable @NotBlank(message = "功能id不能为空") String funcId){
+        return ResultVO.success("查询成功",acFuncService.queryFuncTreeByAppFunc(appId,funcId));
+    }
+
+    /**
+     * 根据应用和功能id查询行为列表
+     * @param appId
+     * @param funcId
+     * @return
+     */
+    @GetMapping("/behaveTreeByAppFunc/{appId}/{funcId}")
+    public ResultVO queryBehaveByAppFunc(@PathVariable @NotBlank(message = "应用id不能为空") String appId,@PathVariable @NotBlank(message = "功能id不能为空") String funcId){
+        return ResultVO.success("查询成功",acFuncService.queryBehaveTreeByAppFunc(appId,funcId));
+    }
+
 }
 

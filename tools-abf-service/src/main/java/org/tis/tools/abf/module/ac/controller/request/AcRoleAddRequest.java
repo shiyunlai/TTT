@@ -8,8 +8,6 @@ import org.tis.tools.abf.module.common.entity.enums.YON;
 import org.tis.tools.core.entity.enums.CommonEnumDeserializer;
 import org.tis.tools.core.entity.request.RestRequest;
 
-import javax.validation.constraints.NotNull;
-
 /**
 *@author wfl
 * @date 2018/05/09
@@ -25,11 +23,11 @@ public class AcRoleAddRequest extends RestRequest {
     private String roleName;
 
     @JSONField(deserializeUsing= CommonEnumDeserializer.class)
-    @NotNull(message = "是否启用不能为空")
     private YON enabled;
 
     private String roleDesc;
 
+    @NotBlank(message = "角色分组不能为空")
     private String roleGroup;
 
 }

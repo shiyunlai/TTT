@@ -3,6 +3,7 @@ package org.tis.tools.abf.module.om.service;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.IService;
+import org.tis.tools.abf.module.ac.entity.vo.OperatorEmp;
 import org.tis.tools.abf.module.om.controller.request.OmEmployeeAddRequest;
 import org.tis.tools.abf.module.om.controller.request.OmEmployeeByOrgAndPositionRequest;
 import org.tis.tools.abf.module.om.controller.request.OmEmployeeUpdateRequest;
@@ -109,6 +110,16 @@ public interface IOmEmployeeService extends IService<OmEmployee>  {
      * @throws OrgManagementException
      */
     void addInOrgAndPosition(OmEmployee omEmployee)throws  OrgManagementException;
+
+
+    /**
+     * 根据姓名查询员工
+     * @param name
+     * @return
+     * @throws OrgManagementException
+     */
+    Page<OperatorEmp> queryEmpByName(Page<OmEmployee> page, Wrapper<OmEmployee> wrapper , String name) throws
+            OrgManagementException;
 
 }
 

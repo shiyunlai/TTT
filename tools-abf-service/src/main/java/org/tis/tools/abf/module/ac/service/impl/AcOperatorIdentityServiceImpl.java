@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.tis.tools.abf.module.ac.controller.request.AcOperatorDefaultIdentity;
 import org.tis.tools.abf.module.ac.controller.request.AcOperatorIdentityRequest;
 import org.tis.tools.abf.module.ac.dao.AcOperatorIdentityMapper;
 import org.tis.tools.abf.module.ac.entity.AcApp;
@@ -20,6 +21,7 @@ import org.tis.tools.abf.module.ac.service.IAcOperatorIdentityService;
 import org.tis.tools.abf.module.ac.service.IAcOperatorIdentityresService;
 import org.tis.tools.abf.module.ac.service.IAcOperatorService;
 import org.tis.tools.abf.module.common.entity.enums.YON;
+import org.tis.tools.core.utils.StringUtil;
 
 import java.util.List;
 
@@ -55,9 +57,11 @@ public class AcOperatorIdentityServiceImpl extends ServiceImpl<AcOperatorIdentit
         }
 
         //判断guidApp对应的应用是否存在
-        AcApp acApp = acAppService.selectById(acOperatorIdentityRequest.getGuidApp());
-        if (null == acApp){
-            throw new AcManagementException(AcExceptionCodes.FAILURE_WHRN_QUERY_AC_APP,wrap("查询应用失败"),acOperatorIdentityRequest.getGuidApp());
+        if (!StringUtil.isEmpty(acOperatorIdentityRequest.getGuidApp())){
+            AcApp acApp = acAppService.selectById(acOperatorIdentityRequest.getGuidApp());
+            if (null == acApp){
+                throw new AcManagementException(AcExceptionCodes.FAILURE_WHRN_QUERY_AC_APP,wrap("查询应用失败"),acOperatorIdentityRequest.getGuidApp());
+            }
         }
 
         changeOtherToNo(acOperatorIdentityRequest);
@@ -156,6 +160,39 @@ public class AcOperatorIdentityServiceImpl extends ServiceImpl<AcOperatorIdentit
                 }
             }
         }
+    }
+
+    /**
+     * 修改操作员默认身份
+     */
+    @Override
+    public AcOperatorIdentity changeDefaultOperatorIdentity(AcOperatorDefaultIdentity acDefault) throws AcManagementException {
+
+        //判断guidOperator对应的操作员是否存在
+        AcOperator acOperator = acOperatorService.selectById(acDefault.getGuidOperator());
+        if (null == acOperator){
+            throw new AcManagementException(AcExceptionCodes.FAILURE_WHEN_QUERY_AC_OPERATOR,wrap("查询操作员失败",acDefault.getGuidOperator()));
+        }
+
+        //查询需要默认的操作员是否存在
+        Wrapper<AcOperatorIdentity> wrapperDefault = new EntityWrapper<AcOperatorIdentity>();
+        wrapperDefault.eq(AcOperatorIdentity.COLUMN_GUID,acDefault.getGuid()).eq(AcOperatorIdentity
+                .COLUMN_GUID_OPERATOR,acDefault.getGuidOperator());
+        //需要默认的身份
+        AcOperatorIdentity acOperatorIdentityDefault = selectOne(wrapperDefault);
+        if (acOperatorIdentityDefault == null){
+            throw new AcManagementException(AcExceptionCodes.FAILURE_WHEN_QUERY_AC_OPERATOR_IDENTITY,wrap
+                    ("需要修改的操作员身份不存在"));
+        }
+
+        //首先将该操作员的其他身份设置为非默认状态
+        this.baseMapper.setDefaultIdentity(acDefault.getGuid(),acDefault.getGuidOperator());
+
+        //修改操作员默认身份
+        acOperatorIdentityDefault.setIdentityFlag(YON.YES);
+        updateById(acOperatorIdentityDefault);
+
+        return acOperatorIdentityDefault;
     }
 }
 

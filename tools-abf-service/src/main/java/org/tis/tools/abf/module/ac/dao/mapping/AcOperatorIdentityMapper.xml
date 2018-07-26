@@ -2,4 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.tis.tools.abf.module.ac.dao.AcOperatorIdentityMapper">
 
+    <update id="setDefaultIdentity" >
+        UPDATE
+        AC_OPERATOR_IDENTITY
+        SET
+        IDENTITY_FLAG = 'N'
+        <where>
+            GUID_OPERATOR = #{guidOperator}
+            AND
+            GUID != #{guid}
+        </where>
+    </update>
+
+
 </mapper>
