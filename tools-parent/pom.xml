@@ -16,8 +16,10 @@
 		<module>../tools-model</module>
 
 		<!-- tools platform runtime -->
+		<module>../tools-auth-server</module>
 		<module>../tools-eureka-server</module>
 		<module>../tools-config-server</module>
+		<module>../tools-gateway-server</module>
 		<module>../tools-abf-service</module>
 		<module>../tools-asf-service</module>
 
