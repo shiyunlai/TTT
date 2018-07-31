@@ -3,12 +3,14 @@
 # 功能说明: 备份mysql数据库
 #
 # 使用说明:
+# ---------------------------
 # 脚本运行所需用户/密码/mysqlsocket请设置在.mysqldumpconf文件中，脚本首次执行会自动生成该文件。
 # [client]
 # user=xxxx
 # password=xxxx
 # socket=/tmp/mysql.sock
 #
+# ---------------------------
 # USAGE: bash mysqldump.sh [-d 数据库(多数据库逗号隔开)] [-t 表名] [-s 备份保存路径] [-l 备份保留天数] [-z 打开压缩功能]
 #
 # 参数使用说明:
@@ -18,7 +20,12 @@
 #    -s      非必传      指定备份存放路径(默认当前路径下backup)
 #    -l      非必传      备份保留天数
 #    -z      不用传递参数    打开压缩功能
+# 
+# ---------------------------
+# 可增加crontab自动备份
+# 0 0 * * * sh /autoscript/mysql_backup/mysqldump.sh -d tistools -s /backup -l 7 -z
 #
+# ---------------------------
 # 使用案例:
 #
 # 0.查看使用说明
