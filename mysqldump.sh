@@ -3,6 +3,11 @@
 # 功能说明: 备份mysql数据库
 #
 # 使用说明:
+# 脚本运行所需用户/密码/mysqlsocket请设置在.mysqldumpconf文件中，脚本首次执行会自动生成该文件。
+# [client]
+# user=xxxx
+# password=xxxx
+# socket=/tmp/mysql.sock
 #
 # USAGE: bash mysqldump.sh [-d 数据库(多数据库逗号隔开)] [-t 表名] [-s 备份保存路径] [-l 备份保留天数] [-z 打开压缩功能]
 #
