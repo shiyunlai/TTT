@@ -10,7 +10,7 @@ import org.tis.tools.abf.module.sys.controller.request.SysSeqnoResetRequest;
 import org.tis.tools.abf.module.sys.entity.SysSeqno;
 import org.tis.tools.abf.module.sys.service.ISysSeqnoService;
 import org.tis.tools.core.web.controller.BaseController;
-import org.tis.tools.core.web.vo.ResultVO;
+import org.tis.tools.model.common.ResultVO;
 import org.tis.tools.core.web.vo.SmartPage;
 
 import java.math.BigDecimal;

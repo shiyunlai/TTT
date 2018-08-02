@@ -1,12 +1,7 @@
 package org.tis.tools.abf.module.jnl.aop;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.baomidou.mybatisplus.plugins.Page;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import org.apache.commons.lang.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -23,16 +18,12 @@ import org.tis.tools.abf.module.jnl.core.LogDataThreadLocal;
 import org.tis.tools.abf.module.jnl.core.OperateLogBuilder;
 import org.tis.tools.abf.module.jnl.annotation.OperateLog;
 import org.tis.tools.abf.module.jnl.entity.enums.OperateResult;
-import org.tis.tools.abf.module.jnl.entity.enums.ReturnType;
 import org.tis.tools.abf.module.jnl.entity.vo.LogDataDetail;
-import org.tis.tools.abf.module.jnl.exception.OperateLogException;
-import org.tis.tools.abf.module.jnl.exception.OperateLogExceptionCodes;
 import org.tis.tools.abf.module.jnl.entity.vo.LogOperateDetail;
 import org.tis.tools.abf.module.jnl.service.ILogAbfOperateService;
 import org.tis.tools.core.exception.ToolsRuntimeException;
 import org.tis.tools.core.utils.BasicUtil;
-import org.tis.tools.core.web.vo.ResultVO;
-import org.tis.tools.model.log.LogData;
+import org.tis.tools.model.common.ResultVO;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -69,7 +60,7 @@ public class OperateLogHandler {
     /**
      * 需要记录日志的切入点
      */
-    @Pointcut("execution(public org.tis.tools.core.web.vo.ResultVO org.tis.tools.abf.module..*Controller.*(..))")
+    @Pointcut("execution(public org.tis.tools.model.common.ResultVO org.tis.tools.abf.module..*Controller.*(..))")
     public void logPoint() {}
 
 

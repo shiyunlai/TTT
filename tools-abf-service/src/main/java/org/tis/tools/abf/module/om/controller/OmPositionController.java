@@ -13,7 +13,7 @@ import org.tis.tools.abf.module.om.entity.enums.OmPositionStatus;
 import org.tis.tools.abf.module.om.entity.enums.OmPositionType;
 import org.tis.tools.abf.module.om.service.IOmPositionService;
 import org.tis.tools.core.web.controller.BaseController;
-import org.tis.tools.core.web.vo.ResultVO;
+import org.tis.tools.model.common.ResultVO;
 import org.tis.tools.core.web.vo.SmartPage;
 
 import java.util.List;

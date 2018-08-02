@@ -6,7 +6,7 @@ import org.tis.tools.core.web.vo.SmartPage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.hibernate.validator.constraints.NotBlank;
-import org.tis.tools.core.web.vo.ResultVO;
+import org.tis.tools.model.common.ResultVO;
 import org.tis.tools.abf.module.sys.service.ISysDutyDefService;
 import org.tis.tools.abf.module.sys.entity.SysDutyDef;
 

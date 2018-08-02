@@ -10,7 +10,7 @@ import org.tis.tools.abf.module.sys.controller.request.SysErrCodeRequest;
 import org.tis.tools.abf.module.sys.entity.SysErrCode;
 import org.tis.tools.abf.module.sys.service.ISysErrCodeService;
 import org.tis.tools.core.web.controller.BaseController;
-import org.tis.tools.core.web.vo.ResultVO;
+import org.tis.tools.model.common.ResultVO;
 import org.tis.tools.core.web.vo.SmartPage;
 
 /**

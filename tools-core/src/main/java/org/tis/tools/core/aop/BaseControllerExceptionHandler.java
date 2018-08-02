@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.tis.tools.core.exception.ToolsRuntimeException;
 import org.tis.tools.core.exception.WebAppException;
-import org.tis.tools.core.web.vo.ResultVO;
+import org.tis.tools.model.common.ResultVO;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;

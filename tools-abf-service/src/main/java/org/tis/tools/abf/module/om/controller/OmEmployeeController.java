@@ -15,7 +15,7 @@ import org.tis.tools.abf.module.om.entity.enums.OmEmployeeStatus;
 import org.tis.tools.abf.module.om.service.IOmEmployeeService;
 import org.tis.tools.core.web.controller.BaseController;
 import org.tis.tools.core.web.vo.PageVO;
-import org.tis.tools.core.web.vo.ResultVO;
+import org.tis.tools.model.common.ResultVO;
 import org.tis.tools.core.web.vo.SmartPage;
 
 import java.util.List;

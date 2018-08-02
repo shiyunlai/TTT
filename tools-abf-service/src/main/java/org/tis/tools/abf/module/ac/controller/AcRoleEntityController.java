@@ -8,7 +8,7 @@ import org.tis.tools.core.web.vo.SmartPage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.hibernate.validator.constraints.NotBlank;
-import org.tis.tools.core.web.vo.ResultVO;
+import org.tis.tools.model.common.ResultVO;
 
 /**
  * acRoleEntity的Controller类

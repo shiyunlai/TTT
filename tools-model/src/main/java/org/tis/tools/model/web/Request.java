@@ -1,4 +1,4 @@
-package org.tis.tools.core.entity.request;
+package org.tis.tools.model.web;
 
 import java.io.Serializable;
 

@@ -3,7 +3,7 @@ package org.tis.tools.abf.module.om.controller.request;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.validator.constraints.NotBlank;
-import org.tis.tools.core.entity.request.RestRequest;
+import org.tis.tools.model.web.RestRequest;
 
 /**
  * Created by chenchao

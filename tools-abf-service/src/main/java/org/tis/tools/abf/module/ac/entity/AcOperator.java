@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.annotations.TableName;
 import java.util.Date;
 
 import com.baomidou.mybatisplus.enums.FieldFill;
+import com.baomidou.mybatisplus.mapper.Condition;
 import lombok.Data;
 import com.baomidou.mybatisplus.annotations.TableId;
 import org.hibernate.validator.constraints.NotBlank;

@@ -13,7 +13,7 @@ import org.tis.tools.core.web.controller.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.tis.tools.abf.module.sys.entity.SysDictItem;
 import org.springframework.web.bind.annotation.*;
-import org.tis.tools.core.web.vo.ResultVO;
+import org.tis.tools.model.common.ResultVO;
 import org.tis.tools.core.web.vo.SmartPage;
 
 /**

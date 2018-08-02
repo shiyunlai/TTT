@@ -5,7 +5,7 @@ import lombok.Data;
 import org.hibernate.validator.constraints.NotBlank;
 import org.tis.tools.abf.module.om.entity.enums.OmGroupType;
 import org.tis.tools.core.entity.enums.CommonEnumDeserializer;
-import org.tis.tools.core.entity.request.RestRequest;
+import org.tis.tools.model.web.RestRequest;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;

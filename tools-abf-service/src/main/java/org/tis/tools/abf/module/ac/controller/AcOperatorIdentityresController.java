@@ -10,7 +10,7 @@ import org.tis.tools.abf.module.ac.service.IAcOperatorIdentityresService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.hibernate.validator.constraints.NotBlank;
-import org.tis.tools.core.web.vo.ResultVO;
+import org.tis.tools.model.common.ResultVO;
 import org.tis.tools.abf.module.ac.entity.AcOperatorIdentityres;
 
 /**

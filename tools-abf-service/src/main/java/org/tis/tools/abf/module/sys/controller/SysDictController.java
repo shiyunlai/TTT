@@ -16,7 +16,7 @@ import org.tis.tools.abf.module.sys.entity.SysDict;
 import org.tis.tools.abf.module.sys.exception.SysManagementException;
 import org.tis.tools.abf.module.sys.service.ISysDictService;
 import org.tis.tools.core.web.controller.BaseController;
-import org.tis.tools.core.web.vo.ResultVO;
+import org.tis.tools.model.common.ResultVO;
 import org.tis.tools.core.web.vo.SmartPage;
 
 import javax.validation.constraints.NotNull;

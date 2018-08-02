@@ -7,7 +7,7 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.tis.tools.abf.module.ac.entity.enums.AuthMode;
 import org.tis.tools.abf.module.ac.entity.enums.OperatorStatus;
 import org.tis.tools.core.entity.enums.CommonEnumDeserializer;
-import org.tis.tools.core.entity.request.RestRequest;
+import org.tis.tools.model.web.RestRequest;
 
 import java.math.BigDecimal;
 import java.util.Date;

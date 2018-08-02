@@ -9,7 +9,7 @@ import org.tis.tools.abf.module.om.entity.enums.OmGender;
 import org.tis.tools.abf.module.om.entity.enums.OmPaperType;
 import org.tis.tools.abf.module.om.entity.enums.OmZipCode;
 import org.tis.tools.core.entity.enums.CommonEnumDeserializer;
-import org.tis.tools.core.entity.request.RestRequest;
+import org.tis.tools.model.web.RestRequest;
 
 import javax.validation.constraints.NotNull;
 import java.util.Date;

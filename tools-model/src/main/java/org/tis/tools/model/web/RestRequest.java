@@ -1,4 +1,4 @@
-package org.tis.tools.core.entity.request;
+package org.tis.tools.model.web;
 
 /**
  * describe: Rest请求基类

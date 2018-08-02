@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.tis.tools.abf.module.jnl.entity.LogAbfOperate;
 import org.tis.tools.abf.module.jnl.service.ILogAbfOperateService;
 import org.tis.tools.core.web.controller.BaseController;
-import org.tis.tools.core.web.vo.ResultVO;
+import org.tis.tools.model.common.ResultVO;
 import org.tis.tools.core.web.vo.SmartPage;
 
 /**

@@ -11,7 +11,7 @@ import org.tis.tools.abf.module.om.controller.request.OmPositionAppRequest;
 import org.tis.tools.abf.module.om.entity.OmPositionApp;
 import org.tis.tools.abf.module.om.service.IOmPositionAppService;
 import org.tis.tools.core.web.controller.BaseController;
-import org.tis.tools.core.web.vo.ResultVO;
+import org.tis.tools.model.common.ResultVO;
 import org.tis.tools.core.web.vo.SmartPage;
 
 /**

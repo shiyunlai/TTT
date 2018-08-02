@@ -2,8 +2,7 @@ package org.tis.tools.abf.module.sys.controller.request;
 
 import lombok.Data;
 import org.hibernate.validator.constraints.NotBlank;
-import org.tis.tools.abf.module.sys.entity.SysRunConfig;
-import org.tis.tools.core.entity.request.RestRequest;
+import org.tis.tools.model.web.RestRequest;
 
 @Data
 public class SysRunConfigRequest extends RestRequest {

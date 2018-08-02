@@ -13,7 +13,7 @@ import org.tis.tools.abf.module.om.entity.OmOrg;
 import org.tis.tools.abf.module.om.entity.enums.OmOrgStatus;
 import org.tis.tools.abf.module.om.service.IOmOrgService;
 import org.tis.tools.core.web.controller.BaseController;
-import org.tis.tools.core.web.vo.ResultVO;
+import org.tis.tools.model.common.ResultVO;
 import org.tis.tools.core.web.vo.SmartPage;
 
 /**

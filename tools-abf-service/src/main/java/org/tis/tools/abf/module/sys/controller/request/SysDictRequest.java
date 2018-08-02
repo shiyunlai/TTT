@@ -6,7 +6,7 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.tis.tools.abf.module.sys.entity.enums.DictFromType;
 import org.tis.tools.abf.module.sys.entity.enums.DictType;
 import org.tis.tools.core.entity.enums.CommonEnumDeserializer;
-import org.tis.tools.core.entity.request.RestRequest;
+import org.tis.tools.model.web.RestRequest;
 
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;

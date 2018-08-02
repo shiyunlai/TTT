@@ -10,7 +10,7 @@ import org.tis.tools.abf.module.om.controller.request.OmEmpPositionRequest;
 import org.tis.tools.abf.module.om.entity.OmEmpPosition;
 import org.tis.tools.abf.module.om.service.IOmEmpPositionService;
 import org.tis.tools.core.web.controller.BaseController;
-import org.tis.tools.core.web.vo.ResultVO;
+import org.tis.tools.model.common.ResultVO;
 import org.tis.tools.core.web.vo.SmartPage;
 
 /**

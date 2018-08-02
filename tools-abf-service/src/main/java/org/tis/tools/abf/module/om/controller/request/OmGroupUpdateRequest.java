@@ -1,12 +1,8 @@
 package org.tis.tools.abf.module.om.controller.request;
 
-import com.baomidou.mybatisplus.plugins.Page;
 import lombok.Data;
 import org.hibernate.validator.constraints.NotBlank;
-import org.tis.tools.abf.module.om.entity.OmEmployee;
-import org.tis.tools.core.entity.request.RestRequest;
-
-import javax.validation.constraints.NotNull;
+import org.tis.tools.model.web.RestRequest;
 
 @Data
 public class OmGroupUpdateRequest extends RestRequest {

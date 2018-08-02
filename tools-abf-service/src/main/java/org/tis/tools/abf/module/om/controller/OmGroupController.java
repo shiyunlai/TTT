@@ -1,37 +1,30 @@
 package org.tis.tools.abf.module.om.controller;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
-import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.ui.ModelMap;
+import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import org.tis.tools.abf.module.ac.entity.AcApp;
 import org.tis.tools.abf.module.jnl.annotation.OperateLog;
 import org.tis.tools.abf.module.jnl.entity.enums.OperateType;
 import org.tis.tools.abf.module.om.controller.request.*;
 import org.tis.tools.abf.module.om.entity.OmEmployee;
+import org.tis.tools.abf.module.om.entity.OmGroup;
 import org.tis.tools.abf.module.om.entity.OmPosition;
 import org.tis.tools.abf.module.om.entity.enums.OmGroupType;
-import org.tis.tools.abf.module.om.exception.OMExceptionCodes;
-import org.tis.tools.abf.module.om.exception.OrgManagementException;
 import org.tis.tools.abf.module.om.service.IOmEmpGroupService;
+import org.tis.tools.abf.module.om.service.IOmGroupService;
 import org.tis.tools.abf.module.om.service.IOmPositionService;
 import org.tis.tools.core.exception.ToolsRuntimeException;
 import org.tis.tools.core.web.controller.BaseController;
+import org.tis.tools.model.common.ResultVO;
 import org.tis.tools.core.web.vo.SmartPage;
-import org.tis.tools.abf.module.om.service.IOmGroupService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-import org.hibernate.validator.constraints.NotBlank;
-import org.tis.tools.core.web.vo.ResultVO;
-import org.tis.tools.abf.module.om.entity.OmGroup;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.groups.Default;
 import java.util.List;
-
-import static org.tis.tools.core.utils.BasicUtil.wrap;
 
 /**
  * omGroup的Controller类
@@ -190,7 +183,7 @@ public class OmGroupController extends BaseController<OmGroup>  {
      * @return
      */
     @RequestMapping(value = "/position")
-    public ResultVO loadPosition(ModelMap model, @RequestBody String content, String age, HttpServletRequest request,
+    public ResultVO loadPosition(@RequestBody String content, String age, HttpServletRequest request,
                                HttpServletResponse response) {
 //        try {
 //            JSONObject jsonObj = JSONObject.parseObject(content);

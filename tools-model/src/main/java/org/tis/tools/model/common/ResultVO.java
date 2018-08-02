@@ -1,8 +1,8 @@
-package org.tis.tools.core.web.vo;
+package org.tis.tools.model.common;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.tis.tools.core.entity.response.RestResponse;
+import org.tis.tools.model.web.RestResponse;
 
 /**
  * describe: 请求响应格式

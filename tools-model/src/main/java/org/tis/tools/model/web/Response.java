@@ -1,4 +1,4 @@
-package org.tis.tools.core.entity.response;
+package org.tis.tools.model.web;
 
 /**
  * describe:

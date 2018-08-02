@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.tis.tools.abf.module.sys.entity.enums.ErrCodeKind;
 import org.tis.tools.core.entity.enums.CommonEnumDeserializer;
-import org.tis.tools.core.entity.request.RestRequest;
+import org.tis.tools.model.web.RestRequest;
 
 /**
  * Created by chenchao
