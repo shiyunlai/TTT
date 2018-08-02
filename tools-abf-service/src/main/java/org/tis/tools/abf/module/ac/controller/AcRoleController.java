@@ -73,7 +73,7 @@ public class AcRoleController extends BaseController<AcRole>  {
     public ResultVO add(@RequestBody @Validated AcRoleAddRequest request) {
         boolean bolen = acRoleService.createAcRole(request.getRoleCode(),request.getRoleName(),request.getEnabled(),
                 request.getRoleDesc(),request.getRoleGroup());
-        return ResultVO.success("新增成功",bolen);
+        return ResultVO.success("新增成功");
     }
 
 
@@ -121,6 +121,19 @@ public class AcRoleController extends BaseController<AcRole>  {
 
         return ResultVO.success("启用成功",acRole);
     }
+
+    /**
+     * 查询角色树形结构
+     * @return
+     */
+    @GetMapping("/roleTree")
+    public ResultVO roleTree(){
+        return ResultVO.success("查询成功",acRoleService.queryRoleTree());
+    }
+
+
+
+
 
 }
 

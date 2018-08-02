@@ -1,11 +1,10 @@
 package org.tis.tools.abf.module.ac.service;
 
 import com.baomidou.mybatisplus.service.IService;
+import org.tis.tools.abf.module.ac.controller.request.AcRoleFuncAddRequest;
 import org.tis.tools.abf.module.ac.entity.AcRoleFunc;
 import org.tis.tools.abf.module.ac.exception.AcRoleFuncManagementException;
 
-import java.io.Serializable;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -47,11 +46,11 @@ public interface IAcRoleFuncService extends IService<AcRoleFunc>  {
      * </pre>
      *
      *
-     * @param acRoleFunc
+     * @param acRoleFuncAddRequest
      * @return 返回增结果
      * @throws AcRoleFuncManagementException
      */
-    boolean addRoleFunc(AcRoleFunc acRoleFunc) throws AcRoleFuncManagementException;
+    boolean addRoleFunc(AcRoleFuncAddRequest acRoleFuncAddRequest) throws AcRoleFuncManagementException;
 
     /**
      * <pre>
@@ -59,11 +58,11 @@ public interface IAcRoleFuncService extends IService<AcRoleFunc>  {
      * </pre>
      *
      *
-     * @param acRoleFunc
+     * @param acRoleFuncAddRequest
      * @return 返回增结果
      * @throws AcRoleFuncManagementException
      */
-    boolean update(AcRoleFunc acRoleFunc) throws AcRoleFuncManagementException;
+    AcRoleFunc update(AcRoleFuncAddRequest acRoleFuncAddRequest) throws AcRoleFuncManagementException;
 
 
 

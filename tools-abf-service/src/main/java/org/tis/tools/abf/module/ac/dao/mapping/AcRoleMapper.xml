@@ -2,4 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.tis.tools.abf.module.ac.dao.AcRoleMapper">
 
+    <select id="queryDistinctRoleGroup" resultType="java.lang.String">
+        SELECT  DISTINCT(role_Group) FROM AC_ROLE WHERE data_status = '0'
+    </select>
+
 </mapper>

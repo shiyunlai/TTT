@@ -437,8 +437,18 @@ public class AcExceptionCodes {
      * 删除角色失败
      */
     public static final String FAILURE_WHEN_DELETE_AC_ROLE = R_EX_CODE("0085");
-
-
+    /**
+     * 新增角色功能信息时功能未查到
+     */
+    public static final String NOT_FUNC_WHEN_CREATE_ROLEFUNC = R_EX_CODE("0086");
+    /**
+     * 新增角色功能信息时应用未查到
+     */
+    public static final String NOT_APP_WHEN_CREATE_ROLEFUNC = R_EX_CODE("0087");
+    /**
+     * 查询权限集失败
+     */
+     public static final String FAILURE_WHEN_QUERY_ROLE_FUNC = R_EX_CODE("0088");
 
 
     /**

@@ -58,7 +58,6 @@
 		<ehcache.core.version>2.6.11</ehcache.core.version>
 		<fastjson.version>1.2.44</fastjson.version>
 		<flowable.version>6.2.0</flowable.version>
-		<flyway-maven-plugin.version>5.0.3</flyway-maven-plugin.version>
 		<google-guava-version>23.5-jre</google-guava-version>
 		<hutool.version>4.0.6</hutool.version>
 		<junrar_version>0.7</junrar_version>

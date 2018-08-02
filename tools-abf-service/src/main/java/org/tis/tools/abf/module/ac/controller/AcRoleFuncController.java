@@ -37,27 +37,22 @@ public class AcRoleFuncController extends BaseController<AcRoleFunc> {
      * 增加角色功能，角色跟功能连接表中增加一条记录，角色跟功能都是已经存在的
      */
     @OperateLog(type = OperateType.ADD, desc = "增加角色功能")
-    @PostMapping("/add")
+    @PostMapping
     public ResultVO add(@RequestBody @Validated AcRoleFuncAddRequest acRoleFuncAddRequest) {
-        AcRoleFunc acRoleFunc = new AcRoleFunc();
-        acRoleFunc.setGuidApp(acRoleFuncAddRequest.getGuidApp());
-        acRoleFunc.setGuidFunc(acRoleFuncAddRequest.getGuidFunc());
-        acRoleFunc.setGuidRole(acRoleFuncAddRequest.getGuidRole());
-        boolean bolen = acRoleService.addRoleFunc(acRoleFunc);
-        AcRoleFunc acRoleFunc1 = acRoleFuncService.queryRoleFunByCondition(acRoleFunc);
-        return ResultVO.success("增加成功", acRoleFunc1);
+        boolean bolen = acRoleFuncService.addRoleFunc(acRoleFuncAddRequest);
+        return ResultVO.success("增加成功");
     }
 
     /**
-     * @param acRoleFunc
+     * @param acRoleFuncAddRequest
      * @return 修改角色功能结果
      */
     @OperateLog(type = OperateType.UPDATE, desc = "修改角色功能")
     @PutMapping
-    public ResultVO update(@RequestBody @Validated AcRoleFunc acRoleFunc) {
-        acRoleFuncService.update(acRoleFunc);
-        AcRoleFunc acRoleFunc1 = acRoleFuncService.queryRoleFunByCondition(acRoleFunc);
-        return ResultVO.success("修改成功！", acRoleFunc1);
+    public ResultVO update(@RequestBody @Validated AcRoleFuncAddRequest acRoleFuncAddRequest) {
+        AcRoleFunc acRoleFunc = acRoleFuncService.update(acRoleFuncAddRequest);
+        //AcRoleFunc acRoleFunc1 = acRoleFuncService.queryRoleFunByCondition(acRoleFuncAddRequest);
+        return ResultVO.success("修改成功！", acRoleFunc);
     }
 
     /**

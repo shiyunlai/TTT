@@ -4,6 +4,7 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.tis.tools.abf.module.ac.controller.request.AcOperatorDefaultIdentity;
 import org.tis.tools.abf.module.ac.controller.request.AcOperatorIdentityRequest;
 import org.tis.tools.abf.module.ac.entity.AcOperatorIdentity;
 import org.tis.tools.abf.module.ac.service.IAcOperatorIdentityService;
@@ -105,5 +106,17 @@ public class AcOperatorIdentityController extends BaseController<AcOperatorIdent
     @NotBlank(message = "操作员ID不能为空") String id){
         return ResultVO.success("查询成功",acOperatorIdentityService.queryByOperator(getPage(page),getCondition(page),id));
     }
+
+    /**
+     * 修改操作员默认身份
+     * @param acDefault
+     * @return
+     */
+    @PutMapping("setDefaultIdentity")
+    public ResultVO setDefaultOperatorIdentity(@RequestBody @Validated AcOperatorDefaultIdentity acDefault){
+        return ResultVO.success("修改默认身份成功",acOperatorIdentityService.changeDefaultOperatorIdentity(acDefault));
+    }
+
+
 }
 
