@@ -1,4 +1,4 @@
-package org.tis.tools.config.oauth;
+package org.tis.tools.gateway.config.oauth;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.web.util.matcher.RequestMatcher;

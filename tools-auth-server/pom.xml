@@ -68,7 +68,7 @@
 
         <dependency>
             <groupId>org.tis</groupId>
-            <artifactId>tools-core</artifactId>
+            <artifactId>tools-model</artifactId>
         </dependency>
 
         <!-- tools-start-persistence begin 引入持久层能力 -->
