@@ -108,7 +108,7 @@ public class CommonController extends JavaBase {
 
     private static Set<String> addCommonImport() {
         Set<String> imports = new HashSet<>();
-        imports.add("org.tis.tools.core.web.vo.ResultVO");
+        imports.add("org.tis.tools.model.common.ResultVO");
         return imports;
     }
 
