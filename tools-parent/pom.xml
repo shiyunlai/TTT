@@ -18,8 +18,11 @@
 		<!-- tools platform runtime -->
 		<module>../tools-eureka-server</module>
 		<module>../tools-config-server</module>
+		<module>../tools-gateway-server</module>
+		<module>../tools-auth-server</module>
 		<module>../tools-abf-service</module>
 		<module>../tools-asf-service</module>
+		<module>../tools-senior-service</module>
 
 		<!-- tools starters -->
 		<module>../tools-starter-persistence</module>
@@ -55,6 +58,7 @@
 		<ehcache.core.version>2.6.11</ehcache.core.version>
 		<fastjson.version>1.2.44</fastjson.version>
 		<flowable.version>6.2.0</flowable.version>
+		<flyway-maven-plugin.version>5.0.3</flyway-maven-plugin.version>
 		<google-guava-version>23.5-jre</google-guava-version>
 		<hutool.version>4.0.6</hutool.version>
 		<junrar_version>0.7</junrar_version>
@@ -62,18 +66,23 @@
 		<kaptcha.version>2.3.2</kaptcha.version>
 		<lombok.version>1.16.12</lombok.version>
 		<mysql-connector-java.version>5.1.38</mysql-connector-java.version>
-		<mybatis-plus-boot-starter.version>2.1.9</mybatis-plus-boot-starter.version>
-		<mybatis-plus.version>2.1.9</mybatis-plus.version>
+		<mybatis-plus-boot-starter.version>2.2.0</mybatis-plus-boot-starter.version>
+		<mybatis-plus.version>2.2.0</mybatis-plus.version>
 		<swagger.version>2.7.0</swagger.version>
 		<shiro.version>1.4.0</shiro.version>
 		<sourceforge-pinyin4j-version>2.5.0</sourceforge-pinyin4j-version>
 		<tools.version>0.0.1-SNAPSHOT</tools.version>
 		<tools-starters.version>1.0.0-RELEASE</tools-starters.version>
-		<tmatesoft-svnkit-version>1.7.11</tmatesoft-svnkit-version>
+		<tmatesoft-svnkit-version>1.8.12</tmatesoft-svnkit-version>
 		<thoughtworks-xstream-version>1.4.9</thoughtworks-xstream-version>
 		<velocity.version>1.7</velocity.version>
 		<zxing.version>3.2.1</zxing.version>
 		<xalan-version>2.7.2</xalan-version>
+		<spring-security-jwt.version>1.0.9.RELEASE</spring-security-jwt.version>
+		<starter-security.version>1.2.1.RELEASE</starter-security.version>
+		<starter-oauth2.version>1.2.1.RELEASE</starter-oauth2.version>
+		<starter-redis.version>1.5.10.RELEASE</starter-redis.version>
+		<starter-openfeign.version>1.4.4.RELEASE</starter-openfeign.version>
 
 	</properties>
 
@@ -247,6 +256,11 @@
 				<artifactId>poi-ooxml</artifactId>
 				<version>${apache-poi-version}</version>
 			</dependency>
+            <!--<dependency>-->
+                <!--<groupId>org.apache.poi</groupId>-->
+                <!--<artifactId>poi-ooxml-schemas</artifactId>-->
+                <!--<version>${apache-poi-version}</version>-->
+            <!--</dependency>-->
 			<dependency>
 				<groupId>org.apache.poi</groupId>
 				<artifactId>poi-scratchpad</artifactId>
@@ -308,6 +322,38 @@
 				<artifactId>commons-io</artifactId>
 				<version>${commons.commons-io.version}</version>
 			</dependency>
+
+			<!--security begin-->
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-jwt</artifactId>
+				<version>${spring-security-jwt.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-starter-security</artifactId>
+				<version>${starter-security.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-starter-oauth2</artifactId>
+				<version>${starter-oauth2.version}</version>
+			</dependency>
+			<!--security end-->
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-data-redis</artifactId>
+				<version>${starter-redis.version}</version>
+			</dependency>
+
+			<!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-openfeign -->
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-starter-openfeign</artifactId>
+				<version>${starter-openfeign.version}</version>
+			</dependency>
+
 		</dependencies>
 	</dependencyManagement>
 
