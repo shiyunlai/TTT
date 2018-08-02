@@ -10,7 +10,7 @@ import org.tis.tools.asf.module.biz.service.IBizAppService;
 import org.tis.tools.core.validation.AddValidateGroup;
 import org.tis.tools.core.validation.UpdateValidateGroup;
 import org.tis.tools.core.web.controller.BaseController;
-import org.tis.tools.core.web.vo.ResultVO;
+import org.tis.tools.model.common.ResultVO;
 import org.tis.tools.core.web.vo.SmartPage;
 
 import java.util.List;
