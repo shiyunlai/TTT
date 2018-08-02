@@ -1,4 +1,4 @@
-package org.tis.tools.properties;
+package org.tis.tools.gateway.properties;
 
 
 import lombok.Data;

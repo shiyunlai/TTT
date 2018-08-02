@@ -1,4 +1,4 @@
-package org.tis.tools.filter;
+package org.tis.tools.gateway.filter;
 
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;

@@ -12,19 +12,16 @@ endpoints:
   refresh:
     enabled: true
 
-tools:
-  cors:
-    open: true
-
 eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:18000/eureka/    # 注册服务地址
   instance:
     appname: 网关服务
-    prefer-ip-address: true   #访问的路径变为IP地址
+    prefer-ip-address: true   #使用IP注册,访问的路径变为IP地址
     lease-renewal-interval-in-seconds: 2  #设置心跳的时间间隔（默认是30秒）
     lease-expiration-duration-in-seconds: 5  #如果现在超过了5秒的间隔（默认90秒）
+
 zuul:
   routes:
     uaa:
@@ -69,7 +66,10 @@ security:
     resource:
       user-info-uri:  http://localhost:18084/user
       prefer-token-info: false
-proxy:
-  auth:
-    load-balanced: true
-    routes:
+
+auth:
+  permitall:
+    - pattern: /uaa/**
+
+logging:
+  level.root: debug

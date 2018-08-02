@@ -1,4 +1,4 @@
-package org.tis.tools.config;
+package org.tis.tools.gateway.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -9,7 +9,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.expression.OAuth2WebSecurityExpressionHandler;
-import org.tis.tools.properties.PermitAllUrlProperties;
+import org.tis.tools.gateway.properties.PermitAllUrlProperties;
 
 @Configuration
 @EnableResourceServer

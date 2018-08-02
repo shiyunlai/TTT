@@ -1,14 +1,9 @@
-package org.tis.tools.config;
+package org.tis.tools.gateway.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
-import org.springframework.security.oauth2.provider.expression.OAuth2WebSecurityExpressionHandler;
-import org.tis.tools.properties.PermitAllUrlProperties;
+import org.tis.tools.gateway.properties.PermitAllUrlProperties;
 
 /**
  * @author keets
@@ -17,20 +12,13 @@ import org.tis.tools.properties.PermitAllUrlProperties;
 @Configuration
 public class GatewayConfig {
 
-
-
-
     @Bean
     @ConfigurationProperties(prefix = "auth")
     public PermitAllUrlProperties getPermitAllUrlProperties() {
         return new PermitAllUrlProperties();
     }
 
-
-
-
     // for https config
-
     /*
     @Value("${server.http}")
     private int httpPort;
