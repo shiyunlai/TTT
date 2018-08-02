@@ -69,6 +69,11 @@
 			<scope>provided</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>org.tis</groupId>
+			<artifactId>tools-model</artifactId>
+		</dependency>
+
 		<!--aop-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

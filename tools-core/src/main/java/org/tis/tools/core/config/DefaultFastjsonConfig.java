@@ -41,15 +41,22 @@ public class DefaultFastjsonConfig {
     /**
      * fastjson的配置
      */
-    public FastJsonConfig fastjsonConfig() {
+    private FastJsonConfig fastjsonConfig() {
         FastJsonConfig fastJsonConfig = new FastJsonConfig();
         fastJsonConfig.setSerializerFeatures(
+                // 格式化
                 SerializerFeature.PrettyFormat,
-                SerializerFeature.WriteMapNullValue,
-                SerializerFeature.WriteEnumUsingToString
+                // 空字段序列化输出null
+//                SerializerFeature.WriteMapNullValue,
+                // 枚举类序列化调用toString方法
+                SerializerFeature.WriteEnumUsingToString,
+                // 关闭循环引用
+                SerializerFeature.DisableCircularReferenceDetect
         );
-        fastJsonConfig.setDateFormat("yyyy-MM-dd HH:mm:ss");
+        // 设置日期格式化
+//        fastJsonConfig.setDateFormat("yyyy-MM-dd HH:mm:ss");
         ValueFilter valueFilter = new ValueFilter() {
+            @Override
             public Object process(Object o, String s, Object o1) {
                 if (null == o1) {
                     o1 = "";
@@ -72,7 +79,7 @@ public class DefaultFastjsonConfig {
     /**
      * 支持的mediaType类型
      */
-    public List<MediaType> getSupportedMediaType() {
+    private List<MediaType> getSupportedMediaType() {
         ArrayList<MediaType> mediaTypes = new ArrayList<>();
         mediaTypes.add(MediaType.APPLICATION_JSON_UTF8);
         return mediaTypes;
