@@ -4,7 +4,9 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.tis.tools.abf.module.ac.controller.request.AcOperatorBatchAddRequest;
 import org.tis.tools.abf.module.ac.controller.request.AcOperatorFuncDateRequest;
+import org.tis.tools.abf.module.ac.controller.request.AcOperatorFuncQueConditionRequest;
 import org.tis.tools.abf.module.ac.controller.request.AcOperatorFuncRequest;
 import org.tis.tools.abf.module.ac.entity.AcOperatorFunc;
 import org.tis.tools.abf.module.ac.service.IAcOperatorFuncService;
@@ -54,7 +56,12 @@ public class AcOperatorFuncController extends BaseController<AcOperatorFunc>  {
         acOperatorFuncService.deleteById(id);
         return ResultVO.success("删除成功");
     }
-    
+
+    /**
+     * 根据id查询
+     * @param id
+     * @return
+     */
     @GetMapping("/{id}")
     public ResultVO detail(@PathVariable @NotBlank(message = "id不能为空") String id) {
         AcOperatorFunc acOperatorFunc = acOperatorFuncService.selectById(id);
@@ -63,12 +70,22 @@ public class AcOperatorFuncController extends BaseController<AcOperatorFunc>  {
         }
         return ResultVO.success("查询成功", acOperatorFunc);
     }
-    
+
+    /**
+     * 分页查询
+     * @param page
+     * @return
+     */
     @PostMapping("/list")
     public ResultVO list(@RequestBody @Validated SmartPage<AcOperatorFunc> page) {
         return  ResultVO.success("查询成功", acOperatorFuncService.selectPage(getPage(page), getCondition(page)));
     }
 
+    /**
+     * 修改有效时间
+     * @param acOperatorFuncDateRequest
+     * @return
+     */
     @OperateLog(type = OperateType.UPDATE,desc = "修改有效时间")
     @PutMapping("/setDate")
     public ResultVO setDate(@RequestBody @Validated AcOperatorFuncDateRequest acOperatorFuncDateRequest){
@@ -84,6 +101,48 @@ public class AcOperatorFuncController extends BaseController<AcOperatorFunc>  {
         acOperatorFuncService.updateById(acOperatorFunc);
 
         return ResultVO.success("时间设置成功",acOperatorFunc);
+    }
+
+    /**
+     * 查询所有应用和操作员下已有应用
+     * @param operatorId
+     * @return
+     */
+    @GetMapping("/queryAppByOperator/{operatorId}")
+    public ResultVO queryAppByOperator (@PathVariable @NotBlank(message = "操作员id不能为空") String operatorId){
+        return ResultVO.success("查询成功",acOperatorFuncService.queryAppByOperator(operatorId));
+    }
+
+    /**
+     * 查询应用下所有功能和操作员下已有功能
+     * @param conditionRequest
+     * @return
+     */
+    @PostMapping("/queryFuncByOperator")
+    public ResultVO queryFuncByOperator (@RequestBody @Validated AcOperatorFuncQueConditionRequest conditionRequest){
+        return ResultVO.success("查询成功",acOperatorFuncService.queryFuncByOperator(conditionRequest));
+    }
+
+    /**
+     * 查询功能下所有行为和操作员下已有行为
+     * @param conditionRequest
+     * @return
+     */
+    @PostMapping("/queryBehaveByOperator")
+    public ResultVO queryBehaveByOperator (@RequestBody @Validated AcOperatorFuncQueConditionRequest conditionRequest){
+        return ResultVO.success("查询成功",acOperatorFuncService.queryBehaveByOperator(conditionRequest));
+    }
+
+    /**
+     * 批量新增和删除操作员功能
+     * @param batchRequest
+     * @return
+     */
+    @OperateLog(type = OperateType.ADD,desc = "批量新增操作员功能信息")
+    @PostMapping("/batchAdd")
+    public ResultVO batchAddClear(@RequestBody @Validated AcOperatorBatchAddRequest batchRequest){
+        acOperatorFuncService.batchAdd(batchRequest);
+        return ResultVO.success("处理成功");
     }
     
 }

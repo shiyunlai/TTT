@@ -1,5 +1,7 @@
 package org.tis.tools.abf.module.ac.service;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.IService;
 import org.tis.tools.abf.module.ac.controller.request.AcOperatorAddRequest;
 import org.tis.tools.abf.module.ac.controller.request.AcOperatorStatusRequest;
@@ -41,6 +43,17 @@ public interface IAcOperatorService extends IService<AcOperator>  {
      * @throws AcOperatorManagementException
      */
     void moveOperator(String id) throws AcOperatorManagementException;
+
+    /**
+     * 根据条件查询角色下的操作员
+     * @param roleId
+     * @return
+     * @throws AcOperatorManagementException
+     */
+    Page<AcOperator> queryByRole (String roleId, Page<AcOperator> page, EntityWrapper<AcOperator> wrapper) throws
+            AcOperatorManagementException;
+
+
 
 }
 

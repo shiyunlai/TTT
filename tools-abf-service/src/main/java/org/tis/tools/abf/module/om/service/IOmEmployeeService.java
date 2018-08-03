@@ -114,12 +114,19 @@ public interface IOmEmployeeService extends IService<OmEmployee>  {
 
     /**
      * 根据姓名查询员工
-     * @param name
      * @return
      * @throws OrgManagementException
      */
-    Page<OperatorEmp> queryEmpByName(Page<OmEmployee> page, Wrapper<OmEmployee> wrapper , String name) throws
+    Page<OperatorEmp> queryEmpByName(Page<OmEmployee> page, Wrapper<OmEmployee> wrapper ) throws
             OrgManagementException;
+
+    /**
+     * 根据机构查询已入职的员工
+     * @param orgId
+     * @return
+     * @throws OrgManagementException
+     */
+    List<OmEmployee> queryEmp(String orgId)throws OrgManagementException;
 
 }
 

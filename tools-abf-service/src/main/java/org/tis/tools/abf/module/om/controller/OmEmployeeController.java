@@ -214,12 +214,21 @@ public class OmEmployeeController extends BaseController<OmEmployee>  {
 
     /**
      * 根据姓名查询员工分页
-     * @param name
      * @return
      */
-    @PostMapping("/queryByName/{name}")
-    public ResultVO queryByName(@RequestBody @Validated SmartPage<OmEmployee> page, @PathVariable String name){
-        return  ResultVO.success("查询成功", omEmployeeService.queryEmpByName(getPage(page),getCondition(page),name));
+    @PostMapping("/queryByName")
+    public ResultVO queryByName(@RequestBody @Validated SmartPage<OmEmployee> page){
+        return  ResultVO.success("查询成功", omEmployeeService.queryEmpByName(getPage(page),getCondition(page)));
+    }
+
+    /**
+     * 根据机构查询已入职的员工
+     * @param orgId
+     * @return
+     */
+    @GetMapping("/queryEmp/{orgId}")
+    public ResultVO queryEmp(@PathVariable @NotBlank(message = "orgId不能为空") String orgId){
+        return ResultVO.success("查询成功",omEmployeeService.queryEmp(orgId));
     }
     
 }

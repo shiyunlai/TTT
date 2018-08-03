@@ -17,5 +17,6 @@ public interface OmEmployeeMapper extends BaseMapper<OmEmployee>  {
 
     List<OmEmployee> queryByOrgPosition(Pagination page , @Param("guidorg") String guidorg ,@Param("guidPosition") String guidPosition);
 
+    List<OmEmployee> queryByOrg(String orgId);
 }
 

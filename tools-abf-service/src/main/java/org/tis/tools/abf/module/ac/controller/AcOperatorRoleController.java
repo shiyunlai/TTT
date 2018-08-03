@@ -1,18 +1,20 @@
 package org.tis.tools.abf.module.ac.controller;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import org.tis.tools.abf.module.ac.controller.request.AcOPeratorRoleUpdateGrop;
 import org.tis.tools.abf.module.ac.controller.request.AcOperatorRoleAddGrop;
+import org.tis.tools.abf.module.ac.controller.request.AcOperatorRoleBatchAddRequest;
+import org.tis.tools.abf.module.ac.controller.request.AcRoleOperatorBatchAddRequest;
+import org.tis.tools.abf.module.ac.entity.AcOperatorRole;
+import org.tis.tools.abf.module.ac.service.IAcOperatorRoleService;
 import org.tis.tools.abf.module.jnl.annotation.OperateLog;
 import org.tis.tools.abf.module.jnl.entity.enums.OperateType;
 import org.tis.tools.core.web.controller.BaseController;
-import org.tis.tools.abf.module.ac.service.IAcOperatorRoleService;
 import org.tis.tools.core.web.vo.SmartPage;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.tis.tools.abf.module.ac.entity.AcOperatorRole;
-import org.springframework.web.bind.annotation.*;
-import org.hibernate.validator.constraints.NotBlank;
 import org.tis.tools.model.common.ResultVO;
 
 /**
@@ -68,6 +70,47 @@ public class AcOperatorRoleController extends BaseController<AcOperatorRole>  {
     public ResultVO list(@RequestBody @Validated SmartPage<AcOperatorRole> page) {
         return  ResultVO.success("查询成功", acOperatorRoleService.selectPage(getPage(page), getCondition(page)));
     }
-    
+
+    /**
+     * 为角色分配操作员
+     * @param batchAddRequest
+     * @return
+     */
+    @PostMapping("/batchAddOperator")
+    public ResultVO batchAdd(@RequestBody @Validated AcOperatorRoleBatchAddRequest batchAddRequest){
+        acOperatorRoleService.batchAdd(batchAddRequest);
+        return ResultVO.success("新增成功");
+    }
+
+    /**
+     * 为操作员分配角色
+     * @param batchAddRequest
+     * @return
+     */
+    @PostMapping("/batchAddRole")
+    public ResultVO batchAddRole(@RequestBody @Validated AcRoleOperatorBatchAddRequest batchAddRequest){
+        acOperatorRoleService.batchAddRole(batchAddRequest);
+        return ResultVO.success("新增成功");
+    }
+
+    /**
+     * 查询未分配角色和已绑定角色
+     * @param userId
+     * @return
+     */
+    @GetMapping("/queryRoleByOperator/{userId}")
+    public ResultVO queryRoleByOperator(@PathVariable @NotBlank(message = "userId不能为空") String userId){
+        return ResultVO.success("查询成功",acOperatorRoleService.queryRoleByOperator(userId));
+    }
+
+    /**
+     * 查询未分配操作员和已绑定操作员
+     * @param roleId
+     * @return
+     */
+    @GetMapping("/queryOperatorByRole/{roleId}")
+    public ResultVO queryOperatorByRole(@PathVariable @NotBlank(message = "roleId不能为空") String roleId){
+        return ResultVO.success("查询成功",acOperatorRoleService.queryOperatorByRole(roleId));
+    }
 }
 

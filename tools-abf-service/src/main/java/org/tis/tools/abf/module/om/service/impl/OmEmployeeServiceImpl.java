@@ -587,28 +587,24 @@ public class OmEmployeeServiceImpl extends ServiceImpl<OmEmployeeMapper, OmEmplo
 
 
     @Override
-    public Page<OperatorEmp> queryEmpByName(Page<OmEmployee> page, Wrapper<OmEmployee> wrapper , String name) throws OrgManagementException {
+    public Page<OperatorEmp> queryEmpByName(Page<OmEmployee> page, Wrapper<OmEmployee> wrapper ) throws OrgManagementException {
 
-        //返回的信息
+        //待返回的信息
         Page<OperatorEmp> operatorEmpPage = new Page<OperatorEmp>();
         List<OperatorEmp> operatorEmpList = new ArrayList<OperatorEmp>();
 
-        if (null == wrapper){
-            wrapper = new EntityWrapper<OmEmployee>();
-        }
-
-        //判断姓名是否为空 为空则查询该姓名下的操作员  不为空则查询所有操作员
+        //查询员工
         Page<OmEmployee> empPage = new Page<OmEmployee>();
         List<OmEmployee> empList = new ArrayList<OmEmployee>();
-        //if(StringUtil.isEmpty(name)){
-        if("queryAll".equals(name)){
+
+        if(null == wrapper){//"queryAll".equals(name)){
             //分页查询所有员工
+            wrapper = new EntityWrapper<OmEmployee>();
             empPage = selectPage(page,wrapper);
             empList = empPage.getRecords();
-
         }else {
             //根据姓名查询员工
-            wrapper.eq(OmEmployee.COLUMN_EMP_NAME,name);
+            wrapper.isNotNull(OmEmployee.COLUMN_USER_ID);
             empPage = selectPage(page,wrapper);
             empList = empPage.getRecords();
         }
@@ -647,7 +643,7 @@ public class OmEmployeeServiceImpl extends ServiceImpl<OmEmployeeMapper, OmEmplo
 
                 //根据员工的user_id查询对应的操作员信息
                 if (StringUtil.isEmpty(omEmployee.getUserId())){
-                    operatorEmp.setOperatorId("");
+                    continue;
                 }else {
                     Wrapper<AcOperator> operatorWrapper = new EntityWrapper<AcOperator>();
                     operatorWrapper.eq(AcOperator.COLUMN_USER_ID, omEmployee.getUserId());
@@ -672,5 +668,19 @@ public class OmEmployeeServiceImpl extends ServiceImpl<OmEmployeeMapper, OmEmplo
         return operatorEmpPage;
     }
 
+    /**
+     * 根据机构查询已入职的员工
+     *
+     * @param orgId
+     * @return
+     * @throws OrgManagementException
+     */
+    @Override
+    public List<OmEmployee> queryEmp(String orgId) throws OrgManagementException {
+
+        List<OmEmployee> list = this.baseMapper.queryByOrg(orgId);
+
+        return list;
+    }
 }
 
