@@ -1,18 +1,9 @@
 package org.tis.tools.abf.module.ac.entity;
 
-import java.math.BigDecimal;
-
-import com.baomidou.mybatisplus.annotations.*;
-
-
 import com.alibaba.fastjson.annotation.JSONField;
-import com.baomidou.mybatisplus.annotations.TableName;
-import java.util.Date;
-
+import com.baomidou.mybatisplus.annotations.*;
 import com.baomidou.mybatisplus.enums.FieldFill;
-import com.baomidou.mybatisplus.mapper.Condition;
 import lombok.Data;
-import com.baomidou.mybatisplus.annotations.TableId;
 import org.hibernate.validator.constraints.NotBlank;
 import org.tis.tools.abf.module.ac.controller.request.AcOperatorUpdateGrop;
 import org.tis.tools.abf.module.ac.entity.enums.AuthMode;
@@ -20,6 +11,8 @@ import org.tis.tools.abf.module.ac.entity.enums.OperatorStatus;
 import org.tis.tools.core.entity.enums.CommonEnumDeserializer;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * acOperator系统登录用户表，一个用户只能有一个或零个操作员
