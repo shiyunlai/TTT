@@ -2,6 +2,7 @@ package org.tis.tools.abf.module.ac.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -201,20 +202,21 @@ public class AcOperatorServiceImpl extends ServiceImpl<AcOperatorMapper, AcOpera
 
         switch (operatorStatusNow){
             case stop:
-                if (!(operatorStatusChange.equals(OperatorStatus.logout))){
+                if (!(operatorStatusChange.equals(OperatorStatus.logout) || operatorStatusChange.equals(OperatorStatus.delete) )){
                     throw new AcOperatorManagementException(AcExceptionCodes.CURRENT_STATUS_IS_NOT_ALLOWED_CHANGE,
-                            wrap("停用状态只能修改为退出状态"));
+                            wrap("停用状态只能修改为退出状态或终结状态"));
                 }
                 break;
             case logout:
                 if (operatorStatusChange.equals(OperatorStatus.stop) || operatorStatusChange.equals(OperatorStatus
-                        .pause) ||operatorStatusChange.equals(OperatorStatus.lock)){
+                        .pause) ||operatorStatusChange.equals(OperatorStatus.lock) || operatorStatusChange.equals
+                        (OperatorStatus.delete)){
                     throw new AcOperatorManagementException(AcExceptionCodes.CURRENT_STATUS_IS_NOT_ALLOWED_CHANGE,
                             wrap("退出状态只能修改为正常状态或挂起状态"));
                 }
                 break;
             case login:
-                if (operatorStatusChange.equals(OperatorStatus.stop) || operatorStatusChange.equals(OperatorStatus.clear) ||operatorStatusChange.equals(OperatorStatus.lock)){
+                if (operatorStatusChange.equals(OperatorStatus.stop) || operatorStatusChange.equals(OperatorStatus.clear) ||operatorStatusChange.equals(OperatorStatus.lock) || operatorStatusChange.equals(OperatorStatus.delete)){
                     throw new AcOperatorManagementException(AcExceptionCodes.CURRENT_STATUS_IS_NOT_ALLOWED_CHANGE,
                             wrap("正常状态只能修改为退出状态或挂起状态"));
                 }
@@ -226,20 +228,20 @@ public class AcOperatorServiceImpl extends ServiceImpl<AcOperatorMapper, AcOpera
                 }
                 break;
             case lock:
-                if (operatorStatusChange.equals(OperatorStatus.stop) || operatorStatusChange.equals(OperatorStatus.login) ||operatorStatusChange.equals(OperatorStatus.pause)){
+                if (operatorStatusChange.equals(OperatorStatus.stop) || operatorStatusChange.equals(OperatorStatus.login) ||operatorStatusChange.equals(OperatorStatus.pause) || operatorStatusChange.equals(OperatorStatus.delete)){
                     throw new AcOperatorManagementException(AcExceptionCodes.CURRENT_STATUS_IS_NOT_ALLOWED_CHANGE,
                             wrap("锁定状态只能修改为退出状态和注销状态"));
                 }
                 break;
             case pause:
-                if (operatorStatusChange.equals(OperatorStatus.stop) || operatorStatusChange.equals(OperatorStatus.clear) ||operatorStatusChange.equals(OperatorStatus.lock)){
+                if (operatorStatusChange.equals(OperatorStatus.stop) || operatorStatusChange.equals(OperatorStatus.clear) ||operatorStatusChange.equals(OperatorStatus.lock) || operatorStatusChange.equals(OperatorStatus.delete)){
                     throw new AcOperatorManagementException(AcExceptionCodes.CURRENT_STATUS_IS_NOT_ALLOWED_CHANGE,
                             wrap("挂起状态只能修改为退出状态和正常状态"));
                 }
                 break;
             default:
                     throw new AcOperatorManagementException(AcExceptionCodes.CURRENT_STATUS_IS_NOT_ALLOWED_CHANGE,
-                            wrap("该状态非操作员状态!"));
+                            wrap("该状态已为操作员终止状态!"));
         }
 
         acOperator.setOperatorStatus(operatorStatusChange);
@@ -336,5 +338,21 @@ public class AcOperatorServiceImpl extends ServiceImpl<AcOperatorMapper, AcOpera
         }
 
     }
+
+    /**
+     * 根据条件查询角色下的操作员
+     * @return
+     * @throws AcOperatorManagementException
+     */
+    @Override
+    public Page<AcOperator> queryByRole(String roleId, Page<AcOperator> page, EntityWrapper<AcOperator> wrapper) throws AcOperatorManagementException {
+
+        return page.setRecords(this.baseMapper.queryByRole(page,roleId,wrapper));
+    }
+
+
+
+
+
 }
 
