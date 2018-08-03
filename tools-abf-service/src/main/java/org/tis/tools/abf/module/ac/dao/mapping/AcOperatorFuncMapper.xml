@@ -2,4 +2,91 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.tis.tools.abf.module.ac.dao.AcOperatorFuncMapper">
 
+    <select id="queryAppByOperator" resultType="org.tis.tools.abf.module.ac.entity.AcApp">
+        SELECT * FROM ac_app WHERE guid IN
+        (       SELECT
+                guid_app AS GUID_APP
+                FROM ac_operator_func
+                WHERE guid_operator = #{operatorId}
+                AND data_status = '0'
+        UNION
+				SELECT
+				b.guid_app AS GUID_APP
+				FROM
+				ac_role_func b,
+				ac_operator_role b2
+				WHERE
+				b.guid_role = b2.guid_role
+				and
+				b2.guid_operator = #{operatorId}
+				AND
+				b.data_status = '0'
+				AND
+				b2.data_status = '0'
+				)
+        AND data_status = '0'
+    </select>
+
+    <select id="queryFuncByOperator" resultType="org.tis.tools.abf.module.ac.entity.AcFunc">
+        SELECT * FROM ac_func WHERE
+        guid IN
+        (SELECT
+                guid_func AS GUID_FUNC
+                FROM ac_operator_func
+                WHERE guid_operator = #{operatorId}
+                AND guid_app = #{appId}
+                AND data_status = '0'
+        UNION
+				SELECT
+				b.guid_func AS GUID_FUNC
+				FROM
+				ac_role_func b,
+				ac_operator_role b2
+				WHERE
+				b.guid_role = b2.guid_role
+				and
+				b2.guid_operator = #{operatorId}
+				AND
+				b.guid_app = #{appId}
+				AND
+				b.data_status = '0'
+				AND
+				b2.data_status = '0'
+				)
+        AND func_type = 'F'
+        AND guid_app = #{appId}
+        AND data_status = '0'
+    </select>
+
+    <select id="queryBehaveByOperator" resultType="org.tis.tools.abf.module.ac.entity.AcFunc">
+        SELECT * FROM ac_func WHERE
+        guid IN
+        (SELECT
+                guid_func AS GUID_FUNC
+                FROM ac_operator_func
+                WHERE guid_operator = #{operatorId}
+                AND guid_app = #{appId}
+                AND data_status = '0'
+        UNION
+				SELECT
+				b.guid_func AS GUID_FUNC
+				FROM
+				ac_role_func b,
+				ac_operator_role b2
+				WHERE
+				b.guid_role = b2.guid_role
+				and
+				b2.guid_operator = #{operatorId}
+				AND
+				b.guid_app = #{appId}
+				AND
+				b.data_status = '0'
+				AND
+				b2.data_status = '0'
+				)
+        AND func_type = 'B'
+        AND guid_func = #{funcId}
+        AND guid_app = #{appId}
+        AND data_status = '0'
+    </select>
 </mapper>
