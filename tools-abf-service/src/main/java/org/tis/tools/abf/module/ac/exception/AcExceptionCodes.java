@@ -449,7 +449,18 @@ public class AcExceptionCodes {
      * 查询权限集失败
      */
      public static final String FAILURE_WHEN_QUERY_ROLE_FUNC = R_EX_CODE("0088");
-
+    /**
+     * 该记录已存在
+     */
+    public static final String FAILURE_WHRN_QUERY_IS_EXIST = R_EX_CODE("0089");
+    /**
+     * 查询角色关联功能(行为)时应用ID为空
+     */
+    public static final String APPID_ISNULL_WHRN_QUERY_ROLE_FUNC = R_EX_CODE("0090");
+    /**
+     * 查询角色关联功能(行为)时功能ID为空
+     */
+    public static final String FUNCID_ISNULL_WHRN_QUERY_ROLE_FUNC = R_EX_CODE("0091");
 
     /**
      * 以烤串方式拼接异常码
