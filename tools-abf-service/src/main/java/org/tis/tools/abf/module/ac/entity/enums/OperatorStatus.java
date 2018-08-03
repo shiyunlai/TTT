@@ -20,7 +20,9 @@ public enum OperatorStatus implements BaseEnum {
 
     logout("logout","退出","退出系统，当前处于非活动状态"),
 
-    stop("stop","停用","新建操作员，还未启用");
+    stop("stop","停用","新建操作员，还未启用"),
+
+    delete("delete","删除","终结新建但是还未启用的操作员");
 
     private final String value;
 
