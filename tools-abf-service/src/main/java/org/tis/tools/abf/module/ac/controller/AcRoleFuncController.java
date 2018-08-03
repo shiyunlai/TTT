@@ -1,18 +1,20 @@
 package org.tis.tools.abf.module.ac.controller;
 
-import org.tis.tools.abf.module.ac.controller.request.AcRoleFuncAddRequest;
-import org.tis.tools.abf.module.ac.controller.request.AcRoleFuncDeleteRequest;
-import org.tis.tools.abf.module.ac.service.IAcRoleFuncService;
+import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import org.tis.tools.abf.module.ac.controller.request.AcRoleFuncAddRequest;
+import org.tis.tools.abf.module.ac.controller.request.AcRoleFuncBatchAddRequest;
+import org.tis.tools.abf.module.ac.controller.request.AcRoleFuncDeleteRequest;
+import org.tis.tools.abf.module.ac.controller.request.AcRoleFuncQueConditionRequest;
+import org.tis.tools.abf.module.ac.entity.AcRoleFunc;
+import org.tis.tools.abf.module.ac.service.IAcRoleFuncService;
 import org.tis.tools.abf.module.ac.service.IAcRoleService;
 import org.tis.tools.abf.module.jnl.annotation.OperateLog;
 import org.tis.tools.abf.module.jnl.entity.enums.OperateType;
 import org.tis.tools.core.web.controller.BaseController;
 import org.tis.tools.core.web.vo.SmartPage;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-import org.tis.tools.abf.module.ac.entity.AcRoleFunc;
-import org.hibernate.validator.constraints.NotBlank;
 import org.tis.tools.model.common.ResultVO;
 
 /**
@@ -111,6 +113,46 @@ public class AcRoleFuncController extends BaseController<AcRoleFunc> {
         return ResultVO.success("删除成功", acRoleFunc1);
     }
 
+    /**
+     * 批量新增和删除角色功能
+     * @param batchRequest
+     * @return
+     */
+    @OperateLog(type = OperateType.ADD,desc = "批量新增角色功能信息")
+    @PostMapping("/batchAdd")
+    public ResultVO batchAddClear(@RequestBody @Validated AcRoleFuncBatchAddRequest batchRequest){
+        acRoleFuncService.batchAdd(batchRequest);
+        return ResultVO.success("处理成功");
+    }
 
+    /**
+     * 查询所有应用和角色下已有应用
+     * @param roleId
+     * @return
+     */
+    @GetMapping("/queryAppByRole/{roleId}")
+    public ResultVO queryAppByRole (@PathVariable @NotBlank(message = "角色id不能为空") String roleId){
+        return ResultVO.success("查询成功",acRoleFuncService.queryAppByRole(roleId));
+    }
+
+    /**
+     * 查询应用下所有功能和角色下已有功能
+     * @param conditionRequest
+     * @return
+     */
+    @PostMapping("/queryFuncByRole")
+    public ResultVO queryFuncByRole (@RequestBody @Validated AcRoleFuncQueConditionRequest conditionRequest){
+        return ResultVO.success("查询成功",acRoleFuncService.queryFuncByRole(conditionRequest));
+    }
+
+    /**
+     * 查询功能下所有行为和角色下已有行为
+     * @param conditionRequest
+     * @return
+     */
+    @PostMapping("/queryBehaveByRole")
+    public ResultVO queryBehaveByRole (@RequestBody @Validated AcRoleFuncQueConditionRequest conditionRequest){
+        return ResultVO.success("查询成功",acRoleFuncService.queryBehaveByRole(conditionRequest));
+    }
 }
 
