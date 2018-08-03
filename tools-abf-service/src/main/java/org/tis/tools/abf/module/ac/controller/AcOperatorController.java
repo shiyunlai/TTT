@@ -154,5 +154,16 @@ public class AcOperatorController extends BaseController<AcOperator>  {
 
         return ResultVO.success("修改成功!",acOperatorQue);
     }
+
+    /**
+     * 根据条件查询角色下的操作员(分页)
+     * @param page
+     * @param roleId
+     * @return
+     */
+    @PostMapping("/queryByRole/{roleId}")
+    public ResultVO queryOperatorByRole(@RequestBody @Validated SmartPage<AcOperator> page,@PathVariable @NotBlank(message = "roleId不能为空") String roleId){
+        return ResultVO.success("查询成功",acOperatorService.queryByRole(roleId,getPage(page),getCondition(page)));
+    }
 }
 
