@@ -51,7 +51,7 @@ export class SWorkitemComponent implements OnInit {
         { label: '新建工程', value: 'project', checked: false },
     ];
     projectInfo = false;
-    prolist: any[] = []; //工程列表
+    prolist: any[] = []; // 工程列表
     // 传入按钮层
     moreData = {
         morebutton: true,
@@ -135,12 +135,9 @@ export class SWorkitemComponent implements OnInit {
                     this.pageIndex = val.result.current;
                     _.forEach(this.data , function (value) {
                                  value.itemNamestr = value.itemName
-                                if(value.itemName.length > 20){
-                                value.itemNamestr = appConfig.subString(value.itemName,10);
+                                if (value.itemName.length > 20) {
+                                value.itemNamestr = appConfig.subString(value.itemName, 10);
                                 }
-
-
-
                         if (value.itemStatus === '开发中') {
                             if (value.fullPath !== '') { // 说明存在分支
 
