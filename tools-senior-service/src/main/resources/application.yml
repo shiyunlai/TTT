@@ -1,0 +1,76 @@
+######################################
+#            base
+######################################
+
+
+
+server:
+  port: 28080
+
+tis:
+  senior:
+    ip: 127.0.0.1
+  shiro:
+    enable: true
+  svn:
+    username: admin
+    password: 111111
+    base-feature-url: http://${tis.senior.ip}/svn/repos/tip/development/branches/Feature/Feature_
+    base-hotfix-url: http://${tis.senior.ip}/svn/repos/tip/development/branches/Hotfix/Hotfix_
+
+# :::::: spring ::::::
+
+spring:
+  profiles:
+    active: dev
+  application:
+    name: sensior-develpoer-design
+
+
+# :::::: mybatis-plus ::::::
+
+mybatis-plus:
+  mapper-locations: classpath*:org/tis/senior/module/**/dao/mapping/*.xml
+  typeAliasesPackage: org.tis.senior.module.*.entity
+  typeEnumsPackage: org.tis.senior.module.*.entity.enums
+  global-config:
+    id-type: 0
+    field-strategy: 2
+    db-column-underline: false
+    refresh-mapper: true
+    logic-delete-value: D
+    logic-not-delete-value: 0
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: true
+    lazyLoadingEnabled: true
+    multipleResultSetsEnabled: true
+
+---
+
+######################################
+#            dev
+######################################
+
+# ::::::::::::
+spring:
+  http:
+    encoding:
+      charset: UTF-8
+  profiles: dev
+  datasource:
+    url: jdbc:mysql://${tis.senior.ip}:3306/senior?autoReconnect=true&useUnicode=true&characterEncoding=utf8
+    &zeroDateTimeBehavior=convertToNull&useSSL=false
+    username: root
+    password: 111111
+  messages:
+    encoding: utf-8
+
+
+# ::::::::::::
+logging:
+  level.root: info
+  level.org.tis.senior: debug
+  path: logs/
+  file: fortest.jnl
+
