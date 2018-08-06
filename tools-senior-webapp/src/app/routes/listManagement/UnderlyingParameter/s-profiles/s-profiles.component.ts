@@ -22,7 +22,6 @@ import * as _ from 'lodash';
     templateUrl: './s-profiles.component.html',
 })
 export class SProfilesComponent implements OnInit {
-//    @ViewChild('time') private d1: ElementRef;
     constructor(
         private http: _HttpClient,
         private router: Router,
@@ -36,14 +35,10 @@ export class SProfilesComponent implements OnInit {
     ) {
 
      }
+
+     // 变量
     token: any;
-
-    profiles:SprofilesModule = new SprofilesModule();
-
-
-
-
-
+    profiles: SprofilesModule = new SprofilesModule();
     showAdd: boolean; // 是否有修改
     isShowTotal = true;
     configTitle = '详情'
@@ -61,11 +56,6 @@ export class SProfilesComponent implements OnInit {
         {key: '0', value: '否'},
         {key: '1', value: '是'}
     ]
-
-
-
-
-
     data: any[] = []; // 表格数据
     headerDate = [  // 配置表头内容
         // { value: '环境代码', key: 'profilesCode', isclick: true},
@@ -95,11 +85,62 @@ export class SProfilesComponent implements OnInit {
     total: number;
     pageTotal: number;
     branshList = [];
-    branch:any;
-    Ptitle:any;
+    branch: any;
+    Ptitle: any;
     time = new Date();
-     tags = [];
+    tags = [];
+    inputVisible = false;
+    inputValue = '';
+    // 管理分支
+    active = true;
+    isShowDetail = false;
+    branchDetali = [
 
+    ]
+    isShowIp = false;
+    isShowartf = false;
+    // 表格数据按钮
+    buttonData = [
+        {key: 'dels', value: '删除' },
+        {key: 'upd', value: '修改'},
+        {key: 'correlation', value: '关联分支'},
+
+
+    ];
+    buttonDataBranch = [
+        {key: 'dels', value: '删除' },
+        {key: 'upd', value: '修改'},
+        {key: 'detail', value: '取消分支'},
+        {key: 'branchDDetail', value: '分支详情'},
+        {key: 'project', value: '拉工程'}
+    ]
+    branchType = [
+        {key: 'feature', value: 'F',selector:false},
+        {key: 'hot', value: 'H' ,selector:false},
+    ]
+    addBranch = {
+        fullPath: '',
+        branchFor: ''
+    };
+    tabs = [
+        {
+            active: true,
+            name  : '选择已有分支',
+
+        },
+        {
+            active: false,
+            name  : '新增分支',
+
+        }
+    ];
+    search = {
+        profilesName: '',
+        manager: '',
+        isAllowDelivery: ''
+    };
+    pageIndex = 1
+    @ViewChild('input') private input: ElementRef;
     ngOnInit() {
         this.token  = this.tokenService.get().token;
         this.getData();
@@ -107,28 +148,22 @@ export class SProfilesComponent implements OnInit {
 
     }
 
+       handleClose(removedTag: any): void {
+           this.tags = this.tags.filter(tag => tag !== removedTag);
+       }
+       sliceTagName(tag: string): string {
+            const isLongTag = tag.length > 20;
+            return isLongTag ? `${tag.slice(0, 20)}...` : tag;
+       }
 
-       inputVisible = false;
-       inputValue = '';
-            // @ViewChild('input') input: NzInputDirectiveComponent;
-            @ViewChild('input') private input: ElementRef;
-            handleClose(removedTag: any): void {
-                this.tags = this.tags.filter(tag => tag !== removedTag);
-            }
-
-            sliceTagName(tag: string): string {
-                const isLongTag = tag.length > 20;
-                return isLongTag ? `${tag.slice(0, 20)}...` : tag;
-            }
-
-            showInput(): void {
+       showInput(): void {
                 this.inputVisible = true;
                 setTimeout(() => {
                     this.input.nativeElement.focus();
                 }, 10);
             }
 
-            handleInputConfirm(): void {
+       handleInputConfirm(): void {
                 if (this.inputValue) {
                     this.tags.push(this.inputValue);
                 }
@@ -136,26 +171,23 @@ export class SProfilesComponent implements OnInit {
                 this.inputVisible = false;
             }
 
-            reset() {
+       reset() {
                  this.search = {
-                        profilesName:'',
-                        manager:'',
-                        isAllowDelivery:''
+                        profilesName: '',
+                        manager: '',
+                        isAllowDelivery: ''
                     };
                     this.getData('search');
                 }
-            // 管理分支
-            active = true;
-            tabChange(obj){
+       tabChange(obj) {
                this.active = obj;
-               console.log(this.active);
             }
-               submitForm() {
-        console.log(this.tags);
-        let objarr = [];
-        if (this.tags.length === 0) {
-              this.nznot.create('error', '请添加打包窗口', '');
-              return;
+
+       submitForm() {
+                let objarr = [];
+                if (this.tags.length === 0) {
+                      this.nznot.create('error', '请添加打包窗口', '');
+                      return;
         }
         if(this.isShowIp == true){
                this.nznot.create('error', '请检查IP地址格式是否正确！', '');
@@ -205,9 +237,7 @@ export class SProfilesComponent implements OnInit {
                 }
                     );
                      this.getData();
-        }else{
-            console.log(this.profiles)
-            //   this.profiles.isAllowDelivery = ' ';
+        }else {
             this.utilityService.putData(appConfig.testUrl  + appConfig.API.sProfilesadd, this.profiles, {Authorization: this.token})
                 .subscribe(
                     (val) => {
@@ -232,115 +262,55 @@ export class SProfilesComponent implements OnInit {
 
 
     }
-    isShowDetail = false;
-    branchDetali = [
-        // {fullPath:''},
-        //  {currVersion:''},
-        //   {creater:''},
-    ]
-    isShowIp = false;
-            checkIp(ip){
+
+       checkIp(ip) {
               let MOBILE_REGEXP =/^(?:(?:1[0-9][0-9]\.)|(?:2[0-4][0-9]\.)|(?:25[0-5]\.)|(?:[1-9][0-9]\.)|(?:[0-9]\.)){3}(?:(?:1[0-9][0-9])|(?:2[0-4][0-9])|(?:25[0-5])|(?:[1-9][0-9])|(?:[0-9]))$/;
-              console.log();
-              if(MOBILE_REGEXP.test(ip)==true){
-                      this.isShowIp = false
-              }else{
+              if (MOBILE_REGEXP.test(ip) === true) {
+                      this.isShowIp = false;
+              }else {
                   this.isShowIp = true;
               }
             }
-
-              isShowartf = false;
-            checkArtf(event){
+       checkArtf(event){
               let MOBILE_REGEXP =/^\+?[1-9][0-9]*$/;
-              console.log(MOBILE_REGEXP.test(event));
-              if(MOBILE_REGEXP.test(event)==true){
+              if(MOBILE_REGEXP.test(event) === true){
                       this.isShowartf = false
               }else{
                   this.isShowartf = true;
               }
             }
-        checkBranch(branch){
-            console.log(branch);
+       checkBranch(branch) {
              this.isShowDetail = true
-               this.utilityService.getData(appConfig.testUrl  + appConfig.API.sBranchadd+'/'+branch, {},{Authorization: this.token})
+               this.utilityService.getData(appConfig.testUrl  + appConfig.API.sBranchadd + '/' + branch, {},{Authorization: this.token})
                 .subscribe(
                     (val) => {
-                        console.log(val)
                         if (val.code === '200') {
                             this.branchDetali = val.result;
                         }else {
                             this.nznot.create('error', val.msg , val.msg);
                         }
                     }  ,
-                (error)=>{
+                (error) => {
                      this.nznot.create('error', error.msg, '');
                 }
                 );
-
-            console.log(branch);
         }
 
-    // 表格数据按钮
-    buttonData = [
-        {key: 'dels', value: '删除' },
-        {key: 'upd', value: '修改'},
-        {key: 'correlation', value: '关联分支'},
-
-
-    ];
-   buttonDataBranch = [
-        {key: 'dels', value: '删除' },
-        {key: 'upd', value: '修改'},
-        {key: 'detail', value: '取消分支'},
-        {key: 'branchDDetail', value: '分支详情'},
-        {key: 'project', value: '拉工程'}
-   ]
-    branchType = [
-        {key: 'feature', value: 'F',selector:false},
-        {key: 'hot', value: 'H' ,selector:false},
-    ]
-      addBranch = {
-        fullPath:'',
-        branchFor:''
-    };
-    tabs = [
-    {
-      active: true,
-      name  : '选择已有分支',
-
-    },
-    {
-      active: false,
-      name  : '新增分支',
-
-    }
-  ];
-
-    search = {
-        profilesName:'',
-        manager:'',
-        isAllowDelivery:''
-    };
-   pageIndex = 1
-
     getData(type?) {
-           if(type == 'search'){
-              this.page = 1
+           if  (type === 'search') {
+              this.page = 1;
            }
         const page = {
-             condition:this.search,
+             condition: this.search,
             page: {
                 size: 10,
                 current: this.page
             }
         };
-     
 
         this.utilityService.postData(appConfig.testUrl  + appConfig.API.allsProfiles, page, {Authorization: this.token})
             .subscribe(
                 (val) => {
-
-                      console.log(val)
                     if (val.code === '200') {
                         this.data = val.result.records;
                         this.total = val.result.total; // 总数
@@ -349,25 +319,23 @@ export class SProfilesComponent implements OnInit {
                         for ( let i = 0; i < this.data.length; i++) {
                             this.data[i].itemName = this.data[i].fullPath
                              this.data[i].fullPathstr = this.data[i].fullPath
-                            if(this.data[i].fullPath.length > 60) {
-                              this.data[i].fullPathstr = appConfig.subString(this.data[i].fullPath,20)
+                            if (this.data[i].fullPath.length > 60) {
+                              this.data[i].fullPathstr = appConfig.subString(this.data[i].fullPath, 20)
                                 }
-
-                            if(this.data[i].fullPath === ''){
-                                  this.data[i].buttonData = this.buttonData
-                            }else{
-                              this.data[i].buttonData = this.buttonDataBranch
+                            if (this.data[i].fullPath === '') {
+                                  this.data[i].buttonData = this.buttonData;
+                            }else {
+                              this.data[i].buttonData = this.buttonDataBranch;
                            }
-                            if(this.data[i].isAllowDelivery === '1'){
-                                this.data[i].isAllowDelivery = true
-                            }else{
-                                this.data[i].isAllowDelivery = false
+                            if (this.data[i].isAllowDelivery === '1') {
+                                this.data[i].isAllowDelivery = true;
+                            }else {
+                                this.data[i].isAllowDelivery = false;
                             }
                         }
-                        console.log( this.data)
                     }
                     // 拼接
-                },(error) => {
+                }, (error) => {
                       this.nznot.create('error', error.msg, '');
                 }
             );
@@ -377,11 +345,10 @@ export class SProfilesComponent implements OnInit {
 
     // 列表组件传过来的内容
     addHandler(event) {
-
         if (event === 'add') {
             this.profiles = new SprofilesModule();
             this.Ptitle = '新增运行环境';
-            this.isShowIp =false;
+            this.isShowIp = false;
             this.isShowartf = false
             this.tags = [];
             this.mergeVisible = true;
@@ -392,8 +359,6 @@ export class SProfilesComponent implements OnInit {
             this.isVisible = true;
         } else if (event === 'ces') {
             this.isCancel = true;
-            console.log(event);
-            console.log('详情界面');
         }
     }
 
@@ -402,49 +367,39 @@ export class SProfilesComponent implements OnInit {
     // 接受子组件删除的数据 单条还是多条
     deleatData(event) {
 
-
-
     }
-    profilesGuid:any;
+
+
+    profilesGuid: any;
     branchInfo = false; // 弹出框 默认为false
     branchData: BranchModule = new BranchModule();
     branchdataInfo: boolean; // 分支详情
     tips = false;
     projectInfo = false;
-prolist: any[] = [];//工程列表
-// 工程穿梭框
-
-
-filterOption(inputValue, option) {
+    prolist: any[] = []; // 工程列表
+    filterOption(inputValue, option) {
     return option.description.indexOf(inputValue) > -1;
   }
 
-  searchpro(ret: any) {
-    console.log('nzSearchChange', ret);
-  }
+      searchpro(ret: any) {
+      }
 
-  select(ret: any) {
-    console.log('nzSelectChange', ret);
-  }
-  subPro = []
-  change(ret: any) {
-     for(let i = 0 ; i < ret.list.length; i++){
-         ret.list[i]['status'] =  ret.to
-     }
-    console.log('nzChange', ret);
-  }
+      select(ret: any) {
+      }
+      subPro = []
+      change(ret: any) {
+         for (let i = 0 ; i < ret.list.length; i++) {
+             ret.list[i]['status'] =  ret.to;
+         }
+      }
 
-list = [];
+        list = [];
 
-workId:string;//工作项ID
+    workId: string; // 工作项ID
     // 按钮点击事件
     buttonEvent(event) {
-
-
-
         this.profilesGuid = event.guid
         if (event.names.key === 'dels') { // 按钮传入删除方法
-
             let self = this;
             this.confirmServ.confirm({
                 title  : '您是否确认要删除这项内容!',
@@ -453,14 +408,12 @@ workId:string;//工作项ID
                     self.utilityService.deleatData(appConfig.testUrl  + appConfig.API.delSprofiles + self.profilesGuid,  {Authorization: self.token})
                         .subscribe(
                             (val) => {
-                                if(val.code === '200') {
+                                if (val.code === '200') {
                                      if ( !(( self.total - 1) % 10)) {
                                         self.pageTotal = self.pageTotal - 10 ;
                                         self.getData();
                                     }
                                     self.getData();
-                                    //
-
                                     self.nznot.create('success', val.msg, val.msg);
                                 }else {
                                     self.nznot.create('error', val.msg, '');
@@ -477,34 +430,28 @@ workId:string;//工作项ID
             });
 
 
-        } else if(event.names.key ==='project'){
-
+        } else if(event.names.key === 'project') {
                    this.utilityService.getData(appConfig.testUrl  + appConfig.API.sProfilesadd + '/' +  event.guid + '/project',  {},  {Authorization: this.token})
                             .subscribe(
                                 (val) => {
                                let others = [];
                                let own = []
-
-                                   if(val.result.others.length > 0){
-
-                                        for(let j= 0; j < val.result.others.length;j++){
-                                          val.result.others[j]['exit']='left'
+                                   if (val.result.others.length > 0){
+                                        for (let  j = 0; j < val.result.others.length; j++) {
+                                          val.result.others[j]['exit'] = 'left';
                                    }
                                 }
-                                    if(val.result.own.length > 0){
-
-                                   for(let j= 0; j < val.result.own.length;j++){
-
-                                          val.result.own[j]['exit']='right'
-                                   }
+                                    if (val.result.own.length > 0) {
+                                       for (let j = 0; j < val.result.own.length; j++) {
+                                              val.result.own[j]['exit'] = 'right';
+                                       }
                                     }
-
                                     others = val.result.others;
                                     own = val.result.own;
-                                      if(own.length > 0 && others.length > 0){
+                                      if(own.length > 0 && others.length > 0) {
                                            others = others.concat(own)
-                                    }else if(others.length == 0 && own.length > 0 ){
-                                         others = own
+                                    }else if(others.length === 0 && own.length > 0 ) {
+                                         others = own;
                                     }
                                const ret = [];
                                 for (let i = 0; i < others.length; i++) {
@@ -519,13 +466,7 @@ workId:string;//工作项ID
                                 });
                                 }
                                 this.list = ret;
-
-
-                                     this.projectInfo = true
-                                  console.log(this.list);
-
-                                    // this.nznot.create('success',val.msg,val.msg);
-                                    // this.getData();
+                                this.projectInfo = true
                                 },
                                 (error) => {
                                     this.nznot.create('error', error.code , error.msg);
@@ -549,7 +490,6 @@ workId:string;//工作项ID
 
                 .subscribe(
                     (val) => {
-                        console.log(val)
                         if (val.code === '200') {
                             this.branshList = val.result
                             this.isShowDetail = false;
@@ -560,26 +500,21 @@ workId:string;//工作项ID
                           }else{
                                this.tips = false;
                           }
-                          console.log(this.tips)
-                              console.log(this.branshList.length)
                         }else {
                             this.nznot.create('error', val.msg, val.msg);
                         }
                     }  ,
-                (error) =>{
-                     this.nznot.create('error', error.msg,'');
+                (error) => {
+                     this.nznot.create('error', error.msg, '');
                 }
                 );
 
 
-        }
-
-       else if (event.names.key  === 'branchDDetail') {
+        } else if (event.names.key  === 'branchDDetail') {
            let url= '/' + event.guid + '/branchDetail'
-                this.utilityService.getData(appConfig.testUrl  + appConfig.API.sProfilesadd + url ,{}, {Authorization: this.token})
+                this.utilityService.getData(appConfig.testUrl  + appConfig.API.sProfilesadd + url , {}, {Authorization: this.token})
                     .subscribe(
                         (val) => {
-                            console.log(val);
                              this.branchInfo = true;
                              this.branchData = val.result;
                              this.branchData.createTime = moment(this.branchData.createTime).format('YYYY-MM-DD');
@@ -595,7 +530,7 @@ workId:string;//工作项ID
                 title  : '您是否确认要取消关联分支!',
                 showConfirmLoading: true,
                 onOk() {
-                    self.saveCorrelation('Q')
+                    self.saveCorrelation('Q');
                 },
                 onCancel() {
                 }
@@ -606,16 +541,12 @@ workId:string;//工作项ID
 
 
 
-subProject(){
-    console.log(this.list);
+    subProject() {
     let projectGuids = []
-    // this.projectInfo = false;
-    for(let i = 0 ; i < this.list.length; i ++){
-            if(this.list[i].status == 'right'&&this.list[i].disabled == false){
+    for (let i = 0 ; i < this.list.length; i ++) {
+            if (this.list[i].status === 'right' && this.list[i].disabled === false) {
             projectGuids.push(this.list[i].guid);
         }
-
-
     }
 
           this.utilityService.postData(appConfig.testUrl  + appConfig.API.sProfilesadd + '/' + this.profilesGuid + '/project' ,{projectGuids:projectGuids}, {Authorization: this.token})
@@ -631,47 +562,42 @@ subProject(){
                             }
                             );
 }
-// 关联分支方法
-
+    // 关联分支方法
     saveCorrelation(item) {
         let url = ''
-        if (item === 'C'){
-            console.log(this.active);
-
-            if(this.active == false){ //选择新增分支
-                    let id =''
-            if(this.addBranch.branchFor =='' || this.addBranch.fullPath == ''){
+        if (item === 'C') {
+            if (this.active === false){ // 选择新增分支
+                    let id = ''
+            if (this.addBranch.branchFor === '' || this.addBranch.fullPath === '') {
                  this.nznot.create('error', '请输入完整分支信息', '');
                  return;
             }
-             if(this.workId){
-                 id =this.workId
-             }else{
-                  id = this.profilesGuid
-             };
+             if (this.workId) {
+                 id = this.workId;
+             }else {
+                  id = this.profilesGuid;
+             }
            this.utilityService.postData(appConfig.testUrl  + appConfig.API.sProfilesadd + '/' + id + '/branch',  this.addBranch, {Authorization: this.token})
             .subscribe(
                 (val) => {
                     this.getData();
-                      this.isCorrelation = false;
-                    this.nznot.create('success',val.msg,val.msg);
-                }
-                ,
-                    error => {
-                         this.nznot.create('error', error.msg,'');
+                     this.isCorrelation = false;
+                    this.nznot.create('success', val.msg, val.msg);
+                },
+                error => {
+                         this.nznot.create('error', error.msg, '');
                     }
             );
-        }else{
-            if(this.branch == null){
+        }else {
+            if (this.branch == null) {
              this.nznot.create('error', '请输入完整分支信息', '');
                 return;
             }
-                 url = '/' + this.profilesGuid + '/branch/' +this.branch;
+                 url = '/' + this.profilesGuid + '/branch/' + this.branch;
                  this.utilityService.getData(appConfig.testUrl  + appConfig.API.sProfilesadd + url, {},{Authorization: this.token})
             .subscribe(
                 (val) => {
-                    console.log(val)
-                    if(val.code === '200') {
+                    if (val.code === '200') {
                         this.getData()
                         this.nznot.create('success', val.msg, val.msg);
                         this.branch = null; // 清空
@@ -681,19 +607,15 @@ subProject(){
                     }
                 }  ,
                 (error) => {
-                     this.nznot.create('error', error.msg,'');
+                     this.nznot.create('error', error.msg, '');
                 }
             );
             }
-
-
-
         }else {
             url = '/' + this.profilesGuid + '/cancel';
                this.utilityService.getData(appConfig.testUrl  + appConfig.API.sProfilesadd + url, {},{Authorization: this.token})
             .subscribe(
                 (val) => {
-                    console.log(val)
                     if (val.code === '200') {
                         this.getData()
                         this.nznot.create('success', val.msg, val.msg);
@@ -709,51 +631,39 @@ subProject(){
             );
 
         }
-
-
-            this.branch=''
+            this.branch = '';
     }
-    //
 
     // 列表按钮方法
     buttonDataHandler(event) {
-        console.log(event);
-
     }
-    // switch = false
-    // switch开关方法
     getStatus(event) {
-        console.log(event);
         event.switch = true
-        // let isAllowDelivery = event.isAllowDelivery
         let status = '';
-        if(event.status === true){
-            status = '1'
+        if (event.status === true) {
+            status = '1';
         }else{
-            status = '0'
+            status = '0';
         }
         let obj = {
             guid: event.guid,
             isAllowDelivery: status
         }
-        // console.log(obj)
         this.utilityService.putData(appConfig.testUrl  + appConfig.API.getStatus, obj,{Authorization: this.token})
             .subscribe(
                 (val) => {
                      event.switch = false
                         this.getData()
                         event.isAllowDelivery = event.status
-                        console.log(event)
-                    if(val.code === '200') {
+
+                    if (val.code === '200') {
                         this.nznot.create('success', val.msg, val.msg);
                     }else {
                         // event.isAllowDelivery = true
                         this.nznot.create('error', val.msg, '');
                     }
-                    // console.log(event)
                 }   ,
                 (error) => {
-                       console.log(error)
                     this.nznot.create('error', error.msg, '');
                      event.switch = false;
 
@@ -767,7 +677,6 @@ subProject(){
 
     // 处理行为代码，跳转、弹出框、其他交互
     isActive(event) {
-        console.log(event);
     }
 
 
@@ -825,25 +734,16 @@ subProject(){
         this.checkVisible = false;
     }
 
-
     // 打印界面
     isVisible = false; // 默认关闭
     workItem = false;
-
-
-
-
     handleOk() {
-        console.log(this.deliverItem);
-        // console.log(this.checkOptionsOne); // 选中的会有true属性 判断即可
         // 请求数据 下载下来
         this.isVisible = false; // 关闭弹出框
     }
 
-
     // 合并的确定
     determine() {
-        console.log('确定成功');
         this.mergeVisible = false;
     }
 

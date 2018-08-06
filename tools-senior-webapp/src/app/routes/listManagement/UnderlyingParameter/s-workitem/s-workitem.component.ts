@@ -252,11 +252,11 @@ export class SWorkitemComponent implements OnInit {
          }
       }
 
-    tabChange(obj){
+    tabChange(obj) {
         this.active = obj;
     }
 
-    workId: string; //工作项ID
+    workId: string; // 工作项ID
     // 按钮点击事件方法
     buttonEvent(event) {
         this.workId = event.guid;
@@ -266,7 +266,6 @@ export class SWorkitemComponent implements OnInit {
                 this.modalVisible = true;
                 this.workAdd = _.cloneDeep(event);
                 this.isEdit = true;
-
             } else if(event.names.key === 'project') {
                    this.utilityService.getData(appConfig.testUrl  + appConfig.API.sWorkitem + '/' +  event.guid + '/project',  {},  {Authorization: this.token})
                             .subscribe(
@@ -314,7 +313,6 @@ export class SWorkitemComponent implements OnInit {
                             );
 
             } else if (event.names.key  === 'association') {
-
                 this.assbranch = undefined;
                 this.branchdataInfo = false;
                 this.getBranch();
@@ -332,7 +330,6 @@ export class SWorkitemComponent implements OnInit {
                         this.utilityService.putData(appConfig.testUrl  + appConfig.API.sWorkitem + '/' +  event.guid + '/putProductStatus',  {},  {Authorization: this.token})
                             .subscribe(
                                 (val) => {
-                                    console.log(val)
                                     this.nznot.create('success', val.msg, val.msg);
                                     this.getData();
                                 },
@@ -355,7 +352,6 @@ export class SWorkitemComponent implements OnInit {
                         this.utilityService.getData(appConfig.testUrl  + appConfig.API.sWorkitem + '/' +  event.guid + '/cancel',  {},  {Authorization: this.token})
                             .subscribe(
                                 (val) => {
-                                    console.log(val)
                                     this.nznot.create('success', val.msg, val.msg);
                                     this.getData();
                                 },
@@ -405,7 +401,7 @@ export class SWorkitemComponent implements OnInit {
         }
     }
 
-    subProject(){
+    subProject() {
         let projectGuids = []
         // this.projectInfo = false;
         for (let i = 0 ; i < this.list.length; i ++) {
@@ -430,10 +426,9 @@ export class SWorkitemComponent implements OnInit {
 
     checkArtf(event){
         let MOBILE_REGEXP =/^\+?[1-9][0-9]*$/;
-        console.log(MOBILE_REGEXP.test(event));
-        if(MOBILE_REGEXP.test(event)==true){
+        if (MOBILE_REGEXP.test(event) === true ) {
             this.isShowArtf = false
-        }else{
+        }else {
             this.isShowArtf = true;
         }
     }
@@ -444,7 +439,6 @@ export class SWorkitemComponent implements OnInit {
 
 
     checkBranch(guid) {
-        console.log(guid)
         this.utilityService.getData(appConfig.testUrl  + appConfig.API.sBranchadd + '/' + guid,   {}, {Authorization: this.token})
             .subscribe(
                 (val) => {
@@ -493,7 +487,6 @@ export class SWorkitemComponent implements OnInit {
             this.utilityService.postData(appConfig.testUrl  + appConfig.API.sWorkitem, this.workAdd,  {Authorization: this.token})
                 .subscribe(
                     (val) => {
-                      console.log(val)
                         if (val.code === '200') {
                              this.modalVisible = false;
                               this.modal.open({
@@ -510,7 +503,7 @@ export class SWorkitemComponent implements OnInit {
 
                                 }
                             });
-                        }else{
+                        }else {
                               this.nznot.create('error', val.msg , val.msg);
                         }
 
@@ -530,8 +523,8 @@ export class SWorkitemComponent implements OnInit {
     // 关联分支
     assSave() {
         let url = '';
-        if (this.active === true){ // 选择已有分支
-         if (this.assbranch == undefined){
+        if (this.active === true) { // 选择已有分支
+         if (this.assbranch === undefined){
               this.nznot.create('error', '请输入完整分支信息', '');
              return;
          }
@@ -548,10 +541,9 @@ export class SWorkitemComponent implements OnInit {
                         this.nznot.create('error', error.code , error.msg);
                     }
             );
-        }else{
-            let id ='';
-            console.log(this.addBranch)
-            if(this.addBranch.branchFor == null || this.addBranch.branchType == null){
+        }else {
+            let id = '';
+            if (this.addBranch.branchFor == null || this.addBranch.branchType == null) {
                  this.nznot.create('error', '请输入完整分支信息', '');
                  return;
             }

@@ -169,7 +169,6 @@ export class SubListComponent implements OnInit {
         this.utilityService.getData(appConfig.testUrl  + appConfig.API.sDeliveryList + '/'+ this.bransguid + '/history', {}, {Authorization: this.token})
             .subscribe(
                 (val) => {
-                    console.log(val)
                     this.loading = false;
                     this.reset = true; // 打开右侧内容
                     this.textcssList = val.result.deliveryDetail;

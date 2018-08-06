@@ -25,19 +25,14 @@ export class SBranchComponent implements OnInit {
                 private confirmServ: NzModalService
                 ) {
     }
-    branch: SbranchModule = new SbranchModule();
 
+    // 变量
+    branch: SbranchModule = new SbranchModule();
     token: any;
     showAdd = true;
     isShowTotal = true;
     isPagination = true;
-    ptitle:any
-    ngOnInit() {
-        this.token = this.tokenService.get().token;
-        this.getData();
-        this.ptitle = '信息提示'
-
-    }
+    ptitle: any;
 
     data: any[] = []; // 表格数据
     headerDate = [  // 配置表头内容
@@ -65,15 +60,21 @@ export class SBranchComponent implements OnInit {
         {key: 'release', value: 'R' ,selector:false},
     ]
     search = {
-        branchType:'',
-        fullPath:'',
-        branchFor:''
+        branchType: '',
+        fullPath: '',
+        branchFor: ''
     };
     page = '1'
     pageIndex = 1
+
+    ngOnInit() {
+        this.token = this.tokenService.get().token;
+        this.getData();
+        this.ptitle = '信息提示';
+    }
     getData(type?) {
-        if(type == 'search'){
-              this.page = '1'
+        if (type === 'search') {
+              this.page = '1';
            }
             const page = {
                 condition: this.search,
@@ -92,34 +93,26 @@ export class SBranchComponent implements OnInit {
                             this.total = val.result.total; // 总数
                             this.pageTotal = val.result.pages * 10; // 页码
                             this.pageIndex = val.result.current;
-
                             for (let i = 0 ; i <  this.data.length; i ++) {
                                 this.data[i].branchTypeText =  this.data[i].branchType;
                                this.data[i].branchForstr = this.data[i].branchFor;
                                 this.data[i].fullPathstr = this.data[i].fullPath;
                                 this.data[i].itemName = this.data[i].fullPath;
-                                if(this.data[i].fullPath.length > 100){
-                                   this.data[i].fullPathstr = appConfig.subString(this.data[i].fullPath,40);
+                                if (this.data[i].fullPath.length > 100) {
+                                   this.data[i].fullPathstr = appConfig.subString(this.data[i].fullPath, 40);
                                 }
-                                 if(this.data[i].branchFor.length > 20){
-                                      this.data[i].branchForstr = appConfig.subString(this.data[i].branchForstr,5);
+                                 if (this.data[i].branchFor.length > 20){
+                                      this.data[i].branchForstr = appConfig.subString(this.data[i].branchForstr, 5);
                                 }
-
-
                                 this.data[i].buttonData = this.buttonData;
                                this.data[i].createTime = moment(this.data[i].createTime).format('YYYY-MM-DD');
-
-
                           }
-
-                        }else{
-                         this.nznot.create('error',val.msg,'');
+                        }else {
+                         this.nznot.create('error', val.msg, '');
                         }
-
                     },
-                (error)=>{
-                    // console.log(error)
-                    this.nznot.create('error', error.msg,'');
+                (error) => {
+                    this.nznot.create('error', error.msg, '');
 
                 }
                 );
@@ -134,22 +127,20 @@ export class SBranchComponent implements OnInit {
     deleatData(event) {
 
     }
-    checkTrue(){
+    checkTrue() {
 
     }
 
     // 顶部按钮
 
     addHandler(event) {
-        console.log(this.branch)
-
         if (event === 'add') {
             this.tag = '验证'
              this.branch = new  SbranchModule();
               this.isShowbranch = true
-          
+
               this.detailsVisible = true;
-              this.ptitle = '补录分支'
+              this.ptitle = '补录分支';
         }
     }
     // 按钮点击事件
@@ -182,7 +173,7 @@ export class SBranchComponent implements OnInit {
                         }
             }   ,
                 (error) => {
-                    self.nznot.create('error', error.msg,error.msg);
+                    self.nznot.create('error', error.msg, error.msg);
                 }
 
                 );
@@ -198,44 +189,40 @@ export class SBranchComponent implements OnInit {
                  this.branch =  new SbranchModule();
                  this.detailsVisible = true;
                  this.branch = _.cloneDeep(event);;
-                 this.branchType.forEach(i=>{
-                            console.log(i)
-                            if(  this.branch.branchType == i.key) {
+                 this.branchType.forEach(i => {
+                            if ( this.branch.branchType === i.key) {
                                  this.branch.branchType = i.value;
                             }
                  })
-                 this.ptitle = '修改分支'
+                 this.ptitle = '修改分支';
 
 
         }  else if (event.names.key === 'details') {
           this.detailsVisible = true
-            this.utilityService.getData(appConfig.testUrl  + appConfig.API.sBranchadd +'/'+ obj,{}, {Authorization: this.token})
+            this.utilityService.getData(appConfig.testUrl  + appConfig.API.sBranchadd + '/' + obj,{}, {Authorization: this.token})
                 .subscribe(
                     (val) => {
-                        console.log(val);
                         this.details = val.result;
                     },
-                    (error)=>{
-                      this.nznot.create('error', error.msg,'');
+                    (error) => {
+                      this.nznot.create('error', error.msg, '');
                     }
                 );
         }
 
     }
-    isShowbranch:boolean;
-    checkmsg:any;
+    isShowbranch: boolean;
+    checkmsg: any;
     tag = '验证';
-       checkversion(item){
+       checkversion(item) {
 
           if (this.tag === '通过') {
               return;
           }
-           console.log(item)
          this.utilityService.postData(appConfig.testUrl  + appConfig.API.sBranchadd +'/'+ 'path',{svnUrl:item}, {Authorization: this.token})
                 .subscribe(
                     (val) => {
-                        console.log(val);
-                        if(val.code === '200') {
+                        if (val.code === '200') {
                            this.branch.lastVersion = val.result;
                            this.isShowbranch = true
                            this.tag = '通过';
@@ -245,81 +232,66 @@ export class SBranchComponent implements OnInit {
                        this.isShowbranch = false
                             this.tag = '验证'
                              this.branch.lastVersion = ''
-                           this.nznot.create('error', error.msg,'');
+                           this.nznot.create('error', error.msg, '');
                 }
                 );
         }
-        checkagin(item){
+        checkagin(item) {
 
                 this.tag = '验证'
-           this.isShowbranch = true
+           this.isShowbranch = true;
         }
 
-change(){
-    this.getData()
-    this.detailsVisible=false
-}
-  reset() {
+    change(){
+        this.getData()
+        this.detailsVisible = false
+    }
+     reset() {
        this.search = {
-                    branchType:'',
-                    fullPath:'',
-                    branchFor:''
+                    branchType: '',
+                    fullPath: '',
+                    branchFor: ''
                 };
        this.getData('search');
-          }
-    addsubmit(){
-
-
+     }
+    addsubmit() {
         let obj = this.branch;
-        console.log(this.branch)
-          if(!obj.branchFor||!obj.fullPath||!obj.branchFor||!obj.lastVersion){
-             this.nznot.create('error', '请输入完整的信息！','');
+          if(!obj.branchFor || !obj.fullPath || !obj.branchFor || !obj.lastVersion){
+             this.nznot.create('error', '请输入完整的信息！', '');
              return;
           }
 
         if ( !obj.guid ) {
-              this.utilityService.postData(appConfig.testUrl  + appConfig.API.sBranchadd ,obj, {Authorization: this.token})
+              this.utilityService.postData(appConfig.testUrl  + appConfig.API.sBranchadd , obj, {Authorization: this.token})
            .subscribe(
             (val) => {
-                console.log(this.branch);
-
-             if(val.code === '200') {
+             if (val.code === '200') {
                    this.getData();
                   this.detailsVisible = false;
-
-
                   this.nznot.create('success', val.msg, val.msg);
              }else {
                 this.nznot.create('error', '异常', '异常');
              }
             }   ,
                 (error) => {
-
-             this.nznot.create('error', error.msg, '');
+                this.nznot.create('error', error.msg, '');
                 }
 
         );
     }else {
-
-                  console.log(this.branch);
-
     this.utilityService.putData(appConfig.testUrl  + appConfig.API.sBranchadd, obj,{Authorization: this.token})
         .subscribe(
             (val) => {
-
              if (val.code === '200') {
                 this.getData();
-
-                  console.log(this.branch);
                   this.detailsVisible = false;
                   this.nznot.create('success', val.msg, val.msg);
              }else {
                 this.nznot.create('error', '异常', '异常');
              }
             }   ,
-                (error)=>{
-
-                     this.nznot.create('error', error.msg,'');
+                (error) => {
+                     this.nznot.create('error', error.msg, '');
                 }
 
         );

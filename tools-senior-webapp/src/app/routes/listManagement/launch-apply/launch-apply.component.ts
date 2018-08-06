@@ -173,7 +173,6 @@ export class LaunchApplyComponent implements OnInit {
         this.utilityService.postData(appConfig.testUrl  + appConfig.API.list, page, { Authorization: this.token})
             .subscribe(
                 (val) => {
-                    console.log(val)
                     if (val.code === '200') {
                         this.data = val.result.records;
                         this.total = val.result.total; // 总数
@@ -269,7 +268,7 @@ export class LaunchApplyComponent implements OnInit {
                     this.mergeListInfo.push(this.data[i]);
                 }
             }
-            if (this.mergeListInfo.length === 0){
+            if (this.mergeListInfo.length === 0) {
                 this.nznot.create('error', '请检查是否勾选工程', '请检查是否勾选工程');
                 return;
             }
@@ -405,7 +404,7 @@ export class LaunchApplyComponent implements OnInit {
                     (error) => {
 
                         this.loadingnext = false;
-                        this.nznot.create('error', error.msg,'');
+                        this.nznot.create('error', error.msg, '');
                         //
                     })
             // step2
@@ -437,7 +436,7 @@ export class LaunchApplyComponent implements OnInit {
                             this.mergeListData  = val.result.mergeLists;
 
                             for  (let i = 0; i < this.mergeListData.length; i ++) {
-                                if (this.mergeListData[i].confirmStatus === '加入投放'){
+                                if (this.mergeListData[i].confirmStatus === '加入投放') {
                                     this.mergeListData[i]['checkbuttons'] = true;
                                 }else {
                                     this.mergeListData[i]['checkbuttons'] = false;
@@ -600,14 +599,14 @@ export class LaunchApplyComponent implements OnInit {
                     });
 
 
-        }else if(event.names.key === 'upd'){
+        }else if(event.names.key === 'upd') {
 
             this.guidDelivery = event.guid;
             this.utilityService.getData( appConfig.testUrl + '/deliveries/' + event.guid + '/profileDateilVerify', {}, {Authorization: this.token})
                 .subscribe(
                     (val) => {
 
-                        if(val.code === '200'){
+                        if(val.code === '200') {
                             this.updPackTiming  = val.result
                             this.updPackTiming['unixTime'] = moment(this.updPackTiming['deliveryTime']).format('YYYY-MM-DD 00:00:00.000')
                             localStorage.setItem('time',this.updPackTiming['unixTime']);
@@ -862,7 +861,7 @@ export class LaunchApplyComponent implements OnInit {
                             this.istextVisible = false;
                             this.checkListVisible = false;
                             this.nznot.create('success', val.msg, val.msg);
-                        }else{
+                        }else {
                             this.nznot.create('error', val.msg,  '');
                         }
                     },
@@ -893,7 +892,7 @@ export class LaunchApplyComponent implements OnInit {
                 (val) => {
 
                     if (val.code === '200') {
-                          
+
                         this.nznot.create('success', val.msg, val.msg);
                     }else {
                         this.nznot.create('error', val.msg, val.msg);
@@ -925,9 +924,9 @@ export class LaunchApplyComponent implements OnInit {
             this.utilityService.putData( appConfig.testUrl + '/checkLists/' + id + '/status/' + type, {}, {Authorization: this.token})
                 .subscribe(
                     (val) => {
-                         
+
                         if (val.code === '200') {
-                           
+
                             this.nznot.create('success', val.msg,  '');
                             if (type === 3) {
                                 this.mergeListData.splice(soyin, 1); // 删除数组
@@ -936,7 +935,7 @@ export class LaunchApplyComponent implements OnInit {
                     }, (error) => {
                         this.nznot.create('error', error.msg, '');
                     });
-                   
+
         }
     }
 
@@ -1088,20 +1087,20 @@ export class LaunchApplyComponent implements OnInit {
     }
 
     checkSavemerge(event) {
-      
+
         let objs = event.arr
-      
+
         const obj ={
             guidDelivery: String(objs.guidDelivery),
             patchType: objs.patchType,
             deployWhere: objs.deployWhere
         }
-      
+
         this.utilityService.putData( appConfig.testUrl + '/checkLists/' + event.errorId + '/delivery', obj, {Authorization: this.token})
             .subscribe(
                 (val) => {
                     if (val.code === '200') {
-                        
+
                         this.mergeListData.forEach((result, i) => {
                             if (result.guid === event.errorId) {
                                 this.mergeListData[i].checkbuttons = true;
@@ -1114,7 +1113,6 @@ export class LaunchApplyComponent implements OnInit {
                 }, (error) => {
                     this.nznot.create('error', error.msg, '');
                 });
-                console.log(this.iStouchan);
     }
 
 
@@ -1304,7 +1302,6 @@ export class LaunchApplyComponent implements OnInit {
 
     // 比较copy的时间
     oncopyChange(time, array) {
-        console.log(time)
         if (time.getTime() !== new Date(array.unixTime).getTime()) {
             for (let i = 0; i < array.packTimeDetails.length; i++) {
                 if (array.packTimeDetails[i].isOptions === 'N') {

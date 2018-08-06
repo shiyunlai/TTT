@@ -249,7 +249,6 @@ export class SProjectComponent implements OnInit {
                     }
                     this.diconfig = this.diconArray;
                 } else {
-                    console.log(event.deployConfig);
                     this. diconfig = [{
                         'exportType': event.deployConfig ,
                         'depolySelect': [{ depoly: event.deployConfig}],
@@ -299,7 +298,6 @@ export class SProjectComponent implements OnInit {
 
     save() {
         let splicing  = [];
-        console.log(this.diconfig)
         _.forEach(this.diconfig, function (value) {
             var arr = [];
             _.forEach(value.depolySelect, function (value1) {
@@ -311,7 +309,6 @@ export class SProjectComponent implements OnInit {
             };
             splicing.push(jsonObj);
         })
-        console.log(this.productAdd)
         this.productAdd.deployConfig = JSON.stringify(splicing);
         if (this.isEdit) { // 修改
             this.utilityService.putData(appConfig.testUrl  + appConfig.API.sProject, this.productAdd, {Authorization: this.token})
@@ -362,7 +359,6 @@ export class SProjectComponent implements OnInit {
     removeInput(index) {
         let i = this.diconfig.indexOf(index);
         this.diconfig.splice(i, 1);
-        console.log(this.diconfig);
     }
 
 
