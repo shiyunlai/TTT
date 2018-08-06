@@ -1,0 +1,128 @@
+ <!--  列表组件 -->
+<div class="mb-md">
+      <div *ngIf="isShowTotal == true">
+          <button  *ngFor="let s of buttons;let l = index" style="margin-right: 1%"   nz-button  (click)="add(s.key)"  [nzType]="'primary'" [nzSize]="'large'">
+              <span>{{s.value}}</span>
+          </button>
+      </div>
+    <button *ngIf="selectedRows.length >0 && !showAdd" nz-button (click)="remove()" style="margin-left: 10px;" [nzType]="'danger'" [nzSize]="'large'">
+        <i class="anticon anticon-minus"></i>
+        <span>删除</span>
+    </button>
+    <!--必须选中一个的时候，即数组长度大于-的时候，才会显示这一块内容，否则不显示-->
+    <ng-container *ngIf="selectedRows.length == 1 && moreData.morebutton && !showAdd">
+        <nz-dropdown [nzPlacement]="'bottomLeft'">
+            <button nz-button nz-dropdown [nzSize]="'large'" class="ml-sm">
+                更多操作 <i class="anticon anticon-down"></i>
+            </button>
+            <ul nz-menu>
+                <li *ngFor="let b of moreData.buttons" ng-if=""  nz-menu-item (click)="moreclick(b.key)">{{b.value}}</li>
+            </ul>
+        </nz-dropdown>
+    </ng-container>
+</div>
+
+<div class="mb-md" *ngIf="isShowTotalhead == true">
+    <nz-alert [nzType]="'info'" [nzShowIcon]="true">
+        <span alert-body>
+            已选择
+            <strong class="text-primary">{{selectedRows.length}}</strong> 项&nbsp;&nbsp;
+            总计 <strong>{{total}}</strong> 个
+            <a *ngIf="selectedRows.length  > 0" (click)="clear()" class="ml-lg">清空</a>
+        </span>
+    </nz-alert>
+</div>
+
+<!-- 如果是异步的列表，必须使用nzAjaxData的-->
+<nz-table #nzTable [nzAjaxData]="initDate" [nzTotal]="pageTotal"
+          [nzPageSize]="q.ps" [nzLoading]="loading"
+          [nzIsPagination]="isPagination"
+          (nzPageIndexChange)="pageChange($event)"
+          [nzPageIndex]='pageindex'>
+    <thead nz-thead>
+    <tr>
+        <th nz-th [nzCheckbox]="true" *ngIf="isShowTotal == true">
+            <label  nz-checkbox [(ngModel)]="allChecked"
+                   [nzIndeterminate]="indeterminate"
+                   (ngModelChange)="checkAll($event)">
+            </label >
+        </th>
+        <th *ngFor="let d of headerDate" nz-th>
+            <span>{{d.value}}</span>
+        </th>
+        <th nz-th>
+            <span>操作</span>
+        </th>
+    </tr>
+    </thead>
+    <!-- table方法-->
+    <tbody nz-tbody>
+    <tr nz-tbody-tr *ngFor="let i of nzTable.data;let l = index">
+        <td nz-td [nzCheckbox]="true" *ngIf="isShowTotal == true">
+            <label nz-checkbox [nzDisabled]="i.disabled" [(ngModel)]="i.checked"  (ngModelChange)="refreshStatus($event)">
+            </label>
+        </td>
+        <td *ngFor="let d of headerDate;let s = index">
+            <!--文本样式显示---默认 -->
+            <span title="{{d.title ? i.itemName : ''}}" *ngIf="!d.radio && !d.switch" [ngClass]="{'active': d.isclick, 'noactive': !d.isclick}" class="active" (click)="isClick(d,i)">{{initDate[l][d.key]}}</span>
+            <!-- select样式显示 根据radio属性 -->
+            <span *ngIf="d.radio">
+                <!--因为ngIf和ngFor不能在同一行中使用，所以要分行来用，为什么不用div而是用ng-container，是因为div受样式或者说全局样式干扰，<ng-container>是不受任何干扰的。-->
+               <ng-container *ngIf = "d.type == 'deployArray' && initDate[l].isshow == true && i.checked">
+                   <nz-select
+                            style="width: 150px;"
+                           nzAllowClear
+                           [nzPlaceHolder]="'部署为'"
+                           [(ngModel)]="initDate[l].deploySelect"
+                            [nzNotFoundContent]="'暂无数据'"
+                           nzShowSearch>
+                          <nz-option
+                              *ngFor="let t of initDate[l].deployArray"
+                              [nzLabel]="t.label"
+                              [nzValue]="t.value">
+                          </nz-option>
+                    </nz-select>
+               </ng-container>
+               <ng-container *ngIf="d.type !== 'deployArray'" >
+                    <nz-select
+                        style="width: 150px;"
+                        nzAllowClear
+                        [nzPlaceHolder]="'导出为'"
+                        [(ngModel)]="initDate[l].patchSelect"
+                        (ngModelChange)="onChanges(initDate[l].patchSelect, initDate[l].depolyJsonArray,initDate[l].deployArray, initDate[l])"
+                        nzShowSearch>
+                          <nz-option
+                              *ngFor="let t of initDate[l].patchArray"
+                              [nzLabel]="t.label"
+                              [nzValue]="t.value">
+                          </nz-option>
+                    </nz-select>
+               </ng-container>
+            </span>
+            <!-- 按钮样式显示，根据switch属性-->
+            <span *ngIf="d.switch">
+                 <button *ngIf='i.isAllowDelivery'  nz-button [nzType]="'primary'" [nzLoading]='i.switch' (click)="status(i,false)">
+                    <span>是</span>
+                    </button>
+                     <button *ngIf='!i.isAllowDelivery'  nz-button [nzType]="'danger'"  [nzLoading]='i.switch' (click)="status(i,true)">
+                    <span>否</span>
+                    </button>
+            </span>
+        </td>
+        <td nz-td>
+            <!--<a *ngIf="!showAdd" style="color:#108ee9;" (click)="add(i)">修改</a>&nbsp;-->
+            <!--<a *ngIf="showAdd" style="color:#108ee9;" (click)="add(i)">{{configTitle}}</a>&nbsp;-->
+            <a *ngFor="let c of i.buttonData" style="color:#108ee9;"  (click)="buttonClick(i, c, l)">
+                   {{c.value}} &nbsp;
+            </a>
+        </td>
+    </tr>
+    <!-- 是否是折叠list， 折叠list显示内容-->
+    <tr nz-tbody-tr *ngIf="data.expand">
+           <td nz-td></td>
+           <td nz-td colspan="4">
+             {{data.description}}
+           </td>
+      </tr>
+    </tbody>
+</nz-table>
