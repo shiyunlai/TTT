@@ -49,7 +49,7 @@ public class MultiDataSourceAutoConfiguration {
      */
     @Bean
     @ConditionalOnProperty(prefix = "tools", name = "multi-datasource-open", havingValue = "false")
-    public DruidDataSource singleDatasource() {
+    public DruidDataSource dataSource() {
         return defaultDataSource();
     }
 
