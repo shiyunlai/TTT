@@ -43,7 +43,7 @@ export class RoleMemberComponent implements OnInit {
     ]
 
     modalVisible = false;
-
+   
     data: any[] = []; // 表格数据
     headerData = [  // 配置表头内容
         {value: '姓名', key: 'operatorName',  isclick: false},
@@ -148,7 +148,6 @@ subAddrole(){
         }
     }
       this.utilityService.postData(appConfig.testUrl  + appConfig.API.roleAdd ,{roleGuids:roleGuids})
-                             .map(res => res.json())
                             .subscribe(
                                 (val) => {
                                     this.roleAddModal = false;
@@ -156,9 +155,7 @@ subAddrole(){
                                     this.getData();
                                 } ,
                             (error) => {
-                                if(error){
-                                       this.nznot.create('error',error.json().msg,'');
-                                }
+                                  this.nznot.create('error',error.msg,'');
 
                             }
                     );

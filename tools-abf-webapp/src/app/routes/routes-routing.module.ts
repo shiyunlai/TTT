@@ -78,7 +78,7 @@ const routes: Routes = [
                     {path: 'funcper/:id', component: FuncperComponent, data: { i18n: 'funcper' , title: '角色管理' } },
                     {path: 'entity/:id', component: EntityauthComponent, data: { i18n: 'entity' , title: '角色管理' } },
                     {path: 'field/:id', component: FieldperComponent, data: { i18n: 'field' , title: '角色管理' } },
-                    {path: 'datarang', component: DataRangeComponent, data: { i18n: 'datarang' , title: '角色管理' ,datamember:[]} },
+                    {path: 'datarang/:id', component: DataRangeComponent, data: { i18n: 'datarang' , title: '角色管理'} },
                      {path: 'datanull', component: DataNullComponent, data: { i18n: 'datanull' , title: '角色管理' } },
                 ]},
             { path: 'menu', component: MenuComponent },

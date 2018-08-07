@@ -430,7 +430,49 @@
             "mechanism": "上海银行总行营业部营业网点",
             "exit": "left"
         }
+    ],
+    "dataRangeList":[
+        {
+            "dataEntity": "操作日志",
+            "applyName": "日志&流水(log&jnl)",
+            "viewRange": [
+                "本人相关",
+                "本部门",
+                "本部门及下级部门",
+                "全部数据"
+                ],
+            "manageableRange":  [
+                "本人相关",
+                "本部门"
+                ],
+             "customRange":  [
+                "不包括异常日志",
+                "不包括7天外日志"
+                ]
+        },
+         {
+            "dataEntity": "入场申请",
+            "applyName": "吉宝O2O(Kepple)",
+            "viewRange": [
+                "本人相关",
+                "本部门",
+                "本部门及下级部门",
+                "全部数据",
+                "相同角色相关"
+                ],
+            "manageableRange":  [
+                "本人相关",
+                "本部门"
+                ],
+             "customRange":  [
+                "不包括异常日志",
+                "不包括7天外日志"
+                ]
+        }
+    
     ]
     
+    
   
+
 }

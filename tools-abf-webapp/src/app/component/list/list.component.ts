@@ -43,7 +43,7 @@ export class ListComponent implements OnInit {
     @Input() // 输入属性,数据总条数
     total: number;
     @Input() // 输入属性,接受父组件传入的数据
-    showAdd: boolean;
+    showAdd: true;
     @Input() // 输入属性,接受父组件传入的数据
     configTitle: string;
 
@@ -80,7 +80,7 @@ export class ListComponent implements OnInit {
     ngOnInit() {
         this.headerDate = this.headerDate;
         this.moreData = this.moreData; // 绑定更多数据
-
+        //  this.showAdd = true;
         console.log(this.showAdd);
     }
 
