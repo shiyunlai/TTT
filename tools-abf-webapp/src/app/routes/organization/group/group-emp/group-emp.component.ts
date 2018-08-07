@@ -114,7 +114,6 @@ export class GroupEmpComponent implements OnInit {
             }
         };
         this.utilityService.postData(appConfig.testUrl + appConfig.API.omGroups + '/' + this.codeGroup + '/emp', page)
-            .map(res => res.json())
             .subscribe(
                 (val) => {
                     for (let i = 0; i < val.result.records.length; i++) {
@@ -182,7 +181,6 @@ export class GroupEmpComponent implements OnInit {
                     cancelText: '取消',
                     onOk: () => {
                         this.utilityService.deleatData(appConfig.testUrl + appConfig.API.omGroups + '/' + this.codeGroup + '/empGroup/' + e.guid)
-                            .map(res => res.json())
                             .subscribe(
                                 (val) => {
                                     this.nznot.create('success', val.msg , val.msg);
@@ -243,7 +241,6 @@ export class GroupEmpComponent implements OnInit {
             guidEmp: this.selectedOption,
         }
         this.utilityService.postData(appConfig.testUrl + appConfig.API.empGroup, jsonObj)
-            .map(res => res.json())
             .subscribe(
                 (val) => {
                     this.nznot.create('success', val.msg , val.msg);

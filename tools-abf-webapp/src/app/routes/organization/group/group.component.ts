@@ -221,7 +221,6 @@ export class GroupComponent implements OnInit {
         if (!this.isEdit) {
             if (this.isRoot) { // 调用新增跟工作组接口
                 this.utilityService.postData(appConfig.testUrl  + appConfig.API.groupRoot, jsonOption)
-                    .map(res => res.json())
                     .subscribe(
                         (val) => {
                             this.nznot.create('success', val.msg , val.msg);
@@ -231,7 +230,6 @@ export class GroupComponent implements OnInit {
             } else {
                 jsonOption.guidParents = this.groupData.guid;
                 this.utilityService.postData(appConfig.testUrl  + appConfig.API.groupChild, jsonOption)
-                    .map(res => res.json())
                     .subscribe(
                         (val) => {
                             this.nznot.create('success', val.msg , val.msg);
@@ -241,7 +239,6 @@ export class GroupComponent implements OnInit {
             }
         } else {
             this.utilityService.putData(appConfig.testUrl  + appConfig.API.omGroups, jsonOption)
-                .map(res => res.json())
                 .subscribe(
                     (val) => {
                         this.nznot.create('success', val.msg , val.msg);
@@ -262,7 +259,6 @@ export class GroupComponent implements OnInit {
             cancelText: '取消',
             onOk: () => {
                 this.utilityService.deleatData(appConfig.testUrl  + appConfig.API.omGroups + '/' + this.groupData.code)
-                    .map(res => res.json())
                     .subscribe(
                         (val) => {
                             console.log(val)

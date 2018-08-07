@@ -180,10 +180,8 @@ export class FunctionComponent implements OnInit {
         this.activatedRoute.queryParams.subscribe(queryParams => {
             this.appGuid = queryParams.productId;
         });
-
         this.configTitle = '修改';
         this.getData();
-        console.log(this.funcItem)
     }
 
     // 根据id查询内容

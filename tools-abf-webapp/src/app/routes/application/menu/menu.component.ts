@@ -87,7 +87,6 @@ export class MenuComponent implements OnInit {
         };
 
         // this.utilityService.postData(appConfig.testUrl + appConfig.API.appList, this.page)
-        //     .map(res => res.json())
         this.utilityService.getData(appConfig.testUrl + appConfig.API.appListAll)
             .subscribe(
                 (val) => {
@@ -187,7 +186,6 @@ export class MenuComponent implements OnInit {
         console.log(this.select.node);
         // this.appCodeChange(this.appcode );
         this.utilityService.deleatData(appConfig.testUrl  + appConfig.API.acMenuDeletByid + this.select.node.guid)
-            .map(res => res.json())
             .subscribe(
                 (val) => {
                 },
@@ -258,7 +256,6 @@ export class MenuComponent implements OnInit {
         if (this.tanchuangTitle === '修改菜单') {
             // console.log(this.addMenuData);
             this.utilityService.putData(appConfig.testUrl  + appConfig.API.acMenuUpdate , this.addMenuData)
-                .map(res => res.json())
                 .subscribe(
                     (val) => {
                     },
@@ -267,7 +264,6 @@ export class MenuComponent implements OnInit {
         if (this.tanchuangTitle === '增加子菜单') {
             // console.log(this.addMenuData);
             this.utilityService.postData(appConfig.testUrl  + appConfig.API.acMenuAddChild, this.addMenuData)
-                .map(res => res.json())
                 .subscribe(
                     (val) => {
                     },
@@ -307,7 +303,6 @@ export class MenuComponent implements OnInit {
             'order': this.playOrder
         };
         this.utilityService.postData(appConfig.testUrl  + appConfig.API.acMenuMove , this.moveDate )
-            .map(res => res.json())
             .subscribe(
                 (val) => {
                 },

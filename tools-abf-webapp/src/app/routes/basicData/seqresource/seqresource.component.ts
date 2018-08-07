@@ -76,7 +76,6 @@ export class SeqresourceComponent implements OnInit {
             }
         };
         this.utilityService.postData(appConfig.testUrl + appConfig.API.seqResource, this.page)
-            .map(res => res.json())
             .subscribe(
                 (val) => {
                     console.log(val.result);
@@ -102,7 +101,6 @@ export class SeqresourceComponent implements OnInit {
 
         };
         this.utilityService.postData(appConfig.testUrl + appConfig.API.seqResource, this.page)
-            .map(res => res.json())
             .subscribe(
                 (val) => {
                     console.log(val.result);
@@ -167,7 +165,6 @@ export class SeqresourceComponent implements OnInit {
                     onOk: () => {
                         // 接口待确认
                          this.utilityService.putData(appConfig.testUrl + appConfig.API.restSeqResource + e.seqKey)
-                             .map(res => res.json())
                                 .subscribe(
                                     (val) => {
                                         console.log(val.result);
@@ -207,7 +204,6 @@ export class SeqresourceComponent implements OnInit {
             cancelText: '取消',
             onOk: () => {
                 this.utilityService.deleatData(appConfig.testUrl + appConfig.API.seqResourcedel + '/' + event[0].seqKey)
-                    .map(res => res.json())
                     .subscribe(
                         (val) => {
 
@@ -256,7 +252,6 @@ export class SeqresourceComponent implements OnInit {
            console.log('调用修改序号接口');
            console.log(this.sequenceResource2);
             this.utilityService.putData(appConfig.testUrl + appConfig.API.seqResourceUpdate, this.sequenceResource2)
-                .map(res => res.json())
                 .subscribe(
                     (val) => {
                         console.log(val.result);

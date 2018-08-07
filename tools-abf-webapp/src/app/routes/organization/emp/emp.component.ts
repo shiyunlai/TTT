@@ -118,7 +118,6 @@ export class EmpComponent implements OnInit {
 
         // 查询组织机构下所有员工
         this.utilityService.postData(appConfig.testUrl + appConfig.API.queryorgList + '/' + this.orgGuid ,  this.page)
-            .map(res => res.json())
             .subscribe(
                 (val) => {
                     console.log(val.result.records)
@@ -209,7 +208,6 @@ export class EmpComponent implements OnInit {
             cancelText: '取消',
             onOk: () => {
                 this.utilityService.deleatData(appConfig.testUrl + appConfig.API.emporgAdd + '/' + event[0].guid)
-                    .map(res => res.json())
                     .subscribe(
                         (val) => {
                             this.nznot.create('success', val.msg , val.msg);
@@ -309,7 +307,6 @@ export class EmpComponent implements OnInit {
         jsonOption.guidOrg = this.orgGuid;
         if (!this.isEdit) { // 新增数据
             this.utilityService.postData(appConfig.testUrl  + appConfig.API.emporgAdd, jsonOption)
-                .map(res => res.json())
                 .subscribe(
                     (val) => {
                         this.nznot.create('success', val.msg , val.msg);
@@ -319,7 +316,6 @@ export class EmpComponent implements OnInit {
         } else {
             this.empStatus(jsonOption);
             this.utilityService.putData(appConfig.testUrl  + appConfig.API.emporgAdd, jsonOption)
-                .map(res => res.json())
                 .subscribe(
                     (val) => {
                         this.nznot.create('success', val.msg , val.msg);
@@ -365,13 +361,11 @@ export class EmpComponent implements OnInit {
             if (this.empAdd.radioValue === 'creat') {
                 // 先调用洗澡操作员接口
                 this.utilityService.postData(appConfig.testUrl + appConfig.API.acOperatorsAdd, jsonObj)
-                    .map(res => res.json())
                     .subscribe(
                         (val) => {
                             if (val.code  === '200') {
                                 // 调用入职接口
                                 this.utilityService.putData(appConfig.testUrl  + appConfig.API.onJob, jsonObj)
-                                    .map(res => res.json())
                                     .subscribe(
                                         (src) => {
                                             console.log(src)
@@ -391,7 +385,6 @@ export class EmpComponent implements OnInit {
             } else
                 {
                 this.utilityService.putData(appConfig.testUrl  + appConfig.API.onJob, jsonObj)
-                    .map(res => res.json())
                     .subscribe(
                         (src) => {
                             console.log(src)
@@ -413,13 +406,11 @@ export class EmpComponent implements OnInit {
             if (this.empAdd.radioValue === 'creat') {
                 // 先调用洗澡操作员接口
                 this.utilityService.postData(appConfig.testUrl + appConfig.API.acOperatorsAdd, jsonObj)
-                    .map(res => res.json())
                     .subscribe(
                         (val) => {
                             if (val.code  === '200') {
                                 // 调用入职接口
                                 this.utilityService.putData(appConfig.testUrl  + appConfig.API.changeOnJob, jsonObj)
-                                    .map(res => res.json())
                                     .subscribe(
                                         (src) => {
                                             console.log(src)
@@ -438,7 +429,6 @@ export class EmpComponent implements OnInit {
                     );
             } else {
                 this.utilityService.putData(appConfig.testUrl  + appConfig.API.changeOnJob, jsonObj)
-                    .map(res => res.json())
                     .subscribe(
                         (src) => {
                             console.log(src)
@@ -462,7 +452,6 @@ export class EmpComponent implements OnInit {
         }
         jsonObj.guid = this.empGuid;
         this.utilityService.putData(appConfig.testUrl  + appConfig.API.outJob, jsonObj)
-            .map(res => res.json())
             .subscribe(
                 (val) => {
                     this.nznot.create('success', val.msg , val.msg);

@@ -89,7 +89,6 @@ export class SystemComponent implements OnInit {
             }
         };
         this.utilityService.postData(appConfig.testUrl + appConfig.API.sysConfigsList, this.page)
-            .map(res => res.json())
             .subscribe(
                 (val) => {
                     console.log(val.result)
@@ -137,7 +136,6 @@ export class SystemComponent implements OnInit {
             cancelText: '取消',
             onOk: () => {
                 this.utilityService.deleatData(appConfig.testUrl + appConfig.API.sysConfigsDel + '/' + event[0].guid)
-                    .map(res => res.json())
                     .subscribe(
                         (val) => {
 
@@ -229,7 +227,6 @@ export class SystemComponent implements OnInit {
         const jsonOption = this.sysAdd;
         if (!this.isEdit) {
             this.utilityService.postData(appConfig.testUrl + appConfig.API.sysConfigAdd, jsonOption)
-                .map(res => res.json())
                 .subscribe(
                     (val) => {
                         this.nznot.create('success', val.msg , val.msg);
@@ -240,7 +237,6 @@ export class SystemComponent implements OnInit {
                     });
         } else {
             this.utilityService.putData(appConfig.testUrl + appConfig.API.sysConFigs, jsonOption)
-                .map(res => res.json())
                 .subscribe(
                     (val) => {
                         this.nznot.create('success', val.msg , val.msg);

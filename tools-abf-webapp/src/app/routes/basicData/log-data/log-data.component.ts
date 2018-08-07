@@ -75,7 +75,6 @@ export class LogDataComponent implements OnInit {
             }
         };
         this.utilityService.postData(appConfig.testUrl + appConfig.API.logData + '/' + guid, this.page)
-            .map(res => res.json())
             .subscribe(
                 (val) => {
                     console.log(val.result.records);

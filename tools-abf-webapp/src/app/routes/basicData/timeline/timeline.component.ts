@@ -63,7 +63,6 @@ export class TimelineComponent implements OnInit {
         };
 
         this.utilityService.postData(appConfig.testUrl + appConfig.API.logChange + '/' + event, this.page)
-            .map(res => res.json())
             .subscribe(
                 (val) => {
                     console.log(val.result);
