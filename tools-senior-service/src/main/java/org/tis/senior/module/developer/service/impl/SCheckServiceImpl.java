@@ -61,6 +61,9 @@ public class SCheckServiceImpl extends ServiceImpl<SCheckMapper, SCheck> impleme
     @Autowired
     private ISStandardListService standardListService;
 
+    @Autowired
+    private ISStashListService stashListService;
+
     @Override
     public CheckResultDetail check(String profileId, String packTiming, String userId) throws SVNException {
         // 验证环境
@@ -263,7 +266,7 @@ public class SCheckServiceImpl extends ServiceImpl<SCheckMapper, SCheck> impleme
         SCheck check = this.baseMapper.selectById(l.getGuidCheck());
         if (!check.getCheckStatus().equals(CheckStatus.WAIT)) {
             throw new DeveloperException("当前该申请状态为'" + check.getCheckStatus().toString() +
-                    "',只能对核对中状态的清单操作！");
+                    "',只能操作状态为核对中的清单！");
         }
         SDelivery delivery = deliveryService.selectById(deliveryId);
         if (delivery == null) {
@@ -432,9 +435,18 @@ public class SCheckServiceImpl extends ServiceImpl<SCheckMapper, SCheck> impleme
                 // 获取所有需要添加到标准清单的申请清单
                 EntityWrapper<SDeliveryList> sdlWrapper = new EntityWrapper<>();
                 sdlWrapper.in(SDeliveryList.COLUMN_GUID_DELIVERY, deliveryIds)
-                        .ne(SDeliveryList.COLUMN_FROM_TYPE, DeliveryListFromType.STANDARD);
+                        .ne(SDeliveryList.COLUMN_FROM_TYPE, DeliveryListFromType.STANDARD)
+                        .ne(SDeliveryList.COLUMN_FROM_TYPE, DeliveryListFromType.FIXED);
                 List<SDeliveryList> sDeliveryLists = deliveryListService.selectList(sdlWrapper);
                 if (sDeliveryLists.size() > 0) {
+                    // 获取需要从贮藏清单删除的全路径集合
+                    List<String> deleteStashs = sDeliveryLists.stream()
+                            .filter(d -> DeliveryListFromType.STASH.equals(d.getFromType()))
+                            .map(SDeliveryList::getFullPath)
+                            .collect(Collectors.toList());
+                    EntityWrapper<SStashList> stashListWrapper = new EntityWrapper<>();
+                    stashListWrapper.in(SStashList.COLUMN_FULL_PATH, deleteStashs);
+                    stashListService.delete(stashListWrapper);
                     // 获取需要同步的申请清单的全路径集合
                     List<String> dlFullPaths = sDeliveryLists.stream().map(SDeliveryList::getFullPath)
                             .collect(Collectors.toList());
