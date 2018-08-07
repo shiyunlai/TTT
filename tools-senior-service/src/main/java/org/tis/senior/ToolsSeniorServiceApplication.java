@@ -2,6 +2,7 @@ package org.tis.senior;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 import org.tis.tools.starter.swagger.EnableSwagger2Doc;
 
 /**
@@ -10,6 +11,7 @@ import org.tis.tools.starter.swagger.EnableSwagger2Doc;
  */
 @EnableSwagger2Doc
 @SpringBootApplication
+@ComponentScan("org.tis")
 public class ToolsSeniorServiceApplication {
 
     public static void main( String[] args ) {
