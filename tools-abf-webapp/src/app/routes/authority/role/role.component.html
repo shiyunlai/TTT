@@ -15,7 +15,17 @@
 
 <div class="ui-g">
     <div class="ui-g-3">
-        <p-card  [style]="{width: '100%','border':'0px',padding: '2px 18px'}"> <app-tree [initDate] = "treedata"  [selectionType]='selectionType'  (develop)="Unfold($event)" [searchTitle] = "searchTitle"  [itemsData]="treemenus"  (Select)="TreeSelect($event)"   (MenuSelect)="RightSelect($event)"   (dropEvent)="dropEvent($event)" (serchValue)="searchVal($event)"></app-tree>
+        <p-card  [style]="{width: '100%','border':'0px',padding: '2px 18px'}">
+            <app-tree [initDate] = "treedata"
+                      [selectionType]='selectionType'
+                      (develop)="Unfold($event)"
+                      [searchTitle] = "searchTitle"
+                      [itemsData]="treemenus"
+                      (Select)="TreeSelect($event)"
+                      (MenuSelect)="RightSelect($event)"
+                      (dropEvent)="dropEvent($event)"
+                      (serchValue)="searchVal($event)">
+            </app-tree>
         </p-card>
     </div>
     <div class="ui-g-9">

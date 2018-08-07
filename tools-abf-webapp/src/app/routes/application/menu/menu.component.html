@@ -8,7 +8,7 @@
         <p-card [style]="{width: '100%'}">
             <form nz-form  [nzLayout]="'inline'">
                 <div nz-row [nzType]="'flex'" [nzGutter]="24">
-                    <div nz-col [nzSpan]="8" class="mb-md">
+                    <div nz-col [nzSpan]="24" class="mb-md">
                         <div nz-form-item class="d-flex">
                             <div nz-form-label><label >应用名称</label></div>
                             <div nz-form-control class="flex-1">
@@ -24,9 +24,17 @@
             </form>
         </p-card>
         <p-card  [style]="{width: '100%'}" *ngIf="treeshow">
-            <app-tree [initDate] = "treedata" [nodrop] = "nodrop" [searchTitle] = "searchTitle"  [itemsData]="treemenus"
-                      (Select)="TreeSelect($event)"   (MenuSelect)="RightSelect($event)"   (dropEvent)="dropEvent($event)"
-                      (serchValue)="searchVal($event)"  (develop)="Unfold($event)"></app-tree>
+            <app-tree [initDate] = "treedata"
+                      [nodrop] = "nodrop"
+                      [searchTitle] = "searchTitle"
+                      [itemsData]="treemenus"
+                      (Select)="TreeSelect($event)"
+                      (MenuSelect)="RightSelect($event)"
+                      (dropEvent)="dropEvent($event)"
+                      (serchValue)="searchVal($event)"
+                      (develop)="Unfold($event)"
+                      [selectionType]='selectionType'
+            ></app-tree>
         </p-card>
     </div>
 <!--左侧展示详细信息-->

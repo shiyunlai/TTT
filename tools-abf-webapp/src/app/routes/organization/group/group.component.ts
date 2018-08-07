@@ -28,7 +28,7 @@ export class GroupComponent implements OnInit {
     isRoot = false; // 是否是跟工作组
     groupDetail: any; // 工作組的詳情
     guidOrg: any; // 查询所有机构
-
+    selectionType: string; // 树结构类型
     constructor(
         private http: _HttpClient,
         private router: Router,
@@ -43,6 +43,7 @@ export class GroupComponent implements OnInit {
         this.groupType = appConfig.Enumeration.groupType;
         this.groupStatus = appConfig.Enumeration.groupStatus;
         this.searchTitle = '请输入工作组代码/名称';
+        this.selectionType = 'single';
     }
 
 

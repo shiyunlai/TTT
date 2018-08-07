@@ -241,7 +241,7 @@ export class AcMenuModule {
     // 菜单代码
     public menuCode: string;
     // 是否叶子菜单
-    public isLeaf: boolean;
+    public isLeaf: string;
     // UI入口
     public uiEntry: string;
     // 菜单层次

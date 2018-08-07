@@ -39,16 +39,16 @@ export class OrgComponent implements OnInit {
     treeResult: string; // 接受请求id值
     isroot = true; // 是否是子节点调用
     dataOrg: any; // 节点信息
+    selectionType: string; // 树结构类型
 
     ngOnInit() {
         this.initData();
         this.searchTitle = '请输入机构代码/名称';
-
         // 枚举值转换
         this.orgDegree = appConfig.Enumeration.orgDegree;
         this.area = appConfig.Enumeration.area;
         this.orgType = appConfig.Enumeration.orgType;
-
+        this.selectionType = 'single';
     }
 
     initData() {
