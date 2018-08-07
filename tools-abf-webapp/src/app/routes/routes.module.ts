@@ -22,7 +22,7 @@ import { Exception500Component } from './exception/500.component';
 // 应用管理
 import { ApplicationComponent } from './application/application/application.component';
 import { FunctionComponent } from './application/function/function.component';
-
+import { InterurlComponent } from './application/application/interurl/interurl.component'
 
 // 权限管理
 import { RoleComponent } from './authority/role/role.component';
@@ -71,11 +71,9 @@ import { GroupdetailComponent } from './organization/groupdetail/groupdetail.com
 import { GroupEmpComponent } from './organization/group/group-emp/group-emp.component';
 import { GroupPostComponent } from './organization/group/group-post/group-post.component';
 
-
-
-
-// 服务
+// 服务管道模块;
 import { UtilityService } from '../service/utils.service';
+import {SafePipe} from '../pipe/safe.pipe';
 
 @NgModule({
     imports: [ SharedModule, RouteRoutingModule, NzTreeModule ], // 模块把特性合并成离散单元的一种方式，当应用需要模块的特性时，将其添加到imports数组中，它告诉Angular应用需要它们来正常工作。
@@ -121,6 +119,7 @@ import { UtilityService } from '../service/utils.service';
         OperatorInfoComponent,
         OperatoroleComponent,
         RoleFuncComponent,
+        InterurlComponent,
         // 组件封装
         ListComponent,
         TreeDemoComponent,
@@ -131,7 +130,9 @@ import { UtilityService } from '../service/utils.service';
         NewAppComponent,
         TableStandardComponent,
         ModelFormComponent,
-        ModelCustomComponent
+        ModelCustomComponent,
+        // 引入url安全协议管道
+        SafePipe
     ],
     entryComponents: [
         FormDetailComponent,
@@ -146,5 +147,5 @@ import { UtilityService } from '../service/utils.service';
 })
 
 export class RoutesModule {
-    
+
 }

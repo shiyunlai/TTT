@@ -50,9 +50,8 @@ export class FunctionComponent implements OnInit {
     page: any;
     total: number;
 
-
     // 基础数据 后期从后台获取
-    funcType = [
+    funcTypes = [
         { key: 'F', value: '功能' },
         { key: 'B', value: '行为' }
     ];
@@ -86,22 +85,20 @@ export class FunctionComponent implements OnInit {
 
     // 列表的方法
     addHandler(event) {
-        setTimeout(_ => {
-            this.funcItem.funcType = 'F';
-        }, 100);
         if (event === '这里是新增的方法') {
             this.funTitle = '新增功能';
-            for (const key in this.funcItem) {
-                delete this.funcItem[key];
-            }
+            this.funcItem = new FuncModule();
             this.isEdit = false;
         } else { // 代表修改，把修改的内容传递进去，重新渲染
             this.funTitle = '修改功能';
             this.isEdit = true;
             this.funcItem = event;
-
         }
+        setTimeout(() => {
+            this.funcItem.funcType = 'F';
+        }, 500);
         this.modalVisible = true;  // 此时点击了列表组件的新增，打开模态框
+
     }
 
 
@@ -128,7 +125,6 @@ export class FunctionComponent implements OnInit {
             onOk: () => {
                 // 模拟接口
                 this.utilityService.deleatData(appConfig.testUrl + appConfig.API.funcDel + '/' + event[0].guid)
-                    .map(res => res.json())
                     .subscribe(
                         (val) => {
                             // 修改成功只和的处理逻辑
@@ -185,7 +181,7 @@ export class FunctionComponent implements OnInit {
             this.appGuid = queryParams.productId;
         });
 
-        this.configTitle = '修改'
+        this.configTitle = '修改';
         this.getData();
     }
 
@@ -209,7 +205,6 @@ export class FunctionComponent implements OnInit {
             }
         };
         this.utilityService.postData(appConfig.testUrl + appConfig.API.funcList + '/' + this.appGuid, this.page)
-            .map(res => res.json())
             .subscribe(
                 (val) => {
                     for (let i = 0; i < val.result.records.length; i++ ) {
@@ -225,7 +220,9 @@ export class FunctionComponent implements OnInit {
 
     // 保存方法
     save() {
+        console.log(this.funcItem)
         const jsonObj = this.funcItem;
+
         // 枚举值转换
         if (jsonObj.ischeck === 'YES') {
             jsonObj.ischeck = 'Y';
@@ -240,7 +237,6 @@ export class FunctionComponent implements OnInit {
         if (!this.isEdit) {  // 新增的业务逻辑
             this.funcItem.guidApp = this.appGuid;
             this.utilityService.postData(appConfig.testUrl + appConfig.API.funcAdd, jsonObj)
-                .map(res => res.json())
                 .subscribe(
                     (val) => {
                         this.nznot.create('success', val.msg , val.msg);
@@ -250,7 +246,6 @@ export class FunctionComponent implements OnInit {
         } else {
             // 修改的保存逻辑
             this.utilityService.putData(appConfig.testUrl + appConfig.API.funcDel, jsonObj)
-                .map(res => res.json())
                 .subscribe(
                     (val) => {
                         this.nznot.create('success', val.msg , val.msg);
@@ -301,7 +296,6 @@ export class FunctionComponent implements OnInit {
             }
         };
         this.utilityService.postData(appConfig.testUrl + appConfig.API.acFuncList + '/' + this.funGuid, this.page)
-            .map(res => res.json())
             .subscribe(
                 (val) => {
                     this.acfundata = val.result.records;
@@ -346,7 +340,6 @@ export class FunctionComponent implements OnInit {
         if (!this.isEdit) {  // 新增的业务逻辑
             this.funcItem.guidApp = this.appGuid;
             this.utilityService.postData(appConfig.testUrl + appConfig.API.acFuncAttr, jsonObj)
-                .map(res => res.json())
                 .subscribe(
                     (val) => {
                         this.nznot.create('success', val.msg , val.msg);
@@ -355,9 +348,7 @@ export class FunctionComponent implements OnInit {
                 );
         } else {
             // 修改的保存逻辑
-
             this.utilityService.putData(appConfig.testUrl + appConfig.API.acFuncPut, jsonObj)
-                .map(res => res.json())
                 .subscribe(
                     (val) => {
                         this.nznot.create('success', val.msg , val.msg);
@@ -374,7 +365,6 @@ export class FunctionComponent implements OnInit {
     // 列表弹窗删除方法
     deleatActiveData(event) {
         this.utilityService.deleatData(appConfig.testUrl + appConfig.API.acFuncDel + '/' + event[0].guid)
-            .map(res => res.json())
             .subscribe(
                 (val) => {
                     // 修改成功只和的处理逻辑

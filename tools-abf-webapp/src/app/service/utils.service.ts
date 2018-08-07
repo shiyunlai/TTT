@@ -2,10 +2,23 @@ import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions , Response , URLSearchParams } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/Rx';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class UtilityService {
-    constructor(private http: Http) { }
+    constructor(private http: Http,
+                private router: Router) { }
+
+    // 跳转路由 原理 通过catch 拦截异常，然后在抛出一个新的错误
+    public httpErrorFun(err: any) {  /* new */
+        let data: any = err.json();  // 需要处理的值 /* new */
+        if (data.code === 'AUTH-401') {
+            this.router.navigateByUrl('/passport/login');
+        }
+        return Observable.throw(data); /* new */
+    }
+
+
     /**
      * @param {string} url地址
      * @param {any} [options]可选提交的参数
@@ -23,7 +36,9 @@ export class UtilityService {
         }
         url += (url.indexOf('?') < 0 ? '?' : '&') + this.param(options);
 
-        return this.http.get(url, { headers: myHeaders }).map(res => res.json());
+        return this.http.get(url, { headers: myHeaders })
+            .catch(res => this.httpErrorFun(res))
+            .map(res => res.json());
     }
 
 
@@ -39,20 +54,25 @@ export class UtilityService {
         for (const key in myheaders) {
             myHeaders.append(key, myheaders[key]);
         };
-        return this.http.post(url, options, { headers: myHeaders });
+        return this.http.post(url, options, { headers: myHeaders })
+            .catch(res => this.httpErrorFun(res))
+            .map(res => res.json());
 
     }
 
 
     // put 修改测试封装
     putData(url: string, options?: any): Observable<any> {
-        return this.http.put(url, options);
+        return this.http.put(url, options)
+            .catch(res => this.httpErrorFun(res))
+            .map(res => res.json());
     }
 
     // 删除封装
     deleatData(url: string, options?: any, myheaders?: any): Observable<any> {
-        console.log(options)
-        return this.http.delete(url, options);
+        return this.http.delete(url, options)
+            .catch(res => this.httpErrorFun(res))
+            .map(res => res.json());
     }
 
 
@@ -73,7 +93,7 @@ export class UtilityService {
 
 
     getBillTypes() {
-        console.log('调用服务方法');
+
     }
 
 

@@ -10,7 +10,7 @@ export let appConfig = {
         roleData: 'roleData',
         roleList: 'roleList', // 新增的成员列表
         orgTreeData: 'orgTreeData',
-        jurisdictionTree:'jurisdictionTree',// 角色功能权限树
+        jurisdictionTree: 'jurisdictionTree', // 角色功能权限树
         // 系统运行参数
         sysConfigAdd: '/sysConfigs', // 新增系统参数
         sysConfigsList: '/sysConfigs/list', // 查询系统参数

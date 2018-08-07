@@ -13,6 +13,7 @@ import { DashboardV1Component } from './index/v1/v1.component';
 
 import { ApplicationComponent } from './application/application/application.component';
 import { FunctionComponent} from './application/function/function.component';
+import { InterurlComponent } from './application/application/interurl/interurl.component'
 
 // 权限管理
 import { RoleComponent } from './authority/role/role.component';
@@ -83,6 +84,7 @@ const routes: Routes = [
             { path: 'menu', component: MenuComponent },
             { path: 'APPlication', component: ApplicationComponent },
             { path: 'function', component: FunctionComponent, data: { i18n: 'function' , title: '应用功能' } },
+            { path: 'interurl', component: InterurlComponent, data: { i18n: 'interurl' , title: 'API详情' } },
             // 操作员路由
             { path: 'operator', component: OperatorsComponent},
             // 操作员详情路由

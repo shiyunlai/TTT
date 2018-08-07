@@ -85,18 +85,15 @@ export class ApplicationComponent implements OnInit {
             }
         };
         this.utilityService.postData(appConfig.testUrl + appConfig.API.appList, this.page)
-            .map(res => res.json())
             .subscribe(
                 (val) => {
-                    console.log(val.result);
                     for (let i = 0; i < val.result.records.length; i++ ) {
-                        if (val.result.records[i].isopen ===  'YES') {
-                            val.result.records[i].buttonData = ['关闭'];
+                        if (val.result.records[i].isopen ===  '是') {
+                            val.result.records[i].buttonData = ['关闭', '查看API'];
                         } else {
-                            val.result.records[i].buttonData = ['开启'];
+                            val.result.records[i].buttonData = ['开启', '查看API'];
                         }
                     }
-                    console.log(val.result.records)
                     this.data = val.result.records;
                     this.total = val.result.total;
                 }
@@ -143,9 +140,7 @@ export class ApplicationComponent implements OnInit {
             okText: '确定',
             cancelText: '取消',
             onOk: () => {
-                console.log(event[0].guid);
                 this.utilityService.deleatData(appConfig.testUrl + appConfig.API.appDed + '/' + event[0].guid)
-                    .map(res => res.json())
                     .subscribe(
                         (val) => {
                             this.nznot.create('success', val.msg , val.msg);
@@ -173,41 +168,40 @@ export class ApplicationComponent implements OnInit {
 
     // 按钮点击事件
     buttonEvent(event) {
-        console.log(event)
-        console.log(event.guid)
-       if (event.isopen === 'NO') { // 关闭状态，调用开启逻辑
-           this.utilityService.putData(appConfig.testUrl + appConfig.API.openApp + '/' + event.guid)
-               .map(res => res.json())
-               .subscribe(
-                   (val) => {
-                       this.nznot.create('success', val.msg , val.msg);
-                       this.getData();
-                   },
-                   response => {
-                   });
-       } else {
+       if (event.names === '关闭') { // 关闭状态，调用开启逻辑
            this.utilityService.putData(appConfig.testUrl + appConfig.API.stopApp + '/' + event.guid)
-               .map(res => res.json())
                .subscribe(
                    (val) => {
-                       console.log(val)
+                       this.nznot.create('success', val.msg , val.msg);
+                       this.getData();
+                   },
+                   response => {
+                   });
+       } else if (event.names === '开启') {
+           this.utilityService.putData(appConfig.testUrl + appConfig.API.openApp + '/' + event.guid)
+               .subscribe(
+                   (val) => {
                        this.nznot.create('success', val.msg , val.msg);
                        this.getData();
                    },
                    response => {
                        this.getData();
                    });
+       } else if (event.names === '查看API') {
+           this.router.navigate(['interurl'],
+               { queryParams:
+                       { appGuid: event.guid
+                       }
+               });
        }
-    }
+     }
     // 列表按钮方法
     buttonDataHandler(event) {
         console.log(event); // 根据event.value来判断不同的请求，来获取结果和方法或者进行路由的跳转
         if (event.value === 'Authority') {
-            console.log(event.key);
         }
 
         if (event.value === 'Overview') {
-            console.log(event.key);
         }
 
     }
@@ -242,7 +236,6 @@ export class ApplicationComponent implements OnInit {
     // 弹出框保存组件
     save() {
         const jsonOption = this.appAdd;
-        console.log(jsonOption)
         // 枚举值转换
         // 枚举值转换
         if (jsonOption.appType === '本地') {
@@ -252,7 +245,6 @@ export class ApplicationComponent implements OnInit {
         }
         if (!this.isEdit) {
             this.utilityService.postData(appConfig.testUrl + appConfig.API.acappAdd, jsonOption)
-                .map(res => res.json())
                 .subscribe(
                     (val) => {
                         this.nznot.create('success', val.msg , val.msg);
@@ -260,7 +252,6 @@ export class ApplicationComponent implements OnInit {
                     });
         } else {
             this.utilityService.putData(appConfig.testUrl + appConfig.API.appDed, jsonOption)
-                .map(res => res.json())
                 .subscribe(
                     (val) => {
                         this.nznot.create('success', val.msg , val.msg);
