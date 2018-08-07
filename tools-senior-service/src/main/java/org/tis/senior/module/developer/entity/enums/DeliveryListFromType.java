@@ -21,6 +21,10 @@ public enum  DeliveryListFromType implements BaseEnum {
 
     STANDARD("S", "标准清单"),
 
+    FIXED("F", "失败补投"),
+
+    STASH("T", "贮藏添加"),
+
     MERGE("M", "合并添加");
 
     private final String value;
