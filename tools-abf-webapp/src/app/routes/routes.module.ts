@@ -54,7 +54,7 @@ import {ModelCustomComponent} from './codeGeneration/custom.component';
 // 公共封装组件
 import { ListComponent } from '../component/list/list.component';
 import { TreeDemoComponent} from '../component/tree/tree';
-import { LogsComponent } from './basicData/logs/logs.component';
+import { LogsComponent } from './basicData/loges/logs.component';
 import { SeqresourceComponent } from './basicData/seqresource/seqresource.component';
 import { TimelineComponent } from './basicData/timeline/timeline.component';
 import { LogDataComponent } from './basicData/log-data/log-data.component';

@@ -33,7 +33,7 @@ import { PostComponent } from './organization/post/post.component';
 // 基础数据
 import { DictComponent } from './basicData/dict/dict.component';
 import { SystemComponent } from './basicData/system/system.component';
-import { LogsComponent } from './basicData/logs/logs.component';
+import { LogsComponent } from './basicData/loges/logs.component';
 import {SeqresourceComponent} from './basicData/seqresource/seqresource.component';
 
 // 用户登录引入
@@ -89,7 +89,7 @@ const routes: Routes = [
             { path: 'operator', component: OperatorsComponent},
             // 操作员详情路由
             { path: 'operatorInfo', component: OperatorInfoComponent, data: { i18n: 'operatorInfo' , title: '操作员详情' },  children: [
-                {path: 'operatorrole/:id', component: OperatoroleComponent, data: { i18n: 'operatorrole' , title: '操作员管理' } },
+                {path: 'operatorrole/:i3d', component: OperatoroleComponent, data: { i18n: 'operatorrole' , title: '操作员管理' } },
                 {path: 'operatfunc/:id', component: RoleFuncComponent, data: { i18n: 'operatfunc' , title: '操作员管理' } },
             ]},
             // 组织机构

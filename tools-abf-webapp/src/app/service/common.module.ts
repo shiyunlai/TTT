@@ -41,6 +41,7 @@ export class AppliaModule {
 
 }
 
+
 // 功能module
 export class FuncModule {
     // 当前页数

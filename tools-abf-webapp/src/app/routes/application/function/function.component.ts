@@ -183,6 +183,7 @@ export class FunctionComponent implements OnInit {
 
         this.configTitle = '修改';
         this.getData();
+        console.log(this.funcItem)
     }
 
     // 根据id查询内容
