@@ -168,7 +168,7 @@ export class DictComponent implements OnInit {
 
     // 列表组件传过来的内容
     addHandler(event) {
-        if (event === '这里是新增的方法') {
+        if (event === 'add') {
             for (const key in this.dictAdd) {
                 delete this.dictAdd[key];
             }

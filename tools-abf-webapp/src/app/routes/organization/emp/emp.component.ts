@@ -178,7 +178,7 @@ export class EmpComponent implements OnInit {
     addHandler(event) {
         this.empAdd = new EmpModule(); // 重新清空赋值
         this.ifshow = false; // 默认是基础信息
-        if (event === '这里是新增的方法') {
+        if (event === 'add') {
             this.isEdit = false;
             this.modalVisible = true;  // 此时点击了列表组件的新增，打开模态框
             this.empAdd.radioValue = 'creat';

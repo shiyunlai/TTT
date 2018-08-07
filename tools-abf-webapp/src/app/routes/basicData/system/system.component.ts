@@ -102,7 +102,7 @@ export class SystemComponent implements OnInit {
     // 想一下，能否把这三个方法封装到一个ts里面，引入即可，不然每次都写着三个方法不太现实。
     // 列表组件传过来的内容
     addHandler(event) {
-        if (event === '这里是新增的方法') {
+        if (event === 'add') {
             for (const key in this.sysAdd) {
                 delete this.sysAdd[key];
             }

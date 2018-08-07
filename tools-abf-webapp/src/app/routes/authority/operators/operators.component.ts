@@ -148,7 +148,7 @@ export class OperatorsComponent implements OnInit {
     // 想一下，能否把这三个方法封装到一个ts里面，引入即可，不然每次都写着三个方法不太现实。
     // 列表组件传过来的内容
     addHandler(event) {
-        if (event === '这里是新增的方法') {
+        if (event === 'add') {
             this.operatorAdd = new OperatrModule(); //  新建的时候 清空 重新构建
             for (const key in this.operator) {
                 delete this.operator[key];

@@ -106,7 +106,7 @@ export class ApplicationComponent implements OnInit {
         setTimeout(_ => {
             this.appAdd.isOpen = 'N'; // 默认关闭
         }, 100);
-        if (event === '这里是新增的方法') {
+        if (event === 'add') {
             for (const key in this.appAdd) {
                 delete this.appAdd[key];
             }

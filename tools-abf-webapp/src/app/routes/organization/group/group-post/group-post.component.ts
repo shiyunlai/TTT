@@ -162,7 +162,7 @@ export class GroupPostComponent implements OnInit {
     addHandler(event) {
         this.ifshow = false; // 默认是基础信息
         this.postAdd = new PostModule(); // 重新清空赋值
-        if (event === '这里是新增的方法') {
+        if (event === 'add') {
             this.postAdd.positionType = '02';
             this.postAdd.positionStatus = 'running';
             this.modalVisible = true;  // 此时点击了列表组件的新增，打开模态框

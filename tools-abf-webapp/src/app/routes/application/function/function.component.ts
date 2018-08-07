@@ -6,7 +6,7 @@ import {UtilityService} from '../../../service/utils.service';
 import {NzModalService, NzNotificationService} from 'ng-zorro-antd';
 import {appConfig} from '../../../service/common';
 import {AppliaModule} from '../../../service/common.module';
-import {FuncModule} from '../../../service/common.module';
+import { FuncModule} from '../../../service/function/func.model';
 import {FuncattrModule} from '../../../service/common.module';
 
 @Component({
@@ -54,7 +54,7 @@ export class FunctionComponent implements OnInit {
     funcTypes = [
         { key: 'F', value: '功能' },
         { key: 'B', value: '行为' }
-    ];
+    ]
 
     // 是否启用
     isOpen = [
@@ -68,10 +68,10 @@ export class FunctionComponent implements OnInit {
     ]
     // 应用的数据值
     appItem: AppliaModule = new AppliaModule(); // 搜索值
-    // 功能的数据值
-    funcItem: FuncModule = new FuncModule();
     // 行为的数据类型
     activeItem: FuncattrModule = new FuncattrModule();
+    // 功能的数据值
+    funcItem: FuncModule = new FuncModule();
 
     constructor(
         private http: _HttpClient,
@@ -85,20 +85,21 @@ export class FunctionComponent implements OnInit {
 
     // 列表的方法
     addHandler(event) {
-        if (event === '这里是新增的方法') {
+        if (event === 'add') {
             this.funTitle = '新增功能';
             this.funcItem = new FuncModule();
             this.isEdit = false;
         } else { // 代表修改，把修改的内容传递进去，重新渲染
+            console.log(event)
+            // 枚举值转换方法
+            event.ischeck = appConfig.comFunc.isYf(event.ischeck)
+            event.isopen = appConfig.comFunc.isYf(event.isopen)
             this.funTitle = '修改功能';
             this.isEdit = true;
             this.funcItem = event;
         }
-        setTimeout(() => {
-            this.funcItem.funcType = 'F';
-        }, 500);
+        this.funcItem.funcType = 'F';
         this.modalVisible = true;  // 此时点击了列表组件的新增，打开模态框
-
     }
 
 
@@ -221,7 +222,6 @@ export class FunctionComponent implements OnInit {
     save() {
         console.log(this.funcItem)
         const jsonObj = this.funcItem;
-
         // 枚举值转换
         if (jsonObj.ischeck === 'YES') {
             jsonObj.ischeck = 'Y';
@@ -274,8 +274,7 @@ export class FunctionComponent implements OnInit {
         buttons: [
             { key: 'Overview', value: '行为概况' }
         ]
-    }
-
+    };
 
     // 列表翻页方法
     activeHandler(event) {
@@ -297,7 +296,16 @@ export class FunctionComponent implements OnInit {
         this.utilityService.postData(appConfig.testUrl + appConfig.API.acFuncList + '/' + this.funGuid, this.page)
             .subscribe(
                 (val) => {
+                    console.log(val.result.records);
                     this.acfundata = val.result.records;
+                    // 后台没有翻译， 应该翻译好的
+                    for (let i = 0; i <  this.acfundata.length; i ++ ) {
+                        if (this.acfundata[i].attrType === 'B') {
+                            this.acfundata[i].attrType = '行为';
+                        } else {
+                            this.acfundata[i].attrType = '功能';
+                        }
+                    }
                     this.total = val.result.total;
                 }
             );
@@ -306,20 +314,16 @@ export class FunctionComponent implements OnInit {
     // 行为弹框新增方法
     addActives(event) {
         // 打开弹窗就查询
-        setTimeout(_ => {
-            this.activeItem.attrType = 'F';
-        }, 100);
-        if (event === '这里是新增的方法') {
+        if (event === 'add') {
             this.activeTitle = '新增行为';
-            for (const key in this.activeItem) {
-                delete this.activeItem[key];
-            }
+            this.activeItem = new FuncattrModule();
             this.isEdit = false;
         } else { // 代表修改，把修改的内容传递进去，重新渲染
             this.activeTitle = '修改行为';
             this.isEdit = true;
             this.activeItem = event;
         }
+        this.activeItem.attrType = 'B';
         this.activeModal = false;
         this.activeAddModal = true;  // 此时点击了列表组件的新增，打开模态框
     }

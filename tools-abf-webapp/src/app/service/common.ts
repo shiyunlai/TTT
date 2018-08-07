@@ -135,8 +135,8 @@ export let appConfig = {
         groupApp: '/omGroups/app', // 给工作组添加应用
         groupPosition: '/omGroups/position', // 给工作组添加岗位
 
-        //角色组接口
-        roleAdd:''//新增角色成员
+        // 角色组接口
+        roleAdd: '' // 新增角色成员
     },
 
 
@@ -237,6 +237,17 @@ export let appConfig = {
             { value: '注销', key: 'cancel' },
         ]
 
+    },
+
+    comFunc: {
+        isYf(event) {
+            if (event === '是') {
+                event = 'YES';
+            } else {
+                event = 'NO';
+            }
+            return event;
+        }
     }
 }
 

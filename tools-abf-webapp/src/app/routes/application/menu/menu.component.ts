@@ -286,6 +286,7 @@ export class MenuComponent implements OnInit {
                 );
         }
         this.appCodeChange(this.appcode );
+        this.guidFuncshow = false;
     }
 
     viewFile() {
