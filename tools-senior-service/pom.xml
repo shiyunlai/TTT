@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
@@ -31,6 +32,11 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-actuator</artifactId>
 		</dependency>
 
 		<dependency>
@@ -105,7 +111,6 @@
 	</dependencies>
 
 	<build>
-		<defaultGoal>install</defaultGoal>
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>
@@ -121,14 +126,12 @@
 			</resource>
 		</resources>
 		<plugins>
-
 			<!-- 使用flyway 在开发阶段，对开发环境进行数据库版本管理 mvn flyway:migrate mvn flyway:info 
 				mvn flyway:clean -->
-
 			<plugin>
 				<groupId>org.flywaydb</groupId>
 				<artifactId>flyway-maven-plugin</artifactId>
-				<version>5.0.3</version>
+				<version>${flyway-maven-plugin.version}</version>
 				<configuration>
 					<driver>com.mysql.jdbc.Driver</driver>
 					<url>jdbc:mysql://139.196.145.67:3306/senior?useUnicode=true&amp;characterEncoding=utf8</url>
