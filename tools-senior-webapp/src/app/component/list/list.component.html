@@ -83,7 +83,7 @@
                           </nz-option>
                     </nz-select>
                </ng-container>
-               <ng-container *ngIf="d.type !== 'deployArray'" >
+               <ng-container *ngIf="i.checked && d.type !== 'deployArray'" >
                     <nz-select
                         style="width: 150px;"
                         nzAllowClear

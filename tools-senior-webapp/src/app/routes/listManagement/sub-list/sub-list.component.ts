@@ -126,6 +126,7 @@ export class SubListComponent implements OnInit {
                     this.selectApply = false; // 投放和补录按钮按钮隐藏
                 }
             );
+        this.getcheckOptionOne(this.workItemInfo.guid); // 调用清单
         this.reset  = false;
     }
 
@@ -288,8 +289,6 @@ export class SubListComponent implements OnInit {
     // 投放申请
     Serve() {
 
-        this.getcheckOptionOne(this.workItemInfo.guid); // 调用清单
-
         this.modalVisible = false;
         if (_.isUndefined(this.textcssList) || this.textcssList.length === 0) {
             this.modalVisible = true;
@@ -359,6 +358,7 @@ export class SubListComponent implements OnInit {
                 // 选清单, 必选
                 for (let i = 0; i < this.elementScice.length; i ++) {
                     if (this.elementScice[i].delivered) {
+                        console.log(this.elementScice[i])
                         this.elementScice[i].disabled = true;
                         this.elementScice[i].check = true;
                     }

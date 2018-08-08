@@ -201,6 +201,7 @@ export class LaunchApplyComponent implements OnInit {
             );
 
     }
+
     // 重置
     reset() {
         this.search = {
@@ -234,6 +235,8 @@ export class LaunchApplyComponent implements OnInit {
                 }
             );
     }
+
+
     // 调用投放环境接口
     getcheckOptionOne(guid) {
         this.utilityService.getData(appConfig.testUrl  + appConfig.API.copyProfiless + '/' + guid + '/delivered', {}, {Authorization: this.token})
