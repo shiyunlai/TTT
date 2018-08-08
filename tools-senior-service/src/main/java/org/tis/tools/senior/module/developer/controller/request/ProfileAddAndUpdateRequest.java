@@ -25,6 +25,9 @@ public class ProfileAddAndUpdateRequest {
     @NotBlank(message = "运行环境的主机IP不能空")
     private String hostIp;
 
+    @NotBlank(message = "流水标志不能为空")
+    private String serialTag;
+
     @NotBlank(message = "运行环境的安装路径不能空")
     private String installPath;
 

@@ -57,6 +57,11 @@ public class SProfiles implements Serializable {
     public static final String COLUMN_HOST_IP = "host_ip";
 
     /**
+     * serial_tag对应表字段
+     */
+    public static final String COLUMN_SERIAL_TAG = "serial_tag";
+
+    /**
      * installPath对应表字段
      */
     public static final String COLUMN_INSTALL_PATH = "install_path";
@@ -110,6 +115,11 @@ public class SProfiles implements Serializable {
      * hostIp逻辑名
      */
     public static final String NAME_HOST_IP = "主机ip";
+
+    /**
+     * hostIp逻辑名
+     */
+    public static final String NAME_SERIAL_TAG = "流水标记";
 
     /**
      * installPath逻辑名
@@ -167,6 +177,11 @@ public class SProfiles implements Serializable {
      * 主机ip:环境对应的服务器IP地址
      */
     private String hostIp;
+
+    /**
+     * 流水标记
+     */
+    private String serialTag;
 
     /**
      * 安装路径:指系统所在的安装路径

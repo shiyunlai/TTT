@@ -31,6 +31,11 @@ public class ProfileBranchDetail {
     private String hostIp;
 
     /**
+     * 流水标志
+     */
+    private String serialTag;
+
+    /**
      * 提交标识
      */
     private String artf;

@@ -1,5 +1,6 @@
 package org.tis.tools.senior.module.developer.controller;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.hibernate.validator.constraints.NotBlank;
@@ -21,6 +22,7 @@ import org.tis.tools.senior.module.developer.entity.enums.BranchType;
 import org.tis.tools.senior.module.developer.entity.enums.IsAllowDelivery;
 import org.tis.tools.senior.module.developer.entity.vo.ProfileBranchDetail;
 import org.tis.tools.senior.module.developer.entity.vo.ProjectDetail;
+import org.tis.tools.senior.module.developer.exception.DeveloperException;
 import org.tis.tools.senior.module.developer.service.ISProfilesService;
 import org.tmatesoft.svn.core.SVNException;
 
@@ -49,6 +51,11 @@ public class SProfilesController extends BaseController<SProfiles>  {
         BeanUtils.copyProperties(request,sProfiles);
         sProfiles.setProfilesCode(sProfiles.getProfilesName());
         sProfiles.setIsAllowDelivery(IsAllowDelivery.ALLOW);
+        EntityWrapper<SProfiles> wrapper = new EntityWrapper<>();
+        wrapper.eq(SProfiles.COLUMN_SERIAL_TAG, sProfiles.getSerialTag());
+        if (sProfilesService.selectCount(wrapper) > 0) {
+            throw new DeveloperException("流水标志" + sProfiles.getSerialTag()  + "已存在");
+        }
         sProfilesService.insert(sProfiles);
         return ResultVO.success("新增成功！", sProfiles);
     }
@@ -58,6 +65,12 @@ public class SProfilesController extends BaseController<SProfiles>  {
         SProfiles sProfiles = new SProfiles();
         BeanUtils.copyProperties(request,sProfiles);
         sProfiles.setProfilesCode(sProfiles.getProfilesName());
+        EntityWrapper<SProfiles> wrapper = new EntityWrapper<>();
+        wrapper.eq(SProfiles.COLUMN_SERIAL_TAG, sProfiles.getSerialTag())
+                .ne(SProfiles.COLUMN_GUID, sProfiles.getGuid());
+        if (sProfilesService.selectCount(wrapper) > 0) {
+            throw new DeveloperException("流水标志" + sProfiles.getSerialTag()  + "已存在");
+        }
         sProfilesService.updateById(sProfiles);
         return ResultVO.success("修改成功！");
     }
