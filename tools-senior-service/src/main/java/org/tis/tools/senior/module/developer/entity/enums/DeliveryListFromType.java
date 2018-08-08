@@ -1,0 +1,54 @@
+package org.tis.tools.senior.module.developer.entity.enums;
+
+import org.tis.tools.core.entity.enums.BaseEnum;
+
+import java.io.Serializable;
+
+/**
+ * description: 投产清单来源类型
+ * 清单来源：
+ * A 手动补录
+ * B 分支提交
+ * M 合并添加;
+ * @author zhaoch
+ * @date 2018/7/12
+ **/
+public enum  DeliveryListFromType implements BaseEnum {
+
+    ADDITION("A", "手动补录"),
+
+    BRANCH("B", "分支提交"),
+
+    STANDARD("S", "标准清单"),
+
+    FIXED("F", "失败补投"),
+
+    STASH("T", "贮藏添加"),
+
+    MERGE("M", "合并添加");
+
+    private final String value;
+
+    private final String name;
+
+    DeliveryListFromType(final String value, final String name) {
+        this.value = value;
+        this.name = name;
+    }
+
+
+    @Override
+    public Serializable deserialze() {
+        return value;
+    }
+
+    @Override
+    public Serializable getValue() {
+        return value;
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
+}

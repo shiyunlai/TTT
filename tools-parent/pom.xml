@@ -58,6 +58,7 @@
 		<ehcache.core.version>2.6.11</ehcache.core.version>
 		<fastjson.version>1.2.44</fastjson.version>
 		<flowable.version>6.2.0</flowable.version>
+		<flyway-maven-plugin.version>5.0.3</flyway-maven-plugin.version>
 		<google-guava-version>23.5-jre</google-guava-version>
 		<hutool.version>4.0.6</hutool.version>
 		<junrar_version>0.7</junrar_version>
@@ -67,6 +68,11 @@
 		<mysql-connector-java.version>5.1.38</mysql-connector-java.version>
 		<mybatis-plus-boot-starter.version>2.2.0</mybatis-plus-boot-starter.version>
 		<mybatis-plus.version>2.2.0</mybatis-plus.version>
+        <spring-security-jwt.version>1.0.9.RELEASE</spring-security-jwt.version>
+        <starter-security.version>1.2.1.RELEASE</starter-security.version>
+        <starter-oauth2.version>1.2.1.RELEASE</starter-oauth2.version>
+        <starter-redis.version>1.5.10.RELEASE</starter-redis.version>
+        <starter-openfeign.version>1.4.4.RELEASE</starter-openfeign.version>
 		<swagger.version>2.7.0</swagger.version>
 		<shiro.version>1.4.0</shiro.version>
 		<sourceforge-pinyin4j-version>2.5.0</sourceforge-pinyin4j-version>
@@ -75,13 +81,8 @@
 		<tmatesoft-svnkit-version>1.8.12</tmatesoft-svnkit-version>
 		<thoughtworks-xstream-version>1.4.9</thoughtworks-xstream-version>
 		<velocity.version>1.7</velocity.version>
+        <xalan-version>2.7.2</xalan-version>
 		<zxing.version>3.2.1</zxing.version>
-		<xalan-version>2.7.2</xalan-version>
-		<spring-security-jwt.version>1.0.9.RELEASE</spring-security-jwt.version>
-		<starter-security.version>1.2.1.RELEASE</starter-security.version>
-		<starter-oauth2.version>1.2.1.RELEASE</starter-oauth2.version>
-		<starter-redis.version>1.5.10.RELEASE</starter-redis.version>
-		<starter-openfeign.version>1.4.4.RELEASE</starter-openfeign.version>
 
 	</properties>
 
