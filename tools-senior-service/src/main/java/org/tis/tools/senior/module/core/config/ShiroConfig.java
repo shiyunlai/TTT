@@ -151,7 +151,9 @@ public class ShiroConfig {
     @ConditionalOnProperty(value = {"tis.shiro.enable"}, matchIfMissing = true)
     @DependsOn(value = "lifecycleBeanPostProcessor") //依赖其他bean的初始化
     public DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator() {
-        return new DefaultAdvisorAutoProxyCreator();
+        DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator = new DefaultAdvisorAutoProxyCreator();
+        defaultAdvisorAutoProxyCreator.setUsePrefix(true);
+        return defaultAdvisorAutoProxyCreator;
     }
 
     /**

@@ -2,8 +2,6 @@
 #            base
 ######################################
 
-
-
 server:
   port: 28080
 
@@ -26,6 +24,12 @@ spring:
   application:
     name: sensior-develpoer-design
 
+# :::::: tools ::::::
+
+tools:
+  multi-datasource-open: false
+  cors:
+    open: true
 
 # :::::: mybatis-plus ::::::
 
