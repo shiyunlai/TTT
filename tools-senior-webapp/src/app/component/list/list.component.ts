@@ -59,6 +59,7 @@ export class ListComponent implements OnInit {
     parsentList: any; // 传输对象
     @Input()
     parsentbool: any; // 传递单个/多个
+
     @Input()
     pageTotal: number; // list页码总数
     @Input()

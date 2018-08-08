@@ -51,6 +51,8 @@ export class DataRangeComponent implements OnInit {
     total:number;
     totalAdd:number;
     pageindex:number;
+    pageindexAdd:number;
+    operate = false;//操作列
     // getData(){
       
     // }
@@ -74,10 +76,26 @@ export class DataRangeComponent implements OnInit {
         // 新增数据范围
         addRange(){
           this.dataAddModal = true;
+           
+        }
+        monitorHandlerAdd(event){
+           this.utilityService.getData(appConfig.ABFUrl + '/' + appConfig.API.dataRangeListAdd)
+            .subscribe(
+                (val) => {
+                    console.log(val)
+                    this.dataAdd = val
+                    this.totalAdd = val.length;
+                    this.pageindexAdd = event;
+                    // this.loading = false;
+                
+                });
         }
         // 新增数据提交
         subAdddata(){
               
+        }
+        selectedRowAdd(event){
+            console.log(event)
         }
 
 }

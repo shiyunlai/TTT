@@ -36,11 +36,12 @@ public class BaseControllerExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResultVO bindException(MethodArgumentNotValidException e) {
         BindingResult bindingResult = e.getBindingResult();
-        String errorMesssage = "数据验证失败:";
+        String errorMessage = "数据验证失败:";
         for (FieldError fieldError : bindingResult.getFieldErrors()) {
-            errorMesssage += fieldError.getDefaultMessage() + ", ";
+            errorMessage += fieldError.getDefaultMessage() + ", ";
         }
-        return ResultVO.error("400", errorMesssage);
+        log.error("参数验证失败:", e);
+        return ResultVO.error("400", errorMessage);
     }
 
     /**
@@ -49,13 +50,13 @@ public class BaseControllerExceptionHandler {
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResultVO methodValidateException(ConstraintViolationException e) {
-
         Set<ConstraintViolation<?>> violations = e.getConstraintViolations();
-        String errorMesssage = "参数验证失败:";
+        String errorMessage = "参数验证失败:";
         for (ConstraintViolation<?> violation : violations) {
-            errorMesssage += violation.getMessage();
+            errorMessage += violation.getMessage();
         }
-        return ResultVO.error("400", errorMesssage);
+        log.error("参数验证失败:", e);
+        return ResultVO.error("400", errorMessage);
     }
 
     /**
@@ -64,18 +65,20 @@ public class BaseControllerExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(HttpMessageConversionException.class)
     public ResultVO messageConversionException(HttpMessageConversionException e) {
+        log.error("请求数据不合法:", e);
         return ResultVO.error("400", "请求数据不合法！");
     }
 
     /**
      * 服务异常处理
-     * @param ex
+     * @param e
      * @return
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ToolsRuntimeException.class)
-    public ResultVO handleServiceRequestError(ToolsRuntimeException ex) {
-        return ResultVO.failure(ex.getCode(), ex.getMessage());
+    public ResultVO handleServiceRequestError(ToolsRuntimeException e) {
+        log.error("服务异常:", e);
+        return ResultVO.failure(e.getCode(), e.getMessage());
     }
 
 
@@ -84,8 +87,9 @@ public class BaseControllerExceptionHandler {
      */
     @ExceptionHandler(WebAppException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResultVO handleWebAppException(WebAppException ex) {
-        return ResultVO.error(ex.getCode(), ex.getMessage());
+    public ResultVO handleWebAppException(WebAppException e) {
+        log.error("请求数据不合法:", e);
+        return ResultVO.error(e.getCode(), e.getMessage());
     }
 
 
@@ -94,7 +98,8 @@ public class BaseControllerExceptionHandler {
      */
     @ExceptionHandler(SQLException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResultVO handleSQLException() {
+    public ResultVO handleSQLException(SQLException e) {
+        log.error("SQL错误:", e);
         // SQL堆栈信息包含敏感信息，不返回前端，在日志中可以查看详细信息
         return ResultVO.error("内部服务发生了SQL错误！");
     }
@@ -104,7 +109,8 @@ public class BaseControllerExceptionHandler {
      */
     @ExceptionHandler(DataAccessException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResultVO handleDataAccessException() {
+    public ResultVO handleDataAccessException(DataAccessException e) {
+        log.error("SQL错误:", e);
         // SQL堆栈信息包含敏感信息，不返回前端，在日志中可以查看详细信息
         return ResultVO.error("内部服务发生了SQL错误！");
     }
@@ -117,7 +123,8 @@ public class BaseControllerExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResultVO handleUnexpectedServerError(Exception ex) {
-        return ResultVO.error(ex.getMessage());
+        log.error("未知异常:", ex);
+        return ResultVO.error("内部服务发生了未知错误！");
     }
 
 }

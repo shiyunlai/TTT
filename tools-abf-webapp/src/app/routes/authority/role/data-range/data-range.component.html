@@ -25,6 +25,7 @@
               [initDate] = "data"
               [headerDate] = "headerData"
               [showAdd]='showAdd'
+                [operate]='operate'
              
              >
     </app-list >
@@ -56,14 +57,15 @@
     <ng-template #roleContent>
         <h2 style="text-align:center">选择实体增加数据范围控制</h2>
               <app-list
-              (pageNumber)="monitorHandler($event)"
-              (deleatData)="deleatData($event)"
-              (isActive)="isActive($event)"
+              (pageNumber)="monitorHandlerAdd($event)"
+              (deleatData)="deleatDataAdd($event)"
+              (isActive)="isActiveAdd($event)"
               (selectedRow)="selectedRowAdd($event)"
               [initDate] = "dataAdd"
               [headerDate] = "headerDataAdd"
               [showAdd]='showAddAdd'
               [total]='totalAdd'
+              [operate]='operate'
               >    
               </app-list>
        </ng-template>
