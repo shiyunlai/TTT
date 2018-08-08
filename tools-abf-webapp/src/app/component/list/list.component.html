@@ -69,15 +69,12 @@
                  <span *ngIf="d.key == 'viewRange'">
                      
                  <nz-checkbox-group [(ngModel)]="i.viewRange" 
-                  
                     class="checkbox"
                      (ngModelChange)="_log(checkOptionsThree)"></nz-checkbox-group> 
                   </span>
-
                     <span *ngIf="d.key == 'manageableRange'">
                     <nz-checkbox-group [(ngModel)]="i.manageableRange"  style="display:block" (ngModelChange)="_log(checkOptionsThree)"></nz-checkbox-group>
                      </span>
-
                       <span *ngIf="d.key=='customRange'">
                           <a *ngFor="let k of i.customRange;" style="display:block" href="{{k.url}}">{{k.label}}</a>
                      </span>
