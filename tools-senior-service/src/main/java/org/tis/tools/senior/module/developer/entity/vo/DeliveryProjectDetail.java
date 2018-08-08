@@ -114,7 +114,7 @@ public class DeliveryProjectDetail {
                     l.stream().collect(Collectors.groupingBy(SCheckList::getPatchType)).forEach((pt, list) -> {
                         DeliveryPatchDetail dpt = new DeliveryPatchDetail();
                         dpt.setPatchType(pt);
-                        dpt.setDeployWhere(list.get(0).getDeployWhere());
+                        dpt.setDeployWhere(DeveloperUtils.getDeployWhere(pt,list.get(0).getDeployWhere()));
                         dpt.setFileList(list);
                         dpts.add(dpt);
                         detail.setDeliveryPatchDetails(dpts);

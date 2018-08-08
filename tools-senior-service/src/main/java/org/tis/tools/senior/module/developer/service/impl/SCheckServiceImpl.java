@@ -114,10 +114,10 @@ public class SCheckServiceImpl extends ServiceImpl<SCheckMapper, SCheck> impleme
         // 获取环境分支下的代码
         List<SvnFile> svnFiles = svnKitService.getBranchDiffStatus(sBranch.getFullPath(),
                 sBranch.getCurrVersion().toString());
-        if (svnFiles.size() < 1) {
+        /*if (svnFiles.size() < 1) {
             throw new DeveloperException("环境" + profiles.getProfilesName() + "对应分支：" + sBranch.getFullPath() + "从版本\"" +
                     sBranch.getCurrVersion() + "\"开始没有文件变动！");
-        }
+        }*/
         Map<String, SvnFile> filePathMergeListMap = svnFiles.stream()
                 .filter(s -> StringUtils.equals(s.getNodeType(), "file"))
                 .collect(Collectors.toMap(f -> DeveloperUtils.getFilePath(f.getPath(), sBranch.getFullPath()), f -> f));

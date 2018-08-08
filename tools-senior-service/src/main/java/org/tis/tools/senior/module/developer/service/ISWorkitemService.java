@@ -107,14 +107,14 @@ public interface ISWorkitemService extends IService<SWorkitem>  {
      * @param guid
      * @param branch
      */
-    void insertBranch(String guid, SBranch branch) throws SVNException;
+    void insertBranch(Integer guid, SBranch branch) throws SVNException;
 
     /**
      * 为工作项拉工程
      * @param guid
      * @param projectGuids
      */
-    void insertProjects(String guid, List<String> projectGuids) throws SVNException;
+    void insertProjects(Integer guid, List<String> projectGuids) throws SVNException;
 
     /**
      * 获取工作项的工程详情
@@ -122,5 +122,7 @@ public interface ISWorkitemService extends IService<SWorkitem>  {
      * @return
      */
     ProjectDetail selectProjects(String guid) throws SVNException;
+
+    boolean selectStandardListByGuid(Integer guidWorkitem);
 }
 
