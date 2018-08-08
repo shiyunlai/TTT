@@ -15,6 +15,7 @@ export let appConfig = {
         // 登陆接口
         login: '/login',
         logout: '/logout', // 登出
+        // 工作项
         sWorkitem: '/sWorkitem', // 查询工作项、修改、删除
         sDeliveryList: '/sDeliveryList', // 整理清单
         sProfiles: '/sProfiles/list',  // 投放申请查询

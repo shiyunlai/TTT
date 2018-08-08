@@ -72,7 +72,7 @@ export class FunctionComponent implements OnInit {
     activeItem: FuncattrModule = new FuncattrModule();
     // 功能的数据值
     funcItem: FuncModule = new FuncModule();
-
+    pageIndex: number; // 当前页数
     constructor(
         private http: _HttpClient,
         private router: Router,
@@ -213,6 +213,7 @@ export class FunctionComponent implements OnInit {
                     }
                     this.data = val.result.records;
                     this.total = val.result.total;
+                    this.pageIndex = val.result.current;
                 }
 
             );

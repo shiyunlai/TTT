@@ -107,9 +107,8 @@ export class SubListComponent implements OnInit {
         }
         this.copyinfos = _.cloneDeep(this.workItemInfo.developers);
         this.workItemInfo.copyinfos = this.copyinfos.split(',');
-
         this.showAdd = true; // 默认没有新增
-        // 请求信息
+        // 请求工作项内容信息
         this.utilityService.getData(appConfig.testUrl  + appConfig.API.sWorkitem + '/' + event + '/branchDetail', {}, {Authorization: this.token})
             .subscribe(
                 (val) => {
@@ -117,17 +116,32 @@ export class SubListComponent implements OnInit {
                     this.bransguid = val.result.guid;
                     this.ifActive = true;
                     this.active = true; // 显示清单整理按钮
-                    this.selectApply = true; // 投放和补录按钮按钮显示
                 },
                 (src) => {
                     this.active = false; // 显示清单整理按钮
                     this.reset = false; // 分支信息关闭
                     this.nznot.create('error', src.code , src.msg);
-                    this.selectApply = false; // 投放和补录按钮按钮隐藏
                 }
             );
+
+        // 请求是否有清单
+        this.utilityService.getData(appConfig.testUrl  + appConfig.API.sWorkitem + '/' + event + '/isOpen', {}, {Authorization: this.token})
+            .subscribe(
+                (val) => {
+                    if(val.result.isOpen === false) {
+                        this.selectApply = false; // 投放和补录按钮按钮隐藏
+                    } else {
+                        this.selectApply = true; // 显示
+                    }
+                },
+                (src) => {
+
+                }
+            );
+
         this.getcheckOptionOne(this.workItemInfo.guid); // 调用清单
         this.reset  = false;
+
     }
 
 
