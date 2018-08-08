@@ -9,6 +9,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.tools.ant.DirectoryScanner;
 
 import java.io.*;
+import java.nio.charset.Charset;
 
 /**
  * 文件处理工具类.<BR>
@@ -84,7 +85,7 @@ public final class FileUtil {
 	 * @throws Exception the exception
 	 */
 	public static void writeFile(String string, String filename) throws Exception {
-		FileUtils.writeStringToFile(new File(filename), string);
+		FileUtils.writeStringToFile(new File(filename), string, Charset.defaultCharset());
 	}
 
 	/**
