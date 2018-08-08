@@ -232,7 +232,7 @@ public class SWorkitemController extends BaseController<SWorkitem> {
      * @return
      */
     @GetMapping("/{guid}/isOpen")
-    public ResultVO selectStandardList(@PathVariable @NotBlank(message = "工作项id不能为空") Integer guid){
+    public ResultVO selectStandardList(@PathVariable @NotNull(message = "工作项id不能为空") Integer guid){
 
         boolean isOpen = sWorkitemService.selectStandardListByGuid(guid);
         JSONObject jsonObject = new JSONObject();
