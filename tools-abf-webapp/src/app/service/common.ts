@@ -240,6 +240,17 @@ export let appConfig = {
             { value: '注销', key: 'cancel' },
         ]
 
+    },
+
+    comFunc: {
+        isYf(event) {
+            if (event === '是') {
+                event = 'YES';
+            } else {
+                event = 'NO';
+            }
+            return event;
+        }
     }
 }
 

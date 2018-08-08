@@ -1,5 +1,5 @@
 /*当你需要在 Angular 启动前执行一些远程数据（例如：应用信息、用户信息等）时非常有用。*/
-import { Injectable, Injector } from '@angular/core';
+import { Injectable, Injector, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { zip } from 'rxjs/observable/zip';
@@ -8,6 +8,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { MenuService, SettingsService, TitleService } from '@delon/theme';
 // import { ACLService } from '@delon/acl';
 import { I18NService } from '../i18n/i18n.service';
+import { DA_SERVICE_TOKEN, ITokenService } from '@delon/auth';
 
 /**
  * 用于应用启动时
@@ -22,7 +23,8 @@ export class StartupService {
         private settingService: SettingsService,
         private titleService: TitleService,
         private httpClient: HttpClient,
-        private injector: Injector) { }
+        private injector: Injector,
+        @Inject(DA_SERVICE_TOKEN) private tokenService: ITokenService) { }
 
     load(): Promise<any> {
         // only works with promises
@@ -39,22 +41,27 @@ export class StartupService {
                 })
             ).subscribe(([langData, appData]) => {
                 // console.log(langData) // 所有语言详情
-                console.log(appData);  // 菜单+user信息请求
                 // setting language data
                 this.translate.setTranslation(this.i18n.defaultLang, langData);
                 this.translate.setDefaultLang(this.i18n.defaultLang);
                 const res: any = appData;
+
          /*       // 应用信息：包括站点名、描述、年份
                 this.settingService.setApp(res.app);
                 // 用户信息：包括姓名、头像、邮箱地址
                 this.settingService.setUser(res.user);*/
                 // ACL：设置权限为全量
                 // this.aclService.setFull(true);
-                // 初始化菜单
-                 this.menuService.add(res.menu);
+                // 初始化菜单 分为开发人员和rct人员
+                if (this.tokenService.get().role === '开发组') {
+                    this.menuService.add(res.devMenu); // 所有权限菜单
+                } else {
+                    this.menuService.add(res.menu);
+                }
+
                 // this.menuService.clear();
                 // 设置页面标题的后缀
-                this.titleService.suffix = res.app.name;
+               // this.titleService.suffix = res.app.name;
             },
             () => { },
             () => {

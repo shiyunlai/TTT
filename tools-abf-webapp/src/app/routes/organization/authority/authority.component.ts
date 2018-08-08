@@ -75,7 +75,6 @@ export class AuthorityComponent implements OnInit {
         };
 
         this.utilityService.postData(appConfig.testUrl  + appConfig.API.omGroups + '/' + this.groupGuid + '/app', this.page)
-            .map(res => res.json())
             .subscribe(
                 (val) => {
                     console.log(val)
@@ -97,7 +96,6 @@ export class AuthorityComponent implements OnInit {
         }
 
         this.utilityService.postData(appConfig.testUrl  + appConfig.API.groupApp, jsonObj)
-            .map(res => res.json())
             .subscribe(
                 (val) => {
                     this.nznot.create('success', val.msg , val.msg);
@@ -117,7 +115,6 @@ export class AuthorityComponent implements OnInit {
         console.log(event)
         // 删除应用
         this.utilityService.deleatData(appConfig.testUrl  + appConfig.API.omGroups + '/' + this.groupGuid + '/app/' + event.guid )
-            .map(res => res.json())
             .subscribe(
                 (val) => {
                     this.nznot.create('success', val.msg , val.msg);

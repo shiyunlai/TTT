@@ -5,6 +5,7 @@ import { UtilityService} from '../../../service/utils.service';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import {appConfig} from '../../../service/common';
 import { AcMenuModule} from '../../../service/common.module';
+import {NzModalService, NzNotificationService} from 'ng-zorro-antd';
 
 @Component({
   selector: 'app-menu',
@@ -18,6 +19,7 @@ export class MenuComponent implements OnInit {
     constructor(
         private http: _HttpClient,
         private utilityService: UtilityService,
+        private nznot: NzNotificationService
     ) { }
 
     treedata: any[]; // tree组件数据
@@ -68,13 +70,15 @@ export class MenuComponent implements OnInit {
         { value: 'dingding', label: 'dingding' },
         { value: 'xz', label: 'plus-square-o' },
     ];
-
+    selectionType: string; // 树结构类型
 
     ngOnInit() {
         this.isDisplay = true;
         this.acmenuModule.pi = 1;
         this.acmenuModule.size = 10;
          this.getAppData(); // 先查询应用信息
+        this.selectionType = 'single';
+        this.queryFunc(); // 查询所有功能
     }
 
     // 查询有哪些应用
@@ -85,26 +89,20 @@ export class MenuComponent implements OnInit {
                 size: 100,
             }
         };
-
-        // this.utilityService.postData(appConfig.testUrl + appConfig.API.appList, this.page)
-        //     .map(res => res.json())
         this.utilityService.getData(appConfig.testUrl + appConfig.API.appListAll)
             .subscribe(
                 (val) => {
-                    // console.log(val.result);
                     this.appData = val.result;
                 }
             );
-        // console.log(this.appData);
     }
-
+    // 查询应用菜单change
     appCodeChange(event ) {
         //  根据应用ID 查菜单
         // 拖拽属性
         this.nodrop = false ;
         this.searchTitle = 'sss';
         this.appcode = event ;
-
         // 调用服务来获取列表节点操作
         this.treedata = [];
         this.utilityService.getData(appConfig.testUrl + appConfig.API.acMenuListByAppcode + event)
@@ -116,19 +114,16 @@ export class MenuComponent implements OnInit {
                     val.result[0].collapsedIcon = 'fa-folder';
                     val.result[0].childDict = true; // 是业务字典
                     val.result[0].children = [{
-                        // 'label': '',
-                        // 'expandedIcon': 'fa-folder-open',
-                        // 'collapsedIcon': 'fa-folder'
                     }];
                     this.treedata.push(val.result[0]);
-
                     // 不是叶子菜单
                     if (this.treedata[0].isleaf === 'N') {
-
-
                     }
+                    this.nznot.create('success', val.msg , val.msg);
+                },
+                (err) => {
+                    this.nznot.create('error', err.msg , err.msg);
                 });
-
         this.treeshow = true; // 显示树结构
 
     }
@@ -170,9 +165,7 @@ export class MenuComponent implements OnInit {
     }
 
     delectMenu() {
-        // console.log(this.select.node);
         this.addMenuData = new AcMenuModule();
-        // this.modalVisible = true;
         this.guidParents[0].label = this.select.node.menuName;
         this.guidParents[0].guid = this.select.node.guid;
         this.addMenuData.guidParents = this.select.node.guid;
@@ -184,32 +177,39 @@ export class MenuComponent implements OnInit {
         this.addMenuData.isLeaf = this.select.node.isleaf;
         this.proParentDisable = false;
         this.proDisable = true ;
-        console.log(this.select.node);
-        // this.appCodeChange(this.appcode );
         this.utilityService.deleatData(appConfig.testUrl  + appConfig.API.acMenuDeletByid + this.select.node.guid)
-            .map(res => res.json())
             .subscribe(
                 (val) => {
+                    this.nznot.create('success', val.msg , val.msg);
                 },
+                (err) => {
+                    this.nznot.create('error', err.msg , err.msg);
+                }
             );
         this.appCodeChange(this.appcode );
     }
-    addMenu() {
-        // 如果已经是叶子菜单了 就不允许增加子菜单
-        if (this.select.node.isleaf === 'Y') {
-            // console.log('叶子菜单不允许增加子菜单');
-            return;
-        }
+
+    // 查询所有功能
+    queryFunc() {
         // 增加菜单前 查询所有的功能
         this.utilityService.getData(appConfig.testUrl  + appConfig.API.funcListAll )
             .subscribe(
                 (val) => {
-                    // console.log(val.result);
+                    this.nznot.create('success', val.msg , val.msg);
                     this.guidFuncList = val.result;
                 },
+                (err) => {
+                    this.nznot.create('error', err.msg , err.msg);
+                }
             );
+    };
+
+    addMenu() {
+        // 如果已经是叶子菜单了 就不允许增加子菜单
+        if (this.select.node.isleaf === '是') {
+            return;
+        }
         this.addMenuData = new AcMenuModule();
-        // this.guidFuncList = [{'key': '功能1' , 'value': 'gongneng1'} , {'key': '功能2' , 'value': 'gongneng2' }];
         this.tanchuangTitle = '增加子菜单';
         this.modalVisible = true;
         this.proLeafDisable = false;
@@ -231,7 +231,7 @@ export class MenuComponent implements OnInit {
         this.guidParentsshow = false;
         this.addMenuData = new AcMenuModule();
         // 最底层菜单才能修改功能
-        if (this.select.node.isleaf === 'Y') {
+        if (this.select.node.isleaf === '是') {
             this.guidFuncshow = true;
             this.addMenuData.guidFunc = this.select.node.guidFunc;
         }else {
@@ -244,6 +244,7 @@ export class MenuComponent implements OnInit {
         this.addMenuData.menuName = this.select.node.menuName;
         this.addMenuData.menuLabel = this.select.node.menuLabel;
         this.addMenuData.menuCode = this.select.node.menuCode;
+        this.addMenuData.guidFunc = this.select.node.guidFunc;
         this.addMenuData.guid = this.select.node.guid;
         this.addMenuData.imagePath = this.select.node.imagePath;
         this.addMenuData.uiEntry = this.select.node.uiEntry;
@@ -255,25 +256,37 @@ export class MenuComponent implements OnInit {
     // 弹窗页面的确认方法
     save () {
         this.modalVisible = false;
+        // 枚举值转换
         if (this.tanchuangTitle === '修改菜单') {
-            // console.log(this.addMenuData);
+            if (this.addMenuData.isLeaf === '是') {
+                this.addMenuData.isLeaf = 'Y';
+            } else {
+                this.addMenuData.isLeaf = 'N';
+            }
             this.utilityService.putData(appConfig.testUrl  + appConfig.API.acMenuUpdate , this.addMenuData)
-                .map(res => res.json())
                 .subscribe(
                     (val) => {
+                        this.nznot.create('success', val.msg , val.msg);
                     },
+                    (err) => {
+                        this.nznot.create('error', err.msg , err.msg);
+                    }
                 );
         }
         if (this.tanchuangTitle === '增加子菜单') {
             // console.log(this.addMenuData);
             this.utilityService.postData(appConfig.testUrl  + appConfig.API.acMenuAddChild, this.addMenuData)
-                .map(res => res.json())
                 .subscribe(
                     (val) => {
+                        this.nznot.create('success', val.msg , val.msg);
                     },
+                    (err) => {
+                        this.nznot.create('error', err.msg , err.msg);
+                    }
                 );
         }
         this.appCodeChange(this.appcode );
+        this.guidFuncshow = false;
     }
 
     viewFile() {
@@ -291,9 +304,6 @@ export class MenuComponent implements OnInit {
 
 
     dropEvent($event) {
-        console.log($event);
-        console.log($event.dragNode.guid) ; // 被拖拽的数据
-        console.log($event.dropNode.guid) ; // 拖拽的数据目标地的guid
         this.originPonit = $event.dragNode.guid;
         this.destinaPoint = $event.dropNode.guid;
         // 如果拖拽的目的地菜单是叶子菜单，拖拽目标目的地设为它的父菜单
@@ -307,27 +317,32 @@ export class MenuComponent implements OnInit {
             'order': this.playOrder
         };
         this.utilityService.postData(appConfig.testUrl  + appConfig.API.acMenuMove , this.moveDate )
-            .map(res => res.json())
             .subscribe(
                 (val) => {
+                    this.nznot.create('success', val.msg , val.msg);
                 },
+                (err) => {
+                    this.nznot.create('error', err.msg , err.msg);
+                }
             );
+        this.guidFuncshow = false;
         this.appCodeChange(this.appcode );
     }
 
     searchVal($event) {
-        console.log('searchVal');
     }
 
     // 点击左侧文件夹标时候触发
     Unfold(event ) {
+        console.log(event)
         // console.log(event.node.guid);
         // 根据上一级guid查询 下一级菜单数据
         this.utilityService.getData(appConfig.testUrl  + appConfig.API.acMenuQueryByFather + event.node.guid)
             .subscribe(
                 (val) => {
+                    console.log(val)
                     for (let i = 0 ; i < val.result.length; i++) {
-                        if (val.result[i].isleaf === 'N') { // 不是最底层的菜单
+                        if (val.result[i].isleaf === '否') { // 不是最底层的菜单
                             val.result[i].label = val.result[i].menuName;
                             val.result[i].expandedIcon = 'fa-folder-open';
                             val.result[i].collapsedIcon = 'fa-folder';
@@ -335,18 +350,18 @@ export class MenuComponent implements OnInit {
                             val.result[i].children = [{'label': ''}];
                         }
 
-                        if (val.result[i].isleaf === 'Y') { // 是最底层的菜单
+                        if (val.result[i].isleaf === '是') { // 是最底层的菜单
                             val.result[i].label = val.result[i].menuName;
                             val.result[i].icon = 'fa-file-word-o';
                             val.result[i].childDict = false;
                         }
-
                     }
                     event.node.children = val.result;
-
+                    this.nznot.create('success', val.msg , val.msg);
                 },
+                (err) => {
+                    this.nznot.create('error', err.msg , err.msg);
+                }
             );
-
     }
-
 }

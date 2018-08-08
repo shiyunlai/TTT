@@ -39,16 +39,16 @@ export class OrgComponent implements OnInit {
     treeResult: string; // 接受请求id值
     isroot = true; // 是否是子节点调用
     dataOrg: any; // 节点信息
+    selectionType: string; // 树结构类型
 
     ngOnInit() {
         this.initData();
         this.searchTitle = '请输入机构代码/名称';
-
         // 枚举值转换
         this.orgDegree = appConfig.Enumeration.orgDegree;
         this.area = appConfig.Enumeration.area;
         this.orgType = appConfig.Enumeration.orgType;
-
+        this.selectionType = 'single';
     }
 
     initData() {
@@ -66,7 +66,6 @@ export class OrgComponent implements OnInit {
     getData(event) {
         // 从服务器获取树列表
         this.utilityService.postData(appConfig.testUrl  + appConfig.API.omgTree + '/' + event.node.guid, {})
-            .map(res => res.json())
             .subscribe(
                 (val) => {
                     console.log(val.result)
@@ -213,7 +212,6 @@ export class OrgComponent implements OnInit {
         if (!this.isEdit) {
             if (this.isroot) { // 新增跟机构
                 this.utilityService.postData(appConfig.testUrl  + appConfig.API.addRoot, jsonOption)
-                    .map(res => res.json())
                     .subscribe(
                         (val) => {
                             this.nznot.create('success', val.msg , val.msg);
@@ -222,7 +220,6 @@ export class OrgComponent implements OnInit {
             } else {
                 jsonOption.guidParents = this.orgData.guid; // 绑定父机构的guid
                 this.utilityService.postData(appConfig.testUrl  + appConfig.API.addChild, jsonOption)
-                    .map(res => res.json())
                     .subscribe(
                         (val) => {
                             this.nznot.create('success', val.msg , val.msg);
@@ -237,7 +234,6 @@ export class OrgComponent implements OnInit {
             this.orgStatus(jsonOption)
             console.log(jsonOption)
             this.utilityService.putData(appConfig.testUrl  + appConfig.API.omg, jsonOption)
-                .map(res => res.json())
                 .subscribe(
                     (val) => {
                         this.nznot.create('success', val.msg , val.msg);
@@ -276,7 +272,6 @@ export class OrgComponent implements OnInit {
             cancelText: '取消',
             onOk: () => {
                 this.utilityService.deleatData(appConfig.testUrl + appConfig.API.omg + '/' +  this.orgData.guid)
-                    .map(res => res.json())
                     .subscribe(
                         (val) => {
                             this.nznot.create('success', val.msg , val.msg);

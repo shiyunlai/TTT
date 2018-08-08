@@ -136,7 +136,6 @@ export class DictComponent implements OnInit {
 
         // 调用服务来获取列表节点操作
         this.utilityService.postData(appConfig.testUrl + appConfig.API.sysDictList ,  this.page)
-            .map(res => res.json())
             .subscribe(
                 (val) => {
                     this.data = val.result.records; // 绑定列表数据
@@ -169,7 +168,7 @@ export class DictComponent implements OnInit {
 
     // 列表组件传过来的内容
     addHandler(event) {
-        if (event === '这里是新增的方法') {
+        if (event === 'add') {
             for (const key in this.dictAdd) {
                 delete this.dictAdd[key];
             }
@@ -210,7 +209,6 @@ export class DictComponent implements OnInit {
             cancelText: '取消',
             onOk: () => {
                 this.utilityService.deleatData(appConfig.testUrl + appConfig.API.sysDictDel + '/' + event[0].guid)
-                    .map(res => res.json())
                     .subscribe(
                         (val) => {
                             this.nznot.create('success', val.msg , val.msg);
@@ -254,7 +252,6 @@ export class DictComponent implements OnInit {
     // 查询树方法
     getTreeList(event) {
         this.utilityService.postData(appConfig.testUrl  + appConfig.API.sysDictsTree + '/' + event, {})
-            .map(res => res.json())
             .subscribe(
                 (val) => {
                     if (val.result.dictName) {
@@ -292,7 +289,6 @@ export class DictComponent implements OnInit {
     // 查询树节点方法
     getTreeNode(event) {
         this.utilityService.postData(appConfig.testUrl  + appConfig.API.sysDictsTree + '/' + event.node.guid, {})
-            .map(res => res.json())
             .subscribe(
                 (val) => {
                     this.treeResult = event.node.guid; // 赋值
@@ -374,7 +370,6 @@ export class DictComponent implements OnInit {
             if (this.creatExit) { // 调用新增的逻辑
                 // 调用服务来获取列表节点操作
                  this.utilityService.postData(appConfig.testUrl  + appConfig.API.sysDictAdd, jsonOption)
-                     .map(res => res.json())
                      .subscribe(
                          (val) => {
                              this.nznot.create('success', val.msg , val.msg);
@@ -384,7 +379,6 @@ export class DictComponent implements OnInit {
 
             } else { // 调用修改的逻辑
             this.utilityService.putData(appConfig.testUrl + appConfig.API.sysDictEdit, jsonOption)
-                .map(res => res.json())
                 .subscribe(
                     (val) => {
                         console.log(val);
@@ -432,7 +426,6 @@ export class DictComponent implements OnInit {
             cancelText: '取消',
             onOk: () => {
                 this.utilityService.deleatData(appConfig.testUrl + appConfig.API.sysDictDel + '/' +  this.treeSelectData.guid)
-                    .map(res => res.json())
                     .subscribe(
                         (val) => {
                             this.nznot.create('success', val.msg , val.msg);
@@ -462,7 +455,6 @@ export class DictComponent implements OnInit {
             cancelText: '取消',
             onOk: () => {
                 this.utilityService.deleatData(appConfig.testUrl + appConfig.API.sysDicttems + '/' +  this.treeSelectData.guid)
-                    .map(res => res.json())
                     .subscribe(
                         (val) => {
                             this.nznot.create('success', val.msg , val.msg);
@@ -519,7 +511,6 @@ export class DictComponent implements OnInit {
             jsonOption.guidDict = this.treeSelectData.guid;
             console.log(jsonOption)
             this.utilityService.postData(appConfig.testUrl  + appConfig.API.sysDictItems, jsonOption)
-                .map(res => res.json())
                 .subscribe(
                     (val) => {
                         this.nznot.create('success', val.msg , val.msg);
@@ -539,7 +530,6 @@ export class DictComponent implements OnInit {
                 seqNo: this.dictItemAdd.seqno,
             };
             this.utilityService.putData( appConfig.testUrl  + appConfig.API.sysDictItems, jsonOption)
-                .map(res => res.json())
                 .subscribe(
                     (val) => {
                         console.log(val);

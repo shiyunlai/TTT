@@ -88,7 +88,6 @@ export class OperatorsComponent implements OnInit {
             }
         };
         this.utilityService.postData(appConfig.testUrl + appConfig.API.acOperatorsList, this.page)
-            .map(res => res.json())
             .subscribe(
                 (val) => {
                     this.data = val.result.records;
@@ -149,7 +148,7 @@ export class OperatorsComponent implements OnInit {
     // 想一下，能否把这三个方法封装到一个ts里面，引入即可，不然每次都写着三个方法不太现实。
     // 列表组件传过来的内容
     addHandler(event) {
-        if (event === '这里是新增的方法') {
+        if (event === 'add') {
             this.operatorAdd = new OperatrModule(); //  新建的时候 清空 重新构建
             for (const key in this.operator) {
                 delete this.operator[key];
@@ -194,7 +193,6 @@ export class OperatorsComponent implements OnInit {
     // 接受子组件删除的数据 单条还是多条
     deleatData(event) {
         this.utilityService.deleatData(appConfig.testUrl + appConfig.API.acOperatorsDel + '/' + event[0].guid)
-            .map(res => res.json())
             .subscribe(
                 (val) => {
                     // 修改成功只和的处理逻辑
@@ -237,7 +235,6 @@ export class OperatorsComponent implements OnInit {
           if (event.names) {
               if (event.names !== '删除' && event.names !== '重置密码') {
                   this.utilityService.putData(appConfig.testUrl + appConfig.API.changeStatus, status)
-                      .map(res => res.json())
                       .subscribe(
                           (val) => {
                               console.log(val);
@@ -247,7 +244,6 @@ export class OperatorsComponent implements OnInit {
               } else {
                   if (event.names === '删除') {
                       this.utilityService.deleatData(appConfig.testUrl + appConfig.API.acOperatorsDel + '/' + event.guid)
-                          .map(res => res.json())
                           .subscribe(
                               (src) => {
                                   // 修改成功只和的处理逻辑
@@ -283,7 +279,6 @@ export class OperatorsComponent implements OnInit {
         const jsonObj  = this.operatorAdd;
         if (this.isEdit) { // 新增
             this.utilityService.postData(appConfig.testUrl + appConfig.API.acOperatorsAdd, jsonObj)
-                .map(res => res.json())
                 .subscribe(
                     (val) => {
                         console.log(val)
@@ -293,7 +288,6 @@ export class OperatorsComponent implements OnInit {
                 );
         } else { // 修改
             this.utilityService.putData(appConfig.testUrl + appConfig.API.acOperatorsDel, jsonObj)
-                .map(res => res.json())
                 .subscribe(
                     (val) => {
                         this.nznot.create('success', val.msg , val.msg);

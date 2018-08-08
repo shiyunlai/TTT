@@ -95,7 +95,6 @@ export class GroupdetailComponent implements OnInit {
         const jsonOption =  this.workItem;
         console.log(jsonOption);
         this.utilityService.putData(appConfig.testUrl  + appConfig.API.omGroups, jsonOption)
-            .map(res => res.json())
             .subscribe(
                 (val) => {
                     this.nznot.create('success', val.msg , val.msg);
@@ -117,7 +116,6 @@ export class GroupdetailComponent implements OnInit {
             cancelText: '取消',
             onOk: () => {
                 this.utilityService.putData(appConfig.testUrl  + appConfig.API.omGroups + '/' + this.guidGroup  + '/reenable' + '/' + true)
-                    .map(res => res.json())
                     .subscribe(
                         (val) => {
                             this.nznot.create('success', val.msg , val.msg);
@@ -126,7 +124,6 @@ export class GroupdetailComponent implements OnInit {
             },
             onCancel: () => {
                 this.utilityService.putData(appConfig.testUrl  + appConfig.API.omGroups + '/' + this.guidGroup  + '/reenable' + '/' + false)
-                    .map(res => res.json())
                     .subscribe(
                         (val) => {
                             this.nznot.create('success', val.msg , val.msg);
@@ -139,7 +136,6 @@ export class GroupdetailComponent implements OnInit {
     // 注销岗位
     cancelGroup() {
         this.utilityService.putData(appConfig.testUrl  + appConfig.API.omGroups + '/' + this.guidGroup  + '/enable')
-            .map(res => res.json())
             .subscribe(
                 (val) => {
                     console.log(val)

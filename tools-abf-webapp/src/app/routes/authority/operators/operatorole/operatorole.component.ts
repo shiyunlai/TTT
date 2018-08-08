@@ -96,7 +96,7 @@ export class OperatoroleComponent implements OnInit {
     addHandler(event) {
         console.log(this.role);
 
-        if (event === '这里是新增的方法') {
+        if (event === 'add') {
             this.modalVisible = true;  // 此时点击了列表组件的新增，打开模态框
         } else{ // 代表修改，把修改的内容传递进去，重新渲染
             console.log(event)

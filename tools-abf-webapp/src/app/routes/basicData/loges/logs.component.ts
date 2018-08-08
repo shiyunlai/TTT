@@ -76,7 +76,6 @@ export class LogsComponent implements OnInit {
             }
         };
         this.utilityService.postData(appConfig.testUrl + appConfig.API.logList, this.page)
-            .map(res => res.json())
             .subscribe(
                 (val) => {
                     this.data = val.result.records;

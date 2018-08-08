@@ -110,7 +110,6 @@ export class GroupPostComponent implements OnInit {
 
         // 查询工作组下所有岗位
         this.utilityService.postData(appConfig.testUrl + appConfig.API.omGroups + '/' + this.groupCode + '/positionIn',  this.page)
-            .map(res => res.json())
             .subscribe(
                 (val) => {
                     // 没有在岗员工，模拟一下
@@ -163,7 +162,7 @@ export class GroupPostComponent implements OnInit {
     addHandler(event) {
         this.ifshow = false; // 默认是基础信息
         this.postAdd = new PostModule(); // 重新清空赋值
-        if (event === '这里是新增的方法') {
+        if (event === 'add') {
             this.postAdd.positionType = '02';
             this.postAdd.positionStatus = 'running';
             this.modalVisible = true;  // 此时点击了列表组件的新增，打开模态框
@@ -192,7 +191,6 @@ export class GroupPostComponent implements OnInit {
         if (event.names) {
             if (event.names === '注销') {
                 this.utilityService.putData(appConfig.testUrl  + appConfig.API.cancel + '/' + event.guid )
-                    .map(res => res.json())
                     .subscribe(
                         (val) => {
                             console.log(val)
@@ -215,7 +213,6 @@ export class GroupPostComponent implements OnInit {
 
             if (event.names === '启用') {
                 this.utilityService.putData(appConfig.testUrl  + appConfig.API.running + '/' + event.guid )
-                    .map(res => res.json())
                     .subscribe(
                         (val) => {
                             console.log(val)
@@ -246,7 +243,6 @@ export class GroupPostComponent implements OnInit {
             cancelText: '取消',
             onOk: () => {
                 this.utilityService.deleatData(appConfig.testUrl + appConfig.API.postDel + '/' + event[0].guid)
-                    .map(res => res.json())
                     .subscribe(
                         (val) => {
                             this.nznot.create('success', val.msg , val.msg);
@@ -317,7 +313,6 @@ export class GroupPostComponent implements OnInit {
                 omPositionRequest: jsonOption
             }
             this.utilityService.postData(appConfig.testUrl  + appConfig.API.groupPosition, jsonAjax)
-                .map(res => res.json())
                 .subscribe(
                     (val) => {
                         this.nznot.create('success', val.msg , val.msg);
@@ -326,7 +321,6 @@ export class GroupPostComponent implements OnInit {
                 );
         } else {
             this.utilityService.putData(appConfig.testUrl  + appConfig.API.postDel, jsonOption)
-                .map(res => res.json())
                 .subscribe(
                     (val) => {
                         this.getData();
@@ -389,7 +383,6 @@ export class GroupPostComponent implements OnInit {
             }
         };
         this.utilityService.postData(appConfig.testUrl + appConfig.API.queryByOrgPosition,  this.page)
-            .map(res => res.json())
             .subscribe(
                 (val) => {
                     console.log(val)
@@ -419,7 +412,6 @@ export class GroupPostComponent implements OnInit {
         if (e.names) {
             if (e.names === '删除') {
                 this.utilityService.deleatData(appConfig.testUrl + appConfig.API.postDelemp + '/' + e.guid)
-                    .map(res => res.json())
                     .subscribe(
                         (val) => {
                             this.nznot.create('success', val.msg , val.msg);
@@ -458,7 +450,6 @@ export class GroupPostComponent implements OnInit {
                 ismain: 'N'
             }
             this.utilityService.postData(appConfig.testUrl + appConfig.API.empAdd,  josnObj)
-                .map(res => res.json())
                 .subscribe(
                     (val) => {
                         console.log(val);
@@ -508,7 +499,6 @@ export class GroupPostComponent implements OnInit {
         };
         // 模拟一下
         this.utilityService.postData(appConfig.testUrl + appConfig.API.listByPosition + '/' + this.postGuid,  this.page)
-            .map(res => res.json())
             .subscribe(
                 (val) => {
                     console.log(val)
@@ -528,7 +518,6 @@ export class GroupPostComponent implements OnInit {
     postappAdd(event) {
         console.log(event)
         this.utilityService.postData(appConfig.testUrl + appConfig.API.addByList,  event)
-            .map(res => res.json())
             .subscribe(
                 (val) => {
                     console.log(val)
@@ -594,7 +583,6 @@ export class GroupPostComponent implements OnInit {
     appDel(event) {
         // 传第三表的id  event.id 即可
         this.utilityService.deleatData(appConfig.testUrl + appConfig.API.appDelpost + '/' + event.guid + '/' + this.postGuid )
-            .map(res => res.json())
             .subscribe(
                 (val) => {
                     this.nznot.create('success', val.msg , val.msg);
