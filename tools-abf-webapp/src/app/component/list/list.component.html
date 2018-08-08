@@ -73,10 +73,10 @@
                      (ngModelChange)="_log(checkOptionsThree)"></nz-checkbox-group> 
                   </span>
                     <span *ngIf="d.key == 'manageableRange'">
-                    <nz-checkbox-group [(ngModel)]="i.manageableRange"  style="display:block" (ngModelChange)="_log(checkOptionsThree)"></nz-checkbox-group>
+                    <nz-checkbox-group   class="checkbox" [(ngModel)]="i.manageableRange"  (ngModelChange)="_log(checkOptionsThree)"></nz-checkbox-group>
                      </span>
                       <span *ngIf="d.key=='customRange'">
-                          <a *ngFor="let k of i.customRange;" style="display:block" href="{{k.url}}">{{k.label}}</a>
+                          <a *ngFor="let k of i.customRange;"   class="checkbox" href="{{k.url}}">{{k.label}}</a>
                      </span>
             <!--还是要写方法，因为不一定是路由跳转还有可能弹出框以及其他的交易，所以写一个方法吧
             <a *ngIf="d.isclick"  [routerLink]="['/APPlication']"  [queryParams]="data[l]">{{data[l][d.key]}}</a>-->

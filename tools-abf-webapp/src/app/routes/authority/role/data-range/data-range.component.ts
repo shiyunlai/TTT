@@ -22,7 +22,7 @@ export class DataRangeComponent implements OnInit {
     ngOnInit() {
         this.roleGuid = this.activatedRoute.snapshot.params.id; // 拿到父组件传过来的组织机构的guid来进行操作
         console.log(this.roleGuid);
-        this.getData()
+        // this.getData()
     }
      headerData = [  // 配置表头内容
         {value: '数据实体', key: 'dataEntity',  isclick: false},
@@ -51,8 +51,13 @@ export class DataRangeComponent implements OnInit {
     total:number;
     totalAdd:number;
     pageindex:number;
-    getData(){
-          this.utilityService.getData(appConfig.ABFUrl + '/' + appConfig.API.dataRangeList)
+    // getData(){
+      
+    // }
+    //翻页
+    monitorHandler(event){
+         this.pageindex = event;
+             this.utilityService.getData(appConfig.ABFUrl + '/' + appConfig.API.dataRangeList)
             .subscribe(
                 (val) => {
                     console.log(val)
@@ -62,7 +67,7 @@ export class DataRangeComponent implements OnInit {
                     // this.loading = false;
                 
                 });
-    }
+        }
      onSearch(event: string): void {
             console.log(event);
         }
@@ -74,7 +79,5 @@ export class DataRangeComponent implements OnInit {
         subAdddata(){
               
         }
-        monitorHandler(event){
-         this.pageindex = event;
-        }
+
 }
