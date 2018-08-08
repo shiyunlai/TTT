@@ -39,7 +39,18 @@
     </div>
 </form>
 <!-- 监听列表组件，如果点击了则告诉弹出框组件，打开弹出框,监听addCreat方法-->
-<app-list (addCreat)="addHandler($event)"  [configTitle]="configTitle"  [total]="total"  (buttonData)="buttonDataHandler($event)"  (pageNumber)="monitorHandler($event)"  (deleatData)="deleatData($event)" (selectedRow)="selectedRow($event)"  (isActive)="isActive($event)"  [initDate] = "data" [headerDate] = "headerData"  [moreData] = "moreData"
+<app-list (addCreat)="addHandler($event)"
+          [configTitle]="configTitle"
+          [total]="total"
+          (buttonData)="buttonDataHandler($event)"
+          (pageNumber)="monitorHandler($event)"
+          (deleatData)="deleatData($event)"
+          (selectedRow)="selectedRow($event)"
+          (isActive)="isActive($event)"
+          [initDate] = "data"
+          [headerDate] = "headerData"
+          [buttons] = 'buttons'
+          [moreData] = "moreData"
           (buttonEvent) = "buttonEvent($event)"
 ></app-list>
 <!--引入列表组件-->
@@ -180,7 +191,8 @@
                 </div>
             </div>
             <!-- 监听列表组件，如果点击了则告诉弹出框组件，打开弹出框,监听addCreat方法-->
-            <app-list  [showAdd]="showAdd" [configTitle]="configTitle"
+            <app-list  [showAdd]="showAdd"
+                       [configTitle]="appConfit"
                       (addCreat)="addappHandler($event)"
                       (buttonData)="buttonappDataHandler($event)"
                       (pageNumber)="monitorappHandler($event)"

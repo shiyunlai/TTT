@@ -48,15 +48,14 @@ export class HeaderUserComponent implements OnInit {
 
     logout() {
  this.router.navigateByUrl(this.tokenService.login_url);
-
        this.utilityService.postData(appConfig.testUrl  + appConfig.API.logout, {}, {Authorization: this.tokenService.get().token })
-        
+
             .subscribe(
                 (val) => {
-                
+
                     },
             );
     //   this.tokenService.clear();
-               
-    }      
+
+    }
 }

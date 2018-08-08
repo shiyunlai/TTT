@@ -8,6 +8,7 @@ import {MenuItem} from 'primeng/api';
 import {NzModalService, NzNotificationService} from 'ng-zorro-antd';
 import {appConfig} from '../../../service/common';
 import {ListComponent} from '../../../component/list/list.component';
+import {EmpModule} from '../../../service/emp';
 
 @Component({
     selector: 'app-dict',
@@ -26,18 +27,14 @@ export class DictComponent implements OnInit {
     @ViewChild('list')
     listTable: ListComponent;
 
-
     constructor(
         private http: _HttpClient,
         private router: Router,
         private utilityService: UtilityService,
         private modal: NzModalService,
         private nznot: NzNotificationService
-    ) {
-
-    }
+    ) {}
     dict: DictModule = new DictModule(); // 绑定数据
-
     dictAdd: DictModule = new DictModule(); // 绑定新增数据
 
     dictItemAdd: DictItemModule = new DictItemModule(); // 绑定业务字典项数据
@@ -73,6 +70,7 @@ export class DictComponent implements OnInit {
     // dictType 业务字典类型
     dictType: any;
 
+
     // 字典项
     itemValue = [
         { text: '字段类型', value: false, key: 'A' },
@@ -84,6 +82,10 @@ export class DictComponent implements OnInit {
         { text: '交易状态', value: false,  key: 'F' },
     ]
 
+    // 表头按钮
+    buttons = [
+        {key: 'add', value: '新增业务字典'}
+    ]
 
     // 筛选条件
     conditions = [
@@ -108,13 +110,16 @@ export class DictComponent implements OnInit {
 
     // 右击菜单数据
     configTitle: string;
+    selectionType: string; // 树类型
     ngOnInit() {
         this.fromType = appConfig.Enumeration.fromType;
         this.dictType = appConfig.Enumeration.systemType;
         this.getData(); // 只会触发一次，但是ngchanges并不会触发咋办
         this.nodrop = true;
+        this.selectionType = 'single';
         this.configTitle = '修改';
     }
+
 
     getData() {
         // 初始化请求后台数据
@@ -138,7 +143,12 @@ export class DictComponent implements OnInit {
         this.utilityService.postData(appConfig.testUrl + appConfig.API.sysDictList ,  this.page)
             .subscribe(
                 (val) => {
+                    for (let i = 0; i < val.result.records.length; i++) {
+                        val.result.records[i].buttonData = ['删除'];
+                    }
+
                     this.data = val.result.records; // 绑定列表数据
+
                     this.guidParents = val.result.records;
                     this.total = val.result.total;
                 });
@@ -157,7 +167,7 @@ export class DictComponent implements OnInit {
     formTypeMode(event) {
         if (event.fromType === '字典项') {
             event.fromType = '0';
-        } else if (event.fromType === '来自单表') {
+        } else if (event.fromType === '单表') {
             event.fromType = '1';
         } else if (event.fromType === '多表或视图') {
             event.fromType = '2';
@@ -199,16 +209,24 @@ export class DictComponent implements OnInit {
     }
 
 
+    buttonEvent(e) {
+        if (e.names) {
+            if (e.names === '删除') {
+               this.deleatData(e);
+            }
+        }
+    }
+
+
     // 接受子组件删除的数据 单条还是多条
     deleatData(event) {
-        console.log(event); // 原本的数据值
         this.modal.open({
             title: '是否删除',
             content: '您是否确认删除所选数据?',
             okText: '确定',
             cancelText: '取消',
             onOk: () => {
-                this.utilityService.deleatData(appConfig.testUrl + appConfig.API.sysDictDel + '/' + event[0].guid)
+                this.utilityService.deleatData(appConfig.testUrl + appConfig.API.sysDictDel + '/' + event.guid)
                     .subscribe(
                         (val) => {
                             this.nznot.create('success', val.msg , val.msg);

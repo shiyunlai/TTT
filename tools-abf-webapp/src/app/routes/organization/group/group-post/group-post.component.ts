@@ -75,6 +75,11 @@ export class GroupPostComponent implements OnInit {
         ]
     };
 
+    // 表头按钮
+    buttons = [
+        {key: 'add', value: '新增岗位'}
+    ]
+
     copy: any;
 
     groupCode: string;
@@ -115,9 +120,9 @@ export class GroupPostComponent implements OnInit {
                     // 没有在岗员工，模拟一下
                     for ( let i = 0; i < val.result.records.length; i++) {
                         if ( val.result.records[i].positionStatus === '正常') {
-                            val.result.records[i].buttonData = ['注销', ' ', ' ', '应用权限'];
+                            val.result.records[i].buttonData = ['注销', '删除', '应用权限'];
                         } else {
-                            val.result.records[i].buttonData = ['启用'];
+                            val.result.records[i].buttonData = ['启用', '删除'];
                         }
                     }
                     this.data = val.result.records;
@@ -187,7 +192,6 @@ export class GroupPostComponent implements OnInit {
     }
 
     buttonEvent(event) {
-        console.log(event)
         if (event.names) {
             if (event.names === '注销') {
                 this.utilityService.putData(appConfig.testUrl  + appConfig.API.cancel + '/' + event.guid )
@@ -197,6 +201,9 @@ export class GroupPostComponent implements OnInit {
                             this.nznot.create('success', val.msg , val.msg);
                             this.getData();
                         },
+                        (error) => {
+                            this.nznot.create('error', error.msg , error.msg);
+                        }
                     );
             }
 
@@ -211,14 +218,21 @@ export class GroupPostComponent implements OnInit {
 
             }
 
+            if (event.names === '删除') {
+                console.log(event)
+                this.deleatData(event);
+            }
+
             if (event.names === '启用') {
                 this.utilityService.putData(appConfig.testUrl  + appConfig.API.running + '/' + event.guid )
                     .subscribe(
                         (val) => {
-                            console.log(val)
                             this.nznot.create('success', val.msg , val.msg);
                             this.getData();
                         },
+                        (error) => {
+                            this.nznot.create('error', error.msg , error.msg);
+                        }
                     );
             }
         } else {
@@ -242,7 +256,7 @@ export class GroupPostComponent implements OnInit {
             okText: '确定',
             cancelText: '取消',
             onOk: () => {
-                this.utilityService.deleatData(appConfig.testUrl + appConfig.API.postDel + '/' + event[0].guid)
+                this.utilityService.deleatData(appConfig.testUrl + appConfig.API.postDel + '/' + event.guid)
                     .subscribe(
                         (val) => {
                             this.nznot.create('success', val.msg , val.msg);
@@ -252,10 +266,12 @@ export class GroupPostComponent implements OnInit {
                                 this.getData();
                             }
                             this.getData();
+                        },
+                        (error) => {
+                            this.nznot.create('error', error.msg , error.msg);
                         });
             },
             onCancel: () => {
-                console.log('取消成功');
             }
         });
     }
@@ -318,6 +334,9 @@ export class GroupPostComponent implements OnInit {
                         this.nznot.create('success', val.msg , val.msg);
                         this.getData();
                     },
+                    (error) => {
+                        this.nznot.create('error', error.msg , error.msg);
+                    }
                 );
         } else {
             this.utilityService.putData(appConfig.testUrl  + appConfig.API.postDel, jsonOption)
@@ -326,6 +345,9 @@ export class GroupPostComponent implements OnInit {
                         this.getData();
                         this.nznot.create('success', val.msg , val.msg);
                     },
+                    (error) => {
+                        this.nznot.create('error', error.msg , error.msg);
+                    }
                 );
         }
         this.modalVisible = false;
@@ -392,6 +414,9 @@ export class GroupPostComponent implements OnInit {
                     }
                     this.empData = val.result;
                     console.log(this.empData);
+                },
+                (error) => {
+                    this.nznot.create('error', error.msg , error.msg);
                 });
     }
     // 新增方法
@@ -416,6 +441,9 @@ export class GroupPostComponent implements OnInit {
                         (val) => {
                             this.nznot.create('success', val.msg , val.msg);
                             this.getEmpList(this.postGuid); // 重新查询列表内容
+                        },
+                        (error) => {
+                            this.nznot.create('error', error.msg , error.msg);
                         });
             }
         }
@@ -455,6 +483,9 @@ export class GroupPostComponent implements OnInit {
                         console.log(val);
                         this.nznot.create('success', val.msg , val.msg);
                         this.getEmpList(this.postGuid); // 重新查询列表内容
+                    },
+                    (error) => {
+                        this.nznot.create('error', error.msg , error.msg);
                     });
         } else {
             this.nznot.create('error', '请最起码选择一个员工进行添加' , '请最起码选择一个员工进行添加');
@@ -526,6 +557,9 @@ export class GroupPostComponent implements OnInit {
                     // 重新查询岗位信息
                     this.getPostApplist();
                     this.getPostApp(); // 重新查询
+                },
+                (error) => {
+                    this.nznot.create('error', error.msg , error.msg);
                 });
     }
 
@@ -588,6 +622,9 @@ export class GroupPostComponent implements OnInit {
                     this.nznot.create('success', val.msg , val.msg);
                     this.getPostApp();
                     this.getPostApplist();
+                },
+                (error) => {
+                    this.nznot.create('error', error.msg , error.msg);
                 });
 
     }

@@ -22,7 +22,7 @@ export class DictModule {
     // 字典项来源表
     public  fromTable: string;
     // 字典项来源列
-    public  usefroKey: string;
+    public  useForKey: string;
     // 实际值
     public  defaultValue: string;
     // 记录过滤条件

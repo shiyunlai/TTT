@@ -11,8 +11,6 @@ import {NzModalService, NzNotificationService} from 'ng-zorro-antd';
   templateUrl: './timeline.component.html',
 })
 export class TimelineComponent implements OnInit {
-
-
     page: any;
     logName: string;
     infoData: any;
@@ -34,15 +32,15 @@ export class TimelineComponent implements OnInit {
     ngOnInit() {
         this.activatedRoute.queryParams.subscribe(queryParams => {
             this.infoData = JSON.parse(queryParams.logInfo);
-            this.logName = queryParams.logInfo.dictName;
+            this.logName = this.infoData.dictName;
         });
-
-        this.getInfo(JSON.parse(this.infoData.dataString));
+        this.getInfo(this.infoData.dataString);
         this.getData(this.infoData.dataGuid);
     }
 
-    // 详情信息
+    // 详情信息--- 还未做，根据后台传给我的数据变化循环改成对应的结构 渲染即可
     getInfo(event) {
+        console.log(event)
         this.dataInfo = event;
 
         for (let k in this.dataInfo) {
@@ -61,7 +59,7 @@ export class TimelineComponent implements OnInit {
                 size: this.pages.size,
             }
         };
-
+        console.log(event)
         this.utilityService.postData(appConfig.testUrl + appConfig.API.logChange + '/' + event, this.page)
             .subscribe(
                 (val) => {

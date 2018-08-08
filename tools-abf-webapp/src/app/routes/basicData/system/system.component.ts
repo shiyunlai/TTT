@@ -75,6 +75,11 @@ export class SystemComponent implements OnInit {
     page: any;
     total: number;
     configTitle: string;
+    // 表头按钮
+    buttons = [
+        {key: 'add', value: '新增系统参数'}
+    ]
+
     ngOnInit() {
         this.getData(); // 只会触发一次，但是ngchanges并不会触发咋办
         this.configTitle = '修改';
@@ -91,7 +96,9 @@ export class SystemComponent implements OnInit {
         this.utilityService.postData(appConfig.testUrl + appConfig.API.sysConfigsList, this.page)
             .subscribe(
                 (val) => {
-                    console.log(val.result)
+                    for (let i = 0; i < val.result.records.length; i++) {
+                        val.result.records[i].buttonData = ['删除'];
+                    }
                     this.data = val.result.records;
                     this.total = val.result.total;
                 }
@@ -127,6 +134,17 @@ export class SystemComponent implements OnInit {
         this.getData();
     }
 
+
+    // 右侧按钮方法
+    buttonEvent(e) {
+        if (e.names) {
+            if (e.names === '删除') {
+                this.deleatData(e);
+            }
+        }
+    }
+
+
     // 接受子组件删除的数据 单条还是多条
     deleatData(event) {
         this.modal.open({
@@ -135,11 +153,10 @@ export class SystemComponent implements OnInit {
             okText: '确定',
             cancelText: '取消',
             onOk: () => {
-                this.utilityService.deleatData(appConfig.testUrl + appConfig.API.sysConfigsDel + '/' + event[0].guid)
+                this.utilityService.deleatData(appConfig.testUrl + appConfig.API.sysConfigsDel + '/' + event.guid)
                     .subscribe(
                         (val) => {
-
-                             this.nznot.create('success', '状态码' + val.code + val.msg , val.msg);
+                             this.nznot.create('success', '状态码' + val.code , val.msg);
                             if ( !(( this.total - 1) % 10)) {
                                 // if ( !(( this.total - this.acfundata.length) % 10)) { // 支持批量删除的方法
                                 this.system.pi -- ;

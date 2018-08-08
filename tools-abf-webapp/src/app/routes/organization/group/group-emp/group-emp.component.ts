@@ -85,7 +85,10 @@ export class GroupEmpComponent implements OnInit {
         {value: '当前机构员工', key: 'orgEmp'},
         {value: '其他机构员工', key: 'orginfoEmp'},
     ];
-
+    // 表头按钮
+    buttons = [
+        {key: 'add', value: '新增员工'}
+    ]
 
     ngOnInit() {
         this.codeGroup = this.activatedRoute.snapshot.params.id; // 拿到父组件传过来的组织机构的guid来进行操作
@@ -93,7 +96,7 @@ export class GroupEmpComponent implements OnInit {
         this.gender = appConfig.Enumeration.gender;
         this.paperType = appConfig.Enumeration.paperType;
         this.empType = appConfig.Enumeration.empType;
-        this.configTitle = '删除'
+        this.configTitle = '';
         // 查询工作组详情
         this.utilityService.getData(appConfig.testUrl  + appConfig.API.omGroups + '/' + this.codeGroup)
             .subscribe(
@@ -126,11 +129,9 @@ export class GroupEmpComponent implements OnInit {
 
     // 查询机构下员工,感觉应该是查出不在当前工作组下的
     getData(orgGuid) {
-
         this.utilityService.getData(appConfig.testUrl + appConfig.API.omGroups + '/' + this.codeGroup + '/empNotIn/' + orgGuid, {})
             .subscribe(
                 (val) => {
-                    console.log(val)
                     this.searchOptions = val.result;
                 });
 
@@ -190,6 +191,9 @@ export class GroupEmpComponent implements OnInit {
                                         this.queryGroupEmp();
                                     }
                                     this.queryGroupEmp();
+                                },
+                                (error) => {
+                                    this.nznot.create('error', error.msg , error.msg);
                                 });
                     },
                     onCancel: () => {
@@ -245,6 +249,10 @@ export class GroupEmpComponent implements OnInit {
                 (val) => {
                     this.nznot.create('success', val.msg , val.msg);
                     this.modalVisible = false;
+                    this.queryGroupEmp();
+                },
+                (error) => {
+                    this.nznot.create('error', error.msg , error.msg);
                 });
 
     }

@@ -4,8 +4,11 @@
         <i class="anticon anticon-plus"></i>
         <span>新建</span>
     </button>-->
-
-
+    <div *ngIf="showAdd">
+        <button  *ngFor="let s of buttons;let l = index" style="margin-right: 1%"   nz-button  (click)="add(s.key)"  [nzType]="'primary'" [nzSize]="'large'">
+            <span>{{s.value}}</span>
+        </button>
+    </div>
 
     <!--必须选中一个的时候，即数组长度大于-的时候，才会显示这一块内容，否则不显示-->
     <ng-container *ngIf="selectedRows.length == 1 && moreData.morebutton && !showAdd">
@@ -45,7 +48,7 @@
             <label nz-checkbox [(ngModel)]="allChecked" [nzIndeterminate]="indeterminate" (ngModelChange)="checkAll($event)"></label>
         </th>
         <th *ngFor="let d of headerDate" nz-th>
-       
+
               <span>{{d.value}}</span>
         </th>
         <th nz-th>
@@ -67,10 +70,10 @@
             <!-- 利用ngClass 来完成是否可以点击跳转等行为 -->
             <span *ngIf='d.key !="viewRange"  && d.key !="manageableRange"  && d.key !="customRange" ' [ngClass]="{'active': d.isclick, 'noactive': !d.isclick}" class="active" (click)="isClick(d,i)">{{initDate[l][d.key]}}</span>
                  <span *ngIf="d.key == 'viewRange'">
-                     
-                 <nz-checkbox-group [(ngModel)]="i.viewRange" 
+
+                 <nz-checkbox-group [(ngModel)]="i.viewRange"
                     class="checkbox"
-                     (ngModelChange)="_log(checkOptionsThree)"></nz-checkbox-group> 
+                     (ngModelChange)="_log(checkOptionsThree)"></nz-checkbox-group>
                   </span>
                     <span *ngIf="d.key == 'manageableRange'">
                     <nz-checkbox-group   class="checkbox" [(ngModel)]="i.manageableRange"  (ngModelChange)="_log(checkOptionsThree)"></nz-checkbox-group>

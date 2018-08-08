@@ -79,13 +79,20 @@ export class PostComponent implements OnInit {
     orgGuid: string;
     Parentsguid: any;
     configTitle: string;
+    appConfit: string;
+
+    // 表头按钮
+    buttons = [
+        {key: 'add', value: '新增岗位'}
+    ]
+
     ngOnInit() {
         this.orgGuid = this.activatedRoute.snapshot.params.id; // 拿到父组件传过来的组织机构的guid来进行操作
         // 枚举值转换
         this.postStatus = appConfig.Enumeration.postStatus;
         this.positionType = appConfig.Enumeration.postType;
         this.getData(); // 只会触发一次，但是ngchanges并不会触发咋办
-        this.configTitle = '修改'
+        this.configTitle = '修改';
     }
 
     getData() { // 初始化请求后台数据
@@ -100,7 +107,6 @@ export class PostComponent implements OnInit {
             .subscribe(
                 (val) => {
                     this.Parentsguid = val.result;
-                    console.log(this.Parentsguid)
                     sessionStorage.setItem('post', JSON.stringify(val.result));
                 });
 
@@ -182,12 +188,16 @@ export class PostComponent implements OnInit {
                             this.nznot.create('success', val.msg , val.msg);
                             this.getData();
                         },
+                        (error) => {
+                            this.nznot.create('error', error.msg , error.msg);
+                        }
                     );
             }
 
             if (event.names === '应用权限') {
                 this.showAdd = true; // 没有新增
                 this.postName = event.postName;
+                this.appConfit = '';
                 this.postGuid = event.guid;
                 this.modelSelect = false; // 打开弹出框
                 this.empdistribution = true; // 弹出在岗员工数代码
@@ -203,6 +213,9 @@ export class PostComponent implements OnInit {
                             this.nznot.create('success', val.msg , val.msg);
                             this.getData();
                         },
+                        (error) => {
+                            this.nznot.create('error', error.msg , error.msg);
+                        }
                     );
             }
         } else {
@@ -236,7 +249,10 @@ export class PostComponent implements OnInit {
                                 this.getData();
                             }
                             this.getData();
+                        }, (error) => {
+                            this.nznot.create('error', error.msg , error.msg);
                         });
+
             },
             onCancel: () => {
                 console.log('取消成功');
@@ -295,10 +311,12 @@ export class PostComponent implements OnInit {
                 this.utilityService.postData(appConfig.testUrl  + appConfig.API.postChild, jsonOption)
                     .subscribe(
                         (val) => {
-                            console.log(val)
                             this.nznot.create('success', val.msg , val.msg);
                             this.getData();
                         },
+                        (error) => {
+                            this.nznot.create('error', error.msg , error.msg);
+                        }
                     );
             } else { // 调用父岗位接口
                 this.utilityService.postData(appConfig.testUrl  + appConfig.API.postRoot, jsonOption)
@@ -307,6 +325,9 @@ export class PostComponent implements OnInit {
                             this.nznot.create('success', val.msg , val.msg);
                             this.getData();
                         },
+                        (error) => {
+                            this.nznot.create('error', error.msg , error.msg);
+                        }
                     );
             }
 
@@ -318,6 +339,9 @@ export class PostComponent implements OnInit {
                         this.getData();
                         this.nznot.create('success', val.msg , val.msg);
                     },
+                    (error) => {
+                        this.nznot.create('error', error.msg , error.msg);
+                    }
                 );
         }
         this.modalVisible = false;
@@ -445,6 +469,9 @@ export class PostComponent implements OnInit {
                         this.nznot.create('success', val.msg , val.msg);
 
                         this.getEmpList(this.postGuid); // 重新查询列表内容
+                    },
+                    (error) => {
+                        this.nznot.create('error', error.msg , error.msg);
                     });
         } else {
             this.nznot.create('error', '请最起码选择一个员工进行添加' , '请最起码选择一个员工进行添加');

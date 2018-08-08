@@ -45,7 +45,9 @@ export class ListComponent implements OnInit {
     @Input() // 输入属性,数据总条数
     total: number;
     @Input() // 输入属性,接受父组件传入的数据
-    showAdd: true;
+    showAdd = true;
+    @Input() // 输入属性,接受父组件传入的表头按钮
+    buttons = true;
     @Input() // 输入属性,接受父组件传入的数据
     configTitle: string;
     @Input()
@@ -84,7 +86,6 @@ export class ListComponent implements OnInit {
         this.headerDate = this.headerDate;
         this.moreData = this.moreData; // 绑定更多数据
         this.loading = true;
-        
     }
 
 

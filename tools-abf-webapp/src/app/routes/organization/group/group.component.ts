@@ -227,6 +227,9 @@ export class GroupComponent implements OnInit {
                             this.nznot.create('success', val.msg , val.msg);
                             this.getData(this.groupData);
                         },
+                        (error) => {
+                            this.nznot.create('error', error.msg , error.msg);
+                        }
                     );
             } else {
                 jsonOption.guidParents = this.groupData.guid;
@@ -236,6 +239,9 @@ export class GroupComponent implements OnInit {
                             this.nznot.create('success', val.msg , val.msg);
                             this.getData(this.groupData);
                         },
+                        (error) => {
+                            this.nznot.create('error', error.msg , error.msg);
+                        }
                     );
             }
         } else {
@@ -246,6 +252,9 @@ export class GroupComponent implements OnInit {
                         this.getData(this.groupData.parent);
 
                     },
+                    (error) => {
+                        this.nznot.create('error', error.msg , error.msg);
+                    }
                 );
         }
         this.modalVisible = false;
@@ -267,6 +276,9 @@ export class GroupComponent implements OnInit {
                             this.nznot.create('success', val.msg , val.msg);
 
                         },
+                        (error) => {
+                            this.nznot.create('error', error.msg , error.msg);
+                        }
                     );
             },
             onCancel: () => {

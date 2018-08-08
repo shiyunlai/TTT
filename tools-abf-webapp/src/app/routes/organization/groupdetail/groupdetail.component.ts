@@ -120,6 +120,9 @@ export class GroupdetailComponent implements OnInit {
                         (val) => {
                             this.nznot.create('success', val.msg , val.msg);
                             this.getInit();
+                        },
+                        (error) => {
+                            this.nznot.create('error', error.msg , error.msg);
                         });
             },
             onCancel: () => {
@@ -128,6 +131,9 @@ export class GroupdetailComponent implements OnInit {
                         (val) => {
                             this.nznot.create('success', val.msg , val.msg);
                             this.getInit();
+                        },
+                        (error) => {
+                            this.nznot.create('error', error.msg , error.msg);
                         });
             }
         });
@@ -141,6 +147,9 @@ export class GroupdetailComponent implements OnInit {
                     console.log(val)
                     this.nznot.create('success', val.msg , val.msg);
                     this.getInit();
+                },
+                (error) => {
+                    this.nznot.create('error', error.msg , error.msg);
                 });
     }
 }

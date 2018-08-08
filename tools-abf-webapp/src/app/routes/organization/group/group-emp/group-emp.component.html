@@ -1,6 +1,5 @@
 <!--  form表单搜索 -->
 <!--<form nz-form (ngSubmit)="search()" [nzLayout]="'inline'">
-
     <div nz-row  [nzType]="'flex'" [nzJustify]="'start'" [nzGutter]="24">
         <div nz-col [nzSpan]="8" class="mb-md">
             <div nz-form-item class="d-flex">
@@ -79,6 +78,7 @@
           (selectedRow)="selectedRow($event)"
           (isActive)="isActive($event)"
           [initDate] = "data"
+          [buttons] = 'buttons'
           [headerDate] = "headerData"
           [moreData] = "moreData"
           [configTitle]="configTitle"
@@ -86,7 +86,7 @@
 <!--引入列表组件-->
 
 <!--新增员工弹出框信息-->
-<nz-modal [nzVisible]="modalVisible"  [nzWidth]="1024" [nzTitle]="'工作组添加员工'"  [nzConfirmLoading]="loading" [nzContent]="modalContent"
+<nz-modal [nzVisible]="modalVisible"  [nzWidth]="1024" [nzTitle]="'工作组添加员工'"  [nzConfirmLoading]="loading" [nzFooter]="modalFooter"  [nzContent]="modalContent"
           (nzOnCancel)="modalVisible=false" (nzOnOk)="save()">
     <ng-template #modalContent>
         <div style="margin-top: 10px" nz-row  [nzType]="'flex'" [nzJustify]="'start'" [nzGutter]="24">

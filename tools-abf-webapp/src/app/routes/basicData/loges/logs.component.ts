@@ -59,6 +59,7 @@ export class LogsComponent implements OnInit {
     test: string;
     page: any;
     total: number;
+    pageIndex: number; // 当前页数
     ngOnInit() {
         this.getData(); // 只会触发一次，但是ngchanges并不会触发咋办\
         this.showAdd = true;
@@ -79,7 +80,7 @@ export class LogsComponent implements OnInit {
             .subscribe(
                 (val) => {
                     this.data = val.result.records;
-                    console.log(val.result.records);
+                    this.pageIndex = val.result.current;
                     this.total = val.result.total;
                 }
             );

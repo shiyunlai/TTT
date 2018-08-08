@@ -36,13 +36,35 @@
                     </div>
                 </div>
             </form>
-            <app-list #list  (addCreat)="addHandler($event)"  [configTitle]="configTitle" [total]="total" (buttonData)="buttonDataHandler($event)"  (pageNumber)="monitorHandler($event)"  (deleatData)="deleatData($event)"  (isActive)="isActive($event)"  (selectedRow)="selectedRow($event)" [initDate] = "data" [headerDate] = "headerData"  [moreData] = "moreData">
+            <app-list #list
+                      (addCreat)="addHandler($event)"
+                      [configTitle]="configTitle"
+                      [total]="total"
+                      (buttonEvent) = "buttonEvent($event)"
+                      (buttonData)="buttonDataHandler($event)"
+                      (pageNumber)="monitorHandler($event)"
+                      (isActive)="isActive($event)"
+                      (selectedRow)="selectedRow($event)"
+                      [initDate] = "data"
+                      [headerDate] = "headerData"
+                      [moreData] = "moreData"
+                      [buttons] = 'buttons'
+            >
             </app-list>
         </p-card>
     </div>
     <div class="ui-g-6">
         <p-card  [style]="{width: '100%'}" *ngIf="treeshow">
-            <app-tree [initDate] = "treedata" [nodrop] = "nodrop" [searchTitle] = "searchTitle"  [itemsData]="treemenus"  (Select)="TreeSelect($event)"   (MenuSelect)="RightSelect($event)"   (dropEvent)="dropEvent($event)" (serchValue)="searchVal($event)"  (develop)="Unfold($event)"></app-tree>
+            <app-tree [initDate] = "treedata"
+                      [nodrop] = "nodrop"
+                      [searchTitle] = "searchTitle"
+                      [itemsData]="treemenus"
+                      (Select)="TreeSelect($event)"
+                      (MenuSelect)="RightSelect($event)"
+                      (dropEvent)="dropEvent($event)"
+                      (serchValue)="searchVal($event)"
+                      [selectionType]='selectionType'
+                      (develop)="Unfold($event)"></app-tree>
         </p-card>
     </div>
 </div>
@@ -136,7 +158,7 @@
                 <div nz-form-item class="d-flex">
                     <div nz-form-label><label for="usefroKey">作为字典项名称的列</label></div>
                     <div nz-form-control class="flex-1">
-                        <nz-input [(ngModel)]="dictAdd.usefroKey" name="usefroKey" [nzSize]="'large'" [nzPlaceHolder]="'作为字典项名称的列'" nzId="usefroKey"></nz-input>
+                        <nz-input [(ngModel)]="dictAdd.useForKey" name="useForKey" [nzSize]="'large'" [nzPlaceHolder]="'作为字典项名称的列'" nzId="useForKey"></nz-input>
                     </div>
                 </div>
             </div>
@@ -182,7 +204,7 @@
                 </div>
             </div>
 
-            <div nz-col [nzSpan]="12" class="mb-md">
+            <div nz-col [nzSpan]="24" class="mb-md">
                 <div nz-form-item class="d-flex">
                     <div nz-form-label><label for="itemName">字典项名称:</label></div>
                     <div nz-form-control class="flex-1">

@@ -28,8 +28,7 @@ export class EmpComponent implements OnInit {
     emp: EmpModule = new EmpModule();
     empAdd: EmpModule = new EmpModule();
 
-    ifshow: boolean = true;
-
+    ifshow = true;
     gender: any;
     page: any;
 
@@ -46,7 +45,10 @@ export class EmpComponent implements OnInit {
     paperType: any;
     loading = false;
     obtitle: string; // 窗口状态
-
+    // 表头按钮
+    buttons = [
+        {key: 'add', value: '新增员工'}
+    ]
     type = [
         { text: '正常', value: false, key: 'normal' },
         { text: '挂起', value: false, key: 'hang' },
@@ -439,6 +441,9 @@ export class EmpComponent implements OnInit {
                             this.onboarding = false; // 关闭入职弹出框
                             this.getData();
                         },
+                        (error) => {
+                            this.nznot.create('error', error.msg , error.msg);
+                        }
                     );
             }
 
@@ -461,6 +466,9 @@ export class EmpComponent implements OnInit {
                     this.departure = false; // 关闭离职弹出框
                     this.getData();
                 },
+                (error) => {
+                    this.nznot.create('error', error.msg , error.msg);
+                }
             );
     }
 

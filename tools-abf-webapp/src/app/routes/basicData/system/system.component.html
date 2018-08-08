@@ -74,9 +74,19 @@
         </div>
     </form>
     <!--列表组件-->
-    <app-list #child [initDate]="data" (addCreat)="addHandler($event)" (buttonData)="buttonDataHandler($event)" (pageNumber)="monitorHandler($event)"
-              (deleatData)="deleatData($event)" [configTitle]="configTitle"  (isActive)="isActive($event)" (selectedRow)="selectedRow($event)" [headerDate]="headerData"
-              [moreData]="moreData" [total]="total"></app-list>
+    <app-list #child [initDate]="data"
+              (addCreat)="addHandler($event)"
+              (buttonData)="buttonDataHandler($event)"
+              (pageNumber)="monitorHandler($event)"
+              (buttonEvent) = "buttonEvent($event)"
+              (deleatData)="deleatData($event)"
+              [configTitle]="configTitle"
+              (isActive)="isActive($event)"
+              (selectedRow)="selectedRow($event)"
+              [headerDate]="headerData"
+              [buttons] = 'buttons'
+              [moreData]="moreData"
+              [total]="total"></app-list>
 </nz-card>
 
 
