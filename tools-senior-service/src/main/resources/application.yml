@@ -30,9 +30,9 @@ spring:
 # :::::: mybatis-plus ::::::
 
 mybatis-plus:
-  mapper-locations: classpath*:org/tis/senior/module/**/dao/mapping/*.xml
-  typeAliasesPackage: org.tis.senior.module.*.entity
-  typeEnumsPackage: org.tis.senior.module.*.entity.enums
+  mapper-locations: classpath*:org/tis/tools/senior/module/**/dao/mapping/*.xml
+  typeAliasesPackage: org.tis.tools.senior.module.*.entity
+  typeEnumsPackage: org.tis.tools.senior.module.*.entity.enums
   global-config:
     id-type: 0
     field-strategy: 2
@@ -59,10 +59,9 @@ spring:
       charset: UTF-8
   profiles: dev
   datasource:
-    url: jdbc:mysql://${tis.senior.ip}:3306/senior?autoReconnect=true&useUnicode=true&characterEncoding=utf8
-    &zeroDateTimeBehavior=convertToNull&useSSL=false
+    url: jdbc:mysql://localhost:3306/senior?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false
     username: root
-    password: 111111
+    password: root
   messages:
     encoding: utf-8
 
