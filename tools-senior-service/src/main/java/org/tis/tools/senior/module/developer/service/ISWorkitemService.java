@@ -123,6 +123,11 @@ public interface ISWorkitemService extends IService<SWorkitem>  {
      */
     ProjectDetail selectProjects(String guid) throws SVNException;
 
+    /**
+     * 验证投放按钮是否显示
+     * @param guidWorkitem
+     * @return
+     */
     boolean selectStandardListByGuid(Integer guidWorkitem);
 }
 
