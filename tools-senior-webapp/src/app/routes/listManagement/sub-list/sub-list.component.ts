@@ -128,7 +128,7 @@ export class SubListComponent implements OnInit {
         this.utilityService.getData(appConfig.testUrl  + appConfig.API.sWorkitem + '/' + event + '/isOpen', {}, {Authorization: this.token})
             .subscribe(
                 (val) => {
-                    if(val.result.isOpen === false) {
+                    if (val.result.isOpen === false) {
                         this.selectApply = false; // 投放和补录按钮按钮隐藏
                     } else {
                         this.selectApply = true; // 显示
