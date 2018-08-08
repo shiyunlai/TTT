@@ -9,7 +9,7 @@ import { DA_SERVICE_TOKEN, ITokenService } from '@delon/auth';
 import * as moment from 'moment';
 import {ProductModule} from '../../../../service/delivent/projectModule';
 import {SbranchModule} from '../../../../service/delivent/sbranchModule';
-
+import * as _ from 'lodash';
 
 @Component({
     selector: 'app-s-branch',
@@ -25,42 +25,32 @@ export class SBranchComponent implements OnInit {
                 private confirmServ: NzModalService
                 ) {
     }
-    branch: SbranchModule = new  SbranchModule();
 
+    // 变量
+    branch: SbranchModule = new SbranchModule();
     token: any;
     showAdd = true;
     isShowTotal = true;
     isPagination = true;
-    ptitle:any
-    // showTa
-    ngOnInit() {
-        this.token = this.tokenService.get().token;
-        this.getData();
-        // this.showAdd = true;
-        this.ptitle = '信息提示'
-
-    }
+    ptitle: any;
 
     data: any[] = []; // 表格数据
     headerDate = [  // 配置表头内容
         {value: '分支类型', key: 'branchType', isclick: true},
-        {value: '代码全路径', key: 'fullPathstr', isclick: false},
+        {value: '代码全路径', key: 'fullPathstr', isclick: false,title:true},
         {value: '创建人', key: 'creater', isclick: false},
         {value: '创建时间', key: 'createTime', isclick: false},
         {value: '分支作用说明', key: 'branchForstr', isclick: false},
-        // {value: '分支当前版本', key: 'currVersion', isclick: false},
-        // {value: '分支起始版本', key: 'lastVersion', isclick: false},
     ];
     total: number;
     pageTotal: number;
     detailsVisible = false
     details: any[] = [];
     mergeVisible = false;
-      buttons = [
+    buttons = [
         {key: 'add', value: '补录', if: true},
     ]
     buttonData = [
-        // {key: 'details', value: '详情'},
         {key: 'dels', value: '删除'},
         {key: 'upd', value: '修改'}
     ];
@@ -70,15 +60,21 @@ export class SBranchComponent implements OnInit {
         {key: 'release', value: 'R' ,selector:false},
     ]
     search = {
-        branchType:'',
-        fullPath:'',
-        branchFor:''
+        branchType: '',
+        fullPath: '',
+        branchFor: ''
     };
     page = '1'
     pageIndex = 1
+
+    ngOnInit() {
+        this.token = this.tokenService.get().token;
+        this.getData();
+        this.ptitle = '信息提示';
+    }
     getData(type?) {
-        if(type == 'search'){
-              this.page = '1'
+        if (type === 'search') {
+              this.page = '1';
            }
             const page = {
                 condition: this.search,
@@ -89,84 +85,66 @@ export class SBranchComponent implements OnInit {
                     asc: false
                 }
             };
-            console.log(page);
-
             this.utilityService.postData(appConfig.testUrl + appConfig.API.sBranch, page, {Authorization: this.token})
-                .map(res => res.json())
                 .subscribe(
                     (val) => {
-                        if (val.code == 200) {
+                      
+                        if (val.code === '200') {
                             this.data = val.result.records;
                             this.total = val.result.total; // 总数
                             this.pageTotal = val.result.pages * 10; // 页码
                             this.pageIndex = val.result.current;
-                            let star = '';
-                            let end = '';
-                            let str = ''
                             for (let i = 0 ; i <  this.data.length; i ++) {
-                                this.data[i].branchTypeText =  this.data[i].branchType
-                                console.log(this.data[i].fullPath.length)
-                                if(this.data[i].fullPath.length > 100){
-                                   star = this.data[i].fullPath.substr(0,40)
-                                   end = this.data[i].fullPath.substr(this.data[i].fullPath.length - 40)
-                                      this.data[i].fullPathstr = star + '...' + end;
-                                }else{
-                                     this.data[i].fullPathstr = this.data[i].fullPath
+                                this.data[i].branchTypeText =  this.data[i].branchType;
+                               this.data[i].branchForstr = this.data[i].branchFor;
+                                this.data[i].fullPathstr = this.data[i].fullPath;
+                                this.data[i].itemName = this.data[i].fullPath;
+                                if (this.data[i].fullPath.length > 100) {
+                                   this.data[i].fullPathstr = appConfig.subString(this.data[i].fullPath, 40);
                                 }
-                                 if(this.data[i].branchFor.length > 20){
-
-                                   star = this.data[i].branchFor.substr(0,5)
-                                   end = this.data[i].branchFor.substr(this.data[i].branchFor.length - 5)
-                                      this.data[i].branchForstr = star + '...' + end;
-
-                                }else{
-                                       this.data[i].branchForstr = this.data[i].branchFor
+                                 if (this.data[i].branchFor.length > 20){
+                                      this.data[i].branchForstr = appConfig.subString(this.data[i].branchForstr, 5);
                                 }
-
-
                                 this.data[i].buttonData = this.buttonData;
                                this.data[i].createTime = moment(this.data[i].createTime).format('YYYY-MM-DD');
-
-
                           }
-
-                        }else{
-                         this.nznot.create('error',val.msg,'');
+                        }else {
+                         this.nznot.create('error', val.msg, '');
                         }
-
                     },
-                (error)=>{
-                    if(error){
-                          this.nznot.create('error', error.json().msg,'');
-                    }
+                (error) => {
+                    this.nznot.create('error', error.msg, '');
+
                 }
                 );
     }
 
     monitorHandler(event) {
         this.page = event;
-          this.getData();
+            if(event > 1){
+            this.getData();
+        }
+     
     }
 
     // 接受子组件删除的数据 单条还是多条
     deleatData(event) {
 
     }
-    checkTrue(){
+    checkTrue() {
 
     }
 
     // 顶部按钮
 
     addHandler(event) {
-        console.log(this.branch)
-
         if (event === 'add') {
             this.tag = '验证'
              this.branch = new  SbranchModule();
-             console.log()
+              this.isShowbranch = true
+
               this.detailsVisible = true;
-              this.ptitle = '补录分支'
+              this.ptitle = '补录分支';
         }
     }
     // 按钮点击事件
@@ -181,11 +159,11 @@ export class SBranchComponent implements OnInit {
       showConfirmLoading: true,
       onOk() {
             self.utilityService.deleatData(appConfig.testUrl  + appConfig.API.sBranchadd +'/'+ obj, {Authorization: self.token})
-                  .map(res => res.json())
+                  // .map(res => res.json())
                 .subscribe(
                     (val) => {
                         let arr = [];
-                      if(val.code == 200) {
+                      if (val.code === '200') {
 
                               if ( !(( self.total - 1) % 10)) {
                                         self.pageTotal = self.pageTotal - 10 ;
@@ -199,7 +177,7 @@ export class SBranchComponent implements OnInit {
                         }
             }   ,
                 (error) => {
-                    self.nznot.create('error', error.msg,error.msg);
+                    self.nznot.create('error', error.msg, error.msg);
                 }
 
                 );
@@ -212,136 +190,113 @@ export class SBranchComponent implements OnInit {
 
 
         } else if (event.names.key === 'upd') {
-            let a = event
-            this.detailsVisible = true;
-                 this.branch = event;   
-                 this.branchType.forEach(i=>{
-                            console.log(i)
-                            if(  this.branch.branchType == i.key) {
+                 this.branch =  new SbranchModule();
+                 this.detailsVisible = true;
+                 this.branch = _.cloneDeep(event);;
+                 this.branchType.forEach(i => {
+                            if ( this.branch.branchType === i.key) {
                                  this.branch.branchType = i.value;
                             }
                  })
-            this.ptitle = '修改分支'
-          
-            
+                 this.ptitle = '修改分支';
+
+
         }  else if (event.names.key === 'details') {
           this.detailsVisible = true
-            this.utilityService.getData(appConfig.testUrl  + appConfig.API.sBranchadd +'/'+ obj,{}, {Authorization: this.token})
-                .map(res => res.json())
+            this.utilityService.getData(appConfig.testUrl  + appConfig.API.sBranchadd + '/' + obj,{}, {Authorization: this.token})
                 .subscribe(
                     (val) => {
-                        console.log(val);
                         this.details = val.result;
                     },
-                (error)=>{
-                    if(error){
-                          this.nznot.create('error', error.json().msg,'');
-                         
+                    (error) => {
+                      this.nznot.create('error', error.msg, '');
                     }
-                }
                 );
         }
 
     }
-    isShowbranch:boolean;
-    checkmsg:any;
+    isShowbranch: boolean;
+    checkmsg: any;
     tag = '验证';
-       checkversion(item){
-           
-          if(this.tag == '通过'){
+       checkversion(item) {
+          
+          if (this.tag === '通过') {
               return;
           }
-           console.log(item)
          this.utilityService.postData(appConfig.testUrl  + appConfig.API.sBranchadd +'/'+ 'path',{svnUrl:item}, {Authorization: this.token})
-                .map(res => res.json())
                 .subscribe(
                     (val) => {
-                        console.log(val);
-                        if(val.code == 200){
+
+                        if (val.code === '200') {
                            this.branch.lastVersion = val.result;
                            this.isShowbranch = true
-                           this.tag = '通过'
+                           this.tag = '通过';
                         }
                     },
-                (error)=>{
-                    if(error){
-                          this.isShowbranch = false
-                          this.checkmsg = error.json().msg;
+                (error) => {
+                       this.isShowbranch = false
                             this.tag = '验证'
-                        //   this.nznot.create('error', error.json().msg,'');
-                            this.nznot.html("<strong>自定义通知栏内HTML</strong><br><p style='width:300px;word-break:normal;white-space:pre-warp;word-wrapL:break-word;'>"+error.json().msg+"</p>");
-                    }
+                             this.branch.lastVersion = ''
+                           this.nznot.create('error', error.msg, '');
                 }
                 );
         }
-        checkagin(item){
-         
+        checkagin(item) {
+
                 this.tag = '验证'
-           
+           this.isShowbranch = true;
         }
 
-change(){
-    this.getData()
-    this.detailsVisible=false
-}
-
-    addsubmit(){
-
-
+    change(){
+        this.getData()
+        this.detailsVisible = false
+    }
+     reset() {
+       this.search = {
+                    branchType: '',
+                    fullPath: '',
+                    branchFor: ''
+                };
+       this.getData('search');
+     }
+    addsubmit() {
         let obj = this.branch;
-        console.log(this.branch)
-          if(!obj.branchFor||!obj.fullPath||!obj.branchFor||!obj.lastVersion){
-             this.nznot.create('error', '请输入完整的信息！','');
+          if(!obj.branchFor || !obj.fullPath || !obj.branchFor || !obj.lastVersion){
+             this.nznot.create('error', '请输入完整的信息！', '');
              return;
           }
 
         if ( !obj.guid ) {
-              this.utilityService.postData(appConfig.testUrl  + appConfig.API.sBranchadd ,obj, {Authorization: this.token})
-            .map(res => res.json())
+              this.utilityService.postData(appConfig.testUrl  + appConfig.API.sBranchadd , obj, {Authorization: this.token})
            .subscribe(
             (val) => {
-                console.log(this.branch);
-            
-             if(val.code == 200) {
+             if (val.code === '200') {
                    this.getData();
                   this.detailsVisible = false;
-               
-
                   this.nznot.create('success', val.msg, val.msg);
              }else {
                 this.nznot.create('error', '异常', '异常');
              }
             }   ,
-                (error)=>{
-                    if(error){
-                          this.nznot.create('error', error.json().msg,'');
-                    }
+                (error) => {
+                this.nznot.create('error', error.msg, '');
                 }
 
         );
     }else {
-
-                  console.log(this.branch);
-
-             this.utilityService.putData(appConfig.testUrl  + appConfig.API.sBranchadd, obj,{Authorization: this.token})
-      .map(res => res.json())
+    this.utilityService.putData(appConfig.testUrl  + appConfig.API.sBranchadd, obj,{Authorization: this.token})
         .subscribe(
             (val) => {
-
-             if(val.code == 200) {
+             if (val.code === '200') {
                 this.getData();
-
-                  console.log(this.branch);
                   this.detailsVisible = false;
                   this.nznot.create('success', val.msg, val.msg);
              }else {
                 this.nznot.create('error', '异常', '异常');
              }
             }   ,
-                (error)=>{
-                    if(error){
-                          this.nznot.create('error', error.json().msg,'');
-                    }
+                (error) => {
+                     this.nznot.create('error', error.msg, '');
                 }
 
         );

@@ -9,6 +9,9 @@ import { environment } from '@env/environment';
 import { UtilityService } from '../../../service/utils.service';
 import {NzModalService, NzNotificationService} from 'ng-zorro-antd';
 import { appConfig} from '../../../service/common';
+import { MenuService, TitleService } from '@delon/theme';
+import { HttpClient } from '@angular/common/http';
+import { zip } from 'rxjs/observable/zip';
 
 @Component({
     selector: 'passport-login',
@@ -28,6 +31,8 @@ export class UserLoginComponent implements OnDestroy {
         public msg: NzMessageService,
         private settingsService: SettingsService,
         private socialService: SocialService,
+        private menuService: MenuService,
+        private httpClient: HttpClient,
         // 自身方法
         private utilityService: UtilityService,
         private modal: NzModalService,
@@ -90,9 +95,7 @@ export class UserLoginComponent implements OnDestroy {
             userId: this.userName.value,
             password : this.password.value
         };
-
         this.utilityService.postData(appConfig.testUrl  + appConfig.API.login, obj)
-            .map(res => res.json())
             .subscribe(
                 (val) => {
                     if (val.code === '200') {
@@ -102,7 +105,20 @@ export class UserLoginComponent implements OnDestroy {
                         this.tokenService.set({
                             token: val.result.token,
                             name: val.result.userInfo.svnUser,
+                            role: val.result.userInfo.role
                         });
+                        // 区分菜单
+                        this.utilityService.getData('assets/app-data.json')
+                            .subscribe(
+                                (menu) => {
+                                    if (val.result.userInfo.role === '开发组') {
+                                        this.menuService.add(menu.devMenu); // 所有权限菜单
+                                    } else {
+                                        this.menuService.add(menu.menu); // 所有权限菜单
+                                    }
+                                }
+                            )
+
                         this.router.navigate(['/']);
                     }
                 },

@@ -66,7 +66,7 @@
 
     <app-list #child [initDate]="data" [configTitle]="configTitle"  [showAdd]="showAdd" [isPagination]="isPagination" [isShowTotal]="isShowTotal"  [buttons] ='buttons' (addCreat)="addHandler($event)" (buttonData)="buttonDataHandler($event)" (pageNumber)="monitorHandler($event)"
               (deleatData)="deleatData($event)" (isActive)="isActive($event)" (buttonEvent)="buttonEvent($event)" (selectedRow)="selectedRow($event)" [headerDate]="headerDate"
-              [moreData]="moreData" [total]="total" (getStatus)="getStatus($event)" [switch]="switch" [pageTotal] = 'pageTotal'></app-list>
+              [moreData]="moreData" [total]="total" (getStatus)="getStatus($event)" [switch]="switch" [pageindex]='pageIndex'  [pageTotal] = 'pageTotal'></app-list>
 </nz-card>
 
 
@@ -196,10 +196,21 @@
 
                 <div nz-col [nzSpan]="24" class="mb-md">
                     <div nz-form-item class="d-flex">
-                        <div nz-form-label nz-col [nzSpan]="8"><label for="name">   主机IP</label></div>
+                        <div nz-form-label nz-col [nzSpan]="8"><label for="name">主机IP</label></div>
                         <div nz-form-control class="flex-1">
                             <nz-input [(ngModel)]="profiles.hostIp" name="hostIp" [nzSize]="'large'" (ngModelChange)="checkIp(profiles.hostIp)" [nzPlaceHolder]="'请输入该环境部署服务的IP'" nzId="hostIp"></nz-input>
                             <nz-alert *ngIf='isShowIp == true' nzBanner nzMessage="你输入的IP地址不合法！"></nz-alert>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div nz-col [nzSpan]="24" class="mb-md">
+                    <div nz-form-item class="d-flex">
+                        <div nz-form-label nz-col [nzSpan]="8"><label for="name">流水标志</label></div>
+                        <div nz-form-control class="flex-1">
+                            <nz-input [(ngModel)]="profiles.serialTag" name="serialTag" [nzSize]="'large'" (ngModelChange)="checkserialTag(profiles.serialTag)" [nzPlaceHolder]="'请输入该环境部署服务的流水标志'" nzId="serialTag"></nz-input>
+                            <nz-alert *ngIf='isShowserialTag == true' nzBanner nzMessage="你输入的流水标志不合法！"></nz-alert>
                         </div>
                     </div>
                 </div>

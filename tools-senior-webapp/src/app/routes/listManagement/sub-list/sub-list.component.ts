@@ -4,7 +4,6 @@ import {UtilityService} from '../../../service/utils.service';
 import {appConfig} from '../../../service/common';
 import {NzModalService, NzNotificationService} from 'ng-zorro-antd';
 import {Router} from '@angular/router';
-import { MergelistModuleergeList} from '../../../service/delivent/mergelistModule';
 import { SettingsService } from '@delon/theme';
 import { DA_SERVICE_TOKEN, ITokenService } from '@delon/auth';
 import * as moment from 'moment';
@@ -26,30 +25,20 @@ export class SubListComponent implements OnInit {
         @Inject(DA_SERVICE_TOKEN) private tokenService: ITokenService, // 依赖注入 注入token
     ) { }
 
+    // 变量
     loading = false;
     search: any;
-    workItmseach: any;
-    workItm = [
-        {key: '001', value: '1618项目组'},
-        {key: '002', value: 'TWS项目组'},
-        {key: '003', value: 'RTS项目组'}
-    ];
-
     title: '请输入工作组代码';
     active: boolean;
     reset: boolean;
     isPagination: boolean;
-    textList: any;
     token: any; // 保存token信息
-    bransguid: string;
-    isShowTotalhead = false
+    bransguid: string
     deliveryTime: any; // 投放时间
     deliveryName: string; // 投放别名
-    mergeilsItem: MergelistModuleergeList = new MergelistModuleergeList();
     workItem: any; // 工作组List
     workItemInfo: any; // 工作组详情
     branchDetail: any; // 分支信息
-    deleteId: string;
     splicingObj: any; //  拼接的数据
     elementScice: any; // 环境数据
     infoVisible = false; //  弹出框默认关闭
@@ -58,17 +47,26 @@ export class SubListComponent implements OnInit {
     copysplicingObj: any; // 复制的数据 用来页面展示
     copytextList: any; // 复制的数据 用来页面展示
     isGou = false; // 默认是没有勾选的
-    userName: string;
-    itemName: string;
+    userName: string; // 用户名称
+    itemName: string; // 工作组名称
     ifActive: boolean; // 是否请求成功
-    copyinfos: any;
-    isShowTotal  = true;
+    copyinfos: any; // 拷贝的信息
+    isShowTotal  = true; // 是否显示总数
     appendTitle: string; // 弹窗名称
     appendSelect: any; // 可追加的环境和方法
     selectApply = false; // 环境按钮
-    stashList: any;
 
-    initData: any;
+    data: any[] = []; // 表格数据
+    showAdd: boolean;
+    test: string; // 测试
+    page: any; // 分页传参格式
+    total: number; // 总数
+    modalVisible = false; // 投放申请弹框
+    textcssList: any; // 修改的申请列表
+    stashList: any; // 修改未投放的列表
+    detailInfo: any; // 投放之后的详情
+    profiles: any; // 提申请合并数组
+
     ngOnInit() {
         this.active = false;
         this.reset = false;
@@ -79,7 +77,6 @@ export class SubListComponent implements OnInit {
         this.copysplicingObj.dliveryAddRequest.profiles = [];
         this.copysplicingObj.deliveryList = [];
     }
-
 
 
     // 调用初始化工作项信息
@@ -95,14 +92,15 @@ export class SubListComponent implements OnInit {
             );
     }
 
-
+    // 只要打开就调用工作项信息
     openChange() {
         this.getworkData(); // 调用工作项信息
     }
 
+
     // 下拉框选择
     checkSelect(event) {
-        for (var i = 0; i < this.workItem.length; i ++ ) {
+        for ( var i = 0; i < this.workItem.length; i ++ ) {
             if (this.workItem[i].guid === event) {
                 this.workItemInfo = this.workItem[i];
             }
@@ -124,11 +122,11 @@ export class SubListComponent implements OnInit {
                 (src) => {
                     this.active = false; // 显示清单整理按钮
                     this.reset = false; // 分支信息关闭
-                    this.nznot.create('error', JSON.parse(src._body).code , JSON.parse(src._body).msg);
+                    this.nznot.create('error', src.code , src.msg);
                     this.selectApply = false; // 投放和补录按钮按钮隐藏
                 }
             );
-        this.getcheckOptionOne(event);
+        this.getcheckOptionOne(this.workItemInfo.guid); // 调用清单
         this.reset  = false;
     }
 
@@ -145,8 +143,6 @@ export class SubListComponent implements OnInit {
 
     }
 
-    data: any[] = []; // 表格数据
-    showAdd: boolean;
     // 传入按钮层
     moreData = {
         morebutton: true,
@@ -155,17 +151,6 @@ export class SubListComponent implements OnInit {
         ]
     }
 
-    test: string;
-    page: any;
-    total: number;
-
-    modalVisible = false; // 投放申请弹框
-
-    textcssList: any;
-
-    calculatedArray: any; // 合计的数组
-
-    detailInfo: any; // 投放之后的详情
     // 数组转换特定格式
     arrarObj(event) {
         let listArray = [];
@@ -179,14 +164,12 @@ export class SubListComponent implements OnInit {
         return listArray;
     }
 
-    // 截取字符串
-
+    // 初始化list
     getData() {
         // 请求信息
         this.utilityService.getData(appConfig.testUrl  + appConfig.API.sDeliveryList + '/'+ this.bransguid + '/history', {}, {Authorization: this.token})
             .subscribe(
                 (val) => {
-                    console.log(val)
                     this.loading = false;
                     this.reset = true; // 打开右侧内容
                     this.textcssList = val.result.deliveryDetail;
@@ -271,28 +254,23 @@ export class SubListComponent implements OnInit {
                 },
                 (error) => {
                     this.loading = false;
-                    console.log(JSON.parse(error._body).code)
                     this.textcssList = []
-                    this.nznot.create('error', JSON.parse(error._body).code , JSON.parse(error._body).msg);
+                    this.nznot.create('error', error.code , error.msg);
                 }
             );
     }
 
     // 按钮点击事件
     buttonEvent(event) {
-        console.log(event)
         if (event.data.names === '删除') {
         } else {
-            console.log('详情');
         }
 
     }
 
     // 列表按钮方法
     buttonDataHandler(event) {
-        console.log(event);
     }
-
 
 
     // 处理行为代码，跳转、弹出框、其他交互
@@ -300,25 +278,17 @@ export class SubListComponent implements OnInit {
 
     }
 
-
     selectedRow(event) { // 选中方法，折叠层按钮显示方法
 
     }
-
-    seach() {
-
-    }
-
 
     // 补录清单方法
     Supplementary() {
     }
 
-
-
-
     // 投放申请
     Serve() {
+
         this.modalVisible = false;
         if (_.isUndefined(this.textcssList) || this.textcssList.length === 0) {
             this.modalVisible = true;
@@ -388,6 +358,7 @@ export class SubListComponent implements OnInit {
                 // 选清单, 必选
                 for (let i = 0; i < this.elementScice.length; i ++) {
                     if (this.elementScice[i].delivered) {
+                        console.log(this.elementScice[i])
                         this.elementScice[i].disabled = true;
                         this.elementScice[i].check = true;
                     }
@@ -400,13 +371,6 @@ export class SubListComponent implements OnInit {
 
         this.deliveryTime = moment(new Date()).format('YYYY-MM-DD');
     }
-
-    selectedCities = [];
-
-
-    profiles: any;
-
-
     // 数据处理
     dataChange() {
         /*拼数据*/
@@ -583,7 +547,6 @@ export class SubListComponent implements OnInit {
       } else {
           this.nznot.create('error', '请检查信息是否全部填写', '请检查信息是否全部填写');
       }*/
-
         this.profiles = [];
         for (let i = 0; i < this.elementScice.length; i ++) {
             if (this.elementScice[i].check && this.elementScice[i].times) {
@@ -611,6 +574,7 @@ export class SubListComponent implements OnInit {
 
             }
         }
+
         this.dataChange();
         // 枚举值改变
         for ( let i = 0; i < this.splicingObj.deliveryList.length; i++) {
@@ -651,8 +615,9 @@ export class SubListComponent implements OnInit {
                 this.splicingObj.stashList[i].fromType = 'M';
             }
         }
+
         this.utilityService.postData(appConfig.testUrl  + appConfig.API.sDeliveryList +  '/deliveryAndDeliveryList', this.splicingObj, {Authorization: this.token})
-            .map(res => res.json())
+            // .map(res => res.json())
             .subscribe(
                 (suc) => {
                     this.nznot.create('success', suc.code , suc.msg);
@@ -660,12 +625,12 @@ export class SubListComponent implements OnInit {
                     this.appendTitle = '投放成功';
                     this.modalVisible = false; // 关闭
                     this.launchVisible  = true; // 显示详情
-                    this.getData();
+                    // this.getData();
                     this.reset = false;
                     this.textcssList = [];
                 },
                 (error) => {
-                    this.nznot.create('error', JSON.parse(error._body).code , JSON.parse(error._body).msg);
+                    this.nznot.create('error', error.code , error.msg);
                     // this.getData();
                 }
             );
@@ -718,8 +683,7 @@ export class SubListComponent implements OnInit {
 
     }
 
-
-
+    // 追加代码确认
     appendsave() {
         let submitArray = [];
         _.forEach(this.appendSelect , function (select) {
@@ -797,7 +761,7 @@ export class SubListComponent implements OnInit {
             stashList: noarray,
             guidWorkitem: this.workItemInfo.guid,
         };
-
+        // 枚举值改变
         for ( let i = 0; i < this.splicingObj.deliveryList.length; i++) {
             if (this.splicingObj.deliveryList[i].commitType === '新增') {
                 this.splicingObj.deliveryList[i].commitType = 'A';
@@ -837,7 +801,7 @@ export class SubListComponent implements OnInit {
             }
         }
         this.utilityService.postData(appConfig.testUrl  + '/sDeliveryList/superadditionDeliverylist', this.splicingObj, {Authorization: this.token})
-            .map(res => res.json())
+            // .map(res => res.json())
             .subscribe(
                 (val) => {
                     this.nznot.create('success', val.code , val.msg);
@@ -845,7 +809,7 @@ export class SubListComponent implements OnInit {
                     this.detailInfo = val.result; // 返回的数据有问题
                     this.appendVisible = false;
                     this.reset = false;
-                    this.getData();
+                    // this.getData();
                     this.launchVisible = true; // 查看追加详情
                 }
             );
@@ -910,11 +874,8 @@ export class SubListComponent implements OnInit {
     }*/
 
 
-
-
     // 比较时间
     onChange(time, array) {
-        console.log(time)
         if (time.getTime() !== new Date(array.unixTime).getTime()) {
            for (let i = 0; i < array.packTimeDetails.length; i++) {
                if (array.packTimeDetails[i].isOptions === 'N') {

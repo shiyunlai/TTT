@@ -1,22 +1,24 @@
 // 工程
 export class SprofilesModule {
 
-      public page = '1';
-    // 环境代码
-       public profilesCode: any;
+        public page = '1';
+         // 环境代码
+         public profilesCode: any;
 
-   //提交标识
-    public artf:number;
+         //  提交标识
+          public artf : number;
 
         // 环境名称
-       public profilesName: any;
+          public profilesName: any;
 
          // 安装路径
            public installPath: any;
 
          // 主机IP
            public hostIp: any;
-
+           
+           //流水标志
+           public serialTag:any;
          // 版本控制用户
 
            public csvUser: any;
@@ -35,9 +37,9 @@ export class SprofilesModule {
 
           public checkOptionsOne = [
                   {label: '09:00', value: '09:00', checked: false},
-                  {label: '12:00', value: '12:00',checked: false},
-                  {label: '17:00', value: '17:00',checked: false},
-              ]
+                  {label: '12:00', value: '12:00', checked: false},
+                  {label: '17:00', value: '17:00', checked: false},
+              ];
 
-          };
+          }
 

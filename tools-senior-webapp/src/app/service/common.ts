@@ -5,6 +5,7 @@ export let appConfig = {
     // testUrl: 'http://192.168.43.136:28080',
     // testUrl: 'http://10.242.125.115:28080',
 
+
     // 所有接口名
     API: {
         treeData: 'treeData',
@@ -87,6 +88,19 @@ export let appConfig = {
         }
         return false;
     },
+
+    // 公共截取方法
+    subString(str, length) {
+        let star = '';
+        let end = '';
+      star = str.substr(0, length)
+       end = str.substr(str.length - length)
+      str = star + '...' + end;
+      return str;
+    }
+
+
+
 
 
 }
