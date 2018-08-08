@@ -38,7 +38,7 @@
           [nzPageSize]="q.ps"
           [nzLoading]="loading"
           (nzPageIndexChange)="pageChange($event)"
-          [nzPageIndex]='q.pi'>
+          [nzPageIndex]='pageindex'>
     <thead nz-thead>
     <tr>
         <th nz-th [nzCheckbox]="true" *ngIf="showAdd" >
@@ -68,8 +68,9 @@
             <span *ngIf='d.key !="viewRange"  && d.key !="manageableRange"  && d.key !="customRange" ' [ngClass]="{'active': d.isclick, 'noactive': !d.isclick}" class="active" (click)="isClick(d,i)">{{initDate[l][d.key]}}</span>
                  <span *ngIf="d.key == 'viewRange'">
                      
-                    <nz-checkbox-group [(ngModel)]="i.viewRange" 
-                    style="display:blocks"
+                 <nz-checkbox-group [(ngModel)]="i.viewRange" 
+                  
+                    class="checkbox"
                      (ngModelChange)="_log(checkOptionsThree)"></nz-checkbox-group> 
                   </span>
 

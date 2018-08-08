@@ -88,6 +88,7 @@ export class SBranchComponent implements OnInit {
             this.utilityService.postData(appConfig.testUrl + appConfig.API.sBranch, page, {Authorization: this.token})
                 .subscribe(
                     (val) => {
+                      
                         if (val.code === '200') {
                             this.data = val.result.records;
                             this.total = val.result.total; // 总数
@@ -120,7 +121,10 @@ export class SBranchComponent implements OnInit {
 
     monitorHandler(event) {
         this.page = event;
-          this.getData();
+            if(event > 1){
+            this.getData();
+        }
+     
     }
 
     // 接受子组件删除的数据 单条还是多条
@@ -215,13 +219,14 @@ export class SBranchComponent implements OnInit {
     checkmsg: any;
     tag = '验证';
        checkversion(item) {
-
+          
           if (this.tag === '通过') {
               return;
           }
          this.utilityService.postData(appConfig.testUrl  + appConfig.API.sBranchadd +'/'+ 'path',{svnUrl:item}, {Authorization: this.token})
                 .subscribe(
                     (val) => {
+
                         if (val.code === '200') {
                            this.branch.lastVersion = val.result;
                            this.isShowbranch = true

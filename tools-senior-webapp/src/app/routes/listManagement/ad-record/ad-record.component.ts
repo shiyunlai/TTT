@@ -138,7 +138,9 @@ export class AdRecordComponent implements OnInit {
     // 列表传入的翻页数据
     monitorHandler(event) {
         this.index = event
-     this.getData();
+         if(event > 1){
+            this.getData();
+        }
     }
 
     // 接受子组件删除的数据 单条还是多条

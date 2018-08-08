@@ -743,7 +743,9 @@ export class SProfilesComponent implements OnInit {
     // 列表传入的翻页数据
     monitorHandler(event) {
         this.page = event;
-        this.getData();
+          if(event > 1){
+            this.getData();
+        }
     }
     // 关闭核对清单
     checkSave() {

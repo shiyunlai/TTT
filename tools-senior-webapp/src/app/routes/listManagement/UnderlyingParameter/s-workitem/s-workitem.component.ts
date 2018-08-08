@@ -230,7 +230,9 @@ export class SWorkitemComponent implements OnInit {
                 size: this.workItem.size, //  每页个数
             }
         };
-        this.getData();
+           if(event > 1){
+            this.getData();
+        }
     }
 
       filterOption(inputValue, option) {

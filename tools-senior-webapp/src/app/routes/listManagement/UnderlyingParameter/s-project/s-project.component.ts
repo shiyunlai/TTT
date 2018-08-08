@@ -215,7 +215,9 @@ export class SProjectComponent implements OnInit {
                 size: this.productItem.size, //  每页个数
             }
         };
-        this.getData();
+          if(event > 1){
+            this.getData();
+        }
     }
 
 

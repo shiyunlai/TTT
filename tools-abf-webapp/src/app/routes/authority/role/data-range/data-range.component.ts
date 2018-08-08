@@ -45,17 +45,21 @@ export class DataRangeComponent implements OnInit {
     showAddAdd = true;
     searchValue = '';
     dataAddModal = false; //新增模态框
+    // loading = true;
     //搜索
     isNull = true;// 是否有数据
     total:number;
-    totalAdd:number
+    totalAdd:number;
+    pageindex:number;
     getData(){
           this.utilityService.getData(appConfig.ABFUrl + '/' + appConfig.API.dataRangeList)
             .subscribe(
                 (val) => {
                     console.log(val)
                     this.data = val
-                    this.total = 2
+                    this.total = val.length;
+                    this.pageindex = 1;
+                    // this.loading = false;
                 
                 });
     }
@@ -69,5 +73,8 @@ export class DataRangeComponent implements OnInit {
         // 新增数据提交
         subAdddata(){
               
+        }
+        monitorHandler(event){
+         this.pageindex = event;
         }
 }
