@@ -60,6 +60,7 @@ export class SProfilesComponent implements OnInit {
     headerDate = [  // 配置表头内容
         // { value: '环境代码', key: 'profilesCode', isclick: true},
         { value: '环境名称', key: 'profilesName', isclick: false},
+        { value: '流水标志', key: 'serialTag', isclick: false },
         { value: 'Release分支', key: 'fullPathstr', isclick: false,title:true },
         // { value: '主机IP', key: 'hostIp', isclick: false },
         // { value: '安装路径', key: 'installPath', isclick: false },
@@ -271,6 +272,15 @@ export class SProfilesComponent implements OnInit {
                   this.isShowIp = true;
               }
             }
+            isShowserialTag = false;
+            checkserialTag(serialTag){
+                let MOBILE_REGEXP = /^([a-z]|[A-Z]|[0-9]){1}$/;;
+                            if (MOBILE_REGEXP.test(serialTag) === true) {
+                                    this.isShowserialTag = false;
+                            }else {
+                                this.isShowserialTag = true;
+                            }
+                   }
        checkArtf(event){
               let MOBILE_REGEXP =/^\+?[1-9][0-9]*$/;
               if(MOBILE_REGEXP.test(event) === true){

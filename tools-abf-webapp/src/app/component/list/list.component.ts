@@ -80,9 +80,7 @@ export class ListComponent implements OnInit {
     ngOnInit() {
         this.headerDate = this.headerDate;
         this.moreData = this.moreData; // 绑定更多数据
-        //  this.showAdd = true;
-        console.log(this.showAdd);
-        console.log(this.initDate)
+ 
     }
 
 

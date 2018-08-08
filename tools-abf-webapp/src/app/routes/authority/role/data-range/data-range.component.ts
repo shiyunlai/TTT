@@ -39,20 +39,23 @@ export class DataRangeComponent implements OnInit {
         {value: '实体描述信息', key: 'entityDescription',  isclick:  false},
       
     ]
-    data=[]
+    data=[];
+    dataAdd=[];
     showAdd = false;
     showAddAdd = true;
     searchValue = '';
     dataAddModal = false; //新增模态框
     //搜索
     isNull = true;// 是否有数据
-
+    total:number;
+    totalAdd:number
     getData(){
           this.utilityService.getData(appConfig.ABFUrl + '/' + appConfig.API.dataRangeList)
             .subscribe(
                 (val) => {
                     console.log(val)
                     this.data = val
+                    this.total = 2
                 
                 });
     }

@@ -27,6 +27,7 @@
               [showAdd]='showAdd'
              >
     </app-list >
+
 </div>
    <button  nz-col [nzSpan]="24" nz-button nzType="dashed" (click)="addRange()"><i class="anticon anticon-plus"></i>添加数据范围</button>
      </div>
@@ -61,9 +62,8 @@
               [initDate] = "dataAdd"
               [headerDate] = "headerDataAdd"
               [showAdd]='showAddAdd'
-              [total]='total'
-              >
-                  
+              [total]='totalAdd'
+              >    
               </app-list>
        </ng-template>
 </nz-modal>

@@ -473,7 +473,15 @@
                 ]
         }
     
-    ]
+    ],
+       "dataRangeListtest":[
+        {
+            "dataEntity": "操作日志",
+            "applyName": "日志&流水(log&jnl)",
+            "viewRange":"2",
+            "manageableRange": "2",
+             "customRange": "2"
+        }]
     
     
   
