@@ -53,6 +53,9 @@ public class SWorkitemServiceImpl extends ServiceImpl<SWorkitemMapper, SWorkitem
     @Autowired
     private SvnProperties svnProperties;
 
+    @Autowired
+    private ISStandardListService standardListService;
+
     private Map<String, SWorkitem> workitems = new HashMap<>();
 
     @Override
@@ -287,7 +290,7 @@ public class SWorkitemServiceImpl extends ServiceImpl<SWorkitemMapper, SWorkitem
     }
 
     @Override
-    public void insertBranch(String guid, SBranch branch) throws SVNException {
+    public void insertBranch(Integer guid, SBranch branch) throws SVNException {
         SWorkitem sWorkitem = selectById(guid);
         if (sWorkitem == null) {
             throw new DeveloperException(guid + "对应工作项已删除或不存在！");
@@ -323,7 +326,7 @@ public class SWorkitemServiceImpl extends ServiceImpl<SWorkitemMapper, SWorkitem
     }
 
     @Override
-    public void insertProjects(String guid, List<String> projectGuids) throws SVNException {
+    public void insertProjects(Integer guid, List<String> projectGuids) throws SVNException {
         SWorkitem sWorkitem = selectById(guid);
         if (sWorkitem == null) {
             throw new DeveloperException(guid + "对应工作项已删除或不存在！");
@@ -365,6 +368,17 @@ public class SWorkitemServiceImpl extends ServiceImpl<SWorkitemMapper, SWorkitem
         projectDetail.setOwn(collect.get(true) != null ? collect.get(true) : Collections.EMPTY_LIST);
         projectDetail.setOthers(collect.get(false) != null ? collect.get(false) : Collections.EMPTY_LIST);
         return projectDetail;
+    }
+
+    @Override
+    public boolean selectStandardListByGuid(Integer guidWorkitem) {
+        EntityWrapper<SStandardList> standardListEntityWrapper = new EntityWrapper<>();
+        standardListEntityWrapper.eq(SStandardList.COLUMN_GUID_WORKITEM, guidWorkitem);
+        List<SStandardList> standardLists = standardListService.selectList(standardListEntityWrapper);
+        if(standardLists.size() > 0){
+            return true;
+        }
+        return false;
     }
 }
 

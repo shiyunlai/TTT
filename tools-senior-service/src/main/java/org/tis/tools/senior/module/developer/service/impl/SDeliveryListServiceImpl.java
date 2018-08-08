@@ -69,6 +69,9 @@ public class SDeliveryListServiceImpl extends ServiceImpl<SDeliveryListMapper, S
     @Autowired
     private ISStashListService stashListService;
 
+    @Autowired
+    private ISDeliveryListService deliveryListService;
+
     @Override
     public DeliveryListStashListDetail assembleDelivery(String branchGuid){
 
@@ -94,93 +97,99 @@ public class SDeliveryListServiceImpl extends ServiceImpl<SDeliveryListMapper, S
         } catch (SVNException e) {
             throw new DeveloperException("分支的svnUrl不合法，无法获取提交记录！");
         }
-        if (svnCommits.size() < 1) {
+        //查询当前工作项的贮藏清单列表
+        EntityWrapper<SStashList> stashEntityWrapper = new EntityWrapper<>();
+        stashEntityWrapper.eq(SStashList.COLUMN_GUID_WORKITEM, workitem.getGuid());
+        List<SStashList> sStashLists = stashListService.selectList(stashEntityWrapper);
+        if (svnCommits.size() == 0 && sStashLists .size() == 0) {
             throw new DeveloperException("该清单已被整理或没有最新的提交记录!");
         }
         List<SDeliveryList> sdList = new ArrayList<>();
-        Map<String, List<SvnFile>> commitMap = svnCommits.stream().collect(Collectors.groupingBy(SvnFile::getNodeType));
-        Set<String> ecdSet = new HashSet<>();
-        if (commitMap.get("dir") != null) {
-            commitMap.get("dir").forEach(f -> {
-                String projectName = DeveloperUtils.getProjectName(f.getPath(),branch.getFullPath());
-                if (StringUtils.isNotBlank(projectName)) {
-                    SProject project = projectMap.get(projectName);
-                    if (project == null) {
-                        throw new DeveloperException("基础参数中没有"+ projectName +"此工程，如要整理清单，请联系rct组创建此工程！");
-                    }
-                    JSONArray jsonArray = JSONArray.parseArray(project.getDeployConfig());
-                    for (Object object : jsonArray) {
-                        JSONObject jsonObject = JSONObject.parseObject(object.toString());
-                        String exportType = jsonObject.getString("exportType");
-                        if ("ecd".equals(exportType)) {
-                            String module = DeveloperUtils.getModule(f.getPath(), branch.getFullPath());
-                            if (StringUtils.isNoneBlank(module) && f.getType().equals(CommitType.ADDED)) {
-
-                                String path = f.getPath();
-                                String subPath = path.substring(0, path.indexOf(path) + path.length());
-                                if (subPath.equals(f.getPath())) {
-                                    ecdSet.add(projectName+"/"+module);
-                                }
-                            }
+        if(svnCommits.size() > 0){
+            Map<String, List<SvnFile>> commitMap = svnCommits.stream().collect(Collectors.groupingBy(SvnFile::getNodeType));
+            Set<String> ecdSet = new HashSet<>();
+            if (commitMap.get("dir") != null) {
+                commitMap.get("dir").forEach(f -> {
+                    String projectName = DeveloperUtils.getProjectName(f.getPath(),branch.getFullPath());
+                    if (StringUtils.isNotBlank(projectName)) {
+                        SProject project = projectMap.get(projectName);
+                        if (project == null) {
+                            throw new DeveloperException("基础参数中没有"+ projectName +"此工程，如要整理清单，请联系rct组创建此工程！");
                         }
-                    }
-                }
-            });
-        }
-        if (commitMap.get("file") != null) {
-            commitMap.get("file").forEach(svnFile -> {
-                SDeliveryList sdl = new SDeliveryList();
-                sdl.setCommitType(svnFile.getType());
-                sdl.setFullPath(DeveloperUtils.getPathUTF(svnFile.getPath()));
-                sdl.setFromType(DeliveryListFromType.BRANCH);
-                String programName = DeveloperUtils.getProgramName(svnFile.getPath());
-                sdl.setProgramName(programName);
-                String projectName = DeveloperUtils.getProjectName(svnFile.getPath(),branch.getFullPath());
-                SProject sProject = projectMap.get(projectName);
-                if (sProject == null) {
-                    throw new DeveloperException("基础参数中没有"+ projectName +"此工程，如要整理清单，请联系rct组创建此工程！");
-                }
-                sdl.setPartOfProject(sProject.getProjectName());
-                String deployConfig = sProject.getDeployConfig();
-                if(ProjectType.IBS.equals(sProject.getProjectType())) {
-                    JSONArray jsonArray = JSONArray.parseArray(deployConfig);
-                    //here  跳出循环的标记
-                    here:
-                    for (Object object : jsonArray) {
-                        //解析json字符串获取导出类型和部署到那
-                        JSONObject jsonObject = JSONObject.parseObject(object.toString());
-                        String exportType = jsonObject.getString("exportType");
-                        if (exportType.equals("ecd")) {
-                            if (ecdSet.size() > 0) {
-                                for (String ecd : ecdSet) {
-                                    if (svnFile.getPath().contains(ecd)) {
-                                        sdl.setPatchType(exportType);
-                                        sdl.setDeployWhere(DeliveryProjectDetail.generateDeployWhereString(exportType, deployConfig));
-                                        break here;
+                        JSONArray jsonArray = JSONArray.parseArray(project.getDeployConfig());
+                        for (Object object : jsonArray) {
+                            JSONObject jsonObject = JSONObject.parseObject(object.toString());
+                            String exportType = jsonObject.getString("exportType");
+                            if ("ecd".equals(exportType)) {
+                                String module = DeveloperUtils.getModule(f.getPath(), branch.getFullPath());
+                                if (StringUtils.isNoneBlank(module) && f.getType().equals(CommitType.ADDED)) {
+
+                                    String path = f.getPath();
+                                    String subPath = path.substring(0, path.indexOf(path) + path.length());
+                                    if (subPath.equals(f.getPath())) {
+                                        ecdSet.add(projectName+"/"+module);
                                     }
                                 }
                             }
-                        } else {
-                            sdl.setPatchType(exportType);
-                            sdl.setDeployWhere(DeliveryProjectDetail.generateDeployWhereString(exportType, deployConfig));
                         }
                     }
-                }else{
-                    JSONArray jsonArray = JSONArray.parseArray(deployConfig);
-                    String exportType = "";
-                    for (Object object : jsonArray) {
-                        JSONObject jsonObject = JSONObject.parseObject(object.toString());
-                        if("".equals(exportType)){
-                            exportType = jsonObject.getString("exportType");
-                        }else{
-                            exportType = exportType + "," + jsonObject.getString("exportType");
-                        }
+                });
+            }
+            if (commitMap.get("file") != null) {
+                commitMap.get("file").forEach(svnFile -> {
+                    SDeliveryList sdl = new SDeliveryList();
+                    sdl.setCommitType(svnFile.getType());
+                    sdl.setFullPath(DeveloperUtils.getPathUTF(svnFile.getPath()));
+                    sdl.setFromType(DeliveryListFromType.BRANCH);
+                    String programName = DeveloperUtils.getProgramName(svnFile.getPath());
+                    sdl.setProgramName(programName);
+                    String projectName = DeveloperUtils.getProjectName(svnFile.getPath(),branch.getFullPath());
+                    SProject sProject = projectMap.get(projectName);
+                    if (sProject == null) {
+                        throw new DeveloperException("基础参数中没有"+ projectName +"此工程，如要整理清单，请联系rct组创建此工程！");
                     }
-                    sdl.setPatchType(exportType);
-                    sdl.setDeployWhere(DeliveryProjectDetail.generateDeployWhereString(exportType, deployConfig));
-                }
-                sdList.add(sdl);
-            });
+                    sdl.setPartOfProject(sProject.getProjectName());
+                    String deployConfig = sProject.getDeployConfig();
+                    if(ProjectType.IBS.equals(sProject.getProjectType())) {
+                        JSONArray jsonArray = JSONArray.parseArray(deployConfig);
+                        //here  跳出循环的标记
+                        here:
+                        for (Object object : jsonArray) {
+                            //解析json字符串获取导出类型和部署到那
+                            JSONObject jsonObject = JSONObject.parseObject(object.toString());
+                            String exportType = jsonObject.getString("exportType");
+                            if (exportType.equals("ecd")) {
+                                if (ecdSet.size() > 0) {
+                                    for (String ecd : ecdSet) {
+                                        if (svnFile.getPath().contains(ecd)) {
+                                            sdl.setPatchType(exportType);
+                                            sdl.setDeployWhere(DeliveryProjectDetail.generateDeployWhereString(exportType, deployConfig));
+                                            break here;
+                                        }
+                                    }
+                                }
+                            } else {
+                                sdl.setPatchType(exportType);
+                                sdl.setDeployWhere(DeliveryProjectDetail.generateDeployWhereString(exportType, deployConfig));
+                            }
+                        }
+                    }else{
+                        JSONArray jsonArray = JSONArray.parseArray(deployConfig);
+                        String exportType = "";
+                        for (Object object : jsonArray) {
+                            JSONObject jsonObject = JSONObject.parseObject(object.toString());
+                            if("".equals(exportType)){
+                                exportType = jsonObject.getString("exportType");
+                            }else{
+                                exportType = exportType + "," + jsonObject.getString("exportType");
+                            }
+                        }
+                        sdl.setPatchType(exportType);
+                        sdl.setDeployWhere(DeliveryProjectDetail.generateDeployWhereString(exportType, deployConfig));
+                    }
+                    sdList.add(sdl);
+                });
+            }
         }
         //保存需要删除的贮藏清单代码
         List<SStashList> deletesStashList = new ArrayList<>();
@@ -188,11 +197,6 @@ public class SDeliveryListServiceImpl extends ServiceImpl<SDeliveryListMapper, S
         List<SDeliveryList> deleteDeliveryLists = new ArrayList<>();
         //保存需要修改整理的清单代码
         List<SDeliveryList> updateDeliveryLists = new ArrayList<>();
-
-        //查询贮藏清单列表
-        EntityWrapper<SStashList> stashListEntityWrapper = new EntityWrapper<>();
-        stashListEntityWrapper.eq(SStashList.COLUMN_GUID_WORKITEM, workitem.getGuid());
-        List<SStashList> sStashLists = stashListService.selectList(stashListEntityWrapper);
 
         List<SDeliveryList> stashLists = new ArrayList<>();
         if(sStashLists.size() > 0){
@@ -254,7 +258,9 @@ public class SDeliveryListServiceImpl extends ServiceImpl<SDeliveryListMapper, S
 
         }
         //移除相同文件：整理出的清单提交类型为删除，贮藏清单为新增的相同文件。
-        sdList.removeAll(deleteDeliveryLists);
+        if(sdList. size() > 0){
+            sdList.removeAll(deleteDeliveryLists);
+        }
         List<SDeliveryList> deliveryLists = new ArrayList<>();
         //遍历移除相同文件后的整理出的清单集合
         for(SDeliveryList sd:sdList){
@@ -268,17 +274,18 @@ public class SDeliveryListServiceImpl extends ServiceImpl<SDeliveryListMapper, S
             deliveryLists.add(sd);
         }
         DeliveryListStashListDetail detail = new DeliveryListStashListDetail();
-
-        List<DeliveryProjectDetail> deliveryDetail = DeliveryProjectDetail.
-                        getDeliveryDetail(deliveryLists, projectList);
-        detail.setDeliveryDetail(deliveryDetail);
-        if(stashLists.size() > 0){
-            List<DeliveryProjectDetail> stashDetail = DeliveryProjectDetail.
-                    getDeliveryDetail(stashLists, projectList);
-            detail.setStashDetail(stashDetail);
-        }else{
-            detail.setStashDetail(null);
+        List<DeliveryProjectDetail> deliveryDetail = null;
+        //将整理出来的清单按工程分组
+        if(deliveryLists.size() > 0){
+            deliveryDetail = DeliveryProjectDetail.getDeliveryDetail(deliveryLists, projectList);
         }
+        detail.setDeliveryDetail(deliveryDetail);
+        List<DeliveryProjectDetail> stashDetail = null;
+        //将贮藏清单按工程分组
+        if(stashLists.size() > 0) {
+            stashDetail = DeliveryProjectDetail.getDeliveryDetail(stashLists, projectList);
+        }
+        detail.setStashDetail(stashDetail);
         return detail;
     }
 
@@ -336,7 +343,7 @@ public class SDeliveryListServiceImpl extends ServiceImpl<SDeliveryListMapper, S
                 throw new DeveloperException("本次投放选择的环境必须包含此工作项已投放的环境！");
             }
         }else{
-            if(nowGuidProfile.containsAll(achieveProfileGuid)){
+            if(nowGuidProfile.contains(achieveProfileGuid)){
                 throw new DeveloperException("未选择代码清单只能向新环境投放！");
             }
         }
@@ -391,10 +398,17 @@ public class SDeliveryListServiceImpl extends ServiceImpl<SDeliveryListMapper, S
                 if(deliveries.size() > 0){
             throw new DeveloperException("你选择的投放环境对应的打包窗口已完成投放，请选择其他时间投放！");
         }
+        //查询此工作项的投放申请按提交申请时间排序
+        EntityWrapper<SDelivery> orderDeliveryEntityWrapper = new EntityWrapper<>();
+        orderDeliveryEntityWrapper.eq(SDelivery.COLUMN_GUID_WORKITEM, request.getGuidWorkitem());
+        orderDeliveryEntityWrapper.orderDesc(Collections.singleton(SDelivery.COLUMN_APPLY_TIME));
+        List<SDelivery> descDelivery = deliveryService.selectList(orderDeliveryEntityWrapper);
 
         //新增投放申请列表
         List<SDelivery> deliveryList = new ArrayList<>();
         List<DeliveryProfileRequest> guidPro = request.getDliveryAddRequest().getProfiles();
+        //获取当前提交的时间
+        Date applyTime = new Date();
         for (DeliveryProfileRequest req : guidPro) {
             for (Integer guidProfile:achieveProfileGuid){
                 if(req.getGuidProfiles().equals(guidProfile) && request.getDeliveryList().size() == 0){
@@ -411,7 +425,7 @@ public class SDeliveryListServiceImpl extends ServiceImpl<SDeliveryListMapper, S
             delivery.setGuidProfiles(req.getGuidProfiles());
             delivery.setDeliveryType(DeliveryType.GENERAL);
             delivery.setProposer(userId);
-            delivery.setApplyTime(new Date());
+            delivery.setApplyTime(applyTime);
             delivery.setPackTiming(req.getPackTiming());
             delivery.setDeliveryTime(req.getDeliveryTime());
             delivery.setDeliveryResult(DeliveryResult.APPLYING);
@@ -426,7 +440,6 @@ public class SDeliveryListServiceImpl extends ServiceImpl<SDeliveryListMapper, S
         SBranch branch= branchService.selectById(request.getGuidBranch());
         //判断此工作项是否有成功投放的申请记录
         if (achieveProfileGuid.size() > 0) {
-
             //移除已成功投放运行环境的投放申请
             choiceProfileGuid.removeAll(achieveProfileGuid);
             if(choiceProfileGuid.size() > 0){
@@ -456,68 +469,147 @@ public class SDeliveryListServiceImpl extends ServiceImpl<SDeliveryListMapper, S
                             standardlList.add(sdl);
                         }
                     }
-                    insertBatch(standardlList);
+                    if(standardlList.size() > 0){
+                        insertBatch(standardlList);
+                    }
+
                 }
             }
         }
+        List<SDeliveryList> deliveryLists = new ArrayList<>();
         //新增对应的投放申请的代码清单
         if(request.getDeliveryList().size() != 0) {
             for (SDelivery sDelivery : deliveryList) {
-                List<SDeliveryList> deliveryLists = new ArrayList<>();
                 //组装投产代码清单
                 for (SDeliveryList dlar : request.getDeliveryList()) {
-                    for(SDeliveryList standardList:standardlList){
+                    SDeliveryList sDeliveryList = new SDeliveryList();
+                    BeanUtils.copyProperties(dlar, sDeliveryList);
+                    for (SDeliveryList standardList : standardlList) {
                         //判断标准清单里是否有代码清单导出为ECD
-                        if(PatchType.ECD.equals(standardList.getPatchType())){
+                        if (PatchType.ECD.equals(standardList.getPatchType())) {
                             //获取截取路径到模块前面的字符
                             String subPath = standardList.getFullPath().substring(
-                                    0,standardList.getFullPath().indexOf(DeveloperUtils.getModule(
+                                    0, standardList.getFullPath().indexOf(DeveloperUtils.getModule(
                                             branch.getFullPath(), standardList.getFullPath())));
                             /*
                                 如果标准清单的工程模块导出为ecd，这次投放的代码清单也是标准清单模块下的文件，那么将
                                 这个投放代码的导出变更标准清单的导出类型
                              */
-                            if(dlar.getFullPath().contains(subPath) && PatchType.EPD.equals(dlar.getPatchType())){
-                                dlar.setPatchType(standardList.getPatchType());
+                            if (dlar.getFullPath().contains(subPath) && PatchType.EPD.equals(dlar.getPatchType())) {
+                                sDeliveryList.setPatchType(standardList.getPatchType());
                                 break;
                             }
                         }
                     }
-                    dlar.setGuidDelivery(sDelivery.getGuid());
-                    if(projectMap.get(dlar.getPartOfProject()).getProjectType().equals(ProjectType.SPECIAL)){
+                    sDeliveryList.setGuidDelivery(sDelivery.getGuid());
+                    if (projectMap.get(dlar.getPartOfProject()).getProjectType().equals(ProjectType.SPECIAL)) {
                         JSONObject jsonObject = new JSONObject();
-                        jsonObject.put(dlar.getPatchType(),dlar.getDeployWhere());
-                        dlar.setDeployWhere(jsonObject.toString());
-                    }else{
-                        dlar.setDeployWhere(DeliveryProjectDetail.generateDeployWhereString(
+                        jsonObject.put(dlar.getPatchType(), dlar.getDeployWhere());
+                        sDeliveryList.setDeployWhere(jsonObject.toString());
+                    } else {
+                        sDeliveryList.setDeployWhere(DeliveryProjectDetail.generateDeployWhereString(
                                 dlar.getPatchType(), projectMap.get(dlar.getPartOfProject()).getDeployConfig()));
                     }
-                    deliveryLists.add(dlar);
+                    deliveryLists.add(sDeliveryList);
                 }
-                //批量添加此次投放的代码清单
-                insertBatch(deliveryLists);
             }
-            //将版本号
+            //批量添加此次投放的代码清单
+            insertBatch(deliveryLists);
+            //记录分支临时版本号
             branchService.recordBranchTempRevision(request.getGuidBranch());
         }
+        if(descDelivery.size() > 0){
+            //获取所有排过序的投放申请中最近当前时间的一条投放申请
+            SDelivery sDelivery = descDelivery.get(0);
+            //获取所有上次投放的申请
+            List<SDelivery> lateDelivery = descDelivery.stream().filter(ddelivery ->
+                        sDelivery.getApplyTime().equals(ddelivery.getApplyTime())).collect(Collectors.toList());
+            //获取上次投放申请中核对失败的申请
+            List<SDelivery> lowDelivery = new ArrayList<>();
+            for(SDelivery sd:lateDelivery){
+                if(sd.getDeliveryResult().equals(DeliveryResult.FAILED)){
+                    lowDelivery.add(sd);
+                }
+            }
+            List<SDeliveryList> fixecDeliveryList = new ArrayList<>();
+            //判断上次投放申请投放的条数等于核对失败的条数，不做处理
+            if(lowDelivery.size() != lateDelivery.size()){
+                for (SDelivery lowDeli:lowDelivery){
+                    //循环本次投放的环境申请
+                    for (SDelivery delivery:deliveryList){
+                        if(lowDeli.getGuidProfiles().equals(delivery.getGuidProfiles())){
+                            //获取此失败投放申请的投放代码清单
+                            EntityWrapper<SDeliveryList> deliveryListEntityWrapper = new EntityWrapper<>();
+                            deliveryListEntityWrapper.eq(SDeliveryList.COLUMN_GUID_DELIVERY, lowDeli.getGuid());
+                            List<SDeliveryList> sDeliveryLists = deliveryListService.
+                                                                    selectList(deliveryListEntityWrapper);
+                            //获取此次投放申请的
+                            List<String> fullPath = request.getDeliveryList().stream().
+                                            map(SDeliveryList::getFullPath).collect(Collectors.toList());
 
-        //先清除此工作项贮藏清单的所有内容
+                            List<SDeliveryList> deliverysList = sDeliveryLists.stream().filter(deliverieLists ->
+                                    !fullPath.contains(deliverieLists.getFullPath())).collect(Collectors.toList());
+                            //再次将失败的投放申请来源类型修改为失败补投
+                            deliverysList.forEach(sDeliveryList ->{
+                                sDeliveryList.setGuidDelivery(delivery.getGuid());
+                                sDeliveryList.setFromType(DeliveryListFromType.FIXED);
+                                fixecDeliveryList.add(sDeliveryList);
+                            });
+                        }
+                    }
+                }
+            }
+            //将失败的投放申请代码清单再次投放
+            if(fixecDeliveryList.size() > 0){
+                deliveryListService.insertBatch(fixecDeliveryList);
+            }
+        }
+        //查询此工作项的贮藏清单所有内容
         EntityWrapper<SStashList> stashListEntityWrapper = new EntityWrapper<>();
         stashListEntityWrapper.eq(SStashList.COLUMN_GUID_WORKITEM,request.getGuidWorkitem());
         List<SStashList> sStashLists = stashListService.selectList(stashListEntityWrapper);
         if(sStashLists.size() > 0){
-            List<Integer> guidStash = sStashLists.stream().map(SStashList::getGuid).collect(Collectors.toList());
-            stashListService.deleteBatchIds(guidStash);
-        }
-        //保存未选择的代码清单
-        if(request.getStashList().size() > 0){
-            List<SStashList> sStashList = new ArrayList<>();
-            for (SStashList stash:request.getStashList()){
-                stash.setGuidWorkitem(request.getGuidWorkitem());
-                sStashList.add(stash);
+            //获取未选择的代码路径集合
+            List<String> noChooesStash = request.getStashList().stream().
+                    map(SStashList::getFullPath).collect(Collectors.toList());
+            //过滤掉贮藏清单中本次有选择贮藏的代码清单集合
+            List<SStashList> chooesStash = sStashLists.stream().filter(sStashList -> !noChooesStash.
+                    contains(sStashList.getFullPath())).collect(Collectors.toList());
+            //获取本次申请选择了贮藏清单的代码集合
+            List<SDeliveryList> sDeliveryLists = new ArrayList<>();
+            if(chooesStash.size() > 0){
+                sDeliveryLists =  deliveryLists.stream().filter(deli ->
+                        (chooesStash.stream().map(SStashList::getFullPath).collect(Collectors.toList())).
+                                contains(deli.getFullPath())).collect(Collectors.toList());
             }
-            stashListService.insertBatch(sStashList);
+
+            //批量修改本次投放申请中选择贮藏清单代码的来源状态
+            if(sDeliveryLists.size() > 0){
+                for (SDeliveryList deliList:sDeliveryLists){
+                    deliList.setFromType(DeliveryListFromType.STASH);
+                }
+                updateBatchById(sDeliveryLists);
+            }
         }
+        //保存与贮藏清单不重复的代码文件
+        List<SStashList> stashLists = new ArrayList<>();
+        //循环这次整理出来没有选择的代码文件
+        no:
+        for (SStashList stash:request.getStashList()) {
+            stash.setGuidWorkitem(request.getGuidWorkitem());
+            //循环贮藏清单
+            for (SStashList stashList:sStashLists) {
+                if(stash.getFullPath().equals(stashList.getFullPath())){
+                    continue no;
+                }
+            }
+            stashLists.add(stash);
+        }
+        if(stashLists.size() > 0){
+            //添加这次未选择的代码文件
+            stashListService.insertBatch(stashLists);
+        }
+
         return deliveryList;
     }
 

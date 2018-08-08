@@ -1,5 +1,6 @@
 package org.tis.tools.senior.module.developer.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.plugins.Page;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.hibernate.validator.constraints.NotBlank;
@@ -7,10 +8,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.tis.tools.senior.module.core.web.util.ShiroUtil;
 import org.tis.tools.core.web.controller.BaseController;
-import org.tis.tools.model.common.ResultVO;
 import org.tis.tools.core.web.vo.SmartPage;
+import org.tis.tools.model.common.ResultVO;
+import org.tis.tools.senior.module.core.web.util.ShiroUtil;
 import org.tis.tools.senior.module.developer.controller.request.WorkItemAddBranchRequest;
 import org.tis.tools.senior.module.developer.controller.request.WorkItemAddProjectRequest;
 import org.tis.tools.senior.module.developer.controller.request.WorkitemAddAndUpdateRequest;
@@ -184,9 +185,9 @@ public class SWorkitemController extends BaseController<SWorkitem> {
      * @return
      * @throws SVNException
      */
-    @PostMapping("/{guid}/branch")
     @RequiresRoles("rct")
-    public ResultVO addBranch(@PathVariable @NotBlank(message = "工作项id不能为空") String guid,
+    @PostMapping("/{guid}/branch")
+    public ResultVO addBranch(@PathVariable @NotNull(message = "工作项id不能为空") Integer guid,
                               @RequestBody @Validated WorkItemAddBranchRequest request) throws SVNException {
         if (request.getBranchType().equals(BranchType.RELEASE)) {
             throw new DeveloperException("工作项不能创建RELEASE分支！");
@@ -219,10 +220,25 @@ public class SWorkitemController extends BaseController<SWorkitem> {
      * @throws SVNException
      */
     @PostMapping("/{guid}/project")
-    public ResultVO addProject(@PathVariable @NotBlank(message = "工作项id不能为空") String guid,
+    public ResultVO addProject(@PathVariable @NotNull(message = "工作项id不能为空") Integer guid,
                               @RequestBody @Validated WorkItemAddProjectRequest request) throws SVNException {
         sWorkitemService.insertProjects(guid,  request.getProjectGuids());
         return ResultVO.success("拉取工程成功！");
+    }
+
+    /**
+     * 验证标准清单是否有代码
+     * @param guid
+     * @return
+     */
+    @GetMapping("/{guid}/isOpen")
+    public ResultVO selectStandardList(@PathVariable @NotBlank(message = "工作项id不能为空") Integer guid){
+
+        boolean isOpen = sWorkitemService.selectStandardListByGuid(guid);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("isOpen",isOpen);
+
+        return ResultVO.success("成功",jsonObject);
     }
 }
 
