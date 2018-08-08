@@ -198,6 +198,10 @@ export class SProfilesComponent implements OnInit {
                this.nznot.create('error', '请检查ARTF格式是否正确！', '');
               return;
         }
+          if(this.isShowserialTag == true){
+               this.nznot.create('error', '请检查流水标志格式是否正确！', '');
+              return;
+        }
           if(!this.profiles.artf || !this.profiles.profilesName || !this.profiles.installPath || !this.profiles.hostIp || !this.profiles.csvUser || !this.profiles.manager){
                this.nznot.create('error', '请检查信息是否完整！', '');
               return;
@@ -359,7 +363,8 @@ export class SProfilesComponent implements OnInit {
             this.profiles = new SprofilesModule();
             this.Ptitle = '新增运行环境';
             this.isShowIp = false;
-            this.isShowartf = false
+            this.isShowartf = false;
+              this.isShowserialTag= false
             this.tags = [];
             this.mergeVisible = true;
         } else if (event === 'checking') {
@@ -486,6 +491,7 @@ export class SProfilesComponent implements OnInit {
             } else if (event.names.key === 'upd') {
             this.Ptitle = '修改运行环境'
             this.isShowartf = false;
+            this.isShowserialTag = false;
             let arr = [];
             event.checkOptionsOne =  this.profiles.checkOptionsOne;
             this.profiles =  _.cloneDeep(event);
