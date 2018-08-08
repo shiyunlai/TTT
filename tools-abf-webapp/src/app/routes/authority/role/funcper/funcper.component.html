@@ -1,7 +1,12 @@
   
-    <p style="margin-bottom: 18px;
+    <div style="margin-bottom: 18px;
         border-bottom: 1px solid gainsboro;
-        height: 32px;">角色 [ ROLE4：角色4] 的功能权限</p>
+        height: 32px;">
+        <span>角色 [ ROLE4：{{roleGuid}}] 的功能权限</span>
+        
+        </div>
+        <!--<pro-header>角色 [ ROLE4：角色4] 的功能权限</pro-header>-->
+        
     <div class="ui-g">
         <!--<div class="ui-g-3">-->
             <p-card  [style]="{width: '100%',border:'0px'}"> 
@@ -10,7 +15,7 @@
             </p-card>
         <!--</div>-->
         <!--<div class="ui-g-9">-->
-            <p-card  *ngIf="tabShow" [style]="{border: '0px'}">
+            <p-card  *ngIf="tabShow" [style]="{border: '0px'}" >
                 <div class="ui-g" style='width:100%'>
                     <h3 style='width:100%;margin:1rem 0;font-weight:bold' >功能：GROUP（工作组）</h3>
                     <p>功能描述，一段假想的简介，这是一段比较长的简介...</p>

@@ -24,7 +24,7 @@ export class ListComponent implements OnInit {
     table: ListComponent;
 
 
-    loading = false;
+    // loading = true;
     selectedRows: any[] = [];
     curRows: any[] = [];
     totalCallNo = 0;
@@ -36,6 +36,8 @@ export class ListComponent implements OnInit {
 
     @Input() // 输入属性,接受父组件传入的数据
     initDate: any[];
+    @Input()
+    loading:boolean;
     @Input() // 输入属性,接受父组件传递的表头
     headerDate: any[];
     @Input() // 输入属性,接受按钮层方法
@@ -43,10 +45,11 @@ export class ListComponent implements OnInit {
     @Input() // 输入属性,数据总条数
     total: number;
     @Input() // 输入属性,接受父组件传入的数据
-    showAdd: boolean;
+    showAdd: true;
     @Input() // 输入属性,接受父组件传入的数据
     configTitle: string;
-
+    @Input()
+    pageindex:number
     data: any[] = [];
 
     @Output()
@@ -80,8 +83,8 @@ export class ListComponent implements OnInit {
     ngOnInit() {
         this.headerDate = this.headerDate;
         this.moreData = this.moreData; // 绑定更多数据
-
-        console.log(this.showAdd);
+        this.loading = true;
+        
     }
 
 
@@ -170,6 +173,7 @@ export class ListComponent implements OnInit {
 
     // 翻页方法
     pageChange(pi: number): Promise<any> {
+          console.log(this.initDate)
         this.q.pi = pi;
         this.loading = true;
         this.allChecked = false; // 全选干掉

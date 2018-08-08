@@ -7,8 +7,7 @@ export let appConfig = {
     API: {
         treeData: 'treeData',
         listData: 'listData',
-        roleData: 'roleData',
-        roleList: 'roleList', // 新增的成员列表
+     
         orgTreeData: 'orgTreeData',
         jurisdictionTree: 'jurisdictionTree', // 角色功能权限树
         // 系统运行参数
@@ -135,8 +134,12 @@ export let appConfig = {
         groupApp: '/omGroups/app', // 给工作组添加应用
         groupPosition: '/omGroups/position', // 给工作组添加岗位
 
-        // 角色组接口
-        roleAdd: '' // 新增角色成员
+        //角色组接口
+        roleAdd:'',//新增角色成员
+        roleData: 'roleData',
+        roleList: 'roleList', // 新增的成员列表
+        dataRangeList: 'dataRangeList',//角色数据范围列表
+        dataRangeListtest:'dataRangeListtest'
     },
 
 

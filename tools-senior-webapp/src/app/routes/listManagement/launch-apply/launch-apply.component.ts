@@ -173,6 +173,7 @@ export class LaunchApplyComponent implements OnInit {
         this.utilityService.postData(appConfig.testUrl  + appConfig.API.list, page, { Authorization: this.token})
             .subscribe(
                 (val) => {
+                
                     if (val.code === '200') {
                         this.data = val.result.records;
                         this.total = val.result.total; // 总数
@@ -305,7 +306,10 @@ export class LaunchApplyComponent implements OnInit {
     // 列表传入的翻页数据
     monitorHandler(event) {
         this.currentpage = event;
-        this.getData();
+        if(event > 1){
+            this.getData();
+        }
+     
     }
 
     // 接受子组件删除的数据 单条还是多条
@@ -570,7 +574,7 @@ export class LaunchApplyComponent implements OnInit {
                                 if (val.code === '200') {
                                     if ( !(( self.total - 1) % 10)) {
                                         self.pageTotal = self.pageTotal - 10 ;
-                                        self.getData();
+                                        // self.getData();
                                     }
                                     self.getData();
 
@@ -832,9 +836,7 @@ export class LaunchApplyComponent implements OnInit {
         ;
 
     }
-    getdatas() {
-
-    }
+  
 
 
     // 状态
@@ -1328,6 +1330,7 @@ export class LaunchApplyComponent implements OnInit {
 
     copyCancel() {
         this.getData(); // 重新查询
+        console.log('s');
         this.launchVisible = false;
     }
 

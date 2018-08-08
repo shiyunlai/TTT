@@ -16,7 +16,9 @@ export class SprofilesModule {
 
          // 主机IP
            public hostIp: any;
-
+           
+           //流水标志
+           public serialTag:any;
          // 版本控制用户
 
            public csvUser: any;

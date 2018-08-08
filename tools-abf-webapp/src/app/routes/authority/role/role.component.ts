@@ -111,8 +111,8 @@ export class RoleComponent implements OnInit {
     TreeSelect(event) {
         // console.log(this.memberdata.length);
         // alert('3')
-        this.id = 'role001';
-     
+        this.id = event.node.label;
+      
     //     let obj = JSON.parse(this.memberdata);
     //    console.log(obj);
     //    return;

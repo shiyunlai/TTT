@@ -60,6 +60,7 @@ export class SProfilesComponent implements OnInit {
     headerDate = [  // 配置表头内容
         // { value: '环境代码', key: 'profilesCode', isclick: true},
         { value: '环境名称', key: 'profilesName', isclick: false},
+        { value: '流水标志', key: 'serialTag', isclick: false },
         { value: 'Release分支', key: 'fullPathstr', isclick: false,title:true },
         // { value: '主机IP', key: 'hostIp', isclick: false },
         // { value: '安装路径', key: 'installPath', isclick: false },
@@ -197,6 +198,10 @@ export class SProfilesComponent implements OnInit {
                this.nznot.create('error', '请检查ARTF格式是否正确！', '');
               return;
         }
+          if(this.isShowserialTag == true){
+               this.nznot.create('error', '请检查流水标志格式是否正确！', '');
+              return;
+        }
           if(!this.profiles.artf || !this.profiles.profilesName || !this.profiles.installPath || !this.profiles.hostIp || !this.profiles.csvUser || !this.profiles.manager){
                this.nznot.create('error', '请检查信息是否完整！', '');
               return;
@@ -271,6 +276,15 @@ export class SProfilesComponent implements OnInit {
                   this.isShowIp = true;
               }
             }
+            isShowserialTag = false;
+            checkserialTag(serialTag){
+                let MOBILE_REGEXP = /^([a-z]|[A-Z]|[0-9]){1}$/;;
+                            if (MOBILE_REGEXP.test(serialTag) === true) {
+                                    this.isShowserialTag = false;
+                            }else {
+                                this.isShowserialTag = true;
+                            }
+                   }
        checkArtf(event){
               let MOBILE_REGEXP =/^\+?[1-9][0-9]*$/;
               if(MOBILE_REGEXP.test(event) === true){
@@ -349,7 +363,8 @@ export class SProfilesComponent implements OnInit {
             this.profiles = new SprofilesModule();
             this.Ptitle = '新增运行环境';
             this.isShowIp = false;
-            this.isShowartf = false
+            this.isShowartf = false;
+              this.isShowserialTag= false
             this.tags = [];
             this.mergeVisible = true;
         } else if (event === 'checking') {
@@ -476,6 +491,7 @@ export class SProfilesComponent implements OnInit {
             } else if (event.names.key === 'upd') {
             this.Ptitle = '修改运行环境'
             this.isShowartf = false;
+            this.isShowserialTag = false;
             let arr = [];
             event.checkOptionsOne =  this.profiles.checkOptionsOne;
             this.profiles =  _.cloneDeep(event);
@@ -727,7 +743,9 @@ export class SProfilesComponent implements OnInit {
     // 列表传入的翻页数据
     monitorHandler(event) {
         this.page = event;
-        this.getData();
+          if(event > 1){
+            this.getData();
+        }
     }
     // 关闭核对清单
     checkSave() {
