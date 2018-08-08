@@ -288,8 +288,8 @@ export class SubListComponent implements OnInit {
 
     // 投放申请
     Serve() {
-
         this.modalVisible = false;
+        // console.log(localStorage.getItem('name'));
         if (_.isUndefined(this.textcssList) || this.textcssList.length === 0) {
             this.modalVisible = true;
             // 不选清单, 禁选

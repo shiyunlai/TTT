@@ -373,6 +373,9 @@ export class EmpComponent implements OnInit {
                                             this.onboarding = false; // 关闭入职弹出框
                                             this.getData();
                                         },
+                                        (error) => {
+                                            this.nznot.create('error', error.msg , error.msg);
+                                        }
                                     );
                             } else {
                                 this.nznot.create('error', val.msg , val.msg);
@@ -382,16 +385,16 @@ export class EmpComponent implements OnInit {
                         },
 
                     );
-            } else
-                {
+            } else {
                 this.utilityService.putData(appConfig.testUrl  + appConfig.API.onJob, jsonObj)
                     .subscribe(
                         (src) => {
-                            console.log(src)
                             this.nznot.create('success', src.msg , src.msg);
                             this.onboarding = false; // 关闭入职弹出框
                             this.getData();
-                        },
+                        }, (error) => {
+                            this.nznot.create('error', error.msg , error.msg);
+                        }
                     );
             }
         } else {
