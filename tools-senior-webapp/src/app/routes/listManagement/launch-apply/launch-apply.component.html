@@ -201,7 +201,7 @@
                 </ng-template>
         </nz-modal>
 
-        <nz-modal [nzVisible]="mergeisVisible"   [nzWidth]="1024" [nzTitle]="'请指定投放日期和环境'"   [nzContent]="dictModal"
+        <nz-modal [nzVisible]="mergeisVisible"  [nzClosable]="isdiabled" [nzMaskClosable]='isdiabled' [nzWidth]="1024" [nzTitle]="'请指定投放日期和环境'"   [nzContent]="dictModal"
           (nzOnCancel)="mergeisVisible=false" (nzOnOk)="savemergeisInfo()" [nzFooter]="is" nzZIndex = '20' >
     <ng-template #dictModal>
 
@@ -211,7 +211,7 @@
             <nz-step  [nzTitle]="'确认清单'"></nz-step>
       </nz-steps>
 
-    <div class="steps-content" >
+    <div class="steps-content" style="display:grid;">
 
        <app-environment [deliveryTime]="deliveryTime" [isShowDate]="isShowDate" (isActive)="isActive($event)" [elementScice]="elementScice" *ngIf="current === 0"></app-environment>
 
@@ -241,9 +241,9 @@
 
 
 
-            <div class="steps-action" >
+            <div class="steps-action"  >
 
-                    <button   nz-button [nzType]="'default'"  (click)="pre()" *ngIf="current > 0">
+                    <button   nz-button [nzType]="'default'"  (click)="pre()" *ngIf="current === 1">
                         <span>上一步</span>
                     </button>
 
@@ -251,6 +251,7 @@
                     <button  nz-col  [nzOffset]="2"  nz-button [nzType]="'default'" [nzLoading]="loadingnext" (click)="next()" *ngIf="current < 2" [disabled]="isNext">
                         <span>下一步</span>
                     </button>
+                
 
                     <!--<button nz-col  nz-button [nzType]="'primary'" [nzOffset]="2"  (click)="done()" *ngIf="current === 2">
                         <span>确认</span>

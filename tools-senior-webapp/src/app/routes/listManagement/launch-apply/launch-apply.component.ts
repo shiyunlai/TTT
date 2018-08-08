@@ -340,6 +340,7 @@ export class LaunchApplyComponent implements OnInit {
             );
     }
 
+   isdiabled = true;
     pre(): void {
         this.current -= 1;
         this.changeContent();
@@ -347,6 +348,7 @@ export class LaunchApplyComponent implements OnInit {
 
     next(): void {
         this.loadingnext = true;
+         this.isdiabled = false;
         // this.current = 0;
         let profiles = '';
         let packTiming = '';
@@ -373,14 +375,14 @@ export class LaunchApplyComponent implements OnInit {
             //   this.current += 1;
             let arr = [];
             this.loading = true;
-
+         
             // 跳转核对列表
             this.utilityService.getData( url, {}, {Authorization: this.token})
                 .subscribe(
                     (val) => {
                         this.loading = false;
                         this.loadingnext = false;
-
+                           this.isdiabled = true;
                         if (val.code === '200') {
 
                             this.current += 1;
@@ -404,6 +406,7 @@ export class LaunchApplyComponent implements OnInit {
 
 
                         }else {
+                            this.isdiabled = true;
                             this.nznot.create('error', val.msg, val.msg);
 
                         }
@@ -411,16 +414,20 @@ export class LaunchApplyComponent implements OnInit {
                     (error) => {
 
                         this.loadingnext = false;
+                        this.isdiabled = true;
                         this.nznot.create('error', error.msg, '');
-                        //
+                   
                     })
+   
             // step2
         }else if (this.current === 1){
-
+        
             let flage = true;
+           
             for (let i = 0; i < this.initDate.length; i++) {
                 if (this.initDate[i].buttonData[0].check === false) {
                     flage = false;
+                     this.isdiabled = true;
                     this.nznot.create('error', '请确认去合并！！', '');
                     return;
                 }
@@ -434,6 +441,7 @@ export class LaunchApplyComponent implements OnInit {
                 this.utilityService.postData(url, {}, {Authorization: this.token})
                     .subscribe(
                         (val) => {
+                             this.isdiabled = true;
                             this.loadingnext = false;
                             this.checkId = val.result.check.guid;
                             this.checkloading = false;
@@ -441,7 +449,6 @@ export class LaunchApplyComponent implements OnInit {
                             this.checkListVisible = true;
                             this.checkModalData = val.result.deliveryDetails;
                             this.mergeListData  = val.result.mergeLists;
-
                             for  (let i = 0; i < this.mergeListData.length; i ++) {
                                 if (this.mergeListData[i].confirmStatus === '加入投放') {
                                     this.mergeListData[i]['checkbuttons'] = true;
@@ -468,13 +475,8 @@ export class LaunchApplyComponent implements OnInit {
                                     guid: this.checkModalData[i].delivery.guid,
                                     guidWorkitem: this.checkModalData[i].delivery.guidWorkitem.target
                                 }
-
-                                this.guidprent.push(obj);
-                                //   if(  this.checkModalData[i].delivery.deliveryResult =='核对成功' || this.checkModalData[i].delivery.deliveryResult =='核对失败' ){
-                                //               this.checkModalData[i].delivery.disabledS = true;
-                                //          }else{
+                                this.guidprent.push(obj);                     
                                 this.checkModalData[i].delivery.disabledS = false;
-                                //          }
                                 for (let j = 0; j < this.checkModalData[i].detailList.length; j ++) {
                                     for (let x = 0; x < this.checkModalData[i].detailList[j].deliveryPatchDetails.length; x ++) {
                                         for (let  y = 0; y < this.checkModalData[i].detailList[j].deliveryPatchDetails[x].fileList.length; y ++) {
@@ -496,8 +498,10 @@ export class LaunchApplyComponent implements OnInit {
                         }
                         , (error) => {
                             this.loadingnext = false;
+                               this.isdiabled = true;
                             this.nznot.create('error', error.msg, '');
                         })
+                         
             }
 
 

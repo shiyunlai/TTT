@@ -139,7 +139,7 @@ export let appConfig = {
         roleData: 'roleData',
         roleList: 'roleList', // 新增的成员列表
         dataRangeList: 'dataRangeList',//角色数据范围列表
-        dataRangeListtest:'dataRangeListtest'
+        dataRangeListAdd:'dataRangeListAdd'
     },
 
 

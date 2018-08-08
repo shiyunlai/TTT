@@ -37,7 +37,7 @@ export class ListComponent implements OnInit {
     @Input() // 输入属性,接受父组件传入的数据
     initDate: any[];
     @Input()
-    loading:boolean;
+    loading = true;
     @Input() // 输入属性,接受父组件传递的表头
     headerDate: any[];
     @Input() // 输入属性,接受按钮层方法
@@ -49,7 +49,11 @@ export class ListComponent implements OnInit {
     @Input() // 输入属性,接受父组件传入的数据
     configTitle: string;
     @Input()
-    pageindex:number
+    pageindex = 1 ;
+    @Input()
+    operate = true;
+
+
     data: any[] = [];
 
     @Output()
@@ -83,7 +87,7 @@ export class ListComponent implements OnInit {
     ngOnInit() {
         this.headerDate = this.headerDate;
         this.moreData = this.moreData; // 绑定更多数据
-        this.loading = true;
+     
         
     }
 
