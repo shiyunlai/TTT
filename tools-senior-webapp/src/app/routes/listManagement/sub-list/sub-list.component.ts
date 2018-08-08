@@ -81,7 +81,7 @@ export class SubListComponent implements OnInit {
 
     // 调用初始化工作项信息
     getworkData() {
-        this.utilityService.getData(appConfig.testUrl  + appConfig.API.sWorkitem + '/user', {}, {Authorization: this.token})
+        this.utilityService.getData(appConfig.testUrl  + appConfig.API.sWorkitem, {}, {Authorization: this.token})
             .subscribe(
                 (val) => {
                     this.workItem = val.result;

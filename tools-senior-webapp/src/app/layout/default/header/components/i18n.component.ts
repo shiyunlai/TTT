@@ -33,7 +33,6 @@ export class HeaderI18nComponent {
     }
 
     change(lang: string) {
-        console.log(lang)
         this.tsServ.use(lang, false).subscribe(() => {
             this.menuService.resume();
             this.titleServ.setTitle();
