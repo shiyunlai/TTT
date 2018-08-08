@@ -82,6 +82,7 @@ export class ListComponent implements OnInit {
         this.moreData = this.moreData; // 绑定更多数据
         //  this.showAdd = true;
         console.log(this.showAdd);
+        console.log(this.initDate)
     }
 
 
@@ -170,6 +171,7 @@ export class ListComponent implements OnInit {
 
     // 翻页方法
     pageChange(pi: number): Promise<any> {
+          console.log(this.initDate)
         this.q.pi = pi;
         this.loading = true;
         this.allChecked = false; // 全选干掉
