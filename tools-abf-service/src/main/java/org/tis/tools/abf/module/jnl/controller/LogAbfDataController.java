@@ -41,4 +41,14 @@ public class LogAbfDataController extends BaseController<LogAbfData> {
         return ResultVO.success("查询成功",logAbfDataService.queryByDataId(getPage(page), getCondition(page),dataGuid));
     }
 
+    /**
+     * 查询操作数据记录的详细信息
+     * @param operateId
+     * @return
+     */
+    @GetMapping("detialMessage/{operateId}")
+    public ResultVO detialMessage(@PathVariable @NotBlank(message = "操作日志GUID不能为空") String operateId){
+        return ResultVO.success("查询成功",logAbfDataService.queryDetialMessage(operateId));
+    }
+
 }
