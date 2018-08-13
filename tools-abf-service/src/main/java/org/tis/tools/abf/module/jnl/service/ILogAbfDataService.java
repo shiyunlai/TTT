@@ -26,5 +26,12 @@ public interface ILogAbfDataService extends IService<LogAbfData>  {
             OperateLogException;
 
     Page<LogAbfData> queryByDataId(Page<LogAbfData> page, Wrapper<LogAbfData> wrapper,String dataGuid)throws OperateLogException;
+
+    /**
+     * 查询信息信息
+     * @param operateId
+     * @throws OperateLogException
+     */
+    Object queryDetialMessage(String operateId) throws OperateLogException;
 }
 
