@@ -60,16 +60,14 @@ public class LogAbfDataServiceImpl extends ServiceImpl<LogAbfDataMapper, LogAbfD
     /**
      * 查询信息信息
      *
-     * @param operateId
+     * @param id
      * @throws OperateLogException
      */
     @Override
-    public Object queryDetialMessage(String operateId) throws OperateLogException {
+    public Object queryDetialMessage(String id) throws OperateLogException {
 
-        //通过日志id查询操作的数据记录
-        Wrapper<LogAbfData> wrapper = new EntityWrapper<LogAbfData>();
-        wrapper.eq(LogAbfData.COLUMN_GUID_OPERATE,operateId);
-        LogAbfData logAbfData = selectOne(wrapper);
+        //通过id查询操作的数据记录
+        LogAbfData logAbfData = selectById(id);
 
         if (null == logAbfData){
             throw new OperateLogException(OperateLogExceptionCodes.RETURN_RESULT_IS_NULL,wrap("找不到对应记录或已经被删除"));
