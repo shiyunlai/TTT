@@ -43,12 +43,12 @@ public class LogAbfDataController extends BaseController<LogAbfData> {
 
     /**
      * 查询操作数据记录的详细信息
-     * @param operateId
+     * @param id
      * @return
      */
-    @GetMapping("detialMessage/{operateId}")
-    public ResultVO detialMessage(@PathVariable @NotBlank(message = "操作日志GUID不能为空") String operateId){
-        return ResultVO.success("查询成功",logAbfDataService.queryDetialMessage(operateId));
+    @GetMapping("detialMessage/{id}")
+    public ResultVO detialMessage(@PathVariable @NotBlank(message = "操作日志GUID不能为空") String id){
+        return ResultVO.success("查询成功",logAbfDataService.queryDetialMessage(id));
     }
 
 }
