@@ -29,9 +29,9 @@ public interface ILogAbfDataService extends IService<LogAbfData>  {
 
     /**
      * 查询信息信息
-     * @param operateId
+     * @param id
      * @throws OperateLogException
      */
-    Object queryDetialMessage(String operateId) throws OperateLogException;
+    Object queryDetialMessage(String id) throws OperateLogException;
 }
 
